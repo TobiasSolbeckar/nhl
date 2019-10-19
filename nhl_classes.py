@@ -66,6 +66,7 @@ class Skater():
 			self.pp['toi_pcg'] = 0
 			self.pp['sf'] = 0
 			self.pp['sf_per_sec'] = 0
+			self.pp['gf'] = 0
 			self.pp['sh_pcg'] = 0
 			self.pp['pt'] = 0
 			self.pp['pt_per_sec'] = 0
@@ -77,10 +78,11 @@ class Skater():
 			self.pp['toi_pcg'] = pp[1]
 			self.pp['sf'] = pp[2]
 			self.pp['sf_per_sec'] = self.pp['sf']/self.pp['toi']
-			self.pp['sh_pcg'] = pp[3]
-			self.pp['pt'] = pp[4]
+			self.pp['gf'] = pp[3]
+			self.pp['sh_pcg'] = pp[4]
+			self.pp['pt'] = pp[5]
 			self.pp['pt_per_sec'] = self.pp['pt']/self.pp['toi']
-			self.pp['pd'] = pp[5]
+			self.pp['pd'] = pp[6]
 			self.pp['pd_per_sec'] = self.pp['pd']/self.pp['toi']
 		
 		# PK
@@ -91,6 +93,7 @@ class Skater():
 			self.pk['toi_pcg'] = 0
 			self.pk['sf'] = 0
 			self.pk['sf_per_sec'] = 0
+			self.pk['gf'] = 0
 			self.pk['sh_pcg'] = 0
 			self.pk['pt'] = 0
 			self.pk['pt_per_sec'] = 0
@@ -102,10 +105,11 @@ class Skater():
 			self.pk['toi_pcg'] = pk[1]
 			self.pk['sf'] = pk[2]
 			self.pk['sf_per_sec'] = self.pk['sf']/self.pk['toi']
-			self.pk['sh_pcg'] = pk[3]
-			self.pk['pt'] = pk[4]
+			self.pk['gf'] = pk[3]
+			self.pk['sh_pcg'] = pk[4]
+			self.pk['pt'] = pk[5]
 			self.pk['pt_per_sec'] = self.pk['pt']/self.pk['toi']
-			self.pk['pd'] = pk[5]
+			self.pk['pd'] = pk[6]
 			self.pk['pd_per_sec'] = self.pk['pd']/self.pk['toi']
 		
 		# OnIce

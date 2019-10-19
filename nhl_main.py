@@ -86,14 +86,14 @@ def create_simulation_parameters():
 # @TODO: Fix playoff-simulation functionality
 
 # Improvements:
+# @TODO: Currently only ES-data is used also for PP/PK for SIMULATION_EXT.
 # @TODO: Print the rosters and starting goalies for teams during SIMULATION_EXT.
-# @TODO: Set this up in GitHub.
+# @TODO: It should be possible to easy update particular attributes, e.g. g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',0.915)
 # @TODO: Create an "smoothed" SH% value for each team? E.g. removing all values outside of league average + 1 sigma?
 # @TODO: Implement "what-if" (for season)
 # @TODO: Simulate per day, rather than per team? How would that work when there is no games at a particular date?
 # @TODO: Output from team_db_row_value looks ugly (too long)
 # @TODO: Create a class that is Game()
-
 
 # Investigations:
 # @TODO: Review game_status/data_param/simulation_param parameters. Are all necessary?

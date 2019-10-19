@@ -40,11 +40,6 @@ def create_databases(simulation_param):
 			diff_rating[team_id] = new_rating[team_id] - old_rating[team_id]
 			#print('{0}: Difference in rating after off-seasons: {1:.1f}%'.format(team_id,100*diff_rating[team_id]/old_rating[team_id]))
 
-	'''
-	@TODO
-	g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',,0.915)
-	'''
-
 	# Save the goalie database.
 	simulation_param['databases']['goalie_db'] = g_db
 
@@ -304,7 +299,7 @@ def add_pp_data(simulation_param,player_data):
 						player_id = 'SEBASTIAN_AHO2'
 					toi_pcg = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
 					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['pp'] = [toi,toi_pcg,sf,sh_pcg,pt,pd]
+						player_data[player_id]['pp'] = [toi,toi_pcg,sf,gf,sh_pcg,pt,pd]
 	return player_data
 
 def add_pk_data(simulation_param,player_data):
@@ -370,7 +365,7 @@ def add_pk_data(simulation_param,player_data):
 						player_id = 'SEBASTIAN_AHO2'
 					toi_pcg = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pk)
 					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['pk'] = [toi,toi_pcg,sf,sh_pcg,pt,pd]
+						player_data[player_id]['pk'] = [toi,toi_pcg,sf,gf,sh_pcg,pt,pd]
 	return player_data
 
 def add_on_ice_data(simulation_param,player_data):
@@ -597,11 +592,6 @@ def create_team_db(simulation_param):
 				# Create special metrics.
 				sa_per_sec = sa/team_toi_es
 
-				# Append data for output.
-				#names.append(name)
-				#reg_arrays.append([gp,team_toi,w,l,otl,p,p_pcg]) 
-				#adv_arrays.append([sf,sa,cf_pcg,scf_pcg,hdcf_pcg,sv_pcg,pdo,sa_per_sec])
-
 				reg_array = [gp,team_toi_es,w,l,otl,p,gf,ga,p_pcg]
 				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo,sa_per_sec]
 
@@ -667,8 +657,8 @@ def add_experimental_data(team_db,skater_db,goalie_db):
 		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
+		# Error/warning handling for weird input
 		if (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec']) == 0:
-			#print(skater.bio['name'] + '')
 			warnings.warn('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:

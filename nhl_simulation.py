@@ -273,6 +273,8 @@ def simulate_gameplay(game_status,data_param,verbose=False):
 			sh_pcg = game_status[ct + '_on_ice_db'][skater_id][1]
 			pt_per_time = game_status[ct + '_on_ice_db'][skater_id][2]
 			pd_per_time = game_status[ct + '_on_ice_db'][skater_id][3]
+			off_per_time = game_status[ct + '_on_ice_db'][skater_id][4]
+			def_per_time = game_status[ct + '_on_ice_db'][skater_id][5]
 			
 			# Update toi for the current skater.
 			skater.in_game_stats['toi'] += game_status['time_step']
@@ -415,7 +417,11 @@ def get_in_game_players(db,key,th):
 	return names
 
 def put_players_on_ice(game_status,data_param,verbose=False):
+	lines_on_ice = [None,None]
 	for i,ct in enumerate(CURRENT_TEAM):
+		line_values = {}
+		line_values['off_per_time'] = 0
+		line_values['def_per_time'] = 0
 		ot = OPPONENT_TEAM[i]
 		ct_on_ice_db = {}
 		players_on_ice = set()
@@ -427,24 +433,36 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 				skater = get_player(data_param[ct + '_skaters'],skater_id)
 				if game_status['gameplay_state'] == GAMEPLAY_ES:
 					toi_pcg = skater.es['toi_pcg']
+					sf = skater.es['sf']
+					gf = skater.es['gf']
 					sf_per_time = game_status['time_step']*skater.es['sf_per_sec']
-					sh_pcg = skater.es['sh_pcg']
+					#sh_pcg = skater.es['sh_pcg']
 					pt_per_time = game_status['time_step']*skater.es['pt_per_sec']
 					pd_per_time = game_status['time_step']*skater.es['pd_per_sec']
+					off_per_time = game_status['time_step']*skater.es['estimated_off_per_sec']
+					def_per_time = game_status['time_step']*skater.es['estimated_def_per_sec']
 				elif game_status[ct + '_pp'] == True:
 					toi_pcg = skater.pp['toi_pcg']
+					sf = skater.pp['sf']
+					gf = skater.pp['gf']
 					sf_per_time = game_status['time_step']*skater.pp['sf_per_sec']
 					sh_pcg = skater.pp['sh_pcg']
 					pt_per_time = 0 # No penalties during PP/PK are allowed for now.
 					pd_per_time = 0 # No penalties during PP/PK are allowed for now.
+					off_per_time = game_status['time_step']*skater.es['estimated_off_per_sec']
+					def_per_time = game_status['time_step']*skater.es['estimated_def_per_sec']
 				elif game_status[ct + '_pk'] == True:
 					toi_pcg = skater.pk['toi_pcg']
+					sf = skater.pk['sf']
+					gf = skater.pk['gf']
 					sf_per_time = game_status['time_step']*skater.pk['sf_per_sec']
 					sh_pcg = skater.pk['sh_pcg']
 					pt_per_time = 0 # 5-on-3 situations allowed for now.
 					pd_per_time = 0 # No penalties during PP/PK are allowed for now.
+					off_per_time = game_status['time_step']*skater.es['estimated_off_per_sec']
+					def_per_time = game_status['time_step']*skater.es['estimated_def_per_sec']
 				else:
-					raise ValueError('wtf?')
+					raise ValueError('Incorrect game_status')
 				if game_status[ot + '_goalie_in_net'] == False:
 					sf_per_time *= 3 # Estimation of how much more often a shot is taken when the goalie is pulled
 					sh_pcg = 1.7 # Ugly hack to get the total goal-prob to be about 90% when the goalie is pulled
@@ -452,13 +470,16 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 				if (random.uniform(0,1) < toi_pcg) and (skater.bio['name'] not in players_on_ice) and (skater.bio['name'] not in game_status['players_in_pbox']):
 					if (skater.bio['position'] == 'D') and (add_more_d == True):
 						players_on_ice.add(skater.bio['name'])
-						ct_on_ice_db[skater_id] = [sf_per_time,sh_pcg,pt_per_time,pd_per_time]
+						ct_on_ice_db[skater_id] = [sf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
 						added_skaters[0] += 1
+						line_values['off_per_time'] += off_per_time
+						line_values['def_per_time'] += def_per_time
 					if (skater.bio['position'] == 'F') and (add_more_f == True):
 						players_on_ice.add(skater.bio['name'])
-						ct_on_ice_db[skater_id] = [sf_per_time,sh_pcg,pt_per_time,pd_per_time]
+						ct_on_ice_db[skater_id] = [sf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
 						added_skaters[1] += 1
-
+						line_values['off_per_time'] += off_per_time
+						line_values['def_per_time'] += def_per_time
 					if added_skaters[0] == game_status[ct + '_number_of_skaters'][0]:
 						add_more_d = False
 					if added_skaters[1] == game_status[ct + '_number_of_skaters'][1]:
@@ -471,6 +492,7 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 					#if (added_skaters[0] == game_status['ht_number_of_skaters'][0]) and (added_skaters[1] == game_status['ht_number_of_skaters'][1]):
 						#break
 		game_status[ct + '_on_ice_db'] = ct_on_ice_db
+		lines_on_ice[i] = line_values
 	if verbose:
 		print(game_status['time_str'] + ': Players on the ice for ' + game_status['ht_id'] + ': ' + str(game_status['ht_on_ice_db'].keys()))
 		print(game_status['time_str'] + ': Players on the ice for ' + game_status['at_id'] + ': ' + str(game_status['at_on_ice_db'].keys()))
