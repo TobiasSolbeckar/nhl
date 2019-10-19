@@ -654,6 +654,7 @@ def add_experimental_data(team_db,skater_db,goalie_db):
 		gf_dict[skater.bio['team_id']].append(skater.es['gf'])
 		scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
 		sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
+		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
 		estimated_off = skater.on_ice['scf']
 		estimated_def = skater.on_ice['sca']
 		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.es['toi'] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
@@ -663,6 +664,7 @@ def add_experimental_data(team_db,skater_db,goalie_db):
 			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.es['toi'] * skater.on_ice['rel_ca']
 			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.es['toi']
 			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.es['toi']
+		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
 		if (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec']) == 0:
