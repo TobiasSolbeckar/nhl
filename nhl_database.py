@@ -22,7 +22,8 @@ def create_databases(simulation_param):
 	
 	# Add experimental data - needs to be done after creation of SkaterDB (and GoalieDB).
 	print('   Adding experimental data')
-	[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db)
+	[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db,simulation_param['debug_team'])
+	
 	for team_id in ACTIVE_TEAMS:
 		team = simulation_param['databases']['team_db'][team_id]
 		old_rating[team_id] = team.get_ratings()[1]
@@ -394,7 +395,22 @@ def add_on_ice_data(simulation_param,player_data):
 					cf_pcg = 0.0						
 				else:
 					cf_pcg = float(row[SKATER_DB_ON_ICE_CF_PERCENT])/100
-				
+
+				if str(row[SKATER_DB_ON_ICE_SF]) == '-':
+					sf = 0						
+				else:
+					sf = int(row[SKATER_DB_ON_ICE_SF])
+
+				if str(row[SKATER_DB_ON_ICE_SA]) == '-':
+					sa = 0						
+				else:
+					sa = int(row[SKATER_DB_ON_ICE_SA])
+
+				if str(row[SKATER_DB_ON_ICE_SF_PERCENT]) == '-':
+					sf_pcg = 0.0						
+				else:
+					sf_pcg = float(row[SKATER_DB_ON_ICE_SF_PERCENT])/100
+
 				if str(row[SKATER_DB_ON_ICE_SCF]) == '-':
 					scf = 0						
 				else:
@@ -477,7 +493,7 @@ def add_on_ice_data(simulation_param,player_data):
 					nz_pcg = (nzs+nzfo)/(ozs+nzs+dzs+ozfo+nzfo+dzfo)
 					dz_pcg = (dzs+dzfo)/(ozs+nzs+dzs+ozfo+nzfo+dzfo)
 					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['on_ice'] = [gp,cf,ca,cf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,ozs_pcg,ozfo,nzfo,dzfo,ozfo_pcg,oz_pcg,nz_pcg,dz_pcg,0]
+						player_data[player_id]['on_ice'] = [gp,cf,ca,cf_pcg,sf,sa,sf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,ozfo,nzfo,dzfo,0]
 	return player_data
 
 def add_corsica_data(simulation_param,player_data):
@@ -622,15 +638,15 @@ def create_team_db(simulation_param):
 
 	return output
 
-def add_experimental_data(team_db,skater_db,goalie_db):
+def add_experimental_data(team_db,skater_db,goalie_db,debug_team_id=None):
 	sf_dict,gf_dict,cf_dict,ca_dict,scf_dict,sca_dict = defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list)
 	#es_toi_per_gp, pp_toi_per_gp, pk_toi_per_gp = 
 	estimated_off_dict, estimated_def_dict = defaultdict(list),defaultdict(list)
 	shots_against_dict,shots_saved_dict = defaultdict(list),defaultdict(list)
 	gp_array = []
 
-	debug_team_id = 'SJS'
-	print('\n' + debug_team_id + ' roster (DEBUG):')
+	if debug_team_id != None:
+		print('\n' + debug_team_id + ' roster (DEBUG):')
 	for skater_id in skater_db.keys():
 		skater = get_player(skater_db,skater_id)
 		
@@ -638,9 +654,9 @@ def add_experimental_data(team_db,skater_db,goalie_db):
 		skater.es['toi_pcg'] = skater.es['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 		skater.pp['toi_pcg'] = skater.pp['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_pp_per_gp
 		skater.pk['toi_pcg'] = skater.pk['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_pk_per_gp
-		
+
 		# Calculate total shots/scf taken per team.
-		sf_dict[skater.bio['team_id']].append(skater.es['sf'])
+		sf_dict[skater.bio['team_id']].append(skater.es['isf'])
 		gf_dict[skater.bio['team_id']].append(skater.es['gf'])
 		scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
 		sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
@@ -664,11 +680,11 @@ def add_experimental_data(team_db,skater_db,goalie_db):
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
 
-		# __TSA_DEBUG:
+		#skater.es['off_sh_pcg'] = skater.es['gf']/
+
+
 		if skater.bio['team_id'] == debug_team_id:
 			print('   {0}: Estimated offense/60: {1:.1f}. Estimated defense/60: {2:.1f}. Estimated off-pcg: {3:.1f}%'.format(skater.bio['name'],3600*skater.on_ice['estimated_off_per_sec'],3600*skater.on_ice['estimated_def_per_sec'],100*skater.on_ice['estimated_off_pcg']))
-		# __END_TSA_DEBUG
-
 
 	for goalie_id in goalie_db.keys():
 		goalie = get_player(goalie_db,goalie_id)

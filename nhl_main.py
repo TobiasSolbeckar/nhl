@@ -86,7 +86,7 @@ def create_simulation_parameters():
 # @TODO: Fix playoff-simulation functionality
 
 # Improvements:
-# @TODO: Currently only ES-data is used also for PP/PK for SIMULATION_EXT.
+# @TODO: Currently only ES-data ('on_ice') is used also for PP/PK for SIMULATION_EXT.
 # @TODO: Print the rosters and starting goalies for teams during SIMULATION_EXT.
 # @TODO: It should be possible to easy update particular attributes, e.g. g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',0.915)
 # @TODO: Create an "smoothed" SH% value for each team? E.g. removing all values outside of league average + 1 sigma?
@@ -112,8 +112,8 @@ simulation_param = create_simulation_parameters()
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_season'] = True									# Default value = False
+simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['print_ul_stats'] = True 									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
@@ -125,15 +125,17 @@ simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
 simulation_param['simulation_mode'] = SIMULATION_EXT 							# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,2500]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50000,1000]											# Number of simulations for each game/season. Default = [50000,2500]
 
 # Create databases.
+simulation_param['debug_team'] = 'SJS'
+simulation_param['debug_player'] = 'ERIK_KARLSSON'
 simulation_param = create_databases(simulation_param)
 
 # Gameplay parameters								
 #simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule']['2019-10-16']
-#simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
-simulation_param['games_to_simulate'] = [['PIT','DAL']]
+simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
+#simulation_param['games_to_simulate'] = [['SJS','BUF']]
 #simulation_param['initial_wins'] = [[0,0]]
 
 simulation_param['down_sample'] = False
@@ -185,6 +187,7 @@ if simulation_param['simulate_ind_games']:
 
 		# Set up simulation output parameters
 		ht_g, at_g, ht_s, at_s, ht_g_prev_batch, at_g_prev_batch = 0,0,0,0,0,0
+		ht_exp_s,at_exp_s = 0,0
 		ht_w_t0, at_w_t0 = simulation_param['databases']['team_db'][simulation_param['ht_id']].w, simulation_param['databases']['team_db'][simulation_param['at_id']].w
 		ht_w_prev_batch, at_w_prev_batch = 0,0
 		batch_g_prob = []
@@ -218,10 +221,14 @@ if simulation_param['simulate_ind_games']:
 			at_g += in_game_data['at'].gf_in_simulated_game
 			ht_s += in_game_data['ht'].sf_in_simulated_game
 			at_s += in_game_data['at'].sf_in_simulated_game
+
+			ht_exp_s += in_game_data['ht'].exp_data['team_sf_in_simulated_game']
+			at_exp_s += in_game_data['at'].exp_data['team_sf_in_simulated_game']
+
 			ht_w = simulation_param['databases']['team_db'][simulation_param['ht_id']].w - ht_w_t0
 			at_w = simulation_param['databases']['team_db'][simulation_param['at_id']].w - at_w_t0
 		
-		print('Erik Karlsson: TOI: ' + str(simulation_param['databases']['skater_db']['ERIK_KARLSSON'].in_game_stats['toi']/N_sim))
+		print(simulation_param['debug_player'] + ' TOI: ' + str(simulation_param['databases']['skater_db'][simulation_param['debug_player']].in_game_stats['toi']/N_sim))
 		
 		if simulation_param['verbose']:
 			mu_g = np.mean(batch_g_prob)
@@ -237,9 +244,10 @@ if simulation_param['simulate_ind_games']:
 
 		# Print simulation output
 		print('\nProbability (goals):  {0} {1:.1f}% - {2:.1f}% {3}'.format(simulation_param['ht_id'],100*(ht_g/(ht_g+at_g)),100*(1 - (ht_g/(ht_g+at_g))),simulation_param['at_id']))
-		#print('Average score: {0} {1:.2f} - {2:.2f} {3}'.format(simulation_param['ht_id'],ht_g/N_sim,at_g/N_sim,simulation_param['at_id']))
-		#if simulation_param['simulation_mode'] == SIMULATION_EXT:
-			#print('Average shots: {0} {1:.0f} - {2:.0f} {3}'.format(simulation_param['ht_id'],ht_s/N_sim,at_s/N_sim,simulation_param['at_id']))
+		print('Average score: {0} {1:.2f} - {2:.2f} {3}'.format(simulation_param['ht_id'],ht_g/N_sim,at_g/N_sim,simulation_param['at_id']))
+		if simulation_param['simulation_mode'] == SIMULATION_EXT:
+			print('Average shots: {0} {1:.0f} - {2:.0f} {3}'.format(simulation_param['ht_id'],ht_s/N_sim,at_s/N_sim,simulation_param['at_id']))
+			print('Average shots EXP: {0} {1:.0f} - {2:.0f} {3}'.format(simulation_param['ht_id'],ht_exp_s/N_sim,at_exp_s/N_sim,simulation_param['at_id']))
 		print('Probability (wins):   {0} {1:.1f}% - {2:.1f}% {3}'.format(simulation_param['ht_id'],100*(ht_w/(ht_w+at_w)),100*(1 - (ht_w/(ht_w+at_w))),simulation_param['at_id']))
 		
 		
@@ -737,8 +745,7 @@ if simulation_param['do_exp']:
 		tmp = []
 		for skater_id in simulation_param['databases']['skater_db'].keys():
 			skater = simulation_param['databases']['skater_db'][skater_id]
-			val = 10000*skater.on_ice['estimated_off_per_sec'] * skater.es['sh_pcg']
-			#val = 10000*skater.on_ice['estimated_off_pcg'] * skater.es['sh_pcg']
+			val = 10000*skater.on_ice['estimated_off_per_sec'] * skater.es['ish_pcg']
 			tmp.append((val,skater_id))
 		tmp.sort(reverse=True)
 		
@@ -747,7 +754,7 @@ if simulation_param['do_exp']:
 		for pair in tmp:
 			skater = simulation_param['databases']['skater_db'][pair[1]]
 			if ranking <= 100 and skater.es['toi'] > 12000:
-				print('{0}: {1} ({2}) - Off/s: {3:.1f}. Off: {4:.2f}% Sh: {5:.2f}% TOI/GP: {6:.1f}min, TOI%: {7:.1f}%, DZFO% {8:.1f}%'.format(ranking,pair[1],skater.bio['team_id'],pair[0],100*skater.on_ice['estimated_off_pcg'],100*skater.es['sh_pcg'],(skater.es['toi']/60)/skater.on_ice['gp'],100*skater.es['toi_pcg'],100*skater.on_ice['dzfo_pcg']))
+				print('{0}: {1} ({2}) - Off/s: {3:.1f}. Off: {4:.2f}% Sh: {5:.2f}% TOI/GP: {6:.1f}min, TOI%: {7:.1f}%, DZFO% {8:.1f}%'.format(ranking,pair[1],skater.bio['team_id'],pair[0],100*skater.on_ice['estimated_off_pcg'],100*skater.es['ish_pcg'],(skater.es['toi']/60)/skater.on_ice['gp'],100*skater.es['toi_pcg'],100*skater.on_ice['dzfo_pcg']))
 				ranking += 1
 
 		ranking = 1
@@ -755,7 +762,7 @@ if simulation_param['do_exp']:
 		for pair in tmp:
 			skater = simulation_param['databases']['skater_db'][pair[1]]
 			if skater.es['toi'] > 12000 and skater.bio['team_id'] == 'SJS':
-				print('{0}: {1} ({2}) - Off/s: {3:.1f}. Off: {4:.2f}% Sh: {5:.2f}% TOI/GP: {6:.1f}min, TOI%: {7:.1f}%, DZFO% {8:.1f}%'.format(ranking,pair[1],skater.bio['team_id'],pair[0],100*skater.on_ice['estimated_off_pcg'],100*skater.es['sh_pcg'],(skater.es['toi']/60)/skater.on_ice['gp'],100*skater.es['toi_pcg'],100*skater.on_ice['dzfo_pcg']))
+				print('{0}: {1} ({2}) - Off/s: {3:.1f}. Off: {4:.2f}% Sh: {5:.2f}% TOI/GP: {6:.1f}min, TOI%: {7:.1f}%, DZFO% {8:.1f}%'.format(ranking,pair[1],skater.bio['team_id'],pair[0],100*skater.on_ice['estimated_off_pcg'],100*skater.es['ish_pcg'],(skater.es['toi']/60)/skater.on_ice['gp'],100*skater.es['toi_pcg'],100*skater.on_ice['dzfo_pcg']))
 				ranking += 1
 
 	if False:
@@ -775,7 +782,7 @@ if simulation_param['do_exp']:
 			print('   Sigma: ' + str(op_team['sigma']))
 
 	if False:
-		op = print_sorted_list(s_db,['sh_pcg'],'es',operation=f_prod,toi_filter=300,position_filter=['F','D'],team=None,print_list_length=100,scale_factor=100,high_to_low=True,do_print=False)
+		op = print_sorted_list(s_db,['ish_pcg'],'es',operation=f_prod,toi_filter=300,position_filter=['F','D'],team=None,print_list_length=100,scale_factor=100,high_to_low=True,do_print=False)
 		print('SH% Mean: ' + str(op['mu']))
 		print('SH% Std: ' + str(op['sigma']))
 
@@ -815,7 +822,8 @@ if simulation_param['do_exp']:
 		print('Combined sigma-diff: ' + str(get_sigma_difference(s_db,player_id,attr) + get_sigma_difference(s_db,player_id,'dz_pcg')))
 
 	if True:
-		op = print_sorted_list(s_db,['estimated_off_pcg'],'on_ice',operation=f_prod,toi_filter=300,position_filter=['F','D'],team=None,print_list_length=50,scale_factor=100,high_to_low=True,do_print=True) 
+		op = print_sorted_list(s_db,['sf','scf'],'on_ice',operation=f_div,toi_filter=300,position_filter=['F','D'],team=None,print_list_length=100,scale_factor=1,high_to_low=True,do_print=True) 
+
 if simulation_param['do_player_cards']:
 	s_db = simulation_param['databases']['skater_db']
 	g_db = simulation_param['databases']['goalie_db']
@@ -1028,7 +1036,7 @@ if simulation_param['do_player_cards']:
 		axes_info['x']['label'] = 'Shoots taken per 60'
 		axes_info['x']['scale'] = 3600
 		axes_info['x']['invert'] = False
-		axes_info['y']['attribute'] = 'sh_pcg'
+		axes_info['y']['attribute'] = 'ish_pcg'
 		axes_info['y']['label'] = 'Shooting success [%]'
 		axes_info['y']['scale'] = 100
 		axes_info['y']['invert'] = False

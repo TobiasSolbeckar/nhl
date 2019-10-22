@@ -41,9 +41,9 @@ class Skater():
 			self.es['part_primary'] = 0
 		else:
 			self.es['part_primary'] = self.es['primary_points']/self.es['points']
-		self.es['sf'] = es[6]
-		self.es['sf_per_sec'] = self.es['sf']/self.es['toi']
-		self.es['sh_pcg'] = es[7]
+		self.es['isf'] = es[6]
+		self.es['isf_per_sec'] = self.es['isf']/self.es['toi']
+		self.es['ish_pcg'] = es[7]
 		self.es['pt'] = es[8]
 		self.es['pt_per_sec'] = self.es['pt']/self.es['toi']   			# penalties taken per second
 		self.es['pd'] = es[9]
@@ -64,10 +64,10 @@ class Skater():
 			self.pp['toi'] = 0
 			self.pp['toi_per_gp'] = 0
 			self.pp['toi_pcg'] = 0
-			self.pp['sf'] = 0
-			self.pp['sf_per_sec'] = 0
+			self.pp['isf'] = 0
+			self.pp['isf_per_sec'] = 0
 			self.pp['gf'] = 0
-			self.pp['sh_pcg'] = 0
+			self.pp['ish_pcg'] = 0
 			self.pp['pt'] = 0
 			self.pp['pt_per_sec'] = 0
 			self.pp['pd'] = 0
@@ -76,10 +76,10 @@ class Skater():
 			self.pp['toi'] = pp[0]
 			self.pp['toi_per_gp'] = pp[0]/on_ice[0]
 			self.pp['toi_pcg'] = pp[1]
-			self.pp['sf'] = pp[2]
-			self.pp['sf_per_sec'] = self.pp['sf']/self.pp['toi']
+			self.pp['isf'] = pp[2]
+			self.pp['isf_per_sec'] = self.pp['isf']/self.pp['toi']
 			self.pp['gf'] = pp[3]
-			self.pp['sh_pcg'] = pp[4]
+			self.pp['ish_pcg'] = pp[4]
 			self.pp['pt'] = pp[5]
 			self.pp['pt_per_sec'] = self.pp['pt']/self.pp['toi']
 			self.pp['pd'] = pp[6]
@@ -91,10 +91,10 @@ class Skater():
 			self.pk['toi'] = 0
 			self.pk['toi_per_gp'] = 0
 			self.pk['toi_pcg'] = 0
-			self.pk['sf'] = 0
-			self.pk['sf_per_sec'] = 0
+			self.pk['isf'] = 0
+			self.pk['isf_per_sec'] = 0
 			self.pk['gf'] = 0
-			self.pk['sh_pcg'] = 0
+			self.pk['ish_pcg'] = 0
 			self.pk['pt'] = 0
 			self.pk['pt_per_sec'] = 0
 			self.pk['pd'] = 0
@@ -103,42 +103,70 @@ class Skater():
 			self.pk['toi'] = pk[0]
 			self.pk['toi_per_gp'] = pk[0]/on_ice[0]
 			self.pk['toi_pcg'] = pk[1]
-			self.pk['sf'] = pk[2]
-			self.pk['sf_per_sec'] = self.pk['sf']/self.pk['toi']
+			self.pk['isf'] = pk[2]
+			self.pk['isf_per_sec'] = self.pk['isf']/self.pk['toi']
 			self.pk['gf'] = pk[3]
-			self.pk['sh_pcg'] = pk[4]
+			self.pk['ish_pcg'] = pk[4]
 			self.pk['pt'] = pk[5]
 			self.pk['pt_per_sec'] = self.pk['pt']/self.pk['toi']
 			self.pk['pd'] = pk[6]
 			self.pk['pd_per_sec'] = self.pk['pd']/self.pk['toi']
 		
 		# OnIce
+		# on_ice = [gp,cf,ca,cf_pcg,sf,sa,sf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,,ozfo,nzfo,dzfo,0]
 		self.on_ice = {}
-		self.on_ice['gp'] = on_ice[0]
-		self.on_ice['cf'] = on_ice[1]
-		self.on_ice['ca'] = on_ice[2]
-		self.on_ice['cf_pcg'] = on_ice[3]
+		x = 0
+		self.on_ice['gp'] = on_ice[x]
+		x += 1
+		self.on_ice['cf'] = on_ice[x]
+		x += 1
+		self.on_ice['ca'] = on_ice[x]
+		x += 1
+		self.on_ice['cf_pcg'] = on_ice[x]
+		x += 1
+		self.on_ice['sf'] = on_ice[x]
+		x += 1
+		self.on_ice['sa'] = on_ice[x]
+		x += 1
+		self.on_ice['sf_pcg'] = on_ice[x]
+		x += 1
+		self.on_ice['scf'] = on_ice[x]
+		x += 1
+		self.on_ice['sca'] = on_ice[x]
+		x += 1
+		self.on_ice['scf_pcg'] = on_ice[x]
+		x += 1
+		self.on_ice['hdcf'] = on_ice[x]
+		x += 1
+		self.on_ice['hdca'] = on_ice[x]
+		x += 1
+		self.on_ice['hdcf_pcg'] = on_ice[x]
+		x += 1
+		self.on_ice['ozs'] = on_ice[x]
+		x += 1
+		self.on_ice['nzs'] = on_ice[x]
+		x += 1
+		self.on_ice['dzs'] = on_ice[x]
+		x += 1
+		self.on_ice['ozfo'] = on_ice[x]
+		x += 1
+		self.on_ice['nzfo'] = on_ice[x]
+		x += 1
+		self.on_ice['dzfo'] = on_ice[x]
+		x += 1
+		self.on_ice['rel_cf'] = on_ice[x]
+
 		self.on_ice['cf_per_sec'] = self.on_ice['cf']/self.es['toi']
 		self.on_ice['ca_per_sec'] = self.on_ice['ca']/self.es['toi']
-		self.on_ice['scf'] = on_ice[4]
-		self.on_ice['sca'] = on_ice[5]
+		self.on_ice['sf_per_sec'] = self.on_ice['sf']/self.es['toi']
+		self.on_ice['sa_per_sec'] = self.on_ice['sa']/self.es['toi']
 		self.on_ice['scf_per_sec'] = self.on_ice['scf']/self.es['toi']
 		self.on_ice['sca_per_sec'] = self.on_ice['sca']/self.es['toi']
-		self.on_ice['scf_pcg'] = on_ice[6]
-		self.on_ice['hdcf'] = on_ice[7]
-		self.on_ice['hdca'] = on_ice[8]
 		self.on_ice['hdcf_per_sec'] = self.on_ice['hdcf']/self.es['toi']
 		self.on_ice['hdca_per_sec'] = self.on_ice['hdca']/self.es['toi']
-		self.on_ice['hdcf_pcg'] = on_ice[9]
-		self.on_ice['ozs'] = on_ice[10]
-		self.on_ice['nzs'] = on_ice[11]
-		self.on_ice['dzs'] = on_ice[12]
 		self.on_ice['ozs_pcg'] = self.on_ice['ozs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['nzs_pcg'] = self.on_ice['nzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['dzs_pcg'] = self.on_ice['dzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
-		self.on_ice['ozfo'] = on_ice[14]
-		self.on_ice['nzfo'] = on_ice[15]
-		self.on_ice['dzfo'] = on_ice[16]
 		self.on_ice['ozfo_pcg'] = self.on_ice['ozfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
 		self.on_ice['nzfo_pcg'] = self.on_ice['nzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
 		self.on_ice['dzfo_pcg'] = self.on_ice['dzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
@@ -149,12 +177,10 @@ class Skater():
 		self.on_ice['non_oz_pcg'] = self.on_ice['dz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_nz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['dz_pcg']
 		self.on_ice['avg_zone_start'] = (self.on_ice['oz_pcg']*3 + self.on_ice['nz_pcg']*2 + self.on_ice['dz_pcg']*1)-2
-		self.on_ice['rel_cf'] = on_ice[21]
 		self.on_ice['rel_ca'] = 1-(self.on_ice['rel_cf']-1)
 		self.on_ice['estimated_off_per_sec'] = 0
 		self.on_ice['estimated_def_per_sec'] = 0
 		self.on_ice['estimated_off_pcg'] = 0
-		#self.on_ice['exp_data'] = []
 		self.rating = []
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
@@ -336,6 +362,7 @@ class Team():
 		self.gf_in_simulated_game = 0
 		self.sf_in_simulated_game = 0
 		self.exp_data = {}
+		self.exp_data['team_sf_in_simulated_game'] = 0
 		self.exp_data['in_season_rating'] = 0
 		self.exp_data['pre_season_rating'] = 0
 
@@ -434,7 +461,9 @@ class Team():
 			self.gf_in_simulated_game = game_output['ht_goals']
 			opponent.gf_in_simulated_game = game_output['at_goals']
 			self.sf_in_simulated_game = game_output['ht_shots']
+			self.exp_data['team_sf_in_simulated_game'] = game_output['ht_exp_shots']
 			opponent.sf_in_simulated_game = game_output['at_shots']
+			opponent.exp_data['team_sf_in_simulated_game'] = game_output['at_exp_shots']
 			if game_output['ht_points'] == 2:
 				self.update_score('w')
 				if game_output['at_points'] == 1:

@@ -103,11 +103,15 @@ def get_player(player_db,player_id):
 
 def get_unavailable_players():
 	unavailable_players = defaultdict(list)
+	unavailable_players['ARI'].append('NIKLAS_HJALMARSSON')
+	unavailable_players['COL'].append('MIKKO_RANTANEN')
+	unavailable_players['EDM'].append('ADAM_LARSSON')
+	unavailable_players['PIT'].append('EVGENI_MALKIN')
+	unavailable_players['PIT'].append('NICK_BJUGSTAD')
 	unavailable_players['SJS'].append('DALTON_PROUT')
 	unavailable_players['SJS'].append('JACOB_MIDDLETON')
-	unavailable_players['SJS'].append('JONNY_BRODZINSKI')
-	unavailable_players['SJS'].append('TREVOR_CARRICK')
-	unavailable_players['SJS'].append('DANIL_YURTAYKIN')
+	unavailable_players['TOR'].append('JOHN_TAVARES')
+	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
 	return unavailable_players
 
 def print_progress(i,N,t0,step=10):
@@ -224,7 +228,6 @@ def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,posit
 
 
 def get_attribute_value(player,attribute,playform='es'):
-	# attribute should be on the form "attribute-playform", where playform is either "es", "pp" or "pk".
 	if player.bio['position'] == 'G':
 		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
 
@@ -407,6 +410,41 @@ def weighted_sum(lst,w_lst):
 
 	return op
 
+def get_from_distribution(val_dict,attribute,normalize=False):
+	# ct_on_ice_db[skater_id] = [isf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
+	
+	sum_value = 1.0
+	p_ids = set()
+	if attribute == 'isf_per_time':		
+		index = 0
+	elif attribute == 'sh_pcg':
+		index = 1
+	elif attribute == 'pt_per_time':
+		index = 2
+	elif attribute == 'pd_per_time':
+		index = 3
+	elif attribute == 'off_per_time':
+		index = 4
+	elif attribute == 'def_per_time':
+		index = 5
+	else:
+		raise ValueError('Unknown attribute ' + attribute)
+	if normalize == True:
+		vals = []
+		for p_id in val_dict.keys():
+			player_values = val_dict[p_id]
+			vals.append(player_values[index])
+		sum_value = np.sum(vals)
+
+
+
+	while True:
+		for p_id in set(val_dict.keys()):  # set for randomizing purposes
+			player_values = val_dict[p_id]
+			if sum_value == 0: # special case
+				return p_id
+			if random.uniform(0,1) <= (player_values[index]/sum_value):
+				return p_id
 
 
 
