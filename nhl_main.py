@@ -53,10 +53,15 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['teams_es'] = 'Data/Team_ES_201920.csv'
 	simulation_param['csvfiles']['teams_pp'] = 'Data/Team_PP_201920.csv'
 	simulation_param['csvfiles']['teams_pk'] = 'Data/Team_PK_201920.csv'
+
+	# If only current season shall be examined
+	if simulation_param['only_this_season'] == True:
+		simulation_param['csvfiles']['skaters_es'] = 'Data/Skater_Individual_ES_201920.csv'
+		simulation_param['csvfiles']['skaters_on_ice'] = 'Data/Skater_OnIce_201920.csv'
+		simulation_param['csvfiles']['skaters_corsica'] = 'Data/Skater_Corsica_201920.csv'
 	return simulation_param
 
-def create_simulation_parameters():
-	sp = {}
+def create_simulation_parameters(sp):
 	sp['simulation_mode'] = None
 	sp['N'] = [50000,2500]										# Number of simulations for each game/season. [rating_based,simulation_based]
 	sp['number_of_periods'] = 3									# Number of periods to be played.
@@ -94,12 +99,12 @@ def create_simulation_parameters():
 # @TODO: Simulate per day, rather than per team? How would that work when there is no games at a particular date?
 # @TODO: Output from team_db_row_value looks ugly (too long)
 # @TODO: Create a class that is Game()
+# @TODO: Unavailable players should check if the correct (i.e. existing) player name has been entered.
 
 # Investigations:
 # @TODO: Review game_status/data_param/simulation_param parameters. Are all necessary?
 # @TODO: Is "unavailable_players" working for season simulation?
 # @TODO: Something is weird with the penalty generating (and drawing of).
-# @TODO: Something is weird with shots faced.
 # @TODO: Use OnIce-data for SF% (or something)?
 # @TODO: Should players_in_pbox be a set() instead of a list?
 # @TODO: Use PP/PK specific data for sa for teams?
@@ -108,12 +113,15 @@ def create_simulation_parameters():
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 today = datetime.datetime.today().strftime('%Y-%m-%d')
-simulation_param = create_simulation_parameters()
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#simulation_param['simulate_season'] = True									# Default value = False
-simulation_param['simulate_ind_games'] = True 								# Default value = False
+simulation_param = {}
+simulation_param['only_this_season'] = False
+simulation_param = create_simulation_parameters(simulation_param)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+simulation_param['simulate_season'] = True									# Default value = False
+#simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['print_ul_stats'] = True 									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
@@ -123,9 +131,9 @@ simulation_param['simulate_ind_games'] = True 								# Default value = False
 # Simulation/iteration parameters
 simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
-#simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['simulation_mode'] = SIMULATION_EXT 							# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,1000]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
+#simulation_param['simulation_mode'] = SIMULATION_EXT 							# SIMULATION_LIGHT or SIMULATION_EXT
+simulation_param['N'] = [50000,500]											# Number of simulations for each game/season. Default = [50000,2500]
 
 # Create databases.
 simulation_param['debug_team'] = 'SJS'
@@ -822,7 +830,24 @@ if simulation_param['do_exp']:
 		print('Combined sigma-diff: ' + str(get_sigma_difference(s_db,player_id,attr) + get_sigma_difference(s_db,player_id,'dz_pcg')))
 
 	if True:
-		op = print_sorted_list(s_db,['sf','scf'],'on_ice',operation=f_div,toi_filter=300,position_filter=['F','D'],team=None,print_list_length=100,scale_factor=1,high_to_low=True,do_print=True) 
+		min_toi = 100
+		list_length = 25
+		team = simulation_param['debug_team']
+		team = None
+		print('\nBest ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_sec'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_sec'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+		
+		print('\nBest ' + str(list_length) + ' defensive players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_sec'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' defensive players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_sec'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+		
+		print('\nBest ' + str(list_length) + ' combined players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' combined players (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],'on_ice',operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				
 
 if simulation_param['do_player_cards']:
 	s_db = simulation_param['databases']['skater_db']
