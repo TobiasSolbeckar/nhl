@@ -514,6 +514,10 @@ def add_corsica_data(simulation_param,player_data):
 					player_id = 'ALEXANDER_WENNBERG'
 				elif player_id == 'ALEX_FORTIN':
 					player_id = 'ALEXANDRE_FORTIN'
+				elif player_id == 'ALEX_NYLANDER':
+					player_id = 'ALEXANDER_NYLANDER'
+				elif player_id == 'ALEX_TEXIER':
+					player_id = 'ALEXANDRE_TEXIER'
 				elif player_id == 'CHRIS_TANEV':
 					player_id = 'CHRISTOPHER_TANEV'
 				elif player_id == 'EVGENY_DADONOV':
@@ -522,6 +526,8 @@ def add_corsica_data(simulation_param,player_data):
 					player_id = 'MATTHEW_BENNING'	
 				elif player_id == 'MITCH_MARNER':
 					player_id = 'MITCHELL_MARNER'
+				elif player_id == 'NICHOLAS_SHORE':
+					player_id = 'NICK_SHORE'
 				elif player_id == '5EBASTIAN_AHO':
 					player_id = 'SEBASTIAN_AHO2'
 
@@ -665,11 +671,16 @@ def add_experimental_data(team_db,skater_db,goalie_db,debug_team_id=None):
 		estimated_def = skater.on_ice['sca']
 		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.es['toi'] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
 		skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] * skater.on_ice['rel_ca'] / skater.es['toi']
+
+		#skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] / skater.es['toi'] 
+		#skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] / skater.es['toi']
+
 		if skater.bio['multiple_teams'] == True:
 			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.es['toi'] * skater.on_ice['rel_cf']
 			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.es['toi'] * skater.on_ice['rel_ca']
 			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.es['toi']
 			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.es['toi']
+
 		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
@@ -955,7 +966,9 @@ def get_row_values_for_team_db(row):
 	return [name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo]
 
 def get_team_id_for_player(name,team_id):
+	
 	manually_checked_players = set()
+	'''
 	manually_checked_players.add('CARL_HAGELIN')
 	manually_checked_players.add('CHRIS_WIDEMAN')
 	manually_checked_players.add('DERICK_BRASSARD')
@@ -964,6 +977,7 @@ def get_team_id_for_player(name,team_id):
 	manually_checked_players.add('RYAN_SPOONER')
 	manually_checked_players.add('TANNER_PEARSON')
 	manually_checked_players.add('VALENTIN_ZYKOV')
+	'''
 	new_team = {}
 	team_id_arr = (team_id.replace(' ','').split(','))
 	if len(team_id_arr) > 1:
@@ -971,6 +985,8 @@ def get_team_id_for_player(name,team_id):
 			if name not in manually_checked_players:
 				raise ValueError('Player ' + name + ' changed club more than once. Please add to "manually_checked_players" to continue.')
 		new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
+		new_team['ERIK_GUBRANSON'] = 'ANA'
+		new_team['ANDREAS_MARTINSEN'] = 'PTI'
 
 		if name not in set(new_team.keys()):
 			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		
