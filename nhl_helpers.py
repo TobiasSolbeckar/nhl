@@ -101,15 +101,6 @@ def get_team(team_db,team_id):
 def get_player(player_db,player_id):
 	return player_db[player_id]
 
-def get_unavailable_players():
-	unavailable_players = defaultdict(list)
-	unavailable_players['SJS'].append('DALTON_PROUT')
-	unavailable_players['SJS'].append('JACOB_MIDDLETON')
-	unavailable_players['SJS'].append('JONNY_BRODZINSKI')
-	unavailable_players['SJS'].append('TREVOR_CARRICK')
-	unavailable_players['SJS'].append('DANIL_YURTAYKIN')
-	return unavailable_players
-
 def print_progress(i,N,t0,step=10):
 	time_unit = ['min','min']
 	printed = False
@@ -183,11 +174,11 @@ def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,posit
 		skater = db[skater_id]
 		if skater.es['toi'] >= toi_filter and skater.bio['position'] in position_filter:
 			if len(attributes) > 1:
-				val_a = get_attribute_value(skater,attributes[0],playform)
-				val_b = get_attribute_value(skater,attributes[1],playform)
+				val_a = get_attribute_value(skater,attributes[0],playform[0])
+				val_b = get_attribute_value(skater,attributes[1],playform[1])
 				val = operation(val_a,val_b)
 			else:
-				val = get_attribute_value(skater,attributes[0],playform)
+				val = get_attribute_value(skater,attributes[0],playform[0])
 			val *= scale_factor
 
 			if team == None:		
@@ -224,7 +215,6 @@ def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,posit
 
 
 def get_attribute_value(player,attribute,playform='es'):
-	# attribute should be on the form "attribute-playform", where playform is either "es", "pp" or "pk".
 	if player.bio['position'] == 'G':
 		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
 
@@ -407,6 +397,41 @@ def weighted_sum(lst,w_lst):
 
 	return op
 
+def get_from_distribution(val_dict,attribute,normalize=False):
+	# ct_on_ice_db[skater_id] = [isf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
+	
+	sum_value = 1.0
+	p_ids = set()
+	if attribute == 'isf_per_time':		
+		index = 0
+	elif attribute == 'sh_pcg':
+		index = 1
+	elif attribute == 'pt_per_time':
+		index = 2
+	elif attribute == 'pd_per_time':
+		index = 3
+	elif attribute == 'off_per_time':
+		index = 4
+	elif attribute == 'def_per_time':
+		index = 5
+	else:
+		raise ValueError('Unknown attribute ' + attribute)
+	if normalize == True:
+		vals = []
+		for p_id in val_dict.keys():
+			player_values = val_dict[p_id]
+			vals.append(player_values[index])
+		sum_value = np.sum(vals)
+
+
+
+	while True:
+		for p_id in set(val_dict.keys()):  # set for randomizing purposes
+			player_values = val_dict[p_id]
+			if sum_value == 0: # special case
+				return p_id
+			if random.uniform(0,1) <= (player_values[index]/sum_value):
+				return p_id
 
 
 
