@@ -27,7 +27,7 @@ class Skater():
 		# ES
 		self.es = {}
 		self.es['toi'] = es[0]
-		self.es['toi_per_gp'] = es[0]/on_ice[0]
+		self.es['toi_per_gp'] = es[0]/on_ice['gp']
 		self.es['toi_pcg'] = es[1]
 		self.es['gf'] = es[2]
 		self.es['ass'] = es[3]
@@ -74,7 +74,7 @@ class Skater():
 			self.pp['pd_per_sec'] = 0
 		else:
 			self.pp['toi'] = pp[0]
-			self.pp['toi_per_gp'] = pp[0]/on_ice[0]
+			self.pp['toi_per_gp'] = pp[0]/on_ice['gp']
 			self.pp['toi_pcg'] = pp[1]
 			self.pp['isf'] = pp[2]
 			self.pp['isf_per_sec'] = self.pp['isf']/self.pp['toi']
@@ -101,7 +101,7 @@ class Skater():
 			self.pk['pd_per_sec'] = 0
 		else:
 			self.pk['toi'] = pk[0]
-			self.pk['toi_per_gp'] = pk[0]/on_ice[0]
+			self.pk['toi_per_gp'] = pk[0]/on_ice['gp']
 			self.pk['toi_pcg'] = pk[1]
 			self.pk['isf'] = pk[2]
 			self.pk['isf_per_sec'] = self.pk['isf']/self.pk['toi']
@@ -113,49 +113,12 @@ class Skater():
 			self.pk['pd_per_sec'] = self.pk['pd']/self.pk['toi']
 		
 		# OnIce
-		# on_ice = [gp,cf,ca,cf_pcg,sf,sa,sf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,,ozfo,nzfo,dzfo,0]
+		# on_ice = [gp,cf,ca,cf_pcg,sf,sa,sf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,ozfo,nzfo,dzfo,0]
 		self.on_ice = {}
-		x = 0
-		self.on_ice['gp'] = on_ice[x]
-		x += 1
-		self.on_ice['cf'] = on_ice[x]
-		x += 1
-		self.on_ice['ca'] = on_ice[x]
-		x += 1
-		self.on_ice['cf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['sf'] = on_ice[x]
-		x += 1
-		self.on_ice['sa'] = on_ice[x]
-		x += 1
-		self.on_ice['sf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['scf'] = on_ice[x]
-		x += 1
-		self.on_ice['sca'] = on_ice[x]
-		x += 1
-		self.on_ice['scf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['hdcf'] = on_ice[x]
-		x += 1
-		self.on_ice['hdca'] = on_ice[x]
-		x += 1
-		self.on_ice['hdcf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['ozs'] = on_ice[x]
-		x += 1
-		self.on_ice['nzs'] = on_ice[x]
-		x += 1
-		self.on_ice['dzs'] = on_ice[x]
-		x += 1
-		self.on_ice['ozfo'] = on_ice[x]
-		x += 1
-		self.on_ice['nzfo'] = on_ice[x]
-		x += 1
-		self.on_ice['dzfo'] = on_ice[x]
-		x += 1
-		self.on_ice['rel_cf'] = on_ice[x]
+		for attribute in on_ice.keys():
+			self.on_ice[attribute] = on_ice[attribute]
 
+		# Special attributes
 		self.on_ice['cf_per_sec'] = self.on_ice['cf']/self.es['toi']
 		self.on_ice['ca_per_sec'] = self.on_ice['ca']/self.es['toi']
 		self.on_ice['sf_per_sec'] = self.on_ice['sf']/self.es['toi']
@@ -177,7 +140,6 @@ class Skater():
 		self.on_ice['non_oz_pcg'] = self.on_ice['dz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_nz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['dz_pcg']
 		self.on_ice['avg_zone_start'] = (self.on_ice['oz_pcg']*3 + self.on_ice['nz_pcg']*2 + self.on_ice['dz_pcg']*1)-2
-		self.on_ice['rel_ca'] = 1-(self.on_ice['rel_cf']-1)
 		self.on_ice['estimated_off_per_sec'] = 0
 		self.on_ice['estimated_def_per_sec'] = 0
 		self.on_ice['estimated_off_pcg'] = 0
