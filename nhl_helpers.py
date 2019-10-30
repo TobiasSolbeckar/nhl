@@ -101,19 +101,6 @@ def get_team(team_db,team_id):
 def get_player(player_db,player_id):
 	return player_db[player_id]
 
-def get_unavailable_players():
-	unavailable_players = defaultdict(list)
-	unavailable_players['ARI'].append('NIKLAS_HJALMARSSON')
-	unavailable_players['COL'].append('MIKKO_RANTANEN')
-	unavailable_players['EDM'].append('ADAM_LARSSON')
-	unavailable_players['PIT'].append('EVGENI_MALKIN')
-	unavailable_players['PIT'].append('NICK_BJUGSTAD')
-	unavailable_players['SJS'].append('DALTON_PROUT')
-	unavailable_players['SJS'].append('JACOB_MIDDLETON')
-	unavailable_players['TOR'].append('JOHN_TAVARES')
-	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
-	return unavailable_players
-
 def print_progress(i,N,t0,step=10):
 	time_unit = ['min','min']
 	printed = False
@@ -187,11 +174,11 @@ def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,posit
 		skater = db[skater_id]
 		if skater.es['toi'] >= toi_filter and skater.bio['position'] in position_filter:
 			if len(attributes) > 1:
-				val_a = get_attribute_value(skater,attributes[0],playform)
-				val_b = get_attribute_value(skater,attributes[1],playform)
+				val_a = get_attribute_value(skater,attributes[0],playform[0])
+				val_b = get_attribute_value(skater,attributes[1],playform[1])
 				val = operation(val_a,val_b)
 			else:
-				val = get_attribute_value(skater,attributes[0],playform)
+				val = get_attribute_value(skater,attributes[0],playform[0])
 			val *= scale_factor
 
 			if team == None:		
