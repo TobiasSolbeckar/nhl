@@ -115,7 +115,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['only_this_season'] = False
+simulation_param['only_this_season'] = True
 simulation_param = create_simulation_parameters(simulation_param)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -501,157 +501,6 @@ if simulation_param['simulate_season']:
 		print('Total time for computation (N=5000): ' + str((5000/N_sim)*(t_tot/(3600*1000))) + ' h.')
 		print('Total time for computation (N=10000): ' + str((10000/N_sim)*(t_tot/(3600*1000))) + ' h.')
 
-if simulation_param['print_ul_stats']:
-	gp_filter=10
-	toi_filter=250
-	cf_filter=[0.4, 1]
-	ozfo_filter=[0.35, 0.65]
-	nhl_output = []
-	vals = []
-	
-	for skater_id in simulation_param['databases']['skater_db']:
-		include_player = True
-		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
-		if skater.on_ice['gp'] < gp_filter:
-			include_player = False
-		if skater.on_ice['cf_pcg'] < cf_filter[0]:
-			include_player = False
-		if skater.on_ice['cf_pcg'] > cf_filter[1]:
-			include_player = False
-		if skater.on_ice['ozfo_pcg'] < ozfo_filter[0]:
-			include_player = False
-		if skater.on_ice['ozfo_pcg'] > ozfo_filter[1]:
-			include_player = False
-
-		if include_player == True:
-			modified_val = skater.on_ice['cf_pcg']*(1/skater.on_ice['ozfo_pcg'])
-			#modified_val = skater.on_ice['cf_pcg']
-			nhl_output.append((modified_val,skater_id))
-			vals.append(modified_val)
-		else:
-			warnings.warn('print_ul_stats::Skipping player ' + skater_id)
-
-
-	nhl_avg = sum(vals)/len(vals)
-	
-	# Print section
-	output_to_print = nhl_output
-	print_length = 50		# How many entries should be printed. 0 = no filter
-
-	output_to_print.sort(reverse=False)
-	if print_length != 0:
-		output_to_print = output_to_print[-print_length:]
-
-	print('Difference compared to overall league average value (avg = {0:.3f}):'.format(nhl_avg))
-
-	for i,val in enumerate(output_to_print):
-		diff = (val[0]-nhl_avg)
-		skater = get_player(simulation_param['databases']['skater_db'],val[1])
-		sign = ''
-		if diff > 0:
-			sign ='+'
-
-		print('{0:.0f}: {1} ({2}): {3}{4:.3f}. [CF: {5:.1f}%, OZFO: {6:.1f}%]'.format((len(output_to_print)-i),skater.bio['name'],skater.bio['team_id'],sign,diff,100*skater.on_ice['cf_pcg'],100*skater.on_ice['ozfo_pcg']))
-	vals = []
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.p_pcg
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team_id = val[1]
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		team.exp_data['position'] = (i+1)
-		if (i+1) <= 16:
-			team.exp_data['in_playoff'] = True
-		else:
-			team.exp_data['in_playoff'] = False
-	#########################################################################################################
-	print('"Effectivness-factor"/win% per cf%: ')
-	vals = []
-	sum_pos_diff = 0
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.p_pcg/team.cf_pcg
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team = get_team(simulation_param['databases']['team_db'],val[1])
-		pos_diff = abs(i+1-team.exp_data['position'])
-		sum_pos_diff += pos_diff
-		print('{0}: {1}: {2:.3f}. (Diff: {3})'.format(i+1,val[1],val[0],pos_diff))
-	print('Sum diff: ' + str(sum_pos_diff))
-	#########################################################################################################
-	print('')
-	print('Most shot attemps on-goal [%] - (sf/cf): ')
-	vals = []
-	sum_pos_diff = 0
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.sf/team.cf
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team = get_team(simulation_param['databases']['team_db'],val[1])
-		pos_diff = abs(i+1-team.exp_data['position'])
-		sum_pos_diff += pos_diff
-		print('{0}: {1}: {2:.3f}. (Diff: {3})'.format(i+1,val[1],val[0],pos_diff))
-	print('Sum diff: ' + str(sum_pos_diff))
-	#########################################################################################################
-	print('')
-	print('Most unblocked shots attemps on-goal [%] - (sf/ff): ')
-	vals = []
-	sum_pos_diff = 0
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.sf/team.ff
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team = get_team(simulation_param['databases']['team_db'],val[1])
-		pos_diff = abs(i+1-team.exp_data['position'])
-		sum_pos_diff += pos_diff
-		print('{0}: {1}: {2:.3f}. (Diff: {3})'.format(i+1,val[1],val[0],pos_diff))
-	print('Sum diff: ' + str(sum_pos_diff))
-	#########################################################################################################
-	print('')
-	print('HDCA / CA [%] - (hdca/ca): ')
-	vals = []
-	sum_pos_diff = 0
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.hdca/team.ca
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team = get_team(simulation_param['databases']['team_db'],val[1])
-		pos_diff = abs(i+1-team.exp_data['position'])
-		sum_pos_diff += pos_diff
-		print('{0}: {1}: {2:.3f}. (Diff: {3})'.format(i+1,val[1],val[0],pos_diff))
-	print('Sum diff: ' + str(sum_pos_diff))
-	#########################################################################################################
-	print('')
-	print('SCF% * PDO: ')
-	vals = []
-	sum_pos_diff = 0
-	correct_po = 0
-	for team_id in ACTIVE_TEAMS:
-		team = get_team(simulation_param['databases']['team_db'],team_id)
-		val = team.scf_pcg*team.pdo
-		vals.append((val,team_id))
-	vals.sort(reverse=True)
-	for i,val in enumerate(vals):
-		team = get_team(simulation_param['databases']['team_db'],val[1])
-		pos_diff = abs(i+1-team.exp_data['position'])
-		sum_pos_diff += pos_diff
-		if ((i+1) <= 16) and (team.exp_data['in_playoff'] == True):
-			correct_po += 1
-		if ((i+1) > 16) and (team.exp_data['in_playoff'] == False):
-			correct_po += 1
-		print('{0}: {1}: {2:.3f}. (Pos: {3}, Diff: {4})'.format(i+1,val[1],val[0],team.exp_data['position'],pos_diff))
-	print('Sum diff: ' + str(sum_pos_diff))
-	print('Correct PO: ' + str(correct_po/31))
-
 if simulation_param['do_exp']:
 	s_db = simulation_param['databases']['skater_db']
 	f_add = lambda a,b : a+b
@@ -823,7 +672,7 @@ if simulation_param['do_exp']:
 		team = simulation_param['debug_team']
 		team = None
 		print('\nBest ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
-		op = print_sorted_list(s_db,['estimated_off_per_sec','points_per_60'],['on_ice','es'],operation=f_prod,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_prod,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
 		#op = print_sorted_list(s_db,['points_per_60'],'es',operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 		print('\nWorst ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
