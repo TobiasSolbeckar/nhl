@@ -548,14 +548,15 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		print(game_status['time_str'] + ': Players on the ice for ' + game_status['at_id'] + ': ' + str(game_status['at_on_ice_db'].keys()))
 	return game_status
 
-def get_starting_goalie(goalie_db,team_id):
+def get_starting_goalie(simulation_param,team_id):
+	##data_param['ht_goalie'] = get_starting_goalie(simulation_param['databases']['goalie_db'],simulation_param['ht_id'])
 	found_goalie = False
 	while found_goalie == False:
-		for goalie_id in set(goalie_db.keys()):
-			goalie = get_player(goalie_db, goalie_id)
-			if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.toi_pcg) and (goalie_id not in get_unavailable_players()[goalie.bio['team_id']]):		
+		for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
+			goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
+			if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.toi_pcg) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
 				found_goalie = True
-				return goalie_id
+				return goalie_id				
 
 def get_time_str(game_status):
 	m = game_status['time']//60
@@ -888,14 +889,14 @@ def create_game_specific_db(simulation_param):
 		data_param['ht_goalie'] = simulation_param['databases']['starting_goalies'][simulation_param['ht_id']]
 		print('Starting goalie for ' + simulation_param['ht_id'] + ': ' + data_param['ht_goalie'])
 	else:
-		data_param['ht_goalie'] = get_starting_goalie(simulation_param['databases']['goalie_db'],simulation_param['ht_id'])
+		data_param['ht_goalie'] = get_starting_goalie(simulation_param,simulation_param['ht_id'])
 	data_param['ht_players'][data_param['ht_goalie']] = get_player(simulation_param['databases']['goalie_db'],data_param['ht_goalie'])
 
 	if simulation_param['databases']['starting_goalies'][simulation_param['at_id']] != None:
 		data_param['at_goalie'] = simulation_param['databases']['starting_goalies'][simulation_param['at_id']]
 		print('Starting goalie for ' + simulation_param['at_id'] + ': ' + data_param['at_goalie'])
 	else:
-		data_param['at_goalie'] = get_starting_goalie(simulation_param['databases']['goalie_db'],simulation_param['at_id'])
+		data_param['at_goalie'] = get_starting_goalie(simulation_param,simulation_param['at_id'])
 	data_param['at_players'][data_param['at_goalie']] = get_player(simulation_param['databases']['goalie_db'],data_param['at_goalie'])
 	
 	return data_param
