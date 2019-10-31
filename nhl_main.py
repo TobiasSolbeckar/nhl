@@ -123,15 +123,15 @@ simulation_param = create_simulation_parameters(simulation_param)
 #simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['print_ul_stats'] = True 									# Default value = False
-simulation_param['do_exp'] = True 											# Default value = False
-#simulation_param['do_player_cards'] = True
+#simulation_param['do_exp'] = True 											# Default value = False
+simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Set up simulation parameters
 # Simulation/iteration parameters
 simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,50]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50000,1]											# Number of simulations for each game/season. Default = [50000,2500]
 
 # Create databases.
 simulation_param['debug_team'] = 'SJS'
@@ -150,7 +150,7 @@ simulation_param['initial_at_goals'] = 0
 
 # Output/print parameters
 simulation_param['print_times'] = False
-simulation_param['verbose'] = False						
+simulation_param['verbose'] = True						
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 if simulation_param['simulate_ind_games']:
@@ -667,7 +667,7 @@ if simulation_param['do_exp']:
 		print('Combined sigma-diff: ' + str(get_sigma_difference(s_db,player_id,attr) + get_sigma_difference(s_db,player_id,'dz_pcg')))
 
 	if True:
-		min_toi = 100
+		min_toi = 50
 		list_length = 20
 		team = simulation_param['debug_team']
 		team = None
@@ -682,10 +682,15 @@ if simulation_param['do_exp']:
 		print('\nWorst ' + str(list_length) + ' defensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_def_per_sec'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['D'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
 		
-		print('\nBest ' + str(list_length) + ' combined players (min. ' + str(min_toi) + ' minutes played):')
-		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
-		print('\nWorst ' + str(list_length) + ' combined players (min. ' + str(min_toi) + ' minutes played):')
-		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F','D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				
+		print('\nBest ' + str(list_length) + ' combined forwards (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' combined forwards (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True)
+
+		print('\nBest ' + str(list_length) + ' combined defenders (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' combined defenders (min. ' + str(min_toi) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['D'],team=team,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				 				
 
 if simulation_param['do_player_cards']:
 	s_db = simulation_param['databases']['skater_db']
@@ -706,7 +711,7 @@ if simulation_param['do_player_cards']:
 	flter['team'] = ['SJS']
 	#flter['team'] = ACTIVE_TEAMS
 	flter['position'] = ['F']
-	flter['toi'] = 200
+	flter['toi'] = 50
 	player_ids = []
 	for sid in s_db.keys():
 		if s_db[sid].bio['team_id'] in flter['team'] and s_db[sid].bio['position'] in flter['position']:
@@ -1096,7 +1101,7 @@ if simulation_param['do_player_cards']:
 	print('TOTAL RATING:')
 	op_l = []
 	for player_id in player_ids:
-		if s_db[player_id].es['toi'] > flter['toi']*60:
+		if s_db[player_id].ind['toi'][STAT_ES] > flter['toi']*60:
 			total_value = weighted_sum(s_db[player_id].rating,flter['ws'])
 			op_l.append((total_value,player_id))
 	op_l.sort(reverse=True)

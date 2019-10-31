@@ -118,10 +118,10 @@ def	simulate_ind_game(simulation_param,data_param):
 			print('   Goals ' + game_status['ht_id'] + ': ' + str(ht_gscr_str))
 			print('   Goals ' + game_status['at_id'] + ': ' + str(at_gscr_str))
 			print('Shots:')
-			print(game_status['ht_id'] + ' ' + str(game_status['ht_shots']) + ' - ' + str(game_status['at_shots']) + ' ' + game_status['at_id'])
+			print(game_status['ht_id'] + ' ' + str(game_status['ht_exp_shots']) + ' - ' + str(game_status['at_exp_shots']) + ' ' + game_status['at_id'])
 
-			ht_sv_pcg = (game_status['at_shots']-game_status['at_goals'])/game_status['at_shots']
-			at_sv_pcg = (game_status['ht_shots']-game_status['ht_goals'])/game_status['ht_shots']
+			ht_sv_pcg = (game_status['at_exp_shots']-game_status['at_goals'])/game_status['at_exp_shots']
+			at_sv_pcg = (game_status['ht_exp_shots']-game_status['ht_goals'])/game_status['ht_exp_shots']
 			print('Saving percentage: {0}: {1:.1f} - {2}: {3:.1f}'.format(data_param['ht_goalie'],100*ht_sv_pcg,data_param['at_goalie'],100*at_sv_pcg))
 			if False:
 				print('- - - - - - - - INDIVIDUAL STATS - - - - - - - -')
@@ -195,6 +195,10 @@ def simulate_regulation_time(simulation_param,data_param,game_status):
 
 		if ( (game_status['time']%simulation_param['period_length']) == (simulation_param['period_length']-1) ) and (verbose == True):
 			print('- - - - - - - - END OF PERIOD ' + str(game_status['current_period']) + ' - - - - - - - -')
+			print('Score:')
+			print(game_status['ht_id'] + ' ' + str(game_status['ht_goals']) + ' - ' + str(game_status['at_goals']) + ' ' + game_status['at_id'])
+			print('Shots:')
+			print(game_status['ht_id'] + ' ' + str(game_status['ht_exp_shots']) + ' - ' + str(game_status['at_exp_shots']) + ' ' + game_status['at_id'])
 
 	return [game_status, data_param]
 
@@ -337,18 +341,20 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 			game_status['players_in_pbox'].append(skater_id)
 		else:
 			if shot_taken == True:
-				#skater_id = get_from_distribution(game_status[ct + '_on_ice_db'],'isf_per_time',normalize=True)
-				if random.uniform(0,1) < (current_team_sh_pcg + (1-opponent_goalie.sv_pcg))/2:
+				skater_id = get_from_distribution(game_status[ct + '_on_ice_db'],'isf_per_time',normalize=True)
+				if verbose:
+					print(game_status['time_str'] + ':    Shot (' + game_status[ct + '_penalty_status'] + ') by ' + skater_id + ' (' + game_status[ct + '_id'] + ')')
+				
+				if random.uniform(0,1) < (game_status[ct + '_on_ice_db'][skater_id][1] + (1-opponent_goalie.sv_pcg))/2:
+				#if random.uniform(0,1) < (current_team+sh_pcg + (1-opponent_goalie.sv_pcg))/2:
 					# Goal is scored.
-					#skater_id = get_from_distribution(game_status[ct + '_on_ice_db'],'sh_pcg',normalize=True)
 					if verbose:
 						print(game_status['time_str'] + ':    Goal (' + game_status[ct + '_penalty_status'] + ') for ' + game_status[ct + '_id'] + ' (' + skater_id + ')')					
-					
+					game_status[ct + '_goalscorers'].append(skater_id)
 					# Update in-game stats.
 					game_status['goal_scored'][i] = True						
 					#skater.in_game_stats['goals'] += 1
 					game_status[ct + '_goals'] += 1
-					#game_status[ct + '_goalscorers'].append(skater_id)
 					
 					# Sudden death if OT
 					if game_status['current_period'] >= 4: 
@@ -476,27 +482,20 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 				pt_per_time = 0 # No penalties during PP/PK are allowed for now.
 				pd_per_time = 0 # No penalties during PP/PK are allowed for now.
 				if game_status['gameplay_state'] == GAMEPLAY_ES:
-					toi_pcg = skater.es['toi_pcg']
-					sf = skater.es['isf']
-					gf = skater.es['gf']
-					isf_per_time = game_status['time_step']*skater.es['isf_per_sec']
-					sh_pcg = skater.es['ish_pcg']
-					pt_per_time = game_status['time_step']*skater.es['pt_per_sec']
-					pd_per_time = game_status['time_step']*skater.es['pd_per_sec']
+					index = STAT_ES
+					pt_per_time = game_status['time_step']*skater.ind['pt_per_sec'][STAT_ES]
+					pd_per_time = game_status['time_step']*skater.ind['pd_per_sec'][STAT_ES]
 				elif game_status[ct + '_pp'] == True:
-					toi_pcg = skater.pp['toi_pcg']
-					sf = skater.pp['isf']
-					gf = skater.pp['gf']
-					isf_per_time = game_status['time_step']*skater.pp['isf_per_sec']
-					sh_pcg = skater.pp['ish_pcg']
+					index = STAT_PP
 				elif game_status[ct + '_pk'] == True:
-					toi_pcg = skater.pk['toi_pcg']
-					sf = skater.pk['isf']
-					gf = skater.pk['gf']
-					isf_per_time = game_status['time_step']*skater.pk['isf_per_sec']
-					sh_pcg = skater.pk['ish_pcg']
+					index = STAT_PK
 				else:
 					raise ValueError('Incorrect game_status')
+				toi_pcg = skater.ind['toi_pcg'][index]
+				sf = skater.ind['isf'][index]
+				gf = skater.ind['gf'][index]
+				isf_per_time = game_status['time_step']*skater.ind['isf_per_sec'][index]
+				sh_pcg = skater.ind['ish_pcg'][STAT_ES]
 				if game_status[ot + '_goalie_in_net'] == False:
 					sf_per_time *= 3 # Estimation of how much more often a shot is taken when the goalie is pulled
 					sh_pcg = 1.7 # Ugly hack to get the total goal-prob to be about 90% when the goalie is pulled

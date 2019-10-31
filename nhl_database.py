@@ -65,10 +65,10 @@ def create_skater_db(simulation_param):
 	player_data = add_corsica_data(simulation_param,player_data)
 
 	for player_id in player_data.keys():
-		if player_data[player_id]['es'] == None or player_data[player_id]['on_ice'] == None:
+		if player_data[player_id]['ind'] == None or player_data[player_id]['on_ice'] == None:
 			warnings.warn('\nSkipping player ' + player_id)
 		else:
-			output[player_id] = Skater(player_data[player_id]['bio'],player_data[player_id]['es'],player_data[player_id]['pp'],player_data[player_id]['pk'],player_data[player_id]['on_ice'])
+			output[player_id] = Skater(player_data[player_id]['bio'],player_data[player_id]['ind'],player_data[player_id]['on_ice'])
 	return output
 
 def add_bio_data(simulation_param):
@@ -142,11 +142,8 @@ def add_bio_data(simulation_param):
 				ACTIVE_SKATERS.add(name)
 				player_data[name] = {}
 				player_data[name]['bio'] = [name,team_id,position,age,height,weight,draft_team,draft_year,draft_round,round_pick,total_draft_pos]
-				# Setup empty structs for PP/PK.
-				player_data[name]['es'] = None
-				player_data[name]['pp'] = None
-				player_data[name]['pk'] = None
-				#player_data[name]['ind'] = None
+				# Setup empty structs.
+				player_data[name]['ind'] = None
 				player_data[name]['on_ice'] = None
 	return player_data
 
@@ -155,85 +152,88 @@ def add_es_data(simulation_param,player_data):
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
 			if row[1] != 'Player':
-				# DATA FROM ROW:
-				# [toi,gf,assist,f_assist,s_assist,sf,pt,pd,sh_pcg]
-				if str(row[SKATER_DB_ES_TOI]) == '-':
-					toi = 0						
-				else:
-					toi = int(60*float(row[SKATER_DB_ES_TOI]))
-				
-				if str(row[SKATER_DB_ES_TEAM_ID]) == '-':
-					raise ValueError('Incorrect team_id ' + str(row[SKATER_DB_ES_TEAM_ID]))
-				else:
-					multiple_teams = False
-					if len(str(row[SKATER_DB_ES_TEAM_ID]).split(',')) > 1:
-						multiple_teams = True
-
-				if str(row[SKATER_DB_ES_GOALS]) == '-':
-					gf = 0						
-				else:
-					gf = int(row[SKATER_DB_ES_GOALS])
-				
-				if str(row[SKATER_DB_ES_ASSIST]) == '-':
-					assist = 0						
-				else:
-					assist = int(row[SKATER_DB_ES_ASSIST])
-
-				if str(row[SKATER_DB_ES_FIRST_ASSIST]) == '-':
-					f_assist = 0						
-				else:
-					f_assist = int(row[SKATER_DB_ES_FIRST_ASSIST])
-
-				if str(row[SKATER_DB_ES_SECOND_ASSIST]) == '-':
-					s_assist = 0						
-				else:
-					s_assist = int(row[SKATER_DB_ES_SECOND_ASSIST])
-
-				if str(row[SKATER_DB_ES_SF]) == '-':
-					sf = 0
-				else:
-					sf = int(row[SKATER_DB_ES_SF])
-
-				if str(row[SKATER_DB_ES_IXG]) == '-':
-					ixg = 0
-				else:
-					ixg = float(row[SKATER_DB_ES_IXG])
-
-				if str(row[SKATER_DB_ES_ICF]) == '-':
-					icf = 0
-				else:
-					icf = int(row[SKATER_DB_ES_ICF])
-					
-				if str(row[SKATER_DB_ES_TOTAL_PENALTIES]) == '-':
-					pt = 0
-				else:
-					pt = int(row[SKATER_DB_ES_TOTAL_PENALTIES])
-
-				if str(row[SKATER_DB_ES_PENALTIES_DRAWN]) == '-':
-					pd = 0
-				else:
-					pd = int(row[SKATER_DB_ES_PENALTIES_DRAWN])
-
-				# Float
-				if str(row[SKATER_DB_ES_SH_PCG]) == '-':
-					sh_pcg = 0.0						
-				else:
-					sh_pcg = float(row[SKATER_DB_ES_SH_PCG])/100
-
-				# Create specifc stats.
-				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
-
 				# Only add players that are playing today.
+				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
 					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
-						player_id = 'SEBASTIAN_AHO2'
-					toi_pcg = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_es)
-					sf_per_sec = sf/toi
-					pt_per_sec = pt/toi
-					pd_per_sec = pd/toi
-					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['es'] = [toi,toi_pcg,gf,assist,f_assist,s_assist,sf,sh_pcg,pt,pd,ixg,icf,multiple_teams]
+						#player_id = 'SEBASTIAN_AHO2'
+						raise ValueError('Wrong Sebastian Aho')
+					
+					player_data[player_id]['ind'] = {}
+
+					if str(row[SKATER_DB_ES_TEAM_ID]) == '-':
+						raise ValueError('Incorrect team_id ' + str(row[SKATER_DB_ES_TEAM_ID]))
+					else:
+						player_data[player_id]['ind']['multiple_teams'] = False
+						if len(str(row[SKATER_DB_ES_TEAM_ID]).split(',')) > 1:
+							player_data[player_id]['ind']['multiple_teams'] = True
+					
+					if str(row[SKATER_DB_ES_TOI]) == '-':
+						player_data[player_id]['ind']['toi'] = [0,0,0]
+						toi = 0
+					else:
+						toi = int(60*float(row[SKATER_DB_ES_TOI]))
+						player_data[player_id]['ind']['toi'] = [toi,0,0]
+
+					if str(row[SKATER_DB_ES_GOALS]) == '-':
+						player_data[player_id]['ind']['gf'] = [0,0,0]
+					else:
+						player_data[player_id]['ind']['gf'] = [int(row[SKATER_DB_ES_GOALS]),0,0]
+					
+					if str(row[SKATER_DB_ES_ASSIST]) == '-':
+						player_data[player_id]['ind']['assist'] = [0,0,0]
+					else:
+						player_data[player_id]['ind']['assist'] = [int(row[SKATER_DB_ES_ASSIST]),0,0]
+
+					if str(row[SKATER_DB_ES_FIRST_ASSIST]) == '-':
+						player_data[player_id]['ind']['f_assist'] = [0,0,0]					
+					else:
+						player_data[player_id]['ind']['f_assist'] = [int(row[SKATER_DB_ES_FIRST_ASSIST]),0,0]
+
+					if str(row[SKATER_DB_ES_SECOND_ASSIST]) == '-':
+						player_data[player_id]['ind']['s_assist'] = [0,0,0]				
+					else:
+						player_data[player_id]['ind']['s_assist'] = [int(row[SKATER_DB_ES_SECOND_ASSIST]),0,0]
+
+					if str(row[SKATER_DB_ES_SF]) == '-':
+						player_data[player_id]['ind']['isf'] = [0,0,0]
+					else:
+						sf = int(row[SKATER_DB_ES_SF])
+						player_data[player_id]['ind']['isf'] = [sf,0,0]
+
+					if str(row[SKATER_DB_ES_ICF]) == '-':
+						player_data[player_id]['ind']['icf'] = [0,0,0]
+					else:
+						player_data[player_id]['ind']['icf'] = [int(row[SKATER_DB_ES_ICF]),0,0]
+						
+					if str(row[SKATER_DB_ES_TOTAL_PENALTIES]) == '-':
+						player_data[player_id]['ind']['pt'] = [0,0,0]
+					else:
+						pt = int(row[SKATER_DB_ES_TOTAL_PENALTIES])
+						player_data[player_id]['ind']['pt'] = [pt,0,0]
+
+					if str(row[SKATER_DB_ES_PENALTIES_DRAWN]) == '-':
+						player_data[player_id]['ind']['pd'] = [0,0,0]
+					else:
+						pd = int(row[SKATER_DB_ES_PENALTIES_DRAWN])
+						player_data[player_id]['ind']['pd'] = [pd,0,0]
+
+					# Float
+					if str(row[SKATER_DB_ES_SH_PCG]) == '-':
+						player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]						
+					else:
+						player_data[player_id]['ind']['ish_pcg'] = [float(row[SKATER_DB_ES_SH_PCG])/100,0.0,0.0]
+					
+					if str(row[SKATER_DB_ES_IXG]) == '-':
+						player_data[player_id]['ind']['ixg'] = [0.0,0.0,0.0]
+					else:
+						player_data[player_id]['ind']['ixg'] = [float(row[SKATER_DB_ES_IXG]),0.0,0.0]
+
+					player_data[player_id]['ind']['toi_pcg'] = [(toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_es),0.0,0.0]
+					player_data[player_id]['ind']['sf_per_sec'] = [sf/toi,0.0,0.0]
+					player_data[player_id]['ind']['pt_per_sec'] = [pt/toi,0.0,0.0]
+					player_data[player_id]['ind']['pd_per_sec'] = [pd/toi,0.0,0.0]
 	return player_data
 
 def add_pp_data(simulation_param,player_data):
@@ -241,65 +241,62 @@ def add_pp_data(simulation_param,player_data):
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
 			if row[1] != 'Player':
-				# DATA FROM ROW:
-				# [name,team_id,position,toi,gf,assist,f_assist,s_assist,sf,pt,pd,sh_pcg]
-				if str(row[SKATER_DB_PP_TOI]) == '-':
-					toi = 0						
-				else:
-					toi = int(60*float(row[SKATER_DB_PP_TOI]))
-				
-				if str(row[SKATER_DB_PP_GOALS]) == '-':
-					gf = 0						
-				else:
-					gf = int(row[SKATER_DB_PP_GOALS])
-				
-				if str(row[SKATER_DB_PP_ASSIST]) == '-':
-					assist = 0						
-				else:
-					assist = int(row[SKATER_DB_PP_ASSIST])
-
-				if str(row[SKATER_DB_PP_FIRST_ASSIST]) == '-':
-					f_assist = 0						
-				else:
-					f_assist = int(row[SKATER_DB_PP_FIRST_ASSIST])
-
-				if str(row[SKATER_DB_PP_SECOND_ASSIST]) == '-':
-					s_assist = 0						
-				else:
-					s_assist = int(row[SKATER_DB_PP_SECOND_ASSIST])
-
-				if str(row[SKATER_DB_PP_SF]) == '-':
-					sf = 0
-				else:
-					sf = int(row[SKATER_DB_PP_SF])
-
-				if str(row[SKATER_DB_PP_PT]) == '-':
-					pt = 0
-				else:
-					pt = int(row[SKATER_DB_PP_PT])
-
-				if str(row[SKATER_DB_PP_PD]) == '-':
-					pd = 0
-				else:
-					pd = int(row[SKATER_DB_PP_PD])
-
-				# Float
-				if str(row[SKATER_DB_PP_SH_PCG]) == '-':
-					sh_pcg = 0.0						
-				else:
-					sh_pcg = float(row[SKATER_DB_PP_SH_PCG])/100
-				
-				# Create specifc stats.
-				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
-
 				# Only add players that are playing today.
+				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
 					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
-						player_id = 'SEBASTIAN_AHO2'
-					toi_pcg = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
-					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['pp'] = [toi,toi_pcg,sf,gf,sh_pcg,pt,pd]
+						#player_id = 'SEBASTIAN_AHO2'
+						raise ValueError('Wrong Sebastian Aho')
+
+					if str(row[SKATER_DB_PP_TOI]) == '-':
+						player_data[player_id]['ind']['toi'][STAT_PP] = 0						
+					else:
+						toi = int(60*float(row[SKATER_DB_PP_TOI]))
+						player_data[player_id]['ind']['toi'][STAT_PP] = toi
+					
+					if str(row[SKATER_DB_PP_GOALS]) == '-':
+						player_data[player_id]['ind']['gf'][STAT_PP] = 0						
+					else:
+						player_data[player_id]['ind']['gf'][STAT_PP] = int(row[SKATER_DB_PP_GOALS])
+					
+					if str(row[SKATER_DB_PP_ASSIST]) == '-':
+						player_data[player_id]['ind']['assist'][STAT_PP] = 0						
+					else:
+						player_data[player_id]['ind']['assist'][STAT_PP] = int(row[SKATER_DB_PP_ASSIST])
+
+					if str(row[SKATER_DB_PP_FIRST_ASSIST]) == '-':
+						player_data[player_id]['ind']['f_assist'][STAT_PP] = 0						
+					else:
+						player_data[player_id]['ind']['f_assist'][STAT_PP] = int(row[SKATER_DB_PP_FIRST_ASSIST])
+
+					if str(row[SKATER_DB_PP_SECOND_ASSIST]) == '-':
+						player_data[player_id]['ind']['s_assist'][STAT_PP] = 0						
+					else:
+						player_data[player_id]['ind']['s_assist'][STAT_PP] = int(row[SKATER_DB_PP_SECOND_ASSIST])
+
+					if str(row[SKATER_DB_PP_SF]) == '-':
+						player_data[player_id]['ind']['isf'][STAT_PP] = 0
+					else:
+						player_data[player_id]['ind']['isf'][STAT_PP] = int(row[SKATER_DB_PP_SF])
+
+					if str(row[SKATER_DB_PP_PT]) == '-':
+						player_data[player_id]['ind']['pt'][STAT_PP] = 0
+					else:
+						player_data[player_id]['ind']['pt'][STAT_PP] = int(row[SKATER_DB_PP_PT])
+
+					if str(row[SKATER_DB_PP_PD]) == '-':
+						player_data[player_id]['ind']['pd'][STAT_PP] = 0
+					else:
+						player_data[player_id]['ind']['pd'][STAT_PP] = int(row[SKATER_DB_PP_PD])
+
+					# Float
+					if str(row[SKATER_DB_PP_SH_PCG]) == '-':
+						player_data[player_id]['ind']['ish_pcg'][STAT_PP] = 0.0						
+					else:
+						player_data[player_id]['ind']['ish_pcg'][STAT_PP] = float(row[SKATER_DB_PP_SH_PCG])/100
+					
+					player_data[player_id]['ind']['toi_pcg'][STAT_PP] = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
 	return player_data
 
 def add_pk_data(simulation_param,player_data):
@@ -307,65 +304,62 @@ def add_pk_data(simulation_param,player_data):
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
 			if row[1] != 'Player':
-				# DATA FROM ROW:
-				# [name,team_id,position,toi,gf,assist,f_assist,s_assist,sf,pt,pd,sh_pcg]
-				if str(row[SKATER_DB_PK_TOI]) == '-':
-					toi = 0						
-				else:
-					toi = int(60*float(row[SKATER_DB_PK_TOI]))
-				
-				if str(row[SKATER_DB_PK_GOALS]) == '-':
-					gf = 0						
-				else:
-					gf = int(row[SKATER_DB_PK_GOALS])
-				
-				if str(row[SKATER_DB_PK_ASSIST]) == '-':
-					assist = 0						
-				else:
-					assist = int(row[SKATER_DB_PK_ASSIST])
-
-				if str(row[SKATER_DB_PK_FIRST_ASSIST]) == '-':
-					f_assist = 0						
-				else:
-					f_assist = int(row[SKATER_DB_PK_FIRST_ASSIST])
-
-				if str(row[SKATER_DB_PK_SECOND_ASSIST]) == '-':
-					s_assist = 0						
-				else:
-					s_assist = int(row[SKATER_DB_PK_SECOND_ASSIST])
-
-				if str(row[SKATER_DB_PK_SF]) == '-':
-					sf = 0
-				else:
-					sf = int(row[SKATER_DB_PK_SF])
-
-				if str(row[SKATER_DB_PK_PT]) == '-':
-					pt = 0
-				else:
-					pt = int(row[SKATER_DB_PK_PT])
-
-				if str(row[SKATER_DB_PK_PD]) == '-':
-					pd = 0
-				else:
-					pd = int(row[SKATER_DB_PK_PD])
-
-				# Float
-				if str(row[SKATER_DB_PK_SH_PCG]) == '-':
-					sh_pcg = 0.0						
-				else:
-					sh_pcg = float(row[SKATER_DB_PK_SH_PCG])/100
-				
-				# Create specifc stats.
-				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
-
 				# Only add players that are playing today.
+				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
 					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
-						player_id = 'SEBASTIAN_AHO2'
-					toi_pcg = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pk)
-					if player_id != 'SEBASTIAN_AHO2':
-						player_data[player_id]['pk'] = [toi,toi_pcg,sf,gf,sh_pcg,pt,pd]
+						#player_id = 'SEBASTIAN_AHO2'
+						raise ValueError('Wrong Sebastian Aho')
+
+					if str(row[SKATER_DB_PP_TOI]) == '-':
+						player_data[player_id]['ind']['toi'][STAT_PK] = 0						
+					else:
+						toi = int(60*float(row[SKATER_DB_PP_TOI]))
+						player_data[player_id]['ind']['toi'][STAT_PK] = toi
+					
+					if str(row[SKATER_DB_PP_GOALS]) == '-':
+						player_data[player_id]['ind']['gf'][STAT_PK] = 0						
+					else:
+						player_data[player_id]['ind']['gf'][STAT_PK] = int(row[SKATER_DB_PP_GOALS])
+					
+					if str(row[SKATER_DB_PP_ASSIST]) == '-':
+						player_data[player_id]['ind']['assist'][STAT_PK] = 0						
+					else:
+						player_data[player_id]['ind']['assist'][STAT_PK] = int(row[SKATER_DB_PP_ASSIST])
+
+					if str(row[SKATER_DB_PP_FIRST_ASSIST]) == '-':
+						player_data[player_id]['ind']['f_assist'][STAT_PK] = 0						
+					else:
+						player_data[player_id]['ind']['f_assist'][STAT_PK] = int(row[SKATER_DB_PP_FIRST_ASSIST])
+
+					if str(row[SKATER_DB_PP_SECOND_ASSIST]) == '-':
+						player_data[player_id]['ind']['s_assist'][STAT_PK] = 0						
+					else:
+						player_data[player_id]['ind']['s_assist'][STAT_PK] = int(row[SKATER_DB_PP_SECOND_ASSIST])
+
+					if str(row[SKATER_DB_PP_SF]) == '-':
+						player_data[player_id]['ind']['isf'][STAT_PK] = 0
+					else:
+						player_data[player_id]['ind']['isf'][STAT_PK] = int(row[SKATER_DB_PP_SF])
+
+					if str(row[SKATER_DB_PP_PT]) == '-':
+						player_data[player_id]['ind']['pt'][STAT_PK] = 0
+					else:
+						player_data[player_id]['ind']['pt'][STAT_PK] = int(row[SKATER_DB_PP_PT])
+
+					if str(row[SKATER_DB_PP_PD]) == '-':
+						player_data[player_id]['ind']['pd'][STAT_PK] = 0
+					else:
+						player_data[player_id]['ind']['pd'][STAT_PK] = int(row[SKATER_DB_PP_PD])
+
+					# Float
+					if str(row[SKATER_DB_PP_SH_PCG]) == '-':
+						player_data[player_id]['ind']['ish_pcg'][STAT_PK] = 0.0						
+					else:
+						player_data[player_id]['ind']['ish_pcg'][STAT_PK] = float(row[SKATER_DB_PP_SH_PCG])/100
+					
+					player_data[player_id]['ind']['toi_pcg'][STAT_PK] = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
 	return player_data
 
 def add_on_ice_data(simulation_param,player_data):
@@ -376,11 +370,11 @@ def add_on_ice_data(simulation_param,player_data):
 
 				# Only add players that are playing today.
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
-				
 				if player_id in ACTIVE_SKATERS: 
 					team_id = player_data[player_id]['bio'][1]
-					if ((player_id == 'SEBASTIAN_AHO') and (team_id != 'CAR')):
-						print('Weirdo')
+					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
+						#player_id = 'SEBASTIAN_AHO2'
+						raise ValueError('Wrong Sebastian Aho')
 
 					player_data[player_id]['on_ice'] = {}
 
@@ -655,31 +649,26 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 
 		# Calculate total shots/scf taken per team, only if player is available
 		if skater_id not in unavailable_players:
-			sf_dict[skater.bio['team_id']].append(skater.es['isf'])
-			gf_dict[skater.bio['team_id']].append(skater.es['gf'])
+			sf_dict[skater.bio['team_id']].append(skater.ind['isf'][STAT_ES])
+			gf_dict[skater.bio['team_id']].append(skater.ind['gf'][STAT_ES])
 			scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
 			sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
 
-
-		# Add toi%-data.
-		skater.es['toi_pcg'] = skater.es['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_es_per_gp
-		skater.pp['toi_pcg'] = skater.pp['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_pp_per_gp
-		skater.pk['toi_pcg'] = skater.pk['toi_per_gp'] / team_db[skater.bio['team_id']].team_toi_pk_per_gp
+		skater.ind['toi_pcg'] = [0,0,0]
+		for index in STAT_INDEX:
+			skater.ind['toi_pcg'][index] = skater.ind['toi_per_gp'][index] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 
 		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
 		estimated_off = skater.on_ice['scf']
 		estimated_def = skater.on_ice['sca']
-		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.es['toi'] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
-		skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] * skater.on_ice['rel_ca'] / skater.es['toi']
-
-		#skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] / skater.es['toi'] 
-		#skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] / skater.es['toi']
+		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.ind['toi'][STAT_ES] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
+		skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] * skater.on_ice['rel_ca'] / skater.ind['toi'][STAT_ES]
 
 		if skater.bio['multiple_teams'] == True:
-			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.es['toi'] * skater.on_ice['rel_cf']
-			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.es['toi'] * skater.on_ice['rel_ca']
-			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.es['toi']
-			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.es['toi']
+			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_cf']
+			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_ca']
+			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.ind['toi'][STAT_ES]
+			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.ind['toi'][STAT_ES]
 
 		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
