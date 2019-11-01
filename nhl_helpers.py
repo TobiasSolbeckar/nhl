@@ -12,6 +12,9 @@ import copy
 import random
 import copy
 import warnings
+import json
+import gspread
+from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
 
@@ -280,7 +283,7 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 					gen_x.append(axes_info['x']['scale']*tmp_player.get_attribute(axes_info['x']['attribute']))
 				gen_y.append(axes_info['y']['scale']*tmp_player.get_attribute(axes_info['y']['attribute']))
 		else:
-			if (get_attribute_value(tmp_player,'toi') > flter['toi']*60):# and (tmp_player.bio['position'] == flter['position']):
+			if (get_attribute_value(tmp_player,'toi') > flter['toi']*60) and (get_attribute_value(tmp_player,'position') in flter['position']):
 				if ydata_only == True:
 					gen_x.append(tmp_index)
 					tmp_index += 1
@@ -339,28 +342,29 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 			if get_attribute_value(player,'toi') < flter['toi']*60:
 				warnings.warn('Player ' + player_id + ' has played less than ' + str(flter['toi']) + ' minutes even strength (' + str(int(get_attribute_value(player,'toi')/60)) + '). Data not included in plot(s).')
 			else:
-				if do_plots == True:
-					current_marker = markers[marker_idx]
-				if (ydata_only == True) and (do_plots == True):
-					plt.scatter(i,axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id)
-				else:
-					if axes_info['fit_data'] == True:
-						x_val = axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute'])
-						y_val = axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'])
-						y_est = fit_fn(x_val)
-						y_diff = y_val - y_est
-						output['pair_list'].append((y_diff,player_id))
-						output['data_list'].append(y_diff)
-						if y_diff > 0:
-							sign = '+'
-						else:
-							sign = ''
-						lbl_val_str = ' (' + sign + str(int(100*y_diff/y_est)) + '%)'
-					else:
-						lbl_val_str = ''
+				if (get_attribute_value(player,'position') in flter['position']):
 					if do_plots == True:
-						plt.scatter(axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute']),axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id+lbl_val_str)
-				marker_idx += 1
+						current_marker = markers[marker_idx]
+					if (ydata_only == True) and (do_plots == True):
+						plt.scatter(i,axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id)
+					else:
+						if axes_info['fit_data'] == True:
+							x_val = axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute'])
+							y_val = axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'])
+							y_est = fit_fn(x_val)
+							y_diff = y_val - y_est
+							output['pair_list'].append((y_diff,player_id))
+							output['data_list'].append(y_diff)
+							if y_diff > 0:
+								sign = '+'
+							else:
+								sign = ''
+							lbl_val_str = ' (' + sign + str(int(100*y_diff/y_est)) + '%)'
+						else:
+							lbl_val_str = ''
+						if do_plots == True:
+							plt.scatter(axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute']),axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id+lbl_val_str)
+					marker_idx += 1
 	
 	# Invert axis for readability.
 	if axes_info['x']['invert'] == True:
@@ -426,8 +430,27 @@ def get_from_distribution(val_dict,attribute,normalize=False):
 			if random.uniform(0,1) <= (player_values[index]/sum_value):
 				return p_id
 
+def acces_gsheet(name_of_ws,credential_path='creds.json'):
+	# Open/access g-Sheet
+	#name_of_ws = "SharksData_Public"
+	credential_path = 'creds.json' 			# Old version
+	print('Authentication Google Sheet "' + name_of_ws +'"...')
+	json_key = json.load(open(credential_path)) # json credentials you downloaded earlier
+	scope = ['https://spreadsheets.google.com/feeds',
+	         'https://www.googleapis.com/auth/drive']
+	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope) # get email and key from creds
+	g_file = gspread.authorize(credentials) # authenticate with Google
+	print('Authentication done')
+	print('Opening worksheet...')
+	g_wb = g_file.open(name_of_ws) # Open Google WorkBook
+	return g_wb
 
-
-
+def get_alpha(pos=None):
+	# translates column index (1,2,3) to column name ('A','B','C'). 
+	alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
+	if pos == None:
+		return alpha
+	else:
+		return alpha[pos-1]
 
 

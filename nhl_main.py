@@ -119,19 +119,19 @@ simulation_param['only_this_season'] = True
 simulation_param = create_simulation_parameters(simulation_param)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#simulation_param['simulate_season'] = True									# Default value = False
+simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['print_ul_stats'] = True 									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
-simulation_param['do_player_cards'] = True
+#simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Set up simulation parameters
 # Simulation/iteration parameters
 simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,1]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50,1]											# Number of simulations for each game/season. Default = [50000,2500]
 
 # Create databases.
 simulation_param['debug_team'] = 'SJS'
@@ -406,15 +406,32 @@ if simulation_param['simulate_season']:
 			print_list_points.append((average_points,team_id))
 	
 	print('\nRegular season summary:')
+
+	# Writing to G-Sheet
+	g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
+	output_sheet = g_wb.worksheet("TEST_TEAM")
+	start_row = (output_sheet.find("INDEX").row)+1
+	teams_col = output_sheet.find("NAME").col
+	end_cell = output_sheet.find("_END_")
+	correct_col = get_alpha(end_cell.col-2)  # Index starts at 0.
+	
+	teams = output_sheet.col_values(teams_col)
+	teams = teams[1:32]
+	pcg_value = 31 * [0]
+
+
 	total_prob = 0
 	if sort_on_alpha:
 		print_list.sort()
 		print_list_points.sort()
 		for i,pair in enumerate(print_list):
+			team_id = pair[0]
+			pcg_val = pair[1]
 			team = get_team(team_db,pair[0])
 			projected_points = print_list_points[i][1]
 			print('{0}: {1} - {2:.1f}%. Projected points: {3:.1f}.'.format(str(i+1),pair[0],100*pair[1],projected_points))
 			total_prob += pair[1]
+			pcg_value[output_sheet.find(get_long_name(team_id)).row-2] = 100*pcg_val
 	else:
 		print_list.sort(reverse=True)
 		print_list_points.sort(reverse=True)
@@ -423,6 +440,15 @@ if simulation_param['simulate_season']:
 			projected_points = print_list_points[i][1]
 			print('{0}: {1} - {2:.1f}%. Projected points: {3:.1f}.'.format(str(i+1),pair[0],100*pair[1],projected_points))
 			total_prob += pair[0]
+
+	output_sheet.update_acell(str(correct_col + '1'), str(today))
+	data_range = str(correct_col + '2:' + correct_col + '32')
+	cell_list = output_sheet.range(data_range)
+	for i,cell in enumerate(cell_list):
+		cell.value = pcg_value[i]
+	# Update in batch
+	output_sheet.update_cells(cell_list)
+
 	print('Projected points:')
 	tl_a = create_tables(team_db,'atlantic',True,True)
 	tl_m = create_tables(team_db,'metro',True,True)
@@ -668,12 +694,40 @@ if simulation_param['do_exp']:
 
 	if True:
 		min_toi = 50
-		list_length = 20
+
+		g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
+		output_sheet = g_wb.worksheet("SkaterData")
+
+		start_cell = output_sheet.find('name')
+		attributes = output_sheet.row_values(start_cell.row)
+		end_col = get_alpha(len(attributes))
+		num_of_rows = 0
+		data_list = []
+		for player_id in s_db.keys():
+			player = s_db[player_id]
+			if get_attribute_value(player,'toi') > min_toi*60:
+				num_of_rows += 1
+				for attribute in attributes:
+					if attribute == 'toi':
+						data_list.append(int(get_attribute_value(player,attribute))/60)
+					else:
+						data_list.append(get_attribute_value(player,attribute))
+
+		data_range = str('A2:' + end_col + str(1+num_of_rows))
+		cell_list = output_sheet.range(data_range)
+		for i,cell in enumerate(cell_list):
+			cell.value = data_list[i]
+
+		# Update in batch
+		output_sheet.update_cells(cell_list)
+		
+		# Write to console.		
+		list_length = 10
 		team = simulation_param['debug_team']
 		team = None
 		print('\nBest ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_prod,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
-		#op = print_sorted_list(s_db,['points_per_60'],'es',operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print(op)
 		print('\nWorst ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
 		
@@ -700,44 +754,27 @@ if simulation_param['do_player_cards']:
 	Decide which players should be on the report cards.
 	'''
 	pl_high = []
-	ws_def = [1.5,0.5,0.1] # suggestion for defenders
+	ws_def = [1,0.75,0.15] # suggestion for defenders
 	ws_cen = [1,1,0.5] # suggestion for centers
-	ws_wng = [1,0.5,1] # suggestion for wingers
-	ws_fwd = [1,0.75,0.75]
+	ws_wng = [0.75,1,1] # suggestion for wingers
+	ws_fwd = [0.75,1,0.75]
 	flter = {}
-	
-	flter['ws'] = ws_cen
-	flter['list_length'] = 20
-	flter['team'] = ['SJS']
+	flter['list_length'] = 10
+	flter['team'] = ['WPG']
 	#flter['team'] = ACTIVE_TEAMS
-	flter['position'] = ['F']
-	flter['toi'] = 50
+	flter['position'] = ['D']
+	flter['toi'] = 100
 	player_ids = []
 	for sid in s_db.keys():
 		if s_db[sid].bio['team_id'] in flter['team'] and s_db[sid].bio['position'] in flter['position']:
 			player_ids.append(sid)
 
-	#player_ids = ['NIKITA_KUCHEROV','BRAD_MARCHAND','PATRICK_KANE','ALEX_OVECHKIN','MITCHELL_MARNER','LEON_DRAISAITL','JOHNNY_GAUDREAU','ARTEMI_PANARIN','MIKKO_RANTANEN','DAVID_PASTRNAK','BLAKE_WHEELER','CLAUDE_GIROUX','MARK_STONE','VLADIMIR_TARASENKO','TAYLOR_HALL','JONATHAN_HUBERDEAU','MATTHEW_TKACHUK','GABRIEL_LANDESKOG','PATRIK_LAINE','PHIL_KESSEL']
-	#player_ids = ['CONNOR_MCDAVID','SIDNEY_CROSBY','NATHAN_MACKINNON','ALEKSANDER_BARKOV','JOHN_TAVARES','AUSTON_MATTHEWS','PATRICE_BERGERON','STEVEN_STAMKOS','MARK_SCHEIFELE','BRAYDEN_POINT','TYLER_SEGUIN','RYAN_OREILLY','EVGENI_MALKIN','SEBASTIAN_AHO','JACK_EICHEL','EVGENY_KUZNETSOV','LOGAN_COUTURE','NICKLAS_BACKSTROM','SEAN_MONAHAN','ELIAS_PETTERSSON']
-	#player_ids = ['ALEX_PIETRANGELO','BRENT_BURNS','CHARLIE_MCAVOY','COLTON_PARAYKO','DREW_DOUGHTY','DUSTIN_BYFUGLIEN','ERIK_KARLSSON','JACCOB_SLAVIN','JACOB_TROUBA','JOHN_CARLSON','JOHN_KLINGBERG','KRIS_LETANG','MARK_GIORDANO','MIRO_HEISKANEN','MORGAN_RIELLY','P_K__SUBBAN','RASMUS_DAHLIN','ROMAN_JOSI','RYAN_SUTER','SETH_JONES','THOMAS_CHABOT','TOREY_KRUG','TYSON_BARRIE','VICTOR_HEDMAN','ZACH_WERENSKI']
-	#player_ids = ['JESSE_PULJUJARVI','MELKER_KARLSSON','JUSTIN_WILLIAMS','JONNY_BRODZINSKI','PATRICK_MARLEAU']
-	#player_ids.append
-	#player_ids = ['DANIL_YURTAYKIN','DYLAN_GAMBRELL','JONNY_BRODZINSKI','LEAN_BERGMANN','LUKAS_RADIL','MELKER_KARLSSON']
-	#player_ids = ['VLADISLAV_NAMESTNIKOV']
-	#player_ids = list(s_db.keys())
-	
-	
-	#pl_high = ['ALEX_PIETRANGELO','BRENT_BURNS','CHARLIE_MCAVOY','COLTON_PARAYKO','DREW_DOUGHTY','DUSTIN_BYFUGLIEN','ERIK_KARLSSON','JACCOB_SLAVIN','JACOB_TROUBA','JOHN_CARLSON','JOHN_KLINGBERG','KRIS_LETANG','MARK_GIORDANO','MIRO_HEISKANEN','MORGAN_RIELLY','P_K__SUBBAN','RASMUS_DAHLIN','ROMAN_JOSI','RYAN_SUTER','SETH_JONES','THOMAS_CHABOT','TOREY_KRUG','TYSON_BARRIE','VICTOR_HEDMAN','ZACH_WERENSKI']
-	#pl_high = ['NIKITA_KUCHEROV','BRAD_MARCHAND','PATRICK_KANE','ALEX_OVECHKIN','MITCHELL_MARNER','LEON_DRAISAITL','JOHNNY_GAUDREAU','ARTEMI_PANARIN','MIKKO_RANTANEN','DAVID_PASTRNAK','BLAKE_WHEELER','CLAUDE_GIROUX','MARK_STONE','VLADIMIR_TARASENKO','TAYLOR_HALL','JONATHAN_HUBERDEAU','MATTHEW_TKACHUK','GABRIEL_LANDESKOG','PATRIK_LAINE','PHIL_KESSEL']
-	#pl_high = ['CONNOR_MCDAVID','SIDNEY_CROSBY','NATHAN_MACKINNON','ALEKSANDER_BARKOV','JOHN_TAVARES','AUSTON_MATTHEWS','PATRICE_BERGERON','STEVEN_STAMKOS','MARK_SCHEIFELE','BRAYDEN_POINT','TYLER_SEGUIN','RYAN_OREILLY','EVGENI_MALKIN','SEBASTIAN_AHO','JACK_EICHEL','EVGENY_KUZNETSOV','LOGAN_COUTURE','NICKLAS_BACKSTROM','SEAN_MONAHAN','ELIAS_PETTERSSON']
-	
 	pl_high = player_ids
-	
 	'''
 	for sid in s_db.keys():
 		if s_db[sid].bio['team_id'] in ['SJS'] and s_db[sid].bio['position'] in ['F']:
 			pl_high.append(sid)
-	pl_high.append('VALERI_NICHUSHKIN')
+	
 	pl_high.append('JESSE_PULJUJARVI')
 	pl_high.append('TYLER_TOFFOLI')
 	pl_high.append('PATRICK_MARLEAU')
@@ -751,6 +788,8 @@ if simulation_param['do_player_cards']:
 		else:
 			flter['ws'] = ws_def
 
+	flter['ws'] = ws_def
+	
 	figure_index = 1
 	axes_info = {}
 	axes_info['x'] = {}
@@ -794,6 +833,7 @@ if simulation_param['do_player_cards']:
 		[plt,ax,op] = plot_player_cards(plt.subplot(n_rows,n_cols,sub_plot_index),axes_info,s_db,player_ids,flter)
 		ll = 1
 		print('Play driving w. zone deployment:')
+		#print(op)
 		for pair in op['pair_list']:
 			# Normalize data
 			value = pair[0]
@@ -1099,11 +1139,13 @@ if simulation_param['do_player_cards']:
 	# Print total rating.
 	values = []
 	print('TOTAL RATING:')
+	counter = 1
 	op_l = []
 	for player_id in player_ids:
-		if s_db[player_id].ind['toi'][STAT_ES] > flter['toi']*60:
+		if s_db[player_id].ind['toi'][STAT_ES] > flter['toi']*60 and s_db[player_id].bio['position'] in flter['position']:
 			total_value = weighted_sum(s_db[player_id].rating,flter['ws'])
 			op_l.append((total_value,player_id))
+			counter += 1
 	op_l.sort(reverse=True)
 	ll = 1
 	for pair in op_l:
@@ -1113,5 +1155,6 @@ if simulation_param['do_player_cards']:
 			if pair[1] in pl_high:
 				values.append(value)
 		ll += 1
+	print('Total number of players: ' + str(counter))
 	print('Average value for player highlighted: ' + str(np.mean(values)))
 
