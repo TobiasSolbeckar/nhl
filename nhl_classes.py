@@ -115,6 +115,9 @@ class Skater():
 		self.on_ice['avg_zone_start'] = (self.on_ice['oz_pcg']*3 + self.on_ice['nz_pcg']*2 + self.on_ice['dz_pcg']*1)-2
 		self.on_ice['estimated_off_per_sec'] = 0
 		self.on_ice['estimated_def_per_sec'] = 0
+		self.on_ice['estimated_off_per_60'] = 0
+		self.on_ice['estimated_def_per_60'] = 0
+		self.on_ice['estimated_def_per_60_diff'] = 0
 		self.on_ice['estimated_off_pcg'] = 0
 		self.rating = []
 		# Simulated stats

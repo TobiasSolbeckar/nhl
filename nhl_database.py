@@ -670,6 +670,10 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.ind['toi'][STAT_ES]
 			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.ind['toi'][STAT_ES]
 
+		skater.on_ice['estimated_off_per_60'] = skater.on_ice['estimated_off_per_sec']*3600
+		skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
+		skater.on_ice['estimated_off_per_60_diff'] = skater.on_ice['estimated_off_per_60'] - skater.on_ice['estimated_def_per_60']
+
 		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
