@@ -448,9 +448,14 @@ def acces_gsheet(name_of_ws,credential_path='creds.json'):
 def get_alpha(pos=None):
 	# translates column index (1,2,3) to column name ('A','B','C'). 
 	alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
+	combined_alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
+	for f_letter in alpha:
+		for s_letter in alpha:
+			combined_alpha.append(f_letter + s_letter)
+
 	if pos == None:
-		return alpha
+		return combined_alpha
 	else:
-		return alpha[pos-1]
+		return combined_alpha[pos-1]
 
 

@@ -378,6 +378,9 @@ def add_on_ice_data(simulation_param,player_data):
 
 					player_data[player_id]['on_ice'] = {}
 
+					player_data[player_id]['on_ice']['rel_cf'] = 1.0
+					player_data[player_id]['on_ice']['rel_ca'] = 1.0
+
 					if str(row[SKATER_DB_ON_ICE_GP]) == '-':
 						player_data[player_id]['on_ice']['gp'] = 0						
 					else:
@@ -661,14 +664,21 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
 		estimated_off = skater.on_ice['scf']
 		estimated_def = skater.on_ice['sca']
+
 		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.ind['toi'][STAT_ES] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
 		skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] * skater.on_ice['rel_ca'] / skater.ind['toi'][STAT_ES]
+
+		if skaters_on_ice['pt_per_sec'] == 0:
+			if skater.on_ice['pd_per_sec'] == 0:
+				skater.on_ice['pd_pcg'] = 0	
+			skater.on_ice['pd_pcg'] = skater.on_ice['pd_per_sec']/skaters_on_ice['pt_per_sec']	
+		skater.on_ice['pd_pcg'] = skater.on_ice['pd_per_sec']/skaters_on_ice['pt_per_sec']
 
 		if skater.bio['multiple_teams'] == True:
 			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_cf']
 			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_ca']
-			skater.on_ice['estimated_off_per_sec'] = estimated_off/ skater.ind['toi'][STAT_ES]
-			skater.on_ice['estimated_def_per_sec'] = estimated_def/ skater.ind['toi'][STAT_ES]
+			skater.on_ice['estimated_off_per_sec'] = estimated_off / skater.ind['toi'][STAT_ES]
+			skater.on_ice['estimated_def_per_sec'] = estimated_def / skater.ind['toi'][STAT_ES]
 
 		skater.on_ice['estimated_off_per_60'] = skater.on_ice['estimated_off_per_sec']*3600
 		skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
@@ -683,7 +693,6 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
-
 
 		if skater.bio['team_id'] == debug_team_id:
 			print('   {0}: Estimated offense/60: {1:.1f}. Estimated defense/60: {2:.1f}. Estimated off-pcg: {3:.1f}%'.format(skater.bio['name'],3600*skater.on_ice['estimated_off_per_sec'],3600*skater.on_ice['estimated_def_per_sec'],100*skater.on_ice['estimated_off_pcg']))
@@ -1254,6 +1263,7 @@ def get_team_id_for_player(name,team_id):
 		new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
 		new_team['ERIK_GUDBRANSON'] = 'ANA'
 		new_team['ANDREAS_MARTINSEN'] = 'PTI'
+		new_team['BRENDAN_PERLINI'] = 'DET'
 
 		if name not in set(new_team.keys()):
 			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		

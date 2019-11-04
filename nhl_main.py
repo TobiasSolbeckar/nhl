@@ -115,7 +115,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['only_this_season'] = True
+simulation_param['only_this_season'] = False
 simulation_param = create_simulation_parameters(simulation_param)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -131,7 +131,7 @@ simulation_param['simulate_season'] = True									# Default value = False
 simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50,1]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50000,1]											# Number of simulations for each game/season. Default = [50000,2500]
 
 # Create databases.
 simulation_param['debug_team'] = 'SJS'
@@ -412,26 +412,24 @@ if simulation_param['simulate_season']:
 	output_sheet = g_wb.worksheet("TEST_TEAM")
 	start_row = (output_sheet.find("INDEX").row)+1
 	teams_col = output_sheet.find("NAME").col
-	end_cell = output_sheet.find("_END_")
-	correct_col = get_alpha(end_cell.col-2)  # Index starts at 0.
 	
+	headers_list = output_sheet.row_values(output_sheet.find("INDEX").row)
+	#print(headers_list)
+	correct_col = get_alpha(len(headers_list))  # Index starts at 0.
 	teams = output_sheet.col_values(teams_col)
 	teams = teams[1:32]
 	pcg_value = 31 * [0]
-
 
 	total_prob = 0
 	if sort_on_alpha:
 		print_list.sort()
 		print_list_points.sort()
 		for i,pair in enumerate(print_list):
-			team_id = pair[0]
-			pcg_val = pair[1]
 			team = get_team(team_db,pair[0])
 			projected_points = print_list_points[i][1]
 			print('{0}: {1} - {2:.1f}%. Projected points: {3:.1f}.'.format(str(i+1),pair[0],100*pair[1],projected_points))
 			total_prob += pair[1]
-			pcg_value[output_sheet.find(get_long_name(team_id)).row-2] = 100*pcg_val
+			pcg_value[output_sheet.find(get_long_name(pair[0])).row-2] = 100*pair[1]
 	else:
 		print_list.sort(reverse=True)
 		print_list_points.sort(reverse=True)
@@ -440,6 +438,7 @@ if simulation_param['simulate_season']:
 			projected_points = print_list_points[i][1]
 			print('{0}: {1} - {2:.1f}%. Projected points: {3:.1f}.'.format(str(i+1),pair[0],100*pair[1],projected_points))
 			total_prob += pair[0]
+			pcg_value[output_sheet.find(get_long_name(pair[0])).row-2] = 100*pair[1]
 
 	output_sheet.update_acell(str(correct_col + '1'), str(today))
 	data_range = str(correct_col + '2:' + correct_col + '32')
@@ -722,12 +721,11 @@ if simulation_param['do_exp']:
 		output_sheet.update_cells(cell_list)
 		
 		# Write to console.		
-		list_length = 10
+		list_length = 20
 		team = simulation_param['debug_team']
 		team = None
 		print('\nBest ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_prod,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
-		print(op)
 		print('\nWorst ' + str(list_length) + ' offensive players (min. ' + str(min_toi) + ' minutes played):')
 		op = print_sorted_list(s_db,['estimated_off_per_sec'],['on_ice'],operation=f_div,toi_filter=min_toi,position_filter=['F'],team=team,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
 		
@@ -760,10 +758,10 @@ if simulation_param['do_player_cards']:
 	ws_fwd = [0.75,1,0.75]
 	flter = {}
 	flter['list_length'] = 10
-	flter['team'] = ['WPG']
+	flter['team'] = ['SJS']
 	#flter['team'] = ACTIVE_TEAMS
-	flter['position'] = ['D']
-	flter['toi'] = 100
+	flter['position'] = ['F']
+	flter['toi'] = 50
 	player_ids = []
 	for sid in s_db.keys():
 		if s_db[sid].bio['team_id'] in flter['team'] and s_db[sid].bio['position'] in flter['position']:
@@ -788,7 +786,7 @@ if simulation_param['do_player_cards']:
 		else:
 			flter['ws'] = ws_def
 
-	flter['ws'] = ws_def
+	flter['ws'] = ws_fwd
 	
 	figure_index = 1
 	axes_info = {}
