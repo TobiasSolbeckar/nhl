@@ -28,19 +28,28 @@ class Skater():
 				self.ind[attribute] = ind[attribute]
 
 		# Special attributes
-		self.ind['toi_per_gp'] = [None,None,None]
-		self.ind['points'] = [None,None,None]
-		self.ind['primary_points'] = [None,None,None]
-		self.ind['goals_above_x'] = [None,None,None]
-		self.ind['points_per_60'] = [None,None,None]
-		self.ind['primary_points_per_60'] = [None,None,None]
-		self.ind['isf_per_sec'] = [None,None,None]
-		self.ind['pt_per_sec'] = [None,None,None]
-		self.ind['pd_per_sec'] = [None,None,None]
-		self.ind['ixg_per_60'] = [None,None,None]
-		self.ind['icf_per_60'] = [None,None,None]
-		self.ind['part_primary'] = [None,None,None]
-		self.ind['icf_pcg'] = [None,None,None]
+		self.ind['toi_per_gp'] = [None,None,None]							# Time on ice per game
+		self.ind['points'] = [None,None,None]								# Total points
+		self.ind['primary_points'] = [None,None,None]						# Primary points
+		self.ind['gf_above_xgf'] = [None,None,None]							# Goals scored above (individual) expected goals
+		self.ind['points_per_60'] = [None,None,None]						# Total points scored per 60 min
+		self.ind['primary_points_per_60'] = [None,None,None]				# Primary points scored per 60 min
+		self.ind['isf_per_sec'] = [None,None,None]							# Individual shots forward per second
+		self.ind['isf_per_60'] = [None,None,None]							# Individual shots forward per 60 min
+		self.ind['pt_per_sec'] = [None,None,None]							# Penalties taken per second
+		self.ind['pd_per_sec'] = [None,None,None]							# Peanlties draw per second
+		self.ind['pt_per_60'] = [None,None,None]							# Penalties taken per 60 min
+		self.ind['pd_per_60'] = [None,None,None]							# Penalties draw per 60 min
+		self.ind['pd_diff_per_60'] = [None,None,None]						# Difference between penalties drawn and taken per 60 min. Higher number is better.
+		self.ind['pd_pcg'] = [None,None,None]								# Quota between penalties drawn and taken. Higher number is better.
+		self.ind['ixgf_per_60'] = [None,None,None]							# Individual expected goals forward per 60 min.
+		self.ind['icf_per_60'] = [None,None,None]							# Individual CF per 60 min
+		self.ind['part_primary'] = [None,None,None]							# Quota of totals points that is primary points. Higher number is better.
+		self.ind['icf_pcg'] = [None,None,None]								# "Shooting percentage", for individual CF.
+		self.ind['ixgf'] = [None,None,None]									# Individual expected goals forward
+		self.ind['ixgf_pcg'] = [None,None,None]								# Quota between individual expected goals and goals scored.
+		self.ind['goal_scoring_rating'] = [None,None,None]					# Metric showing goal scoring potential.
+		
 		for index in [STAT_ES,STAT_PP,STAT_PK]:
 			# For readability
 			toi = ind['toi'][index]
@@ -53,29 +62,32 @@ class Skater():
 			pt = ind['pt'][index]
 			pd = ind['pd'][index]
 			isf = ind['isf'][index]
-			ixg = ind['ixg'][index]
+			ixgf = ind['ixgf'][index]
 			icf = ind['icf'][index]
-
-			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
-			self.ind['points'][index] = gf + assist
-			self.ind['primary_points'][index] = gf + f_assist
-			self.ind['goals_above_x'][index] = gf-ixg
+			
 			if toi == 0:
 				self.ind['points_per_60'][index] = 0
 				self.ind['primary_points_per_60'][index] = 0
 				self.ind['isf_per_sec'][index] = 0
 				self.ind['pt_per_sec'][index] = 0
 				self.ind['pd_per_sec'][index] = 0
-				self.ind['ixg_per_60'][index] = 0
+				self.ind['pt_per_60'][index] = 0
+				self.ind['pd_per_60'][index] = 0
+				self.ind['ixgf_per_60'][index] = 0
 				self.ind['icf_per_60'][index] = 0
+				self.ind['isf_per_60'][index] = 0
 			else:
 				self.ind['points_per_60'][index] = (points/toi) * 3600
 				self.ind['primary_points_per_60'][index] = (p_points/toi) * 3600
 				self.ind['isf_per_sec'][index] = isf/toi
 				self.ind['pt_per_sec'][index] = pt/toi			# penalties taken per second
 				self.ind['pd_per_sec'][index] = pd/toi			# penalties drawn per second
-				self.ind['ixg_per_60'][index] = (ixg/toi) * 3600
+				self.ind['pt_per_60'][index] = self.ind['pt_per_sec'][index] * 3600
+				self.ind['pd_per_60'][index] = self.ind['pd_per_sec'][index] * 3600
+				self.ind['ixgf_per_60'][index] = (ixgf/toi) * 3600
 				self.ind['icf_per_60'][index] = (icf/toi) * 3600
+				self.ind['isf_per_60'][index] = self.ind['isf_per_sec'][index] * 3600
+
 			if points == 0:
 				self.ind['part_primary'][index] = 0
 			else:
@@ -84,6 +96,21 @@ class Skater():
 				self.ind['icf_pcg'][index] = 0
 			else:
 				self.ind['icf_pcg'][index] = gf/icf
+			if self.ind['pt_per_60'][index] + self.ind['pd_per_60'][index] == 0:
+				self.ind['pd_pcg'][index] = 0
+			else:
+				self.ind['pd_pcg'][index] = self.ind['pd_per_60'][index]/(self.ind['pd_per_60'][index]+self.ind['pt_per_60'][index])
+			if gf + ixgf == 0:
+				self.ind['ixgf_pcg'][index] = 0
+			else:
+				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)
+			
+			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
+			self.ind['points'][index] = gf + assist
+			self.ind['primary_points'][index] = gf + f_assist
+			self.ind['gf_above_xgf'][index] = gf-ixgf
+			self.ind['pd_diff_per_60'][index] = self.ind['pd_per_60'][index] - self.ind['pt_per_60'][index]
+			self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
 		
 		# OnIce
 		self.on_ice = {}
@@ -113,15 +140,17 @@ class Skater():
 		self.on_ice['non_oz_pcg'] = self.on_ice['dz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_nz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['dz_pcg']
 		self.on_ice['avg_zone_start'] = (self.on_ice['oz_pcg']*3 + self.on_ice['nz_pcg']*2 + self.on_ice['dz_pcg']*1)-2
-		self.on_ice['estimated_off_per_sec'] = 0
+		self.rating = []
+		# Simulated stats
+		self.in_game_stats = defaultdict(int)
+		
+		# All "estimated_off/def" attributes need to be added after the construction, as they depend on the overall team.
+		self.on_ice['estimated_off_per_sec'] = 0 
 		self.on_ice['estimated_def_per_sec'] = 0
 		self.on_ice['estimated_off_per_60'] = 0
 		self.on_ice['estimated_def_per_60'] = 0
 		self.on_ice['estimated_def_per_60_diff'] = 0
 		self.on_ice['estimated_off_pcg'] = 0
-		self.rating = []
-		# Simulated stats
-		self.in_game_stats = defaultdict(int)
 
 	def print_player(self,s_db=None):
 		print('Information for player ' + self.bio['name'])
@@ -161,13 +190,13 @@ class Goalie():
 		self.sa_per_sec = self.sa/self.toi
 		self.sv = stats_arr[3]
 		self.ga = stats_arr[4]
-		self.sv_pcg = stats_arr[5]
-		self.gaa = stats_arr[6]
-		self.gsaa = stats_arr[7]
+		self.sv_pcg = self.sv/self.sa
+		self.gaa = stats_arr[5]
+		self.gsaa = stats_arr[6]
 		self.gsaa_per_60 = 3600*(self.gsaa/self.toi)
-		self.xga = stats_arr[8]
-		self.avg_shot_dist = stats_arr[9]
-		self.avg_goal_dist = stats_arr[10]
+		self.xga = stats_arr[7]
+		self.avg_shot_dist = stats_arr[8]
+		self.avg_goal_dist = stats_arr[9]
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
 
