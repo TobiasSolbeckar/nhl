@@ -25,6 +25,9 @@ def create_databases(simulation_param):
 	for player_id in simulation_param['databases']['unavailable_players']:
 		if (player_id not in s_db) and (player_id not in g_db):
 			raise ValueError('Unavailable player ' + player_id + ' not in skaterDB.')
+
+	print('   Modifying databases manually')
+	[s_db,g_db] = modify_player_db(s_db,g_db)
 	
 	# Add experimental data - needs to be done after creation of SkaterDB (and GoalieDB).
 	print('   Adding experimental data')
@@ -33,14 +36,8 @@ def create_databases(simulation_param):
 	for team_id in ACTIVE_TEAMS:
 		team = simulation_param['databases']['team_db'][team_id]
 		old_rating[team_id] = team.get_ratings()[1]
-	
+
 	if simulation_param['include_offseason_moves'] == True:
-		print('   Modifying databases for off-season moves')
-		[s_db,g_db] = modify_player_db(s_db,g_db)
-		
-		# Update experimental data after modification of skater_db and goalie_db.
-		[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db,simulation_param['databases']['unavailable_players'])
-		# Update ratings after off-season moves
 		for team_id in ACTIVE_TEAMS:
 			team = simulation_param['databases']['team_db'][team_id]
 			new_rating[team_id] = team.get_ratings()[1]
@@ -156,79 +153,79 @@ def add_es_data(simulation_param,player_data):
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
-					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
+					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_IND_TEAM_ID]) != 'CAR'):
 						#player_id = 'SEBASTIAN_AHO2'
 						raise ValueError('Wrong Sebastian Aho')
 					
 					player_data[player_id]['ind'] = {}
 
-					if str(row[SKATER_DB_ES_TEAM_ID]) == '-':
-						raise ValueError('Incorrect team_id ' + str(row[SKATER_DB_ES_TEAM_ID]))
+					if str(row[SKATER_DB_IND_TEAM_ID]) == '-':
+						raise ValueError('Incorrect team_id ' + str(row[SKATER_DB_IND_TEAM_ID]))
 					else:
 						player_data[player_id]['ind']['multiple_teams'] = False
-						if len(str(row[SKATER_DB_ES_TEAM_ID]).split(',')) > 1:
+						if len(str(row[SKATER_DB_IND_TEAM_ID]).split(',')) > 1:
 							player_data[player_id]['ind']['multiple_teams'] = True
 					
-					if str(row[SKATER_DB_ES_TOI]) == '-':
+					if str(row[SKATER_DB_IND_TOI]) == '-':
 						player_data[player_id]['ind']['toi'] = [0,0,0]
 						toi = 0
 					else:
-						toi = int(60*float(row[SKATER_DB_ES_TOI]))
+						toi = int(60*float(row[SKATER_DB_IND_TOI]))
 						player_data[player_id]['ind']['toi'] = [toi,0,0]
 
-					if str(row[SKATER_DB_ES_GOALS]) == '-':
+					if str(row[SKATER_DB_IND_GOALS]) == '-':
 						player_data[player_id]['ind']['gf'] = [0,0,0]
 					else:
-						player_data[player_id]['ind']['gf'] = [int(row[SKATER_DB_ES_GOALS]),0,0]
+						player_data[player_id]['ind']['gf'] = [int(row[SKATER_DB_IND_GOALS]),0,0]
 					
-					if str(row[SKATER_DB_ES_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_ASSIST]) == '-':
 						player_data[player_id]['ind']['assist'] = [0,0,0]
 					else:
-						player_data[player_id]['ind']['assist'] = [int(row[SKATER_DB_ES_ASSIST]),0,0]
+						player_data[player_id]['ind']['assist'] = [int(row[SKATER_DB_IND_ASSIST]),0,0]
 
-					if str(row[SKATER_DB_ES_FIRST_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_FIRST_ASSIST]) == '-':
 						player_data[player_id]['ind']['f_assist'] = [0,0,0]					
 					else:
-						player_data[player_id]['ind']['f_assist'] = [int(row[SKATER_DB_ES_FIRST_ASSIST]),0,0]
+						player_data[player_id]['ind']['f_assist'] = [int(row[SKATER_DB_IND_FIRST_ASSIST]),0,0]
 
-					if str(row[SKATER_DB_ES_SECOND_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_SECOND_ASSIST]) == '-':
 						player_data[player_id]['ind']['s_assist'] = [0,0,0]				
 					else:
-						player_data[player_id]['ind']['s_assist'] = [int(row[SKATER_DB_ES_SECOND_ASSIST]),0,0]
+						player_data[player_id]['ind']['s_assist'] = [int(row[SKATER_DB_IND_SECOND_ASSIST]),0,0]
 
-					if str(row[SKATER_DB_ES_SF]) == '-':
+					if str(row[SKATER_DB_IND_SF]) == '-':
 						player_data[player_id]['ind']['isf'] = [0,0,0]
 					else:
-						sf = int(row[SKATER_DB_ES_SF])
+						sf = int(row[SKATER_DB_IND_SF])
 						player_data[player_id]['ind']['isf'] = [sf,0,0]
 
-					if str(row[SKATER_DB_ES_ICF]) == '-':
+					if str(row[SKATER_DB_IND_ICF]) == '-':
 						player_data[player_id]['ind']['icf'] = [0,0,0]
 					else:
-						player_data[player_id]['ind']['icf'] = [int(row[SKATER_DB_ES_ICF]),0,0]
+						player_data[player_id]['ind']['icf'] = [int(row[SKATER_DB_IND_ICF]),0,0]
 						
-					if str(row[SKATER_DB_ES_TOTAL_PENALTIES]) == '-':
+					if str(row[SKATER_DB_IND_TOTAL_PENALTIES]) == '-':
 						player_data[player_id]['ind']['pt'] = [0,0,0]
 					else:
-						pt = int(row[SKATER_DB_ES_TOTAL_PENALTIES])
+						pt = int(row[SKATER_DB_IND_TOTAL_PENALTIES])
 						player_data[player_id]['ind']['pt'] = [pt,0,0]
 
-					if str(row[SKATER_DB_ES_PENALTIES_DRAWN]) == '-':
+					if str(row[SKATER_DB_IND_PENALTIES_DRAWN]) == '-':
 						player_data[player_id]['ind']['pd'] = [0,0,0]
 					else:
-						pd = int(row[SKATER_DB_ES_PENALTIES_DRAWN])
+						pd = int(row[SKATER_DB_IND_PENALTIES_DRAWN])
 						player_data[player_id]['ind']['pd'] = [pd,0,0]
 
 					# Float
-					if str(row[SKATER_DB_ES_SH_PCG]) == '-':
+					if str(row[SKATER_DB_IND_SH_PCG]) == '-':
 						player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]						
 					else:
-						player_data[player_id]['ind']['ish_pcg'] = [float(row[SKATER_DB_ES_SH_PCG])/100,0.0,0.0]
+						player_data[player_id]['ind']['ish_pcg'] = [float(row[SKATER_DB_IND_SH_PCG])/100,0.0,0.0]
 					
-					if str(row[SKATER_DB_ES_IXG]) == '-':
-						player_data[player_id]['ind']['ixg'] = [0.0,0.0,0.0]
+					if str(row[SKATER_DB_IND_IXG]) == '-':
+						player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
 					else:
-						player_data[player_id]['ind']['ixg'] = [float(row[SKATER_DB_ES_IXG]),0.0,0.0]
+						player_data[player_id]['ind']['ixgf'] = [float(row[SKATER_DB_IND_IXG]),0.0,0.0]
 
 					player_data[player_id]['ind']['toi_pcg'] = [(toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_es),0.0,0.0]
 					player_data[player_id]['ind']['sf_per_sec'] = [sf/toi,0.0,0.0]
@@ -245,56 +242,56 @@ def add_pp_data(simulation_param,player_data):
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
-					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
+					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_IND_TEAM_ID]) != 'CAR'):
 						#player_id = 'SEBASTIAN_AHO2'
 						raise ValueError('Wrong Sebastian Aho')
 
-					if str(row[SKATER_DB_PP_TOI]) == '-':
+					if str(row[SKATER_DB_IND_TOI]) == '-':
 						player_data[player_id]['ind']['toi'][STAT_PP] = 0						
 					else:
-						toi = int(60*float(row[SKATER_DB_PP_TOI]))
+						toi = int(60*float(row[SKATER_DB_IND_TOI]))
 						player_data[player_id]['ind']['toi'][STAT_PP] = toi
 					
-					if str(row[SKATER_DB_PP_GOALS]) == '-':
+					if str(row[SKATER_DB_IND_GOALS]) == '-':
 						player_data[player_id]['ind']['gf'][STAT_PP] = 0						
 					else:
-						player_data[player_id]['ind']['gf'][STAT_PP] = int(row[SKATER_DB_PP_GOALS])
+						player_data[player_id]['ind']['gf'][STAT_PP] = int(row[SKATER_DB_IND_GOALS])
 					
-					if str(row[SKATER_DB_PP_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_ASSIST]) == '-':
 						player_data[player_id]['ind']['assist'][STAT_PP] = 0						
 					else:
-						player_data[player_id]['ind']['assist'][STAT_PP] = int(row[SKATER_DB_PP_ASSIST])
+						player_data[player_id]['ind']['assist'][STAT_PP] = int(row[SKATER_DB_IND_ASSIST])
 
-					if str(row[SKATER_DB_PP_FIRST_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_FIRST_ASSIST]) == '-':
 						player_data[player_id]['ind']['f_assist'][STAT_PP] = 0						
 					else:
-						player_data[player_id]['ind']['f_assist'][STAT_PP] = int(row[SKATER_DB_PP_FIRST_ASSIST])
+						player_data[player_id]['ind']['f_assist'][STAT_PP] = int(row[SKATER_DB_IND_FIRST_ASSIST])
 
-					if str(row[SKATER_DB_PP_SECOND_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_SECOND_ASSIST]) == '-':
 						player_data[player_id]['ind']['s_assist'][STAT_PP] = 0						
 					else:
-						player_data[player_id]['ind']['s_assist'][STAT_PP] = int(row[SKATER_DB_PP_SECOND_ASSIST])
+						player_data[player_id]['ind']['s_assist'][STAT_PP] = int(row[SKATER_DB_IND_SECOND_ASSIST])
 
-					if str(row[SKATER_DB_PP_SF]) == '-':
+					if str(row[SKATER_DB_IND_SF]) == '-':
 						player_data[player_id]['ind']['isf'][STAT_PP] = 0
 					else:
-						player_data[player_id]['ind']['isf'][STAT_PP] = int(row[SKATER_DB_PP_SF])
+						player_data[player_id]['ind']['isf'][STAT_PP] = int(row[SKATER_DB_IND_SF])
 
-					if str(row[SKATER_DB_PP_PT]) == '-':
+					if str(row[SKATER_DB_IND_TOTAL_PENALTIES]) == '-':
 						player_data[player_id]['ind']['pt'][STAT_PP] = 0
 					else:
-						player_data[player_id]['ind']['pt'][STAT_PP] = int(row[SKATER_DB_PP_PT])
+						player_data[player_id]['ind']['pt'][STAT_PP] = int(row[SKATER_DB_IND_TOTAL_PENALTIES])
 
-					if str(row[SKATER_DB_PP_PD]) == '-':
+					if str(row[SKATER_DB_IND_PENALTIES_DRAWN]) == '-':
 						player_data[player_id]['ind']['pd'][STAT_PP] = 0
 					else:
-						player_data[player_id]['ind']['pd'][STAT_PP] = int(row[SKATER_DB_PP_PD])
+						player_data[player_id]['ind']['pd'][STAT_PP] = int(row[SKATER_DB_IND_PENALTIES_DRAWN])
 
 					# Float
-					if str(row[SKATER_DB_PP_SH_PCG]) == '-':
+					if str(row[SKATER_DB_IND_SH_PCG]) == '-':
 						player_data[player_id]['ind']['ish_pcg'][STAT_PP] = 0.0						
 					else:
-						player_data[player_id]['ind']['ish_pcg'][STAT_PP] = float(row[SKATER_DB_PP_SH_PCG])/100
+						player_data[player_id]['ind']['ish_pcg'][STAT_PP] = float(row[SKATER_DB_IND_SH_PCG])/100
 					
 					player_data[player_id]['ind']['toi_pcg'][STAT_PP] = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
 	return player_data
@@ -308,56 +305,56 @@ def add_pk_data(simulation_param,player_data):
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
 					team_id = player_data[player_id]['bio'][1]
-					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
+					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_IND_TEAM_ID]) != 'CAR'):
 						#player_id = 'SEBASTIAN_AHO2'
 						raise ValueError('Wrong Sebastian Aho')
 
-					if str(row[SKATER_DB_PP_TOI]) == '-':
+					if str(row[SKATER_DB_IND_TOI]) == '-':
 						player_data[player_id]['ind']['toi'][STAT_PK] = 0						
 					else:
-						toi = int(60*float(row[SKATER_DB_PP_TOI]))
+						toi = int(60*float(row[SKATER_DB_IND_TOI]))
 						player_data[player_id]['ind']['toi'][STAT_PK] = toi
 					
-					if str(row[SKATER_DB_PP_GOALS]) == '-':
+					if str(row[SKATER_DB_IND_GOALS]) == '-':
 						player_data[player_id]['ind']['gf'][STAT_PK] = 0						
 					else:
-						player_data[player_id]['ind']['gf'][STAT_PK] = int(row[SKATER_DB_PP_GOALS])
+						player_data[player_id]['ind']['gf'][STAT_PK] = int(row[SKATER_DB_IND_GOALS])
 					
-					if str(row[SKATER_DB_PP_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_ASSIST]) == '-':
 						player_data[player_id]['ind']['assist'][STAT_PK] = 0						
 					else:
-						player_data[player_id]['ind']['assist'][STAT_PK] = int(row[SKATER_DB_PP_ASSIST])
+						player_data[player_id]['ind']['assist'][STAT_PK] = int(row[SKATER_DB_IND_ASSIST])
 
-					if str(row[SKATER_DB_PP_FIRST_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_FIRST_ASSIST]) == '-':
 						player_data[player_id]['ind']['f_assist'][STAT_PK] = 0						
 					else:
-						player_data[player_id]['ind']['f_assist'][STAT_PK] = int(row[SKATER_DB_PP_FIRST_ASSIST])
+						player_data[player_id]['ind']['f_assist'][STAT_PK] = int(row[SKATER_DB_IND_FIRST_ASSIST])
 
-					if str(row[SKATER_DB_PP_SECOND_ASSIST]) == '-':
+					if str(row[SKATER_DB_IND_SECOND_ASSIST]) == '-':
 						player_data[player_id]['ind']['s_assist'][STAT_PK] = 0						
 					else:
-						player_data[player_id]['ind']['s_assist'][STAT_PK] = int(row[SKATER_DB_PP_SECOND_ASSIST])
+						player_data[player_id]['ind']['s_assist'][STAT_PK] = int(row[SKATER_DB_IND_SECOND_ASSIST])
 
-					if str(row[SKATER_DB_PP_SF]) == '-':
+					if str(row[SKATER_DB_IND_SF]) == '-':
 						player_data[player_id]['ind']['isf'][STAT_PK] = 0
 					else:
-						player_data[player_id]['ind']['isf'][STAT_PK] = int(row[SKATER_DB_PP_SF])
+						player_data[player_id]['ind']['isf'][STAT_PK] = int(row[SKATER_DB_IND_SF])
 
-					if str(row[SKATER_DB_PP_PT]) == '-':
+					if str(row[SKATER_DB_IND_TOTAL_PENALTIES]) == '-':
 						player_data[player_id]['ind']['pt'][STAT_PK] = 0
 					else:
-						player_data[player_id]['ind']['pt'][STAT_PK] = int(row[SKATER_DB_PP_PT])
+						player_data[player_id]['ind']['pt'][STAT_PK] = int(row[SKATER_DB_IND_TOTAL_PENALTIES])
 
-					if str(row[SKATER_DB_PP_PD]) == '-':
+					if str(row[SKATER_DB_IND_PENALTIES_DRAWN]) == '-':
 						player_data[player_id]['ind']['pd'][STAT_PK] = 0
 					else:
-						player_data[player_id]['ind']['pd'][STAT_PK] = int(row[SKATER_DB_PP_PD])
+						player_data[player_id]['ind']['pd'][STAT_PK] = int(row[SKATER_DB_IND_PENALTIES_DRAWN])
 
 					# Float
-					if str(row[SKATER_DB_PP_SH_PCG]) == '-':
+					if str(row[SKATER_DB_IND_SH_PCG]) == '-':
 						player_data[player_id]['ind']['ish_pcg'][STAT_PK] = 0.0						
 					else:
-						player_data[player_id]['ind']['ish_pcg'][STAT_PK] = float(row[SKATER_DB_PP_SH_PCG])/100
+						player_data[player_id]['ind']['ish_pcg'][STAT_PK] = float(row[SKATER_DB_IND_SH_PCG])/100
 					
 					player_data[player_id]['ind']['toi_pcg'][STAT_PK] = (toi/get_team(simulation_param['databases']['team_db'],team_id).team_toi_pp)
 	return player_data
@@ -372,7 +369,7 @@ def add_on_ice_data(simulation_param,player_data):
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS: 
 					team_id = player_data[player_id]['bio'][1]
-					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_ES_TEAM_ID]) != 'CAR'):
+					if (player_id == 'SEBASTIAN_AHO') and (str(row[SKATER_DB_IND_TEAM_ID]) != 'CAR'):
 						#player_id = 'SEBASTIAN_AHO2'
 						raise ValueError('Wrong Sebastian Aho')
 
@@ -553,16 +550,15 @@ def create_goalie_db(simulation_param):
 					toi_pcg = (toi/get_team(team_db,team_id).team_toi_es)
 
 					# DEBUG:
-					'''
-					if team_id == 'SJS':
+					if team_id == simulation_param['debug_team']:
 						print('Name: ' + name)
 						print('TOI: ' + str(toi))
 						print('TOI-PCG: ' + str(toi_pcg))
 						print('Shots against: ' + str(sa))
 						print('Saves: ' + str(sv))
 						print('Sv%: ' + str(sv_pcg))
-					'''
-					output[name] = Goalie(name,team_id,[toi,toi_pcg,sa,sv,ga,sv_pcg,gaa,gsaa,xga,avg_shot_dist,avg_goal_dist])
+
+					output[name] = Goalie(name,team_id,[toi,toi_pcg,sa,sv,ga,gaa,gsaa,xga,avg_shot_dist,avg_goal_dist])
 	return output
 
 def get_active_goalies(simulation_param):
@@ -593,13 +589,8 @@ def create_team_db(simulation_param):
 	output = {}
 	with open(simulation_param['csvfiles']['teams_es'],'rt') as f:
 		reader = csv.reader(f, delimiter=',')
-		#reader = csv.reader(f)
-		names = []
-		reg_arrays = []
-		adv_arrays = []
-		total_gp = 0
-		total_otl = 0
-		total_gf = 0
+		names,reg_arrays,adv_arrays = [],[],[]
+		total_gp,total_otl,total_gf = 0,0,0
 		for row in reader:
 			if row[1] != 'Team':
 				# Get data from row.
@@ -662,31 +653,20 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.ind['toi_pcg'][index] = skater.ind['toi_per_gp'][index] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 
 		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
-		estimated_off = skater.on_ice['scf']
-		estimated_def = skater.on_ice['sca']
-
-		skater.on_ice['estimated_off_per_sec'] = skater.on_ice['scf'] * skater.on_ice['rel_cf'] / skater.ind['toi'][STAT_ES] 		# Yes, it _SHOULD_ be "scf" and "rel_cf"
-		skater.on_ice['estimated_def_per_sec'] = skater.on_ice['sca'] * skater.on_ice['rel_ca'] / skater.ind['toi'][STAT_ES]
-
-		if skaters_on_ice['pt_per_sec'] == 0:
-			if skater.on_ice['pd_per_sec'] == 0:
-				skater.on_ice['pd_pcg'] = 0	
-			skater.on_ice['pd_pcg'] = skater.on_ice['pd_per_sec']/skaters_on_ice['pt_per_sec']	
-		skater.on_ice['pd_pcg'] = skater.on_ice['pd_per_sec']/skaters_on_ice['pt_per_sec']
-
+		estimated_off = skater.on_ice['scf'] * skater.on_ice['rel_cf'] 						# Yes, it _SHOULD_ be "scf" and "rel_cf"
+		estimated_def = skater.on_ice['sca'] * skater.on_ice['rel_ca']
 		if skater.bio['multiple_teams'] == True:
 			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_cf']
 			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_ca']
-			skater.on_ice['estimated_off_per_sec'] = estimated_off / skater.ind['toi'][STAT_ES]
-			skater.on_ice['estimated_def_per_sec'] = estimated_def / skater.ind['toi'][STAT_ES]
-
+		skater.on_ice['estimated_off_per_sec'] = estimated_off / skater.ind['toi'][STAT_ES]
+		skater.on_ice['estimated_def_per_sec'] = estimated_def / skater.ind['toi'][STAT_ES]
 		skater.on_ice['estimated_off_per_60'] = skater.on_ice['estimated_off_per_sec']*3600
 		skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
 		skater.on_ice['estimated_off_per_60_diff'] = skater.on_ice['estimated_off_per_60'] - skater.on_ice['estimated_def_per_60']
-
 		# Store estimated offensive and defensive capabilities per team.
 		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
+		
 		# Error/warning handling for weird input
 		if (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec']) == 0:
 			warnings.warn('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
@@ -695,7 +675,10 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
 
 		if skater.bio['team_id'] == debug_team_id:
-			print('   {0}: Estimated offense/60: {1:.1f}. Estimated defense/60: {2:.1f}. Estimated off-pcg: {3:.1f}%'.format(skater.bio['name'],3600*skater.on_ice['estimated_off_per_sec'],3600*skater.on_ice['estimated_def_per_sec'],100*skater.on_ice['estimated_off_pcg']))
+			print(skater_id)
+			print('   5v5-TOI: {0:.1f}. 5v5-TOI/GP: {1:.1f}'.format(get_attribute_value(skater,'toi',STAT_ES)/60,get_attribute_value(skater,'toi_per_gp',STAT_ES)/60))
+			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(get_attribute_value(skater,'estimated_off_per_60'),get_attribute_value(skater,'estimated_def_per_60'),100*get_attribute_value(skater,'estimated_off_pcg')))
+			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(get_attribute_value(skater,'pt_per_60'),get_attribute_value(skater,'pd_per_60'),get_attribute_value(skater,'pd_diff_per_60')))
 
 	for goalie_id in goalie_db.keys():
 		# Calculate total sa/ss per team, only if player is available
@@ -706,7 +689,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	
 	for team_id in team_db.keys():
 		gp_array.append(team_db[team_id].gp)
-		avg_gp = np.mean(gp_array)
+	avg_gp = np.mean(gp_array)
 	if avg_gp > 20:
 		avg_gp = 20
 
@@ -714,26 +697,24 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	for team_id in ACTIVE_TEAMS:
 		team_sh_pcg = sum(gf_dict[team_id])/sum(sf_dict[team_id])
 		team_sv_pcg = sum(shots_saved_dict[team_id])/sum(shots_against_dict[team_id])
-		team_estimated_off = sum(estimated_off_dict[team_id])
-		team_estimated_def = sum(estimated_def_dict[team_id])
+		team_estimated_off = sum(estimated_off_dict[team_id])								# How much offense the team generates, based on the individual players.
+		team_estimated_def = sum(estimated_def_dict[team_id])								# How much offense the team gives up, based on the individual players.
 		team_scf = sum(scf_dict[team_id])
 		team_sca = sum(sca_dict[team_id])
 		team_db[team_id].exp_data['sh_pcg'] = team_sh_pcg
 		team_db[team_id].exp_data['sv_pcg'] = team_sv_pcg
-		team_db[team_id].exp_data['estimated_team_off'] = team_estimated_off*team_db[team_id].exp_data['sh_pcg']
-		team_db[team_id].exp_data['estimated_team_def'] = team_estimated_def*(1-team_db[team_id].exp_data['sv_pcg'])
+		team_db[team_id].exp_data['estimated_off'] = team_estimated_off*team_db[team_id].exp_data['sh_pcg']
+		team_db[team_id].exp_data['estimated_def'] = team_estimated_def*(1-team_db[team_id].exp_data['sv_pcg'])
+		team_db[team_id].exp_data['estimated_off_pcg'] = team_db[team_id].exp_data['estimated_off']/(team_db[team_id].exp_data['estimated_off']+team_db[team_id].exp_data['estimated_def'])
+
 		team_db[team_id].exp_data['pdo'] = team_db[team_id].exp_data['sh_pcg']+team_db[team_id].exp_data['sv_pcg']
 		team_db[team_id].exp_data['scf_pcg'] = (team_scf/(team_scf+team_sca))
 		
-		# Assign ratings
-		team_db[team_id].exp_data['pre_season_rating'] = team_db[team_id].exp_data['estimated_team_off']/(team_db[team_id].exp_data['estimated_team_off']+team_db[team_id].exp_data['estimated_team_def'])
-		
-		# Two (three) different ways of calculating ratings.
-		#team_db[team_id].exp_data['in_season_rating'] = team_db[team_id].exp_data['scf_pcg']*(team_db[team_id].exp_data['pdo']+team_db[team_id].p_pcg)
-		#team_db[team_id].exp_data['in_season_rating'] = team_db[team_id].exp_data['estimated_team_off']/(team_db[team_id].exp_data['estimated_team_off']+team_db[team_id].exp_data['estimated_team_def'])
-		team_db[team_id].exp_data['in_season_rating'] = (team_db[team_id].p_pcg*0.5*P_PCG_FACTOR*avg_gp/20) + (team_db[team_id].exp_data['estimated_team_off']/(team_db[team_id].exp_data['estimated_team_off']+team_db[team_id].exp_data['estimated_team_def']))
+		# Assign ratings. Different for pre_season or non_pre_season.
+		team_db[team_id].exp_data['pre_season_rating'] = team_db[team_id].exp_data['estimated_off_pcg']
+		team_db[team_id].exp_data['in_season_rating'] = (team_db[team_id].p_pcg*P_PCG_FACTOR*avg_gp/20) + team_db[team_id].exp_data['estimated_off_pcg']
 
-		print('   {0}: Rating: {1:.3f}. PDO: {2:.3f}. Shooting: {3:.1f}%. Saving: {4:.1f}%'.format(team_id,team_db[team_id].exp_data['in_season_rating'],team_db[team_id].exp_data['pdo'],100*team_db[team_id].exp_data['sh_pcg'],100*team_db[team_id].exp_data['sv_pcg']))
+		print('   {0}: Rating: {1:.3f}. "Goodness": {2:.3f}. Play-control: {3:.1f}%. PDO: {4:.3f}. Shooting: {5:.1f}%. Saving: {6:.1f}%'.format(team_id,team_db[team_id].exp_data['in_season_rating'],team_db[team_id].exp_data['estimated_off_pcg'],100*team_db[team_id].exp_data['scf_pcg'],team_db[team_id].exp_data['pdo'],100*team_db[team_id].exp_data['sh_pcg'],100*team_db[team_id].exp_data['sv_pcg']))
 
 	return [team_db,skater_db]
 
@@ -764,12 +745,6 @@ def get_row_values_for_goalie_db(row):
 		raise ValueError('Incorrect Player-ID')
 	else:
 		name = generate_player_id(row[GOALIE_DB_NAME])
-	"""
-	if str(row[GOALIE_DB_TEAM_ID]) == '-':
-		raise ValueError('Incorrect Team-ID')
-	else:
-		team_id = get_team_id_for_player(name,str(row[GOALIE_DB_TEAM_ID]))
-	"""
 	
 	if str(row[GOALIE_DB_TOI]) == '-':
 		toi = 0.0						
@@ -969,236 +944,18 @@ def get_row_values_for_team_db(row):
 
 
 def modify_player_db(s_db,g_db):
-	"""
-	ISOLATED TEAM IMPACT: BEFORE (AFTER) [DIFF]  
-	 =       --> within 0.0049 difference 
-	 + (-)   --> between 0.005 and 0.0099 difference
-	 ++ (--) --> between 0.010 and 0.0149 difference
-	 ++ (--) --> between 0.015 and 0.0199 difference
-	 ...
-	 """
-	# Retiring / signing out of NHL
-	s_db = update_new_team(s_db,'BROOKS_ORPIK',None)			# WSH: 0.5140 (0.5194) [+]
-	g_db = update_new_team(g_db,'ROBERTO_LUONGO',None)
-	g_db = update_new_team(g_db,'SCOTT_DARLING',None)			# CAR: 0.4998 (0.5279) [+++++]
-	s_db = update_new_team(s_db,'RYAN_CALLAHAN',None)			# CAR: 0.4998 (0.5279) [+++++]
-	s_db = update_new_team(s_db,'JORI_LEHTERA',None)			# 
-	s_db = update_new_team(s_db,'RYAN_SPOONER',None)			# 
-	s_db = update_new_team(s_db,'CHRIS_KUNITZ',None)			# 
-	s_db = update_new_team(s_db,'MATT_CULLEN',None)				#
-	s_db = update_new_team(s_db,'MARCUS_KRUGER',None)			# 
-	s_db = update_new_team(s_db,'SVEN_ANDRIGHETTO',None)		# 
-	s_db = update_new_team(s_db,'DEREK_MACKENZIE',None)			# 
-	s_db = update_new_team(s_db,'ANDREJ_SUSTR',None)			# 
-	s_db = update_new_team(s_db,'TOM_PYATT',None)				#
-	s_db = update_new_team(s_db,'ERIC_FEHR',None)				#
-	s_db = update_new_team(s_db,'JAKUB_JERABEK',None)			#
-	s_db = update_new_team(s_db,'IGOR_OZHIGANOV',None)			#
-	s_db = update_new_team(s_db,'EGOR_YAKOVLEV',None)			#
-	s_db = update_new_team(s_db,'BOGDAN_KISELEVICH',None)		#
-	s_db = update_new_team(s_db,'TY_RATTIE',None)
-	s_db = update_new_team(s_db,'MATT_HENDRICKS',None)	
-	s_db = update_new_team(s_db,'TOMAS_HYKA',None)	
-	s_db = update_new_team(s_db,'CORBAN_KNIGHT',None)
-	s_db = update_new_team(s_db,'JASON_GARRISON',None)		
-	g_db = update_new_team(g_db,'ANTTI_NIEMI',None)
-	s_db = update_new_team(s_db,'MAX_MCCORMICK',None)			#
-	s_db = update_new_team(s_db,'PATRIK_BERGLUND',None)
-	s_db = update_new_team(s_db,'JUSTIN_WILLIAMS',None)
-	s_db = update_new_team(s_db,'NIKLAS_KRONWALL',None)
-	s_db = update_new_team(s_db,'DAN_GIRARDI',None)
-
-	# Trades and signings
-	# 2019-06-14
-	s_db = update_new_team(s_db,'RADKO_GUDAS','WSH') 			# WSH: 0.5327 (0.5303) [=] 		PHI: 0.5015  (0.5042)  [=]
-	s_db = update_new_team(s_db,'MATT_NISKANEN','PHI')
-	# 2019-06-15
-	s_db = update_new_team(s_db,'OLLI_MAATTA','CHI') 			# CHI: 0.4949 (0.4879) [-] 		PIT: 0.5238  (0.5316)  [+]
-	s_db = update_new_team(s_db,'DOMINIK_KAHUN','PIT')
-	# 2019-06-17
-	s_db = update_new_team(s_db,'JACOB_TROUBA','NYR') 			# NYR: 0.4643 (0.4627) [=] 		WPG: 0.5172  (0.5194)  [=]
-	s_db = update_new_team(s_db,'NEAL_PIONK','WPG') 
-	# 2019-06-18
-	s_db = update_new_team(s_db,'JUSTIN_BRAUN','PHI') 			# PHI: 0.5042 (0.4972) [-]		SJS: 0.5067  (0.5156)  [+]
-	# 2019-06-22
-	s_db = update_new_team(s_db,'P_K__SUBBAN','NJD')			# NJD: 0.4565 (0.4580) [=] 		NSH: 0.5379  (0.5373)  [=]
-	s_db = update_new_team(s_db,'STEVEN_SANTINI','NSH')			
-	s_db = update_new_team(s_db,'J_T__MILLER','VAN')			# VAN: 0.4395 (0.4460) [+]		TBL: 0.5761  (0.5763)  [=]
-	s_db = update_new_team(s_db,'JOHN_HAYDEN','NJD')			
-	s_db = update_new_team(s_db,'JOHN_QUENNEVILLE','CHI')
-	#2019-06-25
-	s_db = update_new_team(s_db,'CALVIN_DE_HAAN','CHI')			# CHI: 0.4909 (0.4911) [=]		CAR: 0.4952 (0.4954) [=]
-	s_db = update_new_team(s_db,'GUSTAV_FORSLING','CAR')
-	s_db = update_new_team(s_db,'CARL_SODERBERG','ARI')			# ARI: 0.4858 (0.4930) [+]		COL: 0.5281 (0.5217) [-]
-	s_db = update_new_team(s_db,'KEVIN_CONNAUTON','COL')
-	# 2019-06-30
-	s_db = update_new_team(s_db,'ANDREW_SHAW','CHI')			# CHI: 0.4911 (0.4960) [=] 		MTL: 0.4981 (0.4843) [--]
-	g_db = update_new_team(g_db,'JAMES_REIMER','CAR')			# CAR: 0.5279 (0.5121) [---]
-	s_db = update_new_team(s_db,'ALEX_GALCHENYUK','PIT')		# ARI: 0.4930 (0.5014) [+]		PIT: 0.5196 (0.5122) [-]
-	s_db = update_new_team(s_db,'PHIL_KESSEL','ARI')
-	s_db = update_new_team(s_db,'ANDRE_BURAKOVSKY','COL')		# COL: 0.5217 (0.5272) [+]		WSH: 0.5194 (0.5153) [=]
-	s_db = update_new_team(s_db,'COLIN_MILLER','BUF')			# BUF: 0.4593 (0.4544) [=]		VGK: 0.5385 (0.5471) [+]
-	s_db = update_new_team(s_db,'ERIK_HAULA','CAR')				# CAR: 0.4954 (0.4998) [=]		VGK: 0.5403 (0.5385) [=]
-	# 2019-07-01
-	s_db = update_new_team(s_db,'PAR_LINDHOLM','BOS')			# BOS: 0.5406 (0.5376) [=]
-	s_db = update_new_team(s_db,'BRETT_RITCHIE','BOS')			 
-	s_db = update_new_team(s_db,'BRENDAN_GAUNCE','BOS')			 
-	s_db = update_new_team(s_db,'JEAN-SEBASTIEN_DEA','BUF')		# BUF: 0.4616 (0.4638) [=]
-	s_db = update_new_team(s_db,'JOHN_GILMOUR','BUF')			# BUF: 0.4650 (0.4616) [=]
-	s_db = update_new_team(s_db,'JIMMY_VESEY','BUF')			# BUF: 0.4638 (0.4704) [+]
-	s_db = update_new_team(s_db,'CURTIS_LAZAR','BUF')			# BUF: 0.4640 (0.4619) [=]
-	s_db = update_new_team(s_db,'GUSTAV_NYQUIST','CBJ')			# CBJ: 0.4748 (0.4797) [=]		SJS: 0.5096 (0.5016) [-]
-	s_db = update_new_team(s_db,'RYAN_CARPENTER','CHI')			# CHI: 0.5145 (0.5132) [=]
-	s_db = update_new_team(s_db,'JOONAS_DONSKOI','COL')			# COL: 0.5342 (0.5406) [+] 		SJS: 0.5188 (0.5134) [-]
-	s_db = update_new_team(s_db,'NAZEM_KADRI','COL') 			# TOR: 0.5400 (0.5374) [=]		COL: 0.5409 (0.5454) [=]
-	s_db = update_new_team(s_db,'CALLE_ROSEN','COL') 			# TOR: 0.5374 (0.5371) [=]		COL: 0.5454 (0.5457) [=]
-	s_db = update_new_team(s_db,'PIERRE-EDOUARD_BELLEMARE','COL') # COL: 0.5406 (0.5377) [=]  	VGK: 0.5457 (0.5500) [-]
-	s_db = update_new_team(s_db,'JOE_PAVELSKI','DAL')			# DAL: 0.4963 (0.5074) [++] 	SJS: 0.5134 (0.5050) [-]
-	s_db = update_new_team(s_db,'COREY_PERRY','DAL')			# DAL: 0.5074 (0.5088) [=] 		ANA: 0.5330 (0.5325) [=]
-	s_db = update_new_team(s_db,'ANDREJ_SEKERA','DAL')			# DAL: 0.5060 (0.5009) [-]
-	s_db = update_new_team(s_db,'PATRIK_NEMETH','DET')			# DET: 0.4789 (0.4736) [-]
-	s_db = update_new_team(s_db,'VALTTERI_FILPPULA','DET')		# DET: 0.4736 (0.4817) [+]
-	s_db = update_new_team(s_db,'MARKUS_GRANLUND','EDM')		# EDM: 0.4590 (0.4592) [=]
-	s_db = update_new_team(s_db,'ANTON_STRALMAN','FLA')			# FLA: 0.5103 (0.5023) [-]
-	s_db = update_new_team(s_db,'NOEL_ACCIARI','FLA')			# FLA: 0.5037 (0.5052) [=]
-	s_db = update_new_team(s_db,'BRETT_CONNOLLY','FLA')			# FLA: 0.5052 (0.5170) [++]
-	s_db = update_new_team(s_db,'JOAKIM_RYAN','LAK') 			# LAK: 0.4875 (0.4819) [-]		SJS: 0.5046 (0.5096) [+]
-	s_db = update_new_team(s_db,'MARIO_KEMPE','LAK')			# LAK: 0.4864 (0.4846) [=]
-	s_db = update_new_team(s_db,'MATS_ZUCCARELLO','MIN')		# MIN: 0.4803 (0.4875) [+] 		DAL: 0.5088 (0.5036) [-]
-	s_db = update_new_team(s_db,'RYAN_HARTMAN','MIN')			# MIN: 0.4875 (0.4898) [=]
-	s_db = update_new_team(s_db,'LUKE_JOHNSON','MIN')			# MIN: 0.4879 (0.4868) [=]
-	s_db = update_new_team(s_db,'WAYNE_SIMMONDS','NJD')			# NJD: 0.4491 (0.4495) [=]
-	s_db = update_new_team(s_db,'MATT_DUCHENE','NSH')			# NSH: 0.5525 (0.5650) [++] 	CBJ: 0.4955 (0.4861) [-]
-	s_db = update_new_team(s_db,'DANIEL_CARR','NSH')			
-	s_db = update_new_team(s_db,'ARTEMI_PANARIN','NYR')			# CBJ: 0.4861 (0.4748) [--]		NYR: 0.4393 (0.4562) [+++]
-	s_db = update_new_team(s_db,'RON_HAINSEY','OTT')			# OTT: 0.4116 (0.4066) [-]		TOR: 0.5496 (0.5560) [+]
-	s_db = update_new_team(s_db,'TYLER_ENNIS','OTT')			# OTT: 0.4066 (0.4096) [=]
-	s_db = update_new_team(s_db,'NIKITA_ZAITSEV','OTT') 		# OTT: 0.4094 (0.4111) [=]
-	s_db = update_new_team(s_db,'CONNOR_BROWN','OTT')			# OTT: 0.4111 (0.4152) [=]
-	s_db = update_new_team(s_db,'KEVIN_HAYES','PHI')			# PHI: 0.4967 (0.5015) [+] 		WPG: 0.5213  (0.5172) [-]
-	s_db = update_new_team(s_db,'NATE_PROSSER','PHI')			# PHI: 0.5058 (0.5041) [=]
-	s_db = update_new_team(s_db,'ANDY_WELINSKI','PHI')			 
-	s_db = update_new_team(s_db,'TYLER_PITLICK','PHI')			# PHI: 0.4982 (0.5008) [=]
-	s_db = update_new_team(s_db,'BRANDON_TANEV','PIT')			# PIT: 0.5047 (0.5055) [=]
-	s_db = update_new_team(s_db,'ANDREW_AGOZZINO','PIT')		
-	s_db = update_new_team(s_db,'NATHAN_WALKER','STL')			# STL: 0.4886 (0.4889) [=]
-	s_db = update_new_team(s_db,'LUKE_SCHENN','TBL')			# TBL: 0.5698 (0.5740) [=]
-	s_db = update_new_team(s_db,'CODY_CECI','TOR')				# TOR: 0.5624 (0.5471) [---] 
-	s_db = update_new_team(s_db,'BEN_HARPUR','TOR')				# TOR: 0.5471 (0.5405) [-]
-	s_db = update_new_team(s_db,'JASON_SPEZZA','TOR')			# TOR: 0.5540 (0.5496) [=]		DAL: 0.5036 (0.5060) [=]
-	s_db = update_new_team(s_db,'KENNY_AGOSTINO','TOR')			# TOR: 0.5560 (0.5553) [=]
-	s_db = update_new_team(s_db,'KEVIN_GRAVEL','TOR')			# TOR: 0.5448 (0.5405) [=]
-	s_db = update_new_team(s_db,'TYSON_BARRIE','TOR') 			# TOR: 0.5405 (0.5340) [-] 		COL: 0.5436 (0.5483) [=] 
-	s_db = update_new_team(s_db,'ALEXANDER_KERFOOT','TOR')		# TOR: 0.5340 (0.5400) [+] 		COL: 0.5483 (0.5409) [-]	
-	s_db = update_new_team(s_db,'TYLER_MYERS','VAN')			# VAN: 0.4604 (0.4563) [=]
-	s_db = update_new_team(s_db,'JORDIE_BENN','VAN')			# VAN: 0.4614 (0.4587) [=]
-	s_db = update_new_team(s_db,'OSCAR_FANTENBERG','VAN')		# VAN: 0.4587 (0.4570) [=]
-	s_db = update_new_team(s_db,'BRENDAN_LEIPSIC','WSH')		# WSH: 0.5088 (0.5060) [=]
-	s_db = update_new_team(s_db,'GARNET_HATHAWAY','WSH')		# WSH: 0.5163 (0.5173) [=]
-	s_db = update_new_team(s_db,'RICHARD_PANIK','WSH')			# WSH: 0.5173 (0.5090) [-]
-	g_db = update_new_team(g_db,'SERGEI_BOBROVSKY','FLA') 		# FLA: 0.4798 (0.5103) [+++++]	CBJ: 0.5436 (0.4955) [---------]
-	g_db = update_new_team(g_db,'SEMYON_VARLAMOV','NYI')		# NYI: 0.5150 (0.5128) [=]		COL: 0.5269 (0.5406) [++]
-	g_db = update_new_team(g_db,'ROBIN_LEHNER','CHI')			# CHI: 0.5027 (0.5104) [+]  	NYI: 0.5150 (0.5128) [=]
-	g_db = update_new_team(g_db,'CAM_TALBOT','CGY')				# CGY: 0.5451 (0.5383) [-]  	
-	g_db = update_new_team(g_db,'MIKE_SMITH','EDM')				# EDM: 0.4562 (0.4590) [=] 		CGY: 0.5451 (0.5383) [-]
-	g_db = update_new_team(g_db,'KEITH_KINKAID','MTL')			
-	g_db = update_new_team(g_db,'MAXIME_LAGACE','BOS')			
-	g_db = update_new_team(g_db,'CURTIS_MCELHINNEY','TBL')		
-	g_db = update_new_team(g_db,'CALVIN_PICKARD','DET')			
-
-	# Non-signed UFA; removed from this list if signing a contract.
-	# List from capfriendly.com
-	s_db = update_new_team(s_db,'DION_PHANEUF',None)			 
-	s_db = update_new_team(s_db,'PATRICK_MARLEAU',None)		 
-	s_db = update_new_team(s_db,'JASON_POMINVILLE',None)		
-	s_db = update_new_team(s_db,'DERICK_BRASSARD',None)			 
-	s_db = update_new_team(s_db,'ANDREW_MACDONALD',None)		 
-	s_db = update_new_team(s_db,'MARC_METHOT',None)				 			 
-	s_db = update_new_team(s_db,'JAMIE_MCGINN',None)			 
-	s_db = update_new_team(s_db,'THOMAS_VANEK',None)			 
-	s_db = update_new_team(s_db,'BEN_HUTTON',None)				 
-	s_db = update_new_team(s_db,'ADAM_MCQUAID',None)			
-	s_db = update_new_team(s_db,'BEN_LOVEJOY',None)				
-	s_db = update_new_team(s_db,'BRIAN_BOYLE',None)				 
-	s_db = update_new_team(s_db,'DAVID_SCHLEMKO',None)			
-	s_db = update_new_team(s_db,'RILEY_SHEAHAN',None)			
-	s_db = update_new_team(s_db,'TOBIAS_RIEDER',None)			 
-	s_db = update_new_team(s_db,'ALEX_PETROVIC',None)			 
-	s_db = update_new_team(s_db,'STEFAN_NOESEN',None)			 
-	s_db = update_new_team(s_db,'OSCAR_LINDBERG',None)			 
-	s_db = update_new_team(s_db,'LUCA_SBISA',None)				 
-	s_db = update_new_team(s_db,'DMITRIJ_JASKIN',None)			
-	s_db = update_new_team(s_db,'DEVANTE_SMITH-PELLY',None) 
-	s_db = update_new_team(s_db,'JOE_MORROW',None)				
-	s_db = update_new_team(s_db,'GABRIEL_BOURQUE',None)			
-	s_db = update_new_team(s_db,'CHRIS_THORBURN',None)			
-	s_db = update_new_team(s_db,'MAGNUS_PAAJARVI',None)			
-	s_db = update_new_team(s_db,'TROY_BROUWER',None)			
-	s_db = update_new_team(s_db,'MICHEAL_HALEY',None)			
-	s_db = update_new_team(s_db,'DREW_STAFFORD',None)			
-	s_db = update_new_team(s_db,'CODY_MCLEOD',None)				
-	s_db = update_new_team(s_db,'ERIC_GRYBA',None)				
-	s_db = update_new_team(s_db,'FREDRIK_CLAESSON',None)		
-	s_db = update_new_team(s_db,'ROURKE_CHARTIER',None)			
-	s_db = update_new_team(s_db,'WADE_MEGAN',None)				
-	s_db = update_new_team(s_db,'ZAC_RINALDO',None)				
-	s_db = update_new_team(s_db,'CONNOR_BRICKLEY',None)			
-	s_db = update_new_team(s_db,'MATT_READ',None)				
-	s_db = update_new_team(s_db,'JUSTIN_FALK',None)				
-	s_db = update_new_team(s_db,'CHRIS_BUTLER',None)			
-	g_db = update_new_team(g_db,'CAM_WARD',None)
-	g_db = update_new_team(g_db,'MICHAL_NEUVIRTH',None)
-	g_db = update_new_team(g_db,'CHAD_JOHNSON',None)
-	g_db = update_new_team(g_db,'MIKE_MCKENNA',None)	
-	# 2019-07-05
-	s_db = update_new_team(s_db,'BLAKE_PIETILA','ANA')			 
-	s_db = update_new_team(s_db,'DALTON_PROUT','SJS')			# SJS: 0.5050 (0.5046) [=]
-	s_db = update_new_team(s_db,'JONNY_BRODZINSKI','SJS')		# SJS: 0.4947 (0.4942) [=]
-	s_db = update_new_team(s_db,'MARK_LETESTU','WPG')			# WPG: 0.5285 (0.5271) [=]
-	s_db = update_new_team(s_db,'PHIL_VARONE','MTL')			 
-	s_db = update_new_team(s_db,'BEN_CHIAROT','MTL')			
-	s_db = update_new_team(s_db,'NICK_COUSINS','MTL')			# MTL: 0.4970 (0.4958) [=]
-	# 2019-07-09
-	s_db = update_new_team(s_db,'MARCUS_JOHANSSON','BUF')		# BOS: 0.5433 (0.5406) [=]		BUF: 0.4602 (0.4640) [=]
-	s_db = update_new_team(s_db,'ALEXANDER_NYLANDER','CHI') 	# CHI: 0.5092 (0.5115) [=]		BUF: 0.4713 (0.4681) [=]
-	s_db = update_new_team(s_db,'HENRI_JOKIHARJU','BUF')
-	# 2019-07-10
-	s_db = update_new_team(s_db,'MICHEAL_FERLAND','VAN')		 
-	# 2019-07-12
-	s_db = update_new_team(s_db,'MICHAEL_DEL_ZOTTO','ANA')		 
-	s_db = update_new_team(s_db,'RYAN_DZINGEL','CAR')			 
-	# 2019-07-19
-	s_db = update_new_team(s_db,'CHRIS_WIDEMAN','ANA')			
-	s_db = update_new_team(s_db,'ARTEM_ANISIMOV','OTT')
-	s_db = update_new_team(s_db,'ZACK_SMITH','CHI')
-	s_db = update_new_team(s_db,'JOSH_ARCHIBALD','EDM')			
-	s_db = update_new_team(s_db,'MILAN_LUCIC','CGY')
-	s_db = update_new_team(s_db,'JAMES_NEAL','EDM')				
-	# 2019-07-26
-	g_db = update_new_team(g_db,'GARRET_SPARKS','VGK')
-	s_db = update_new_team(s_db,'KALLE_KOSSILA','TOR')			
-	s_db = update_new_team(s_db,'GARRETT_WILSON','TOR')			
-	s_db = update_new_team(s_db,'PONTUS_ABERG','TOR')			
-	s_db = update_new_team(s_db,'JORDAN_SCHMALTZ','TOR')		
-	# 2019-08-02
-	g_db = update_new_team(g_db,'MIKE_CONDON','TBL')
-	s_db = update_new_team(s_db,'PHILLIP_DI_GIUSEPPE','NYR')	
-	s_db = update_new_team(s_db,'DARREN_ARCHIBALD','TOR')
-	s_db = update_new_team(s_db,'MICHAEL_STONE','CAR')  			
-	# 2019-08-09
-	s_db = update_new_team(s_db,'KEVIN_SHATTENKIRK','TBL')  	
-	s_db = update_new_team(s_db,'MARKO_DANO','CBJ')  			
-	s_db = update_new_team(s_db,'TREVOR_CARRICK','SJS')
-	# 2019-08-16
-	s_db = update_new_team(s_db,'ADAM_ERNE','DET')
-	# 2019-08-23
-	s_db = update_new_team(s_db,'VALERI_NICHUSHKIN','COL')
-	s_db = update_new_team(s_db,'PAT_MAROON','TBL')
-	s_db = update_new_team(s_db,'JAKE_GARDINER','CAR')
-	s_db = update_new_team(s_db,'JOEL_EDMUNDSON','CAR')
-	s_db = update_new_team(s_db,'JUSTIN_FAULK','STL')
 	'''
+	Manually update databases if needed.
+	Ex:
+		s_db = update_new_team(s_db,'RICHARD_PANIK','WSH')
+		g_db = update_new_team(g_db,'JOHN_GIBSON','SJS')
+		g_db = update_new_team(g_db,'MARTIN_JONES',None)
+		g_db['MARTIN_JONES'].sv = int(0.93*g_db['MARTIN_JONES'].sa)
 	'''
+
+	# ADD MODIFICATIONS TO DATABASE HERE
+	
+	
 	return [s_db, g_db]
 
 def update_new_team(db,player,new_team):
@@ -1226,12 +983,9 @@ def get_unavailable_players():
 	unavailable_players['COL'].append('MIKKO_RANTANEN')
 	unavailable_players['COL'].append('GABRIEL_LANDESKOG')
 	unavailable_players['EDM'].append('ADAM_LARSSON')
-	unavailable_players['PIT'].append('EVGENI_MALKIN')
-	unavailable_players['PIT'].append('NICK_BJUGSTAD')
 	unavailable_players['SJS'].append('DALTON_PROUT')
 	unavailable_players['SJS'].append('JACOB_MIDDLETON')
 	unavailable_players['STL'].append('VLADIMIR_TARASENKO')
-	unavailable_players['TOR'].append('JOHN_TAVARES')
 	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
 
 	all_unavailable_players = set()
