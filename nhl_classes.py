@@ -7,19 +7,8 @@ class Skater():
 		# player_data[name]['bio'] = [name,team_id,position,age,height,weight,draft_team,draft_year,draft_round,round_pick,total_draft_pos]
 		
 		# Bio-data
-		self.bio = {}
-		self.bio['name'] = bio[0]
-		self.bio['team_id'] = bio[1]
+		self.bio = bio
 		self.bio['multiple_teams'] = ind['multiple_teams']
-		self.bio['position'] = bio[2]
-		self.bio['age'] = bio[3]
-		self.bio['height'] = bio[4]
-		self.bio['weight'] = bio[5]
-		self.bio['draft_team'] = bio[6]
-		self.bio['draft_year'] = bio[7]
-		self.bio['draft_round'] = bio[8]
-		self.bio['round_pick'] = bio[9]
-		self.bio['total_draft_pos'] = bio[10]
 		
 		# Ind
 		self.ind = {}
@@ -46,7 +35,7 @@ class Skater():
 		self.ind['icf_per_60'] = [None,None,None]							# Individual CF per 60 min
 		self.ind['part_primary'] = [None,None,None]							# Quota of totals points that is primary points. Higher number is better.
 		self.ind['icf_pcg'] = [None,None,None]								# "Shooting percentage", for individual CF.
-		self.ind['ixgf'] = [None,None,None]									# Individual expected goals forward
+		#self.ind['ixgf'] = [None,None,None]									# Individual expected goals forward
 		self.ind['ixgf_pcg'] = [None,None,None]								# Quota between individual expected goals and goals scored.
 		self.ind['goal_scoring_rating'] = [None,None,None]					# Metric showing goal scoring potential.
 		
@@ -121,12 +110,25 @@ class Skater():
 		toi = ind['toi'][STAT_ES]
 		self.on_ice['cf_per_sec'] = self.on_ice['cf']/ind['toi'][STAT_ES]
 		self.on_ice['ca_per_sec'] = self.on_ice['ca']/ind['toi'][STAT_ES]
+		self.on_ice['cf_per_60'] = 3600 * self.on_ice['cf_per_sec']
+		self.on_ice['ca_per_60'] = 3600 * self.on_ice['ca_per_sec']
 		self.on_ice['sf_per_sec'] = self.on_ice['sf']/ind['toi'][STAT_ES]
 		self.on_ice['sa_per_sec'] = self.on_ice['sa']/ind['toi'][STAT_ES]
+		self.on_ice['sf_per_60'] = 3600 * self.on_ice['sf_per_sec']
+		self.on_ice['sa_per_60'] = 3600 * self.on_ice['sa_per_sec']
+		self.on_ice['xgf_per_sec'] = self.on_ice['xgf']/ind['toi'][STAT_ES]
+		self.on_ice['xga_per_sec'] = self.on_ice['xga']/ind['toi'][STAT_ES]
+		self.on_ice['xgf_per_60'] = 3600 * self.on_ice['xgf_per_sec']
+		self.on_ice['xga_per_60'] = 3600 * self.on_ice['xga_per_sec']
 		self.on_ice['scf_per_sec'] = self.on_ice['scf']/ind['toi'][STAT_ES]
 		self.on_ice['sca_per_sec'] = self.on_ice['sca']/ind['toi'][STAT_ES]
+		self.on_ice['scf_per_60'] = 3600 * self.on_ice['scf_per_sec']
+		self.on_ice['sca_per_60'] = 3600 * self.on_ice['sca_per_sec']
 		self.on_ice['hdcf_per_sec'] = self.on_ice['hdcf']/ind['toi'][STAT_ES]
 		self.on_ice['hdca_per_sec'] = self.on_ice['hdca']/ind['toi'][STAT_ES]
+		self.on_ice['hdcf_per_60'] = 3600 * self.on_ice['hdcf_per_sec']
+		self.on_ice['hdca_per_60'] = 3600 * self.on_ice['hdca_per_sec']
+
 		self.on_ice['ozs_pcg'] = self.on_ice['ozs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['nzs_pcg'] = self.on_ice['nzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['dzs_pcg'] = self.on_ice['dzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
@@ -254,7 +256,7 @@ class Team():
 		# This is directly accessed in the create_team_db()
 		self.team_toi_pp = 0
 		self.team_toi_pk = 0
-		self.team_toi_pk_per_gp = 0
+		self.team_toi_pp_per_gp = 0
 		self.team_toi_pk_per_gp = 0
 
 		self.sf = adv_array[0]
@@ -273,6 +275,8 @@ class Team():
 		self.scf_pcg = adv_array[11]
 		self.scf_per_sec = self.scf/self.team_toi_es
 		self.sca_per_sec = self.sca/self.team_toi_es
+		self.scf_per_60 = 3600 * self.scf_per_sec
+		self.sca_per_60 = 3600 * self.sca_per_sec
 		self.hdcf = adv_array[12]
 		self.hdca = adv_array[13]
 		self.hdcf_pcg = adv_array[14]
@@ -332,6 +336,11 @@ class Team():
 		self.exp_data['team_sf_in_simulated_game'] = 0
 		self.exp_data['in_season_rating'] = 0
 		self.exp_data['pre_season_rating'] = 0
+		self.exp_data['total_made_playoffs'] = 0
+		self.exp_data['mean_made_playoffs'] = 0
+		self.exp_data['total_simulated_points'] = 0
+		self.exp_data['mean_simulated_points'] = 0
+
 
 	def get_division(self,team_id):
 		atlantic,metro,central,pacific = set(),set(),set(),set()
