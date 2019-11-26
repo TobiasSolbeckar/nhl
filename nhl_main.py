@@ -95,16 +95,16 @@ simulation_param['include_offseason_moves'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#simulation_param['simulate_ind_games'] = True 								# Default value = False
+simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
-simulation_param['simulate_season'] = True									# Default value = False
+#simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['print_ul_stats'] = True 									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,2500]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50000,1000]											# Number of simulations for each game/season. Default = [50000,2500]
 simulation_param['debug_team'] = 'SJS'
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
@@ -114,7 +114,7 @@ simulation_param = create_databases(simulation_param)
 # Gameplay parameters								
 #simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule']['2019-11-16']
 #simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
-simulation_param['games_to_simulate'] = [['SJS','DET']]
+simulation_param['games_to_simulate'] = [['SJS','WPG']]
 #simulation_param['initial_wins'] = [[0,0]]
 simulation_param['down_sample'] = False
 simulation_param['initial_time'] = 0
