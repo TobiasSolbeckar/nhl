@@ -3,167 +3,132 @@ from nhl_defines import *
 from nhl_simulation import *
 
 class Skater():
-	def __init__(self,bio,es,pp,pk,on_ice):
+	def __init__(self,bio,ind,on_ice):
 		# player_data[name]['bio'] = [name,team_id,position,age,height,weight,draft_team,draft_year,draft_round,round_pick,total_draft_pos]
-		# player_data[name]['es'] = [toi,toi_pcg,gf,assist,f_assist,s_assist,sf,sf_per_sec,sh_pcg,pt_per_sec,pd_per_sec,multiple_teams]
-		# player_data[player_id]['pp'] = [toi,toi_pcg,sf,sh_pcg,pt,pd]
-		# player_data[name]['pk'] = [toi_pcg,sf_per_sec,sh_pcg,pt_per_sec,pd_per_sec]
-		# player_data[name]['on_ice'] = [gp,cf,ca,cf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,ozs_pcg,ozfo,nzfo,dzfo,ozfo_pcg,oz_pcg,nz_pcg,dz_pcg]
 		
 		# Bio-data
-		self.bio = {}
-		self.bio['name'] = bio[0]
-		self.bio['team_id'] = bio[1]
-		self.bio['multiple_teams'] = es[-1] # This is not very nice.
-		self.bio['position'] = bio[2]
-		self.bio['age'] = bio[3]
-		self.bio['height'] = bio[4]
-		self.bio['weight'] = bio[5]
-		self.bio['draft_team'] = bio[6]
-		self.bio['draft_year'] = bio[7]
-		self.bio['draft_round'] = bio[8]
-		self.bio['round_pick'] = bio[9]
-		self.bio['total_draft_pos'] = bio[10]
-		# ES
-		self.es = {}
-		self.es['toi'] = es[0]
-		self.es['toi_per_gp'] = es[0]/on_ice[0]
-		self.es['toi_pcg'] = es[1]
-		self.es['gf'] = es[2]
-		self.es['ass'] = es[3]
-		self.es['f_ass'] = es[4]
-		self.es['s_ass'] = es[5]
-		self.es['points'] = self.es['gf'] + self.es['ass']
-		self.es['primary_points'] = self.es['gf'] + self.es['f_ass']
-		self.es['points_per_60'] = (self.es['points']/self.es['toi']) * 3600
-		self.es['primary_points_per_60'] = (self.es['primary_points']/self.es['toi']) * 3600
-		if self.es['points'] == 0:
-			self.es['part_primary'] = 0
-		else:
-			self.es['part_primary'] = self.es['primary_points']/self.es['points']
-		self.es['isf'] = es[6]
-		self.es['isf_per_sec'] = self.es['isf']/self.es['toi']
-		self.es['ish_pcg'] = es[7]
-		self.es['pt'] = es[8]
-		self.es['pt_per_sec'] = self.es['pt']/self.es['toi']   			# penalties taken per second
-		self.es['pd'] = es[9]
-		self.es['pd_per_sec'] = self.es['pd']/self.es['toi']			# penalties drawn per second
-		self.es['ixg'] = es[10]
-		self.es['ixg_per_60'] = (self.es['ixg']/self.es['toi']) * 3600
-		self.es['goals_above_x'] = self.es['gf'] - self.es['ixg']
-		self.es['icf'] = es[11]
-		self.es['icf_per_60'] = (self.es['icf']/self.es['toi']) * 3600
-		if self.es['icf'] == 0:
-			self.es['icf_pcg'] = 0
-		else:
-			self.es['icf_pcg'] = self.es['gf']/self.es['icf']
+		self.bio = bio
+		self.bio['multiple_teams'] = ind['multiple_teams']
 		
-		# PP
-		self.pp = {}
-		if pp == None:
-			self.pp['toi'] = 0
-			self.pp['toi_per_gp'] = 0
-			self.pp['toi_pcg'] = 0
-			self.pp['isf'] = 0
-			self.pp['isf_per_sec'] = 0
-			self.pp['gf'] = 0
-			self.pp['ish_pcg'] = 0
-			self.pp['pt'] = 0
-			self.pp['pt_per_sec'] = 0
-			self.pp['pd'] = 0
-			self.pp['pd_per_sec'] = 0
-		else:
-			self.pp['toi'] = pp[0]
-			self.pp['toi_per_gp'] = pp[0]/on_ice[0]
-			self.pp['toi_pcg'] = pp[1]
-			self.pp['isf'] = pp[2]
-			self.pp['isf_per_sec'] = self.pp['isf']/self.pp['toi']
-			self.pp['gf'] = pp[3]
-			self.pp['ish_pcg'] = pp[4]
-			self.pp['pt'] = pp[5]
-			self.pp['pt_per_sec'] = self.pp['pt']/self.pp['toi']
-			self.pp['pd'] = pp[6]
-			self.pp['pd_per_sec'] = self.pp['pd']/self.pp['toi']
+		# Ind
+		self.ind = {}
+		for attribute in ind.keys():
+			if attribute not in ['multiple_teams']:
+				self.ind[attribute] = ind[attribute]
+
+		# Special attributes
+		self.ind['toi_per_gp'] = [None,None,None]							# Time on ice per game
+		self.ind['points'] = [None,None,None]								# Total points
+		self.ind['primary_points'] = [None,None,None]						# Primary points
+		self.ind['gf_above_xgf'] = [None,None,None]							# Goals scored above (individual) expected goals
+		self.ind['points_per_60'] = [None,None,None]						# Total points scored per 60 min
+		self.ind['primary_points_per_60'] = [None,None,None]				# Primary points scored per 60 min
+		self.ind['isf_per_sec'] = [None,None,None]							# Individual shots forward per second
+		self.ind['isf_per_60'] = [None,None,None]							# Individual shots forward per 60 min
+		self.ind['pt_per_sec'] = [None,None,None]							# Penalties taken per second
+		self.ind['pd_per_sec'] = [None,None,None]							# Peanlties draw per second
+		self.ind['pt_per_60'] = [None,None,None]							# Penalties taken per 60 min
+		self.ind['pd_per_60'] = [None,None,None]							# Penalties draw per 60 min
+		self.ind['pd_diff_per_60'] = [None,None,None]						# Difference between penalties drawn and taken per 60 min. Higher number is better.
+		self.ind['pd_pcg'] = [None,None,None]								# Quota between penalties drawn and taken. Higher number is better.
+		self.ind['ixgf_per_60'] = [None,None,None]							# Individual expected goals forward per 60 min.
+		self.ind['icf_per_60'] = [None,None,None]							# Individual CF per 60 min
+		self.ind['part_primary'] = [None,None,None]							# Quota of totals points that is primary points. Higher number is better.
+		self.ind['icf_pcg'] = [None,None,None]								# "Shooting percentage", for individual CF.
+		#self.ind['ixgf'] = [None,None,None]									# Individual expected goals forward
+		self.ind['ixgf_pcg'] = [None,None,None]								# Quota between individual expected goals and goals scored.
+		self.ind['goal_scoring_rating'] = [None,None,None]					# Metric showing goal scoring potential.
 		
-		# PK
-		self.pk = {}
-		if pk == None:
-			self.pk['toi'] = 0
-			self.pk['toi_per_gp'] = 0
-			self.pk['toi_pcg'] = 0
-			self.pk['isf'] = 0
-			self.pk['isf_per_sec'] = 0
-			self.pk['gf'] = 0
-			self.pk['ish_pcg'] = 0
-			self.pk['pt'] = 0
-			self.pk['pt_per_sec'] = 0
-			self.pk['pd'] = 0
-			self.pk['pd_per_sec'] = 0
-		else:
-			self.pk['toi'] = pk[0]
-			self.pk['toi_per_gp'] = pk[0]/on_ice[0]
-			self.pk['toi_pcg'] = pk[1]
-			self.pk['isf'] = pk[2]
-			self.pk['isf_per_sec'] = self.pk['isf']/self.pk['toi']
-			self.pk['gf'] = pk[3]
-			self.pk['ish_pcg'] = pk[4]
-			self.pk['pt'] = pk[5]
-			self.pk['pt_per_sec'] = self.pk['pt']/self.pk['toi']
-			self.pk['pd'] = pk[6]
-			self.pk['pd_per_sec'] = self.pk['pd']/self.pk['toi']
+		for index in [STAT_ES,STAT_PP,STAT_PK]:
+			# For readability
+			toi = ind['toi'][index]
+			gf = ind['gf'][index]
+			assist = ind['assist'][index]
+			f_assist = ind['f_assist'][index]
+			s_assist = ind['s_assist'][index]
+			points = gf + assist
+			p_points = gf + f_assist
+			pt = ind['pt'][index]
+			pd = ind['pd'][index]
+			isf = ind['isf'][index]
+			ixgf = ind['ixgf'][index]
+			icf = ind['icf'][index]
+			
+			if toi == 0:
+				self.ind['points_per_60'][index] = 0
+				self.ind['primary_points_per_60'][index] = 0
+				self.ind['isf_per_sec'][index] = 0
+				self.ind['pt_per_sec'][index] = 0
+				self.ind['pd_per_sec'][index] = 0
+				self.ind['pt_per_60'][index] = 0
+				self.ind['pd_per_60'][index] = 0
+				self.ind['ixgf_per_60'][index] = 0
+				self.ind['icf_per_60'][index] = 0
+				self.ind['isf_per_60'][index] = 0
+			else:
+				self.ind['points_per_60'][index] = (points/toi) * 3600
+				self.ind['primary_points_per_60'][index] = (p_points/toi) * 3600
+				self.ind['isf_per_sec'][index] = isf/toi
+				self.ind['pt_per_sec'][index] = pt/toi			# penalties taken per second
+				self.ind['pd_per_sec'][index] = pd/toi			# penalties drawn per second
+				self.ind['pt_per_60'][index] = self.ind['pt_per_sec'][index] * 3600
+				self.ind['pd_per_60'][index] = self.ind['pd_per_sec'][index] * 3600
+				self.ind['ixgf_per_60'][index] = (ixgf/toi) * 3600
+				self.ind['icf_per_60'][index] = (icf/toi) * 3600
+				self.ind['isf_per_60'][index] = self.ind['isf_per_sec'][index] * 3600
+
+			if points == 0:
+				self.ind['part_primary'][index] = 0
+			else:
+				self.ind['part_primary'][index] = p_points/points
+			if icf == 0:
+				self.ind['icf_pcg'][index] = 0
+			else:
+				self.ind['icf_pcg'][index] = gf/icf
+			if self.ind['pt_per_60'][index] + self.ind['pd_per_60'][index] == 0:
+				self.ind['pd_pcg'][index] = 0
+			else:
+				self.ind['pd_pcg'][index] = self.ind['pd_per_60'][index]/(self.ind['pd_per_60'][index]+self.ind['pt_per_60'][index])
+			if gf + ixgf == 0:
+				self.ind['ixgf_pcg'][index] = 0
+			else:
+				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)
+			
+			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
+			self.ind['points'][index] = gf + assist
+			self.ind['primary_points'][index] = gf + f_assist
+			self.ind['gf_above_xgf'][index] = gf-ixgf
+			self.ind['pd_diff_per_60'][index] = self.ind['pd_per_60'][index] - self.ind['pt_per_60'][index]
+			self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
 		
 		# OnIce
-		# on_ice = [gp,cf,ca,cf_pcg,sf,sa,sf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,ozs,nzs,dzs,,ozfo,nzfo,dzfo,0]
 		self.on_ice = {}
-		x = 0
-		self.on_ice['gp'] = on_ice[x]
-		x += 1
-		self.on_ice['cf'] = on_ice[x]
-		x += 1
-		self.on_ice['ca'] = on_ice[x]
-		x += 1
-		self.on_ice['cf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['sf'] = on_ice[x]
-		x += 1
-		self.on_ice['sa'] = on_ice[x]
-		x += 1
-		self.on_ice['sf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['scf'] = on_ice[x]
-		x += 1
-		self.on_ice['sca'] = on_ice[x]
-		x += 1
-		self.on_ice['scf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['hdcf'] = on_ice[x]
-		x += 1
-		self.on_ice['hdca'] = on_ice[x]
-		x += 1
-		self.on_ice['hdcf_pcg'] = on_ice[x]
-		x += 1
-		self.on_ice['ozs'] = on_ice[x]
-		x += 1
-		self.on_ice['nzs'] = on_ice[x]
-		x += 1
-		self.on_ice['dzs'] = on_ice[x]
-		x += 1
-		self.on_ice['ozfo'] = on_ice[x]
-		x += 1
-		self.on_ice['nzfo'] = on_ice[x]
-		x += 1
-		self.on_ice['dzfo'] = on_ice[x]
-		x += 1
-		self.on_ice['rel_cf'] = on_ice[x]
+		for attribute in on_ice.keys():
+			self.on_ice[attribute] = on_ice[attribute]
 
-		self.on_ice['cf_per_sec'] = self.on_ice['cf']/self.es['toi']
-		self.on_ice['ca_per_sec'] = self.on_ice['ca']/self.es['toi']
-		self.on_ice['sf_per_sec'] = self.on_ice['sf']/self.es['toi']
-		self.on_ice['sa_per_sec'] = self.on_ice['sa']/self.es['toi']
-		self.on_ice['scf_per_sec'] = self.on_ice['scf']/self.es['toi']
-		self.on_ice['sca_per_sec'] = self.on_ice['sca']/self.es['toi']
-		self.on_ice['hdcf_per_sec'] = self.on_ice['hdcf']/self.es['toi']
-		self.on_ice['hdca_per_sec'] = self.on_ice['hdca']/self.es['toi']
+		# Special attributes
+		toi = ind['toi'][STAT_ES]
+		self.on_ice['cf_per_sec'] = self.on_ice['cf']/ind['toi'][STAT_ES]
+		self.on_ice['ca_per_sec'] = self.on_ice['ca']/ind['toi'][STAT_ES]
+		self.on_ice['cf_per_60'] = 3600 * self.on_ice['cf_per_sec']
+		self.on_ice['ca_per_60'] = 3600 * self.on_ice['ca_per_sec']
+		self.on_ice['sf_per_sec'] = self.on_ice['sf']/ind['toi'][STAT_ES]
+		self.on_ice['sa_per_sec'] = self.on_ice['sa']/ind['toi'][STAT_ES]
+		self.on_ice['sf_per_60'] = 3600 * self.on_ice['sf_per_sec']
+		self.on_ice['sa_per_60'] = 3600 * self.on_ice['sa_per_sec']
+		self.on_ice['xgf_per_sec'] = self.on_ice['xgf']/ind['toi'][STAT_ES]
+		self.on_ice['xga_per_sec'] = self.on_ice['xga']/ind['toi'][STAT_ES]
+		self.on_ice['xgf_per_60'] = 3600 * self.on_ice['xgf_per_sec']
+		self.on_ice['xga_per_60'] = 3600 * self.on_ice['xga_per_sec']
+		self.on_ice['scf_per_sec'] = self.on_ice['scf']/ind['toi'][STAT_ES]
+		self.on_ice['sca_per_sec'] = self.on_ice['sca']/ind['toi'][STAT_ES]
+		self.on_ice['scf_per_60'] = 3600 * self.on_ice['scf_per_sec']
+		self.on_ice['sca_per_60'] = 3600 * self.on_ice['sca_per_sec']
+		self.on_ice['hdcf_per_sec'] = self.on_ice['hdcf']/ind['toi'][STAT_ES]
+		self.on_ice['hdca_per_sec'] = self.on_ice['hdca']/ind['toi'][STAT_ES]
+		self.on_ice['hdcf_per_60'] = 3600 * self.on_ice['hdcf_per_sec']
+		self.on_ice['hdca_per_60'] = 3600 * self.on_ice['hdca_per_sec']
+
 		self.on_ice['ozs_pcg'] = self.on_ice['ozs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['nzs_pcg'] = self.on_ice['nzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
 		self.on_ice['dzs_pcg'] = self.on_ice['dzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
@@ -177,13 +142,17 @@ class Skater():
 		self.on_ice['non_oz_pcg'] = self.on_ice['dz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_nz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['dz_pcg']
 		self.on_ice['avg_zone_start'] = (self.on_ice['oz_pcg']*3 + self.on_ice['nz_pcg']*2 + self.on_ice['dz_pcg']*1)-2
-		self.on_ice['rel_ca'] = 1-(self.on_ice['rel_cf']-1)
-		self.on_ice['estimated_off_per_sec'] = 0
-		self.on_ice['estimated_def_per_sec'] = 0
-		self.on_ice['estimated_off_pcg'] = 0
 		self.rating = []
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
+		
+		# All "estimated_off/def" attributes need to be added after the construction, as they depend on the overall team.
+		self.on_ice['estimated_off_per_sec'] = 0 
+		self.on_ice['estimated_def_per_sec'] = 0
+		self.on_ice['estimated_off_per_60'] = 0
+		self.on_ice['estimated_def_per_60'] = 0
+		self.on_ice['estimated_def_per_60_diff'] = 0
+		self.on_ice['estimated_off_pcg'] = 0
 
 	def print_player(self,s_db=None):
 		print('Information for player ' + self.bio['name'])
@@ -223,13 +192,13 @@ class Goalie():
 		self.sa_per_sec = self.sa/self.toi
 		self.sv = stats_arr[3]
 		self.ga = stats_arr[4]
-		self.sv_pcg = stats_arr[5]
-		self.gaa = stats_arr[6]
-		self.gsaa = stats_arr[7]
+		self.sv_pcg = self.sv/self.sa
+		self.gaa = stats_arr[5]
+		self.gsaa = stats_arr[6]
 		self.gsaa_per_60 = 3600*(self.gsaa/self.toi)
-		self.xga = stats_arr[8]
-		self.avg_shot_dist = stats_arr[9]
-		self.avg_goal_dist = stats_arr[10]
+		self.xga = stats_arr[7]
+		self.avg_shot_dist = stats_arr[8]
+		self.avg_goal_dist = stats_arr[9]
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
 
@@ -287,7 +256,7 @@ class Team():
 		# This is directly accessed in the create_team_db()
 		self.team_toi_pp = 0
 		self.team_toi_pk = 0
-		self.team_toi_pk_per_gp = 0
+		self.team_toi_pp_per_gp = 0
 		self.team_toi_pk_per_gp = 0
 
 		self.sf = adv_array[0]
@@ -306,6 +275,8 @@ class Team():
 		self.scf_pcg = adv_array[11]
 		self.scf_per_sec = self.scf/self.team_toi_es
 		self.sca_per_sec = self.sca/self.team_toi_es
+		self.scf_per_60 = 3600 * self.scf_per_sec
+		self.sca_per_60 = 3600 * self.sca_per_sec
 		self.hdcf = adv_array[12]
 		self.hdca = adv_array[13]
 		self.hdcf_pcg = adv_array[14]
@@ -365,6 +336,11 @@ class Team():
 		self.exp_data['team_sf_in_simulated_game'] = 0
 		self.exp_data['in_season_rating'] = 0
 		self.exp_data['pre_season_rating'] = 0
+		self.exp_data['total_made_playoffs'] = 0
+		self.exp_data['mean_made_playoffs'] = 0
+		self.exp_data['total_simulated_points'] = 0
+		self.exp_data['mean_simulated_points'] = 0
+
 
 	def get_division(self,team_id):
 		atlantic,metro,central,pacific = set(),set(),set(),set()

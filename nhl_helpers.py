@@ -3,8 +3,7 @@ import time
 import itertools
 import os
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
+import platform
 import math
 import inspect
 import csv
@@ -12,8 +11,15 @@ import copy
 import random
 import copy
 import warnings
+import json
+import gspread
+from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
+
+if platform.system() == 'Darwin':
+	import matplotlib
+	import matplotlib.pyplot as plt
 
 def generate_long_name():
 	long_name = {}
@@ -163,34 +169,51 @@ def generate_player_id(raw_str):
 	player_id = str(raw_str).upper().replace(' ','_')
 	player_id = player_id.replace('.','_')
 	player_id = player_id.replace("'",'')
+
+	# Handle special cases
+	if player_id == 'ALEXANDER_NYLANDER':
+		player_id = 'ALEX_NYLANDER'
 	return player_id
 
-def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,position_filter=['F','D'],team=None,print_list_length=50,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
+def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_length=50,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
+
+	if _filter == None:
+		_filter['toi'] = 0
+		_filter['position'] = ['F','D']
+		_filter['additional_players'] = []
+		_filter['team'] = None
+		
 	output = {}
-	toi_filter *= 60
-	sorted_list = []
-	data_list = []
+	added_players = set()
+	sorted_list,data_list = [],[]
+	playform = STAT_ES
 	for skater_id in db.keys():
 		skater = db[skater_id]
-		if skater.es['toi'] >= toi_filter and skater.bio['position'] in position_filter:
+		if (skater.ind['toi'][STAT_ES] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
 			if len(attributes) > 1:
-				val_a = get_attribute_value(skater,attributes[0],playform[0])
-				val_b = get_attribute_value(skater,attributes[1],playform[1])
+				val_a = get_attribute_value(skater,attributes[0],playform)
+				val_b = get_attribute_value(skater,attributes[1],playform)
 				val = operation(val_a,val_b)
 			else:
-				val = get_attribute_value(skater,attributes[0],playform[0])
+				val = get_attribute_value(skater,attributes[0],playform)
 			val *= scale_factor
-
-			if team == None:		
+			if _filter['team'] == None:
 				sorted_list.append((val,skater_id))
 				data_list.append(val)
+				added_players.add(skater_id)
 			else:
-				if skater.bio['team_id'] == team:
+				if skater.bio['team_id'] in _filter['team']:
 					sorted_list.append((val,skater_id))
 					data_list.append(val)
-			
+					added_players.add(skater_id)
+			if (skater_id in _filter['additional_players']) and (skater_id not in added_players):
+				sorted_list.append((val,skater_id))
+				data_list.append(val)
+
+	# This is not very nice.
 	sorted_list.sort(reverse=high_to_low)
 	data_list.sort(reverse=high_to_low)
+
 	output['mu'] = np.mean(data_list)
 	output['sigma'] = np.std(data_list)
 	output['list'] = sorted_list
@@ -200,37 +223,30 @@ def print_sorted_list(db,attributes,playform,operation=None,toi_filter=200,posit
 	else:
 		norm_factor = 1
 	if do_print == True:
-		print('\n' + str(attributes) + ' (scale factor=' + str(scale_factor) + '):')
-		ranking = 1
+		print(str(attributes) + '. Scale factor=' + str(scale_factor) + '. Min. TOI=' + str(_filter['toi']))
+		ranking = 0
 		for pair in sorted_list:
-			skater = db[pair[1]]
-			if ranking <= print_list_length:
+			ranking += 1
+			skater_id = pair[1]
+			skater = db[skater_id]
+			if ranking <= print_list_length or skater_id in _filter['additional_players']:
 				#print('{0}: {1} ({2}) - "{3}"({4}): {5:.1f}.'.format(ranking,skater.bio['name'],skater.bio['team_id'],attributes,playform.upper(),pair[0]))
 				print('{0}: {1} ({2}) - {3:.2f}'.format(ranking,skater.bio['name'],skater.bio['team_id'],norm_factor*pair[0]))
 				for attribute in attributes:
 					print('   {0}: {1:.2f}'.format(attribute,scale_factor*get_attribute_value(skater,attribute,playform)))
-				ranking += 1
 	return output
 
 
 
-def get_attribute_value(player,attribute,playform='es'):
+def get_attribute_value(player,attribute,playform_index=STAT_ES):
 	if player.bio['position'] == 'G':
 		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
-
-	if attribute in player.es.keys():
-		if playform == 'es':
-			return player.es[attribute]
-		elif playform == 'pp':
-			return player.pp[attribute]
-		elif playform == 'pk':
-			return player.pk[attribute]
-		else:
-			raise ValueError('Unknown playform ' + playform + '.')
+	if attribute in player.bio.keys():
+		return player.bio[attribute]
+	elif attribute in player.ind.keys():
+		return player.ind[attribute][playform_index]
 	elif attribute in player.on_ice.keys():
 		return player.on_ice[attribute]
-	elif attribute in player.bio.keys():
-		return player.bio[attribute]
 	else:
 		raise ValueError('Unknown attribute ' + attribute)
 
@@ -242,12 +258,12 @@ def get_pair_index(pair_list,key):
 			return [idx,val]
 	raise ValueError('No key ' + key + ' found in list')
 
-def get_sigma_difference(db,player_id,attribute,playform='es'):
+def get_sigma_difference(db,player_id,attribute,playform=STAT_ES):
 	op = print_sorted_list(db,[attribute],playform,operation=None,toi_filter=200,position_filter=['F','D'],team=None,print_list_length=50,scale_factor=1,high_to_low=True,do_print=False,normalize=False)
 	player_val = get_attribute_value(db[player_id],attribute,playform)
 	return (player_val-op['mu'])/op['sigma']
 
-def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
+def plot_player_cards(ax,axes_info,p_db,player_ids,_filter):
 	# Init
 	gen_x,gen_y,spec_x,spec_y,markers = [],[],[],[],[]
 	output = {}
@@ -279,7 +295,7 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 	for tmp_id in p_db:
 		tmp_player = p_db[tmp_id]
 		if tmp_player.bio['position'] == 'G':
-			if tmp_player.get_attribute('toi') > flter['toi']*60:
+			if tmp_player.get_attribute('toi') > _filter['toi']*60:
 				if ydata_only == True:
 					gen_x.append(tmp_index)
 					tmp_index += 1
@@ -287,7 +303,7 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 					gen_x.append(axes_info['x']['scale']*tmp_player.get_attribute(axes_info['x']['attribute']))
 				gen_y.append(axes_info['y']['scale']*tmp_player.get_attribute(axes_info['y']['attribute']))
 		else:
-			if (get_attribute_value(tmp_player,'toi','es') > flter['toi']*60):# and (tmp_player.bio['position'] == flter['position']):
+			if (get_attribute_value(tmp_player,'toi') > _filter['toi']*60) and (get_attribute_value(tmp_player,'position') in _filter['position']):
 				if ydata_only == True:
 					gen_x.append(tmp_index)
 					tmp_index += 1
@@ -321,8 +337,8 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 		player = p_db[player_id]
 		if player.bio['position'] == 'G':
 			# Different functions for getting data from goalies vs. skaters
-			if player.get_attribute('toi') < flter['toi']*60:
-				warnings.warn('Player ' + player_id + ' has played less than ' + str(flter['toi']) + ' minutes even strength (' + str(int(player.get_attribute('toi')/60)) + '). Data not included in plot(s).')
+			if player.get_attribute('toi') < _filter['toi']*60:
+				warnings.warn('Player ' + player_id + ' has played less than ' + str(_filter['toi']) + ' minutes even strength (' + str(int(player.get_attribute('toi')/60)) + '). Data not included in plot(s).')
 			else:
 				current_marker = markers[marker_idx]
 				if ydata_only == True:
@@ -343,31 +359,32 @@ def plot_player_cards(ax,axes_info,p_db,player_ids,flter):
 					plt.scatter(axes_info['x']['scale']*player.get_attribute(axes_info['x']['attribute']),axes_info['y']['scale']*player.get_attribute(axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id+lbl_val_str)
 				marker_idx += 1
 		else:
-			if get_attribute_value(player,'toi','es') < flter['toi']*60:
-				warnings.warn('Player ' + player_id + ' has played less than ' + str(flter['toi']) + ' minutes even strength (' + str(int(get_attribute_value(player,'toi','es')/60)) + '). Data not included in plot(s).')
+			if get_attribute_value(player,'toi') < _filter['toi']*60:
+				warnings.warn('Player ' + player_id + ' has played less than ' + str(_filter['toi']) + ' minutes even strength (' + str(int(get_attribute_value(player,'toi')/60)) + '). Data not included in plot(s).')
 			else:
-				if do_plots == True:
-					current_marker = markers[marker_idx]
-				if (ydata_only == True) and (do_plots == True):
-					plt.scatter(i,axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'],'es'),c=current_marker[1],marker=current_marker[0],label=player_id)
-				else:
-					if axes_info['fit_data'] == True:
-						x_val = axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute'],'es')
-						y_val = axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'],'es')
-						y_est = fit_fn(x_val)
-						y_diff = y_val - y_est
-						output['pair_list'].append((y_diff,player_id))
-						output['data_list'].append(y_diff)
-						if y_diff > 0:
-							sign = '+'
-						else:
-							sign = ''
-						lbl_val_str = ' (' + sign + str(int(100*y_diff/y_est)) + '%)'
-					else:
-						lbl_val_str = ''
+				if (get_attribute_value(player,'position') in _filter['position']):
 					if do_plots == True:
-						plt.scatter(axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute']),axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'],'es'),c=current_marker[1],marker=current_marker[0],label=player_id+lbl_val_str)
-				marker_idx += 1
+						current_marker = markers[marker_idx]
+					if (ydata_only == True) and (do_plots == True):
+						plt.scatter(i,axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id)
+					else:
+						if axes_info['fit_data'] == True:
+							x_val = axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute'])
+							y_val = axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute'])
+							y_est = fit_fn(x_val)
+							y_diff = y_val - y_est
+							output['pair_list'].append((y_diff,player_id))
+							output['data_list'].append(y_diff)
+							if y_diff > 0:
+								sign = '+'
+							else:
+								sign = ''
+							lbl_val_str = ' (' + sign + str(int(100*y_diff/y_est)) + '%)'
+						else:
+							lbl_val_str = ''
+						if do_plots == True:
+							plt.scatter(axes_info['x']['scale']*get_attribute_value(player,axes_info['x']['attribute']),axes_info['y']['scale']*get_attribute_value(player,axes_info['y']['attribute']),c=current_marker[1],marker=current_marker[0],label=player_id+lbl_val_str)
+					marker_idx += 1
 	
 	# Invert axis for readability.
 	if axes_info['x']['invert'] == True:
@@ -433,8 +450,104 @@ def get_from_distribution(val_dict,attribute,normalize=False):
 			if random.uniform(0,1) <= (player_values[index]/sum_value):
 				return p_id
 
+def acces_gsheet(name_of_ws,credential_path='creds.json'):
+	# Open/access g-Sheet
+	#name_of_ws = "SharksData_Public"
+	credential_path = 'creds.json' 			# Old version
+	print('Authentication Google Sheet "' + name_of_ws +'"...')
+	json_key = json.load(open(credential_path)) # json credentials you downloaded earlier
+	scope = ['https://spreadsheets.google.com/feeds',
+	         'https://www.googleapis.com/auth/drive']
+	credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope) # get email and key from creds
+	g_file = gspread.authorize(credentials) # authenticate with Google
+	print('Authentication done')
+	print('Opening worksheet...')
+	g_wb = g_file.open(name_of_ws) # Open Google WorkBook
+	return g_wb
+
+def get_alpha(pos=None):
+	# translates column index (1,2,3) to column name ('A','B','C'). 
+	alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
+	combined_alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
+	for f_letter in alpha:
+		for s_letter in alpha:
+			combined_alpha.append(f_letter + s_letter)
+
+	if pos == None:
+		return combined_alpha
+	else:
+		return combined_alpha[pos-1]
+
+def evaluate_combination(s_db,player_ids,attributes=['estimated_off_per_60','estimated_def_per_60','pd_diff_per_60']):
+	if isinstance(player_ids, list) == False:
+		raise ValueError('Uncompatible types. Input must be a (list-of) list(s).')
+	else:
+		if isinstance(player_ids[0],list):
+			# List of line combinations
+			print('@TODO')
+		else:
+			data_values = len(attributes)*[0]
+			for player_id in player_ids:
+				for i,attribute in enumerate(attributes):
+					data_values[i] += get_attribute_value(s_db[player_id],attribute)
+			for i,attribute in enumerate(attributes):
+				print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))				
+
+def print_player_from_team(player_db,team_id,position=[]):
+	if position == []:
+		position = ['G','D','F']
+	for player_id in player_db:
+		player = get_player(player_db,player_id)
+		if (player.bio['team_id'] == team_id) and (player.bio['position'] in position):
+			print(player_id)
+
+def get_sorted_db(simulation_param,value_key,cut_off=None,toi_filter=0,position_filter=None,best_first=True):
+	"""
+	Return the cut_off best players in a certain category. Can filter out players based on time-on-ice [minutes]
+	"""
+	lst = []
+	split_key = value_key.split('_')
+	split_val_key = ''
+	for val in split_key[1:]:
+		split_val_key += val + '_'
+	split_val_key = split_val_key[:-1]
+	if position_filter == None:
+		position_filter = ['G','D','F']
+	for skater_id in simulation_param['databases']['skater_db'].keys():
+		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		if (skater.es['toi']/60 >= toi_filter) and (skater.bio['position'] in position_filter):
+			if split_key[0] == 'es':
+				lst.append((skater.es[split_val_key],skater_id))
+			elif split_key[0] == 'on_ice':
+				lst.append((skater.on_ice[split_val_key],skater_id))
+			else:
+				raise ValueError('Unknown split-key "' + value_key.split('_')[0] + '"')
+	lst.sort(reverse=best_first)
+	if cut_off == None:
+		return lst
+	else:
+		return lst[0:cut_off]
 
 
+def create_player_list(s_db,_filter):
+	list_of_players = []
+	for skater_id in ACTIVE_SKATERS:
+		skater = get_player(s_db,skater_id)
+		player_ok = True
+		for attribute in _filter:
+			if isinstance(_filter[attribute],str) == True:
+				if get_attribute_value(skater,attribute) != _filter[attribute]:
+					player_ok &= False
+			elif _filter[attribute] > 0:
+				if get_attribute_value(skater,attribute) < _filter[attribute]:
+					player_ok &= False
+			elif _filter[attribute] < 0:
+				if get_attribute_value(skater,attribute) > -1*_filter[attribute]:
+					player_ok &= False
 
+		if player_ok:
+			list_of_players.append(skater_id)
+	
+	return list_of_players
 
 
