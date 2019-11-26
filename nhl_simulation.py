@@ -471,7 +471,8 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		players_on_ice = set()
 		added_skaters = [0,0]
 		add_more_f, add_more_d = True, True
-		while added_skaters[0] < game_status[ct + '_number_of_skaters'][0] or added_skaters[1] < game_status[ct + '_number_of_skaters'][1]: 
+		#while added_skaters[0] < game_status[ct + '_number_of_skaters'][0] or added_skaters[1] < game_status[ct + '_number_of_skaters'][1]:
+		while add_more_d or add_more_f:
 			for skater_id in set(data_param[ct + '_skaters']):  # using a set for randomizing purposes
 				skater = get_player(data_param[ct + '_skaters'],skater_id)
 				# @TODO: This should depend on gameplay_state
@@ -534,7 +535,6 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		line_values['sf_per_time'] = np.mean(line_values['sf_per_time'])
 		line_values['sa_per_time'] = np.mean(line_values['sa_per_time'])
 		if line_values['sf'] == 0:
-			print('__TSA_DEBUG: Line with combined sf == 0: ' + str(ct_on_ice_db.keys()))
 			line_values['line_sh_pcg'] = 0
 		else:
 			line_values['line_sh_pcg'] = line_values['gf'] / line_values['sf']
@@ -542,9 +542,11 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		game_status[ct + '_line_values'] = line_values
 		# For debug only
 		lines_on_ice[i] = line_values
-	if verbose:
-		print(game_status['time_str'] + ': Players on the ice for ' + game_status['ht_id'] + ': ' + str(game_status['ht_on_ice_db'].keys()))
-		print(game_status['time_str'] + ': Players on the ice for ' + game_status['at_id'] + ': ' + str(game_status['at_on_ice_db'].keys()))
+		if verbose:
+			print(game_status['time_str'] + ': Players on ice for: ' + game_status[ct + '_id'] + ': ' + str(len(game_status[ct + '_on_ice_db'].keys())) + '. ' + str(game_status[ct + '_on_ice_db'].keys()))
+		
+		if len((game_status[ct + '_on_ice_db'].keys())) < 4 and (int(game_status['time_str'][0]) != 6):
+			raise ValueError('Too few players in ' + game_status[ct + '_id'])
 	return game_status
 
 def get_starting_goalie(simulation_param,team_id):
@@ -574,14 +576,13 @@ def get_time_str(game_status):
 	
 	return game_status
 
-def get_playoff_cut(team_db):
+def get_playoff_cut(team_db,use_simulated_points=False):
 	# Returns the lowest point value needed to make the playoffs in each division
-
-	[tmp,div_a,div_b] = create_tables(team_db,'eastern',False,True)
+	[__,div_a,div_b] = create_tables(team_db,'eastern',print_to_cmd=False,store=True,use_simulated_points=use_simulated_points)
 	wild_card_east = [div_a[3],div_a[4],div_b[3],div_b[4]]
 	wild_card_east.sort(reverse=True)
 
-	[tmp,div_a,div_b] = create_tables(team_db,'western',False,True)
+	[__,div_a,div_b] = create_tables(team_db,'western',print_to_cmd=False,store=True,use_simulated_points=use_simulated_points)
 	wild_card_west = [div_a[3],div_a[4],div_b[3],div_b[4]]
 	wild_card_west.sort(reverse=True)
 
@@ -755,24 +756,28 @@ def create_playoff_tree(playoff_teams,simulation_param,verbose=True):
 
 	return [conference_champ, conference_finals, division_finals]
 
-def create_tables(team_db,key,print_to_cmd=True,store=False):
+def create_tables(team_db,key,print_to_cmd=True,store=False,use_simulated_points=False):
 	tl_league,tl_eastern,tl_western,tl_atlantic,tl_metro,tl_central,tl_pacific = [],[],[],[],[],[],[]
 	
 	for team_id in team_db.keys():
 		team = get_team(team_db,team_id)
-		tl_league.append((team.p,team_id))
-		if team.division == 'A':
-			tl_eastern.append((team.p,team_id))
-			tl_atlantic.append((team.p,team_id))
-		elif team.division == 'M':
-			tl_eastern.append((team.p,team_id))
-			tl_metro.append((team.p,team_id))
-		elif team.division == 'C':
-			tl_western.append((team.p,team_id))
-			tl_central.append((team.p,team_id))
+		if use_simulated_points == True:
+			points = team.exp_data['mean_simulated_points']
 		else:
-			tl_western.append((team.p,team_id))
-			tl_pacific.append((team.p,team_id))		
+			points = team.p
+		tl_league.append((points,team_id))
+		if team.division == 'A':
+			tl_eastern.append((points,team_id))
+			tl_atlantic.append((points,team_id))
+		elif team.division == 'M':
+			tl_eastern.append((points,team_id))
+			tl_metro.append((points,team_id))
+		elif team.division == 'C':
+			tl_western.append((points,team_id))
+			tl_central.append((points,team_id))
+		else:
+			tl_western.append((points,team_id))
+			tl_pacific.append((points,team_id))		
 	
 	show_all_stats = True
 	if team.gp == 82:
@@ -870,8 +875,47 @@ def create_game_specific_db(simulation_param):
 
 	# Create 'sub-versions' of the player_db, containing only the players in the current game.
 	ht_skater_db, at_skater_db = {},{}
-	ht_skater_db = simulation_param['databases']['team_specific_db'][simulation_param['ht_id']]
-	at_skater_db = simulation_param['databases']['team_specific_db'][simulation_param['at_id']]
+	available_ht_players = set(simulation_param['databases']['team_specific_db'][simulation_param['ht_id']].keys())
+	available_at_players = set(simulation_param['databases']['team_specific_db'][simulation_param['at_id']].keys())
+	
+	list_of_defs, list_of_fwds = [],[]
+	for skater_id in available_ht_players:
+		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		toi_per_gp = get_attribute_value(skater,'toi_per_gp')
+		if get_attribute_value(skater,'position') == 'D':
+			list_of_defs.append((toi_per_gp,skater_id))
+		else:
+			list_of_fwds.append((toi_per_gp,skater_id))
+	list_of_defs.sort(reverse=True)
+	list_of_defs = list_of_defs[:6]
+	list_of_fwds.sort(reverse=True)
+	list_of_fwds = list_of_fwds[:12]
+	for pair in list_of_defs:
+		skater_id = pair[1]
+		ht_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+	for pair in list_of_fwds:
+		skater_id = pair[1]
+		ht_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+
+	list_of_defs, list_of_fwds = [],[]
+	for skater_id in available_at_players:
+		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		toi_per_gp = get_attribute_value(skater,'toi_per_gp')
+		if get_attribute_value(skater,'position') == 'D':
+			list_of_defs.append((toi_per_gp,skater_id))
+		else:
+			list_of_fwds.append((toi_per_gp,skater_id))
+	list_of_defs.sort(reverse=True)
+	list_of_defs = list_of_defs[:6]
+	list_of_fwds.sort(reverse=True)
+	list_of_fwds = list_of_fwds[:12]
+	for pair in list_of_defs:
+		skater_id = pair[1]
+		at_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+	for pair in list_of_fwds:
+		skater_id = pair[1]
+		at_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+
 
 	# Set up data_param, containing information about the players in the game.
 	data_param = {}
