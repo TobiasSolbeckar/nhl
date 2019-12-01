@@ -53,7 +53,7 @@ class Skater():
 			isf = ind['isf'][index]
 			ixgf = ind['ixgf'][index]
 			icf = ind['icf'][index]
-			
+
 			if toi == 0:
 				self.ind['points_per_60'][index] = 0
 				self.ind['primary_points_per_60'][index] = 0
@@ -81,6 +81,10 @@ class Skater():
 				self.ind['part_primary'][index] = 0
 			else:
 				self.ind['part_primary'][index] = p_points/points
+			if isf == 0:
+				self.ind['ish_pcg'][index] = 0
+			else:
+				self.ind['ish_pcg'][index] = gf/isf
 			if icf == 0:
 				self.ind['icf_pcg'][index] = 0
 			else:
@@ -93,6 +97,7 @@ class Skater():
 				self.ind['ixgf_pcg'][index] = 0
 			else:
 				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)
+
 			
 			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
 			self.ind['points'][index] = gf + assist
@@ -108,22 +113,46 @@ class Skater():
 
 		# Special attributes
 		toi = ind['toi'][STAT_ES]
+		if (self.on_ice['cf']+self.on_ice['ca']) == 0:
+			self.on_ice['cf_pcg']
+		else:
+			self.on_ice['cf_pcg'] = self.on_ice['cf'] / (self.on_ice['cf']+self.on_ice['ca'])
 		self.on_ice['cf_per_sec'] = self.on_ice['cf']/ind['toi'][STAT_ES]
 		self.on_ice['ca_per_sec'] = self.on_ice['ca']/ind['toi'][STAT_ES]
 		self.on_ice['cf_per_60'] = 3600 * self.on_ice['cf_per_sec']
 		self.on_ice['ca_per_60'] = 3600 * self.on_ice['ca_per_sec']
+		
+		if (self.on_ice['sf']+self.on_ice['sa']) == 0:
+			self.on_ice['sf_pcg'] = 0
+		else:
+			self.on_ice['sf_pcg'] = self.on_ice['sf'] / (self.on_ice['sf']+self.on_ice['sa'])
 		self.on_ice['sf_per_sec'] = self.on_ice['sf']/ind['toi'][STAT_ES]
 		self.on_ice['sa_per_sec'] = self.on_ice['sa']/ind['toi'][STAT_ES]
 		self.on_ice['sf_per_60'] = 3600 * self.on_ice['sf_per_sec']
 		self.on_ice['sa_per_60'] = 3600 * self.on_ice['sa_per_sec']
+		
+		if (self.on_ice['xgf']+self.on_ice['xga']) == 0:
+			self.on_ice['xgf_pcg'] = 0
+		else:
+			self.on_ice['xgf_pcg'] = self.on_ice['xgf'] / (self.on_ice['xgf']+self.on_ice['xga'])
 		self.on_ice['xgf_per_sec'] = self.on_ice['xgf']/ind['toi'][STAT_ES]
 		self.on_ice['xga_per_sec'] = self.on_ice['xga']/ind['toi'][STAT_ES]
 		self.on_ice['xgf_per_60'] = 3600 * self.on_ice['xgf_per_sec']
 		self.on_ice['xga_per_60'] = 3600 * self.on_ice['xga_per_sec']
+		
+		if (self.on_ice['scf']+self.on_ice['sca']) == 0:
+			self.on_ice['scf_pcg'] = 0
+		else:
+			self.on_ice['scf_pcg'] = self.on_ice['scf'] / (self.on_ice['scf']+self.on_ice['sca'])
 		self.on_ice['scf_per_sec'] = self.on_ice['scf']/ind['toi'][STAT_ES]
 		self.on_ice['sca_per_sec'] = self.on_ice['sca']/ind['toi'][STAT_ES]
 		self.on_ice['scf_per_60'] = 3600 * self.on_ice['scf_per_sec']
 		self.on_ice['sca_per_60'] = 3600 * self.on_ice['sca_per_sec']
+		
+		if (self.on_ice['hdcf']+self.on_ice['hdca']) == 0:
+			self.on_ice['hdcf_pcg'] = 0
+		else:	
+			self.on_ice['hdcf_pcg'] = self.on_ice['hdcf'] / (self.on_ice['hdcf']+self.on_ice['hdca'])
 		self.on_ice['hdcf_per_sec'] = self.on_ice['hdcf']/ind['toi'][STAT_ES]
 		self.on_ice['hdca_per_sec'] = self.on_ice['hdca']/ind['toi'][STAT_ES]
 		self.on_ice['hdcf_per_60'] = 3600 * self.on_ice['hdcf_per_sec']
