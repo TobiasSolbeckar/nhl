@@ -15,7 +15,7 @@ def create_databases(simulation_param):
 	data_dir = simulation_param['data_dir']
 	mod_time_db = os.stat(simulation_param['csvfiles']['skater_bio']).st_mtime
 	mod_time_db = datetime.datetime.fromtimestamp(mod_time_db)
-	if mod_time_db.strftime("%y%m%d") != datetime.datetime.now().strftime("%y%m%d"):
+	if mod_time_db.strftime("%y%m%d") != datetime.datetime.now().strftime("%y%m%d") or simulation_param['generate_fresh_databases']:
 		print('Downloading new csv-files from www.naturalstattrick.com')
 		print('   Downloading bio-data')
 		write_skater_bio_csv(simulation_param['url_skater_bio'],os.path.join(data_dir,'Skater_Bio_201920.csv'))
@@ -29,6 +29,9 @@ def create_databases(simulation_param):
 		write_skater_on_ice_csv(simulation_param['url_skater_on_ice'],os.path.join(data_dir,'Skater_OnIce_201920.csv'))
 		print('   Downloading relative data')
 		write_skater_relative_csv(simulation_param['url_skater_relative'],os.path.join(data_dir,'Skater_Relative_201819_201920.csv'))
+		print('   Download goalie data')
+		write_goalie_csv(simulation_param['url_goalie_201819_201920'],os.path.join(data_dir,'Goalie_201819_201920.csv'))
+		write_goalie_csv(simulation_param['url_goalie_201920'],os.path.join(data_dir,'Goalie_201920.csv'))
 		print('   Downloading ES team data')
 		write_team_csv(simulation_param['url_team_es'],os.path.join(data_dir,'Team_ES_201920.csv'))
 		print('   Downloading PP team data')
@@ -112,6 +115,7 @@ def create_skater_db(simulation_param):
 def add_bio_data(simulation_param):
 	global ACTIVE_SKATERS
 	player_data = {}
+	old_data = get_old_data(simulation_param)
 	with open(simulation_param['csvfiles']['skater_bio'],'rt') as f:
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
@@ -164,6 +168,11 @@ def add_bio_data(simulation_param):
 				player_data[player_id]['on_ice']['nzfo'] = 0
 				player_data[player_id]['on_ice']['dzfo'] = 0
 
+				if player_id in old_data:
+					player_data[player_id]['bio']['rookie'] = False
+				else:
+					player_data[player_id]['bio']['rookie'] = True
+							
 				# Read player data.
 				if str(row[SKATER_DB_BIO_NAME]) == '-':
 					raise ValueError('Incorrect Player-ID')
@@ -218,6 +227,16 @@ def add_bio_data(simulation_param):
 					player_data[player_id]['bio']['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
 
 	return player_data
+
+def get_old_data(simulation_param):
+	previous_skaters = set()
+	with open(simulation_param['csvfiles']['skater_old_bio'],'rt') as f:
+		reader = csv.reader(f, delimiter=',')
+		for row in reader:
+			if row[1] != 'player_name':
+				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+				previous_skaters.add(player_id)
+	return previous_skaters
 
 def add_es_data(simulation_param,player_data):
 	for season_data in simulation_param['csvfiles']['skater_es']:
@@ -543,7 +562,7 @@ def create_goalie_db(simulation_param):
 	with open(simulation_param['csvfiles']['goalie'],'rt') as f:
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
-			if row[1] != 'Player':
+			if row[1] != 'player_name':
 				# Get data from row.
 				[name,toi,sa,sv,ga,sv_pcg,gaa,gsaa,xga,avg_shot_dist,avg_goal_dist] = get_row_values_for_goalie_db(row)
 				if name in ACTIVE_GOALIES:
@@ -571,7 +590,7 @@ def get_active_goalies(simulation_param):
 	with open(simulation_param['csvfiles']['goalie_bio'],'rt') as f:
 		reader = csv.reader(f, delimiter=',')
 		for row in reader:
-			if row[1] != 'Player':
+			if row[1] != 'player_name':
 				if str(row[GOALIE_DB_NAME]) == '-':
 					raise ValueError('Incorrect Player-ID')
 				else:
@@ -1005,15 +1024,14 @@ def update_new_team(db,player,new_team):
 def get_unavailable_players():
 	# This structure is stored for historical reasons.
 	unavailable_players = defaultdict(list)
-	unavailable_players['ARI'].append('NIKLAS_HJALMARSSON')
-	unavailable_players['COL'].append('MIKKO_RANTANEN')
 	unavailable_players['COL'].append('GABRIEL_LANDESKOG')
-	unavailable_players['EDM'].append('ADAM_LARSSON')
+	unavailable_players['LAK'].append('ILYA_KOVALCHUK')
 	unavailable_players['NSH'].append('VIKTOR_ARVIDSSON')
 	unavailable_players['PIT'].append('SIDNEY_CROSBY')
 	unavailable_players['TOR'].append('MITCHELL_MARNER')
 	unavailable_players['SJS'].append('DALTON_PROUT')
 	unavailable_players['STL'].append('VLADIMIR_TARASENKO')
+	unavailable_players['VGK'].append('BRANDON_PIRRI')
 	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
 
 	all_unavailable_players = set()
