@@ -168,3 +168,25 @@ def write_team_csv(url,filename):
 			for j,field in enumerate(fieldnames):
 				team_dict[field] = str(data_table[j+i*data_length].contents[0])
 			writer.writerow(team_dict)
+
+def write_goalie_csv(url,filename):
+	soup = BeautifulSoup(requests.get(url).text,'html.parser')
+	tables = soup.find_all('table')
+	data_table = tables[0].find_all('td')
+	fieldnames = ['id','player_name','team','gp','toi','sa','sv','ga','sv_pcg','gaa','gsaa','xga','hdsa','hdsv','hdga','hdsv_pcg','hdgaa','hdgsaa','mdsa','mdsv','mdga','mdsv_pcg','mdgaa','mdgsaa','ldsa','ldsv','ldga','ldsv_pcg','ldgaa','ldgsaa','rush_attempts_against','rebound_attempts_against','avg_shot_dist','avg_goal_dist']
+	data_length = len(fieldnames)
+	number_of_players = int(len(data_table)/data_length)
+	with open(filename, mode='w') as csv_file:
+		writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+		writer.writeheader()
+		for i in range(number_of_players):
+			player_dict = {}
+			for j,field in enumerate(fieldnames):
+				if j == 1:
+					name_item = data_table[1+i*data_length]
+					player_dict['player_name'] = str(name_item.find('a').contents[0])
+				else:
+					player_dict[field] = str(data_table[j+i*data_length].contents[0])
+			writer.writerow(player_dict)
+
+
