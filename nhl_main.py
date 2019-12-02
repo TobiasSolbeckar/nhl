@@ -12,6 +12,7 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['team_pk'] = 'Data/Team_PK_201920.csv'
 	simulation_param['csvfiles']['goalie_bio'] = 'Data/Goalie_201920.csv'
 	simulation_param['csvfiles']['skater_relative'] = 'Data/Skater_Relative_201819_201920.csv'
+	simulation_param['csvfiles']['skater_old_bio'] = 'Data/Skater_Bio_201819.csv'
 	simulation_param['csvfiles']['skater_bio'] = 'Data/Skater_Bio_201920.csv'
 
 	simulation_param['csvfiles']['skater_es'] = []
@@ -51,13 +52,16 @@ def create_simulation_parameters(sp):
 	sp['exp_position'] = ['F','D']
 	sp['exp_additional_players'] = []
 	sp['data_dir'] = 'Data'
+	sp['url_skater_bio_201819'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20182019&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_skater_bio'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_skater_ind_es'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 	sp['url_skater_ind_pp'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 	sp['url_skater_ind_pk'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 	sp['url_skater_on_ice'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 	sp['url_skater_relative'] = "http://naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-	sp['url_goalie'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+	sp['url_goalie_201819_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+	sp['url_goalie_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+	
 	sp['url_team_es'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pp'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pk'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
@@ -75,10 +79,11 @@ def create_simulation_parameters(sp):
 # @TODO: Create simulation parameter to control which playoff calculation should be used.
 # @TODO: Apply TOI-filter to UL-calculations.
 # @TODO: Fix playoff-simulation functionality
+# @TODO: Remove empty lines in csv-files.
 
 # Improvements:
 # @TODO: Currently only ES-data ('on_ice') is used also for PP/PK for SIMULATION_EXT.
-# @TODO: Print the rosters and starting goalies for teams during SIMULATION_EXT.
+# @TODO: Currently only ES-data fo goalies available. Should also include PP/PK.
 # @TODO: It should be possible to easy update particular attributes, e.g. g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',0.915)
 # @TODO: Create an "smoothed" SH% value for each team? E.g. removing all values outside of league average + 1 sigma?
 # @TODO: Implement "what-if" (for season)
@@ -87,12 +92,12 @@ def create_simulation_parameters(sp):
 # @TODO: Create a class that is Game()
 
 # Investigations:
+# @TODO: What happens if using all-situation (instead of 5v5) for sv_pcg during simulation?
 # @TODO: Review game_status/data_param/simulation_param parameters. Are all necessary?
 # @TODO: Something is weird with the penalty generating (and drawing of).
 # @TODO: Use OnIce-data for SF% (or something)?
 # @TODO: Should players_in_pbox be a set() instead of a list?
 # @TODO: Use PP/PK specific data for sa for teams?
-# @TODO: Use PP/PK specific data for goalies?
 # @TODO: Investigate size of playoff_N?
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -100,8 +105,9 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201819','201920']
+simulation_param['seasons'] = ['201920']
 simulation_param['write_to_gsheet'] = True
+simulation_param['generate_fresh_databases'] = False
 
 simulation_param = create_simulation_parameters(simulation_param)
 simulation_param['offseason'] = False
@@ -109,9 +115,9 @@ simulation_param['include_offseason_moves'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#simulation_param['simulate_ind_games'] = True 								# Default value = False
+simulation_param['simulate_ind_games'] = True 								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
-simulation_param['simulate_season'] = True									# Default value = False
+#simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['print_ul_stats'] = True 									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
@@ -126,9 +132,9 @@ simulation_param['debug_player'] = ['ERIK_KARLSSON']
 simulation_param = create_databases(simulation_param)
 
 # Gameplay parameters								
-#simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule']['2019-11-16']
-#simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
-simulation_param['games_to_simulate'] = [['SJS','WPG']]
+#simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule']['2019-12-03']
+simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
+#simulation_param['games_to_simulate'] = [['SJS','WSH']]
 #simulation_param['initial_wins'] = [[0,0]]
 simulation_param['down_sample'] = False
 simulation_param['initial_time'] = 0
@@ -136,9 +142,9 @@ simulation_param['initial_ht_goals'] = 0
 simulation_param['initial_at_goals'] = 0
 
 # Analytics parameters
-simulation_param['exp_min_toi'] = 100
-simulation_param['exp_list_length'] = 10
-simulation_param['exp_team'] = None
+simulation_param['exp_min_toi'] = 5
+simulation_param['exp_list_length'] = 20
+simulation_param['exp_team'] = []
 #simulation_param['exp_position'] = ['F','D']
 simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 simulation_param['exp_show_player_ranking'] = False
@@ -245,6 +251,11 @@ if simulation_param['simulate_ind_games']:
 			print('Average shots EXP: {0} {1:.0f} - {2:.0f} {3}'.format(simulation_param['ht_id'],ht_exp_s/N_sim,at_exp_s/N_sim,simulation_param['at_id']))
 		print('Probability (wins):   {0} {1:.1f}% - {2:.1f}% {3}'.format(simulation_param['ht_id'],100*(ht_w/(ht_w+at_w)),100*(1 - (ht_w/(ht_w+at_w))),simulation_param['at_id']))
 		
+		ht_rating = simulation_param['databases']['team_db'][simulation_param['ht_id']].exp_data['in_season_rating']
+		at_rating = simulation_param['databases']['team_db'][simulation_param['at_id']].exp_data['in_season_rating']
+		ht_prob = ht_rating/(ht_rating+at_rating)
+		at_prob = at_rating/(ht_rating+at_rating)
+		print('Probability (rating): {0} {1:.1f}% - {2:.1f}% {3}'.format(simulation_param['ht_id'],100*ht_prob,100*at_prob,simulation_param['at_id']))
 		
 		# Timing
 		t_end = 1000*time.time()
@@ -465,6 +476,7 @@ if simulation_param['simulate_season']:
 
 if simulation_param['do_exp']:
 	s_db = simulation_param['databases']['skater_db']
+	g_db = simulation_param['databases']['goalie_db']
 	t_db = simulation_param['databases']['team_db']
 	f_add = lambda a,b : a+b
 	f_sub = lambda a,b : a-b
@@ -584,6 +596,15 @@ if simulation_param['do_exp']:
 	print('\nWorst ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				 				
 
+	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
+	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True)
+	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+	
 	if simulation_param['write_to_gsheet'] == True:
 		g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
 		output_sheet = g_wb.worksheet("SkaterData")
@@ -620,6 +641,8 @@ if (simulation_param['do_player_cards'] == True) and (simulation_param['do_plots
 	_filter['list_length'] = simulation_param['exp_list_length']
 	_filter['toi'] = simulation_param['exp_min_toi']
 	_filter['team'] = simulation_param['exp_team']
+	if _filter['team'] == None:
+		_filter['team'] = []
 	_filter['position'] = simulation_param['exp_position']
 	player_ids = []
 	for sid in s_db.keys():
@@ -895,16 +918,16 @@ if (simulation_param['do_player_cards'] == True) and (simulation_param['do_plots
 		[plt,ax,__] = plot_player_cards(plt.subplot(n_rows,n_cols,sub_plot_index),axes_info,s_db,player_ids,_filter)
 		plt.title(str(figure_index) + '.' + str(sub_plot_index) + ': Points vs. total draft position')
 		sub_plot_index += 1	
-		axes_info['fit_data'] = True
-		axes_info['add_threshold'] = False
-		axes_info['x']['attribute'] = 'draft_round'
-		axes_info['x']['label'] = '"Draft round'
+		axes_info['fit_data'] = False
+		axes_info['add_threshold'] = True
+		axes_info['x']['attribute'] = 'pd_per_60'
+		axes_info['x']['label'] = 'Penalties drawn per 60'
 		axes_info['x']['scale'] = 1
 		axes_info['x']['invert'] = False
-		axes_info['y']['attribute'] = 'estimated_off_pcg'
-		axes_info['y']['label'] = 'Play control [%]'
-		axes_info['y']['scale'] = 100
-		axes_info['y']['invert'] = False
+		axes_info['y']['attribute'] = 'pt_per_60'
+		axes_info['y']['label'] = 'Penalties taken per 60'
+		axes_info['y']['scale'] = 1
+		axes_info['y']['invert'] = True
 		[plt,ax,__] = plot_player_cards(plt.subplot(n_rows,n_cols,sub_plot_index),axes_info,s_db,player_ids,_filter)
 		plt.title(str(figure_index) + '.' + str(sub_plot_index) + ': Points vs. draft round')
 		sub_plot_index += 1	
