@@ -236,7 +236,52 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 					print('   {0}: {1:.2f}'.format(attribute,scale_factor*get_attribute_value(skater,attribute,playform)))
 	return output
 
+def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
+	if _filter == None:
+		_filter['toi'] = 0
+		_filter['additional_players'] = []
+		_filter['team'] = None
+	output = {}
+	added_players = set()
+	sorted_list,data_list = [],[]
+	for goalie_id in db.keys():
+		goalie = db[goalie_id]
+		if goalie.get_attribute('toi') >= 60*_filter['toi'] or goalie_id in _filter['additional_players']:
+			val = goalie.get_attribute(attribute) * scale_factor
+			if _filter['team'] == None:
+				sorted_list.append((val,goalie_id))
+				data_list.append(val)
+				added_players.add(goalie_id)
+			else:
+				if goalie.get_attribute('team_id') in _filter['team']:
+					sorted_list.append((val,goalie_id))
+					data_list.append(val)
+					added_players.add(goalie_id)
+			if (goalie_id in _filter['additional_players']) and (goalie_id not in added_players):
+				sorted_list.append((val,goalie_id))
+				data_list.append(val)
 
+	# This is not very nice.
+	sorted_list.sort(reverse=high_to_low)
+	data_list.sort(reverse=high_to_low)
+	output['mu'] = np.mean(data_list)
+	output['sigma'] = np.std(data_list)
+	output['list'] = sorted_list
+	output['data'] = data_list
+	if normalize == True:
+		norm_factor = 1/np.max(data_list)
+	else:
+		norm_factor = 1
+	if do_print == True:
+		print(str(attribute) + '. Scale factor=' + str(scale_factor) + '. Min. TOI=' + str(_filter['toi']))
+		ranking = 0
+		for pair in sorted_list:
+			ranking += 1
+			goalie_id = pair[1]
+			goalie = db[goalie_id]
+			if ranking <= print_list_length or goalie_id in _filter['additional_players']:
+				print('{0}: {1} ({2}) - {3:.2f}'.format(ranking,goalie.get_attribute('name'),goalie.get_attribute('team_id'),norm_factor*pair[0]))
+	return output
 
 def get_attribute_value(player,attribute,playform_index=STAT_ES):
 	if player.bio['position'] == 'G':
