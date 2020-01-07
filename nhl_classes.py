@@ -226,6 +226,8 @@ class Goalie():
 		self.gsaa = stats_arr[6]
 		self.gsaa_per_60 = 3600*(self.gsaa/self.toi)
 		self.xga = stats_arr[7]
+		self.ga_above_xga = self.ga - self.xga
+		self.ga_above_xga_per_60 = 3600*(self.ga_above_xga/self.toi)
 		self.avg_shot_dist = stats_arr[8]
 		self.avg_goal_dist = stats_arr[9]
 		# Simulated stats
@@ -256,6 +258,10 @@ class Goalie():
 			return self.gsaa_per_60
 		elif attribute == 'xga':
 			return self.xga
+		elif attribute == 'ga_above_xga':
+			return self.ga_above_xga
+		elif attribute == 'ga_above_xga_per_60':
+			return self.ga_above_xga_per_60
 		elif attribute == 'avg_shot_dist':
 			return self.avg_shot_dist
 		elif attribute == 'avg_goal_dist':
@@ -280,6 +286,10 @@ class Team():
 		self.p = reg_array[5]
 		self.gf = reg_array[6]
 		self.ga = reg_array[7]
+		if self.gf + self.ga == 0:
+			self.gf_pcg = 0
+		else:
+			self.gf_pcg = self.gf/(self.gf+self.ga)
 		self.p_pcg = reg_array[8]
 		
 		# This is directly accessed in the create_team_db()
@@ -299,52 +309,23 @@ class Team():
 		self.ff = adv_array[6]
 		self.fa = adv_array[7]
 		self.ff_pcg = adv_array[8]
-		self.scf = adv_array[9]
-		self.sca = adv_array[10]
-		self.scf_pcg = adv_array[11]
+		self.xgf = adv_array[9]
+		self.xga = adv_array[10]
+		self.xgf_pcg = adv_array[11]
+		self.scf = adv_array[12]
+		self.sca = adv_array[13]
+		self.scf_pcg = adv_array[14]
 		self.scf_per_sec = self.scf/self.team_toi_es
 		self.sca_per_sec = self.sca/self.team_toi_es
 		self.scf_per_60 = 3600 * self.scf_per_sec
 		self.sca_per_60 = 3600 * self.sca_per_sec
-		self.hdcf = adv_array[12]
-		self.hdca = adv_array[13]
-		self.hdcf_pcg = adv_array[14]
-		self.sv_pcg = adv_array[15]
-		self.pdo = adv_array[16]
-		self.sa_per_sec = adv_array[17]
+		self.hdcf = adv_array[15]
+		self.hdca = adv_array[16]
+		self.hdcf_pcg = adv_array[17]
+		self.sv_pcg = adv_array[18]
+		self.pdo = adv_array[19]
+		self.sa_per_sec = adv_array[20]
 
-		self.rating_1a = self.cf_pcg
-		self.rating_1b = self.rating_1a*self.pdo
-		self.rating_1c = self.rating_1a*self.p_pcg
-		self.rating_1d = self.rating_1a*self.pdo*self.p_pcg
-		self.rating_1e = self.rating_1a*(self.pdo+self.p_pcg)
-		self.rating_1f = self.rating_1a*(self.pdo+(self.p_pcg/2))
-
-		self.rating_2a = self.scf_pcg
-		self.rating_2b = self.rating_2a*self.pdo
-		self.rating_2c = self.rating_2a*self.p_pcg
-		self.rating_2d = self.rating_2a*self.pdo*self.p_pcg
-		self.rating_2e = self.rating_2a*(self.pdo+self.p_pcg)
-		self.rating_2f = self.rating_2a*(self.pdo+(self.p_pcg/2))
-
-		self.rating_3a = (self.cf_pcg+self.scf_pcg)
-		self.rating_3b = self.rating_3a*self.pdo
-		self.rating_3c = self.rating_3a*self.p_pcg
-		self.rating_3d = self.rating_3a*self.pdo*self.p_pcg	
-		self.rating_3e = self.rating_3a*(self.pdo+self.p_pcg)
-		self.rating_3f = self.rating_3a*(self.pdo+(self.p_pcg/2))
-
-		self.rating_4a = (self.cf_pcg*self.scf_pcg)
-		self.rating_4b = self.rating_4a*self.pdo
-		self.rating_4c = self.rating_4a*self.p_pcg
-		self.rating_4d = self.rating_4a*self.pdo*self.p_pcg
-		self.rating_4e = self.rating_4a*(self.pdo+self.p_pcg)
-		self.rating_4f = self.rating_4a*(self.pdo+(self.p_pcg/2))
-
-		self.rating_5  = self.pdo*self.p_pcg
-		
-		self.rating = self.rating_2e
-		
 		self.schedule = team_schedule
 		self.remaining_schedule = self.schedule[self.gp:]
 		self.game_index = self.gp
@@ -362,6 +343,7 @@ class Team():
 		self.gf_in_simulated_game = 0
 		self.sf_in_simulated_game = 0
 		self.exp_data = {}
+		self.exp_data['hits_per_game'] = 0
 		self.exp_data['team_sf_in_simulated_game'] = 0
 		self.exp_data['in_season_rating'] = 0
 		self.exp_data['pre_season_rating'] = 0
@@ -370,6 +352,18 @@ class Team():
 		self.exp_data['total_simulated_points'] = 0
 		self.exp_data['mean_simulated_points'] = 0
 
+		self.rank = {}
+		self.rank['p_pcg'] = 0
+		self.rank['gf_pcg'] = 0
+		self.rank['sf_pcg'] = 0
+		self.rank['cf_pcg'] = 0
+		self.rank['ff_pcg'] = 0
+		self.rank['xgf_pcg'] = 0
+		self.rank['scf_pcg'] = 0
+		self.rank['hdcf_pcg'] = 0
+		self.rank['sv_pcg'] = 0
+		self.rank['pdo'] = 0
+		self.rank['hits_per_game'] = 0
 
 	def get_division(self,team_id):
 		atlantic,metro,central,pacific = set(),set(),set(),set()

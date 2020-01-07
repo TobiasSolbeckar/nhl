@@ -28,7 +28,7 @@ SIMULATION_EXT = 1
 WS_DEF = [1,0.75,0.15] # weighted scale suggestion for defenders
 WS_CEN = [1,1,0.5] # weighted scale suggestion for centers
 WS_WNG = [0.75,1,1] # weighted scale suggestion for wingers
-WS_FWD = [0.75,1,0.75]
+WS_FWD = [1.25,1.25,0.5]
 
 global STAT_ES
 global STAT_PP
@@ -326,6 +326,9 @@ global TEAM_DB_FF_PCG_COL
 global TEAM_DB_SCF_COL
 global TEAM_DB_SCA_COL
 global TEAM_DB_SCF_PCG_COL
+global TEAM_DB_xGF_COL
+global TEAM_DB_xGA_COL
+global TEAM_DB_xGF_PCG_COL
 global TEAM_DB_HDCF_COL
 global TEAM_DB_HDCA_COL
 global TEAM_DB_HDCF_PCG_COL

@@ -223,15 +223,17 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 	else:
 		norm_factor = 1
 	if do_print == True:
-		print(str(attributes) + '. Scale factor=' + str(scale_factor) + '. Min. TOI=' + str(_filter['toi']))
+		print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}.'.format(attributes,scale_factor,_filter['toi'],len(sorted_list),output['mu']))
 		ranking = 0
 		for pair in sorted_list:
 			ranking += 1
 			skater_id = pair[1]
 			skater = db[skater_id]
 			if ranking <= print_list_length or skater_id in _filter['additional_players']:
+				val = norm_factor*pair[0]
 				#print('{0}: {1} ({2}) - "{3}"({4}): {5:.1f}.'.format(ranking,skater.bio['name'],skater.bio['team_id'],attributes,playform.upper(),pair[0]))
-				print('{0}: {1} ({2}) - {3:.2f}'.format(ranking,skater.bio['name'],skater.bio['team_id'],norm_factor*pair[0]))
+				print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma']))
+				print('   TOI: {0:.1f} minutes'.format(get_attribute_value(skater,'toi',playform)/60))
 				for attribute in attributes:
 					print('   {0}: {1:.2f}'.format(attribute,scale_factor*get_attribute_value(skater,attribute,playform)))
 	return output
@@ -273,14 +275,15 @@ def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_fac
 	else:
 		norm_factor = 1
 	if do_print == True:
-		print(str(attribute) + '. Scale factor=' + str(scale_factor) + '. Min. TOI=' + str(_filter['toi']))
+		print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}.'.format(attribute,scale_factor,_filter['toi'],len(sorted_list),output['mu']))
 		ranking = 0
 		for pair in sorted_list:
 			ranking += 1
 			goalie_id = pair[1]
 			goalie = db[goalie_id]
 			if ranking <= print_list_length or goalie_id in _filter['additional_players']:
-				print('{0}: {1} ({2}) - {3:.2f}'.format(ranking,goalie.get_attribute('name'),goalie.get_attribute('team_id'),norm_factor*pair[0]))
+				val = norm_factor*pair[0]
+				print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,goalie.get_attribute('name'),goalie.get_attribute('team_id'),val,(val-output['mu'])/output['sigma']))
 	return output
 
 def get_attribute_value(player,attribute,playform_index=STAT_ES):
@@ -536,7 +539,8 @@ def evaluate_combination(s_db,player_ids,attributes=['estimated_off_per_60','est
 				for i,attribute in enumerate(attributes):
 					data_values[i] += get_attribute_value(s_db[player_id],attribute)
 			for i,attribute in enumerate(attributes):
-				print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))				
+				print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))
+	return data_values		
 
 def print_player_from_team(player_db,team_id,position=[]):
 	if position == []:
@@ -596,3 +600,32 @@ def create_player_list(s_db,_filter):
 	return list_of_players
 
 
+def get_team_values(team_db):
+	values_dict = defaultdict(list)
+	for team_id in ACTIVE_TEAMS:
+		team = team_db[team_id]
+		values_dict['p_pcg'].append(team.p_pcg)
+		values_dict['gf_pcg'].append(team.gf_pcg)
+		values_dict['sf_pcg'].append(team.sf_pcg)
+		values_dict['cf_pcg'].append(team.cf_pcg)
+		values_dict['ff_pcg'].append(team.ff_pcg)
+		values_dict['xgf_pcg'].append(team.xgf_pcg)
+		values_dict['scf_pcg'].append(team.scf_pcg)
+		values_dict['hdcf_pcg'].append(team.hdcf_pcg)
+		values_dict['sv_pcg'].append(team.sv_pcg)
+		values_dict['pdo'].append(team.pdo)
+		values_dict['hits_per_game'].append(team.exp_data['hits_per_game'])
+	return values_dict
+
+def get_rank(value,lst):
+	'''
+	Returns the rank of the value in the list
+	'''
+	lst.sort(reverse=False)
+	rank = 1
+	for lst_val in lst:
+		if lst_val == value:
+			return rank
+		rank += 1
+	if rank > len(lst):
+		raise ValueError('Could not find value ' + str(value) + ' in the list.')

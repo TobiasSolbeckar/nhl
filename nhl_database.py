@@ -29,7 +29,7 @@ def create_databases(simulation_param):
 		write_skater_on_ice_csv(simulation_param['url_skater_on_ice'],os.path.join(data_dir,'Skater_OnIce_201920.csv'))
 		print('   Downloading relative data')
 		write_skater_relative_csv(simulation_param['url_skater_relative'],os.path.join(data_dir,'Skater_Relative_201819_201920.csv'))
-		print('   Download goalie data')
+		print('   Downloading goalie data')
 		write_goalie_csv(simulation_param['url_goalie_201819_201920'],os.path.join(data_dir,'Goalie_201819_201920.csv'))
 		write_goalie_csv(simulation_param['url_goalie_201920'],os.path.join(data_dir,'Goalie_201920.csv'))
 		print('   Downloading ES team data')
@@ -126,7 +126,10 @@ def add_bio_data(simulation_param):
 				ACTIVE_SKATERS.add(player_id)
 				# Initialize structs.
 				player_data[player_id] = {}
+				# Bio
 				player_data[player_id]['bio'] = {}
+
+				# Individual
 				player_data[player_id]['ind'] = {}
 				player_data[player_id]['ind']['toi'] = [0,0,0]
 				player_data[player_id]['ind']['gf'] = [0,0,0]
@@ -140,7 +143,7 @@ def add_bio_data(simulation_param):
 				player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]
 				player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
 
-				# Initialize on-ice data
+				# On-ice data
 				player_data[player_id]['on_ice'] = {}
 				player_data[player_id]['on_ice']['rel_scf_per_60'] = 1.0
 				player_data[player_id]['on_ice']['rel_sca_per_60'] = 1.0
@@ -173,6 +176,8 @@ def add_bio_data(simulation_param):
 				else:
 					player_data[player_id]['bio']['rookie'] = True
 							
+				player_data[player_id]['bio']['salary'] = 700000
+
 				# Read player data.
 				if str(row[SKATER_DB_BIO_NAME]) == '-':
 					raise ValueError('Incorrect Player-ID')
@@ -617,13 +622,13 @@ def create_team_db(simulation_param):
 		for row in reader:
 			if row[1] != 'team_name':
 				# Get data from row.
-				[name,gp,team_toi_es,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				[name,gp,team_toi_es,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xga,xgf,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 
 				# Create special metrics.
 				sa_per_sec = sa/team_toi_es
 
 				reg_array = [gp,team_toi_es,w,l,otl,p,gf,ga,p_pcg]
-				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo,sa_per_sec]
+				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo,sa_per_sec]
 
 				total_gp += gp
 				total_otl += otl
@@ -635,7 +640,7 @@ def create_team_db(simulation_param):
 		reader = csv.reader(f,delimiter=',')		
 		for row in reader:
 			if row[1] != 'team_name':
-				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 				total_gf += gf
 				output[name].team_toi_pp = team_toi
 				output[name].team_toi_pp_per_gp = team_toi/gp
@@ -645,7 +650,7 @@ def create_team_db(simulation_param):
 		reader = csv.reader(f,delimiter=',')
 		for row in reader:
 			if row[1] != 'team_name':
-				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 				total_gf += gf
 				output[name].team_toi_pk = team_toi
 				output[name].team_toi_pk_per_gp = team_toi/gp
@@ -654,7 +659,6 @@ def create_team_db(simulation_param):
 
 def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,debug_team_id=None):
 	sf_dict,gf_dict,cf_dict,ca_dict,scf_dict,sca_dict = defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list)
-	#es_toi_per_gp, pp_toi_per_gp, pk_toi_per_gp = 
 	estimated_off_dict, estimated_def_dict = defaultdict(list),defaultdict(list)
 	shots_against_dict,shots_saved_dict = defaultdict(list),defaultdict(list)
 	gp_array = []
@@ -721,6 +725,13 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	if avg_gp > 20:
 		avg_gp = 20
 
+	hits_ok = True
+	try:
+		hits_dict = get_hits_dict()
+	except:
+		print('Could not download data for hits per game.')
+		hits_ok = False
+
 	print('\nTeam metrics:')
 	for team_id in ACTIVE_TEAMS:
 		team_sh_pcg = sum(gf_dict[team_id])/sum(sf_dict[team_id])
@@ -729,6 +740,8 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		team_estimated_def = sum(estimated_def_dict[team_id])								# How much offense the team gives up, based on the individual players.
 		team_scf = sum(scf_dict[team_id])
 		team_sca = sum(sca_dict[team_id])
+		if hits_ok == True:
+			team_db[team_id].exp_data['hits_per_game'] = hits_dict[team_id]
 		team_db[team_id].exp_data['sh_pcg'] = team_sh_pcg
 		team_db[team_id].exp_data['sv_pcg'] = team_sv_pcg
 		team_db[team_id].exp_data['estimated_off'] = team_estimated_off*team_db[team_id].exp_data['sh_pcg']
@@ -746,20 +759,23 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 
 		print('   {0}: Rating: {1:.3f}. "Goodness": {2:.3f}. Play-control: {3:.1f}%. PDO: {4:.3f}. Shooting: {5:.1f}%. Saving: {6:.1f}%'.format(team_id,team_db[team_id].exp_data['in_season_rating'],team_db[team_id].exp_data['estimated_off_pcg'],100*team_db[team_id].exp_data['scf_pcg'],team_db[team_id].exp_data['pdo'],100*team_db[team_id].exp_data['sh_pcg'],100*team_db[team_id].exp_data['sv_pcg']))
 
-	# __TSA_DEBUG
-	print('__TSA_DEBUG_DALTON_PROUT:')
-	skater = get_player(skater_db,'DALTON_PROUT')
-	print('   TOI: ' + str(skater.ind['toi']))
-	print('   TOI%: ' + str(skater.ind['toi_pcg']))
-	print('   TOI/GP: ' + str(skater.ind['toi_per_gp']))
-	print('   TEAM_ES/GP: ' + str(team_db[skater.bio['team_id']].team_toi_es_per_gp/60))
-	print('   TEAM_PP/GP: ' + str(team_db[skater.bio['team_id']].team_toi_pp_per_gp/60))
-	print('   TEAM_PK/GP: ' + str(team_db[skater.bio['team_id']].team_toi_pk_per_gp/60))
+	# Add ranking data. This needs to be done in a separate for-loop because of hits_per_game. #@TODO: Move assignment of hits_per_game to general Team-constructor.
+	# Get values for ranking
+	values_dict = get_team_values(team_db)
 	
-	print('SJS TOI:')
-	print('   5v5: {0:.1f} min. 5v5/GP: {1:.4f} min'.format(team_db[team_id].team_toi_es/60,team_db[team_id].team_toi_es_per_gp/60))
-	print('   PP: {0:.1f} min. PP/GP: {1:.4f} min'.format(team_db[team_id].team_toi_pp/60,team_db[team_id].team_toi_pp_per_gp/60))
-	print('   PK: {0:.1f} min. PK/GP: {1:.4f} min'.format(team_db[team_id].team_toi_pk/60,team_db[team_id].team_toi_pk_per_gp/60))
+	# Assign ranking(s)
+	for team_id in ACTIVE_TEAMS:
+		team_db[team_id].rank['p_pcg'] = get_rank(team_db[team_id].p_pcg,values_dict['p_pcg'])
+		team_db[team_id].rank['gf_pcg'] = get_rank(team_db[team_id].gf_pcg,values_dict['gf_pcg'])
+		team_db[team_id].rank['sf_pcg'] = get_rank(team_db[team_id].sf_pcg,values_dict['sf_pcg'])
+		team_db[team_id].rank['cf_pcg'] = get_rank(team_db[team_id].cf_pcg,values_dict['cf_pcg'])
+		team_db[team_id].rank['ff_pcg'] = get_rank(team_db[team_id].ff_pcg,values_dict['ff_pcg'])
+		team_db[team_id].rank['xgf_pcg'] = get_rank(team_db[team_id].xgf_pcg,values_dict['xgf_pcg'])
+		team_db[team_id].rank['scf_pcg'] = get_rank(team_db[team_id].scf_pcg,values_dict['scf_pcg'])
+		team_db[team_id].rank['hdcf_pcg'] = get_rank(team_db[team_id].hdcf_pcg,values_dict['hdcf_pcg'])
+		team_db[team_id].rank['sv_pcg'] = get_rank(team_db[team_id].sv_pcg,values_dict['sv_pcg'])
+		team_db[team_id].rank['pdo'] = get_rank(team_db[team_id].pdo,values_dict['pdo'])
+		team_db[team_id].rank['hits_per_game'] = get_rank(team_db[team_id].exp_data['hits_per_game'],values_dict['hits_per_game'])
 
 	return [team_db,skater_db]
 
@@ -970,6 +986,21 @@ def get_row_values_for_team_db(row):
 	else:
 		scf_pcg = float(row[TEAM_DB_SCF_PCG_COL])/100
 
+	if str(row[TEAM_DB_xGF_COL]) == '-':
+		xgf = 0
+	else:
+		xgf = float(row[TEAM_DB_xGF_COL])
+
+	if str(row[TEAM_DB_xGA_COL]) == '-':
+		xga = 0
+	else:
+		xga = float(row[TEAM_DB_xGA_COL])
+
+	if str(row[TEAM_DB_xGF_PCG_COL]) == '-':
+		xgf_pcg = 0.0
+	else:
+		xgf_pcg = float(row[TEAM_DB_xGF_PCG_COL])/100
+
 	if str(row[TEAM_DB_HDCF_PCG_COL]) == '-':
 		hdcf_pcg = 0.0
 	else:
@@ -985,7 +1016,7 @@ def get_row_values_for_team_db(row):
 	else:
 		pdo = float(row[TEAM_DB_PDO_COL])
 	
-	return [name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo]
+	return [name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo]
 
 
 def modify_player_db(s_db,g_db):
@@ -1024,12 +1055,10 @@ def update_new_team(db,player,new_team):
 def get_unavailable_players():
 	# This structure is stored for historical reasons.
 	unavailable_players = defaultdict(list)
-	unavailable_players['COL'].append('GABRIEL_LANDESKOG')
 	unavailable_players['LAK'].append('ILYA_KOVALCHUK')
 	unavailable_players['NSH'].append('VIKTOR_ARVIDSSON')
-	unavailable_players['PIT'].append('SIDNEY_CROSBY')
-	unavailable_players['TOR'].append('MITCHELL_MARNER')
 	unavailable_players['SJS'].append('DALTON_PROUT')
+	unavailable_players['SJS'].append('LUKAS_RADIL')
 	unavailable_players['STL'].append('VLADIMIR_TARASENKO')
 	unavailable_players['VGK'].append('BRANDON_PIRRI')
 	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
@@ -1066,6 +1095,13 @@ def get_team_id_for_player(name,team_id):
 		new_team['BRENDAN_PERLINI'] = 'DET'
 		new_team['JACOB_DE_LA_ROSE'] = 'STL'
 		new_team['ROBBY_FABBRI'] = 'DET'
+		new_team['CHANDLER_STEPHENSON'] = 'VGK'
+		new_team['NICK_SHORE'] = 'WPG'
+		new_team['TAYLOR_HALL'] = 'ARI'
+		new_team['STEFAN_NOESEN'] = 'SJS'
+		new_team['MARCO_SCANDELLA'] = 'MTL'
+		new_team['MIKE_REILLY'] = 'OTT'
+		new_team['ILYA_KOVALCHUK'] = 'MTL'
 
 		if name not in set(new_team.keys()):
 			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		

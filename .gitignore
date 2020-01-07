@@ -1,3 +1,14 @@
 
 *.pyc
 creds.json
+Data/Goalie_201819_201920.csv
+Data/Goalie_201920.csv
+Data/Skater_Bio_201920.csv
+Data/Skater_Individual_ES_201920.csv
+Data/Skater_Individual_PK_201920.csv
+Data/Skater_Individual_PP_201920.csv
+Data/Skater_OnIce_201920.csv
+Data/Skater_Relative_201819_201920.csv
+Data/Team_ES_201920.csv
+Data/Team_PK_201920.csv
+Data/Team_PP_201920.csv

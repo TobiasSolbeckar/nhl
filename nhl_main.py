@@ -61,7 +61,6 @@ def create_simulation_parameters(sp):
 	sp['url_skater_relative'] = "http://naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_goalie_201819_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_goalie_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-	
 	sp['url_team_es'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pp'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pk'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
@@ -82,6 +81,7 @@ def create_simulation_parameters(sp):
 # @TODO: Remove empty lines in csv-files.
 
 # Improvements:
+# @TODO: Add possibility to read multiple seasons for goaltenders.
 # @TODO: Currently only ES-data ('on_ice') is used also for PP/PK for SIMULATION_EXT.
 # @TODO: Currently only ES-data fo goalies available. Should also include PP/PK.
 # @TODO: It should be possible to easy update particular attributes, e.g. g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',0.915)
@@ -89,7 +89,6 @@ def create_simulation_parameters(sp):
 # @TODO: Implement "what-if" (for season)
 # @TODO: Simulate per day, rather than per team? How would that work when there is no games at a particular date?
 # @TODO: Output from team_db_row_value looks ugly (too long)
-# @TODO: Create a class that is Game()
 
 # Investigations:
 # @TODO: What happens if using all-situation (instead of 5v5) for sv_pcg during simulation?
@@ -106,7 +105,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
 simulation_param['seasons'] = ['201920']
-simulation_param['write_to_gsheet'] = True
+simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
 simulation_param = create_simulation_parameters(simulation_param)
@@ -115,17 +114,17 @@ simulation_param['include_offseason_moves'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-simulation_param['simulate_ind_games'] = True 								# Default value = False
+#simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['simulate_season'] = True									# Default value = False
-#simulation_param['print_ul_stats'] = True 									# Default value = False
-#simulation_param['do_exp'] = True 											# Default value = False
+#simulation_param['print_ul_stats'] = 	True 									# Default value = False
+simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,1000]											# Number of simulations for each game/season. Default = [50000,2500]
-simulation_param['debug_team'] = 'SJS'
+simulation_param['N'] = [50000,5000]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['debug_team'] = None
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
 # Create databases.
@@ -133,8 +132,8 @@ simulation_param = create_databases(simulation_param)
 
 # Gameplay parameters								
 #simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule']['2019-12-03']
-simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
-#simulation_param['games_to_simulate'] = [['SJS','WSH']]
+#simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][today]
+simulation_param['games_to_simulate'] = [['SJS','VAN'],['SJS','ARI']]
 #simulation_param['initial_wins'] = [[0,0]]
 simulation_param['down_sample'] = False
 simulation_param['initial_time'] = 0
@@ -142,13 +141,14 @@ simulation_param['initial_ht_goals'] = 0
 simulation_param['initial_at_goals'] = 0
 
 # Analytics parameters
-simulation_param['exp_min_toi'] = 5
+simulation_param['exp_min_toi'] = 100
 simulation_param['exp_list_length'] = 20
-simulation_param['exp_team'] = []
-#simulation_param['exp_position'] = ['F','D']
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+simulation_param['exp_team'] = None
+simulation_param['exp_position'] = ['D']
+#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['STL_F']
+simulation_param['exp_additional_players'] = ['JARED_SPURGEON','RYAN_ELLIS']#,'CONNOR_BROWN','TYLER_BOZAK','RILEY_NASH','ANDERS_BJORK','JADEN_SCHWARTZ','ARTTURI_LEHKONEN','OLIVER_BJORKSTRAND','JEAN-GABRIEL_PAGEAU','PIERRE-EDOUARD_BELLEMARE']
 simulation_param['exp_show_player_ranking'] = False
-simulation_param['exp_weighted_scale'] = WS_FWD
+simulation_param['exp_weighted_scale'] = WS_DEF
 
 # Output/print parameters
 simulation_param['print_times'] = False
@@ -156,7 +156,15 @@ simulation_param['verbose'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # For now, matplotlib cannot be loaded for Windows machines.
 if platform.system() == 'Windows':
+	print('Cannot do plots on Windows-platform')
 	simulation_param['do_plots'] = False
+	print('Cannot write to Google on Windows-platform')
+	simulation_param['write_to_gsheet'] = False
+
+lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['TOMAS_HERTL','LOGAN_COUTURE','PATRICK_MARLEAU'],['MARCUS_SORENSEN','JOE_THORNTON','KEVIN_LABANC'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
+for line in lines:
+	tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
+	print(100*tmp_vals[0]/(tmp_vals[0]+tmp_vals[1]))
 
 if simulation_param['simulate_ind_games']:
 	if simulation_param['simulation_mode'] == None:
@@ -483,21 +491,36 @@ if simulation_param['do_exp']:
 	f_mult = lambda a,b : a*b
 	f_div = lambda a,b : a/b
 	
+	
+	mse = defaultdict(float)
+	for team_id in ACTIVE_TEAMS:
+		team = t_db[team_id]
+		for attribute in team.rank.keys():
+			if attribute != 'p_pcg':
+				mse[attribute] += (team.rank['p_pcg']-team.rank[attribute]) * (team.rank['p_pcg']-team.rank[attribute])
+	print(mse)
+
 	if simulation_param['do_plots'] == True:
 		# Set up color/markers
-		gen_x, gen_y,markers = [],[],[]
+		markers = []
 		colors = ['c','m','g','r','b'] # black and yellow are protected colors.
 		forms = ['o','v','s','*','x','p','d']
 		for form in forms:
 			for color in colors:
 				markers.append(str(form + color))
+		figure_index = 1
+		
+		# Figure 1
+		plt.figure(figure_index)
+		# Subplot 1.1
 		ax = plt.subplot(2,1,1)
 		marker_idx = 0
+		x_attribute = 'scf_pcg'
+		y_attribute = 'estimated_off_pcg'
+		gen_x, gen_y = [],[]
 		for team_id in ACTIVE_TEAMS:
-			#x = t_db[team_id].exp_data['estimated_off_pcg']
-			x = t_db[team_id].exp_data['scf_pcg']
-			#y = t_db[team_id].p_pcg
-			y = t_db[team_id].exp_data['estimated_off_pcg']
+			x = t_db[team_id].exp_data[x_attribute]
+			y = t_db[team_id].exp_data[y_attribute]
 			gen_x.append(x)
 			gen_y.append(y)
 			current_marker = markers[marker_idx]
@@ -505,21 +528,21 @@ if simulation_param['do_exp']:
 			marker_idx += 1
 		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
 		# Plot stuff
-		#plt.xlabel('Estimated Offensive%')
-		plt.xlabel('scf_pcg')
+		plt.xlabel(x_attribute)
 		#ax.invert_yaxis() 
-		#plt.ylabel('Point%')
-		plt.ylabel('estimated_off_pcg')
+		plt.ylabel(y_attribute)
 		font_size = np.min([200/len(ACTIVE_TEAMS),9])
 		ax.legend(loc='upper left', bbox_to_anchor=(1.0, 1.03), ncol=1, fontsize=font_size)
 		plt.grid(True)
-
+		# Subplot 1.2
 		ax = plt.subplot(2,1,2)
-		gen_x, gen_y = [],[]
 		marker_idx = 0
+		x_attribute = 'scf_per_60'
+		y_attribute = 'sca_per_60'
+		gen_x, gen_y = [],[]
 		for team_id in ACTIVE_TEAMS:
-			x = t_db[team_id].exp_data['scf_per_60']
-			y = t_db[team_id].exp_data['sca_per_60']
+			x = t_db[team_id].exp_data[x_attribute]
+			y = t_db[team_id].exp_data[y_attribute]
 			gen_x.append(x)
 			gen_y.append(y)
 			current_marker = markers[marker_idx]
@@ -527,14 +550,223 @@ if simulation_param['do_exp']:
 			marker_idx += 1
 		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
 		# Plot stuff
-		plt.xlabel('SCF per 60')
-		#plt.axis([90,150,90,150])
+		start = int(np.min([np.min(ax.get_xlim()),np.min(ax.get_ylim())]))
+		stop = int(np.max([np.max(ax.get_xlim()),np.max(ax.get_ylim())]))
+		plt.plot(range(start,stop),range(start,stop),'k--',label='50% threshold')
+		plt.xlabel(x_attribute)
+		plt.axis([20,32,20,32])
 		ax.invert_yaxis() 
-		plt.ylabel('SCA per 60')
-		#font_size = np.min([200/len(ACTIVE_TEAMS),9])
-		#ax.legend(loc='upper left', bbox_to_anchor=(1.0, 1.03), ncol=1, fontsize=font_size)
-		#plt.subplots_adjust(left=0.05,bottom=0.07,top=0.95,right=0.82,hspace=0.3)
+		plt.ylabel(y_attribute)
 		plt.grid(True)
+		figure_index += 1
+		
+		########################################################################################################################
+		# Figure 2
+		plt.figure(figure_index)
+		# Subplot 2.1
+		ax = plt.subplot(2,1,1)
+		marker_idx = 0
+		x_attribute = 'sh_pcg'
+		y_attribute = 'sv_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].exp_data[x_attribute]*100
+			y = t_db[team_id].exp_data[y_attribute]*100
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		font_size = np.min([200/len(ACTIVE_TEAMS),9])
+		ax.legend(loc='upper left', bbox_to_anchor=(1.0, 1.03), ncol=1, fontsize=font_size)
+		# Subplot 2.2
+		ax = plt.subplot(2,1,2)
+		marker_idx = 0
+		x_attribute = 'estimated_off'
+		y_attribute = 'estimated_def'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].exp_data[x_attribute]
+			y = t_db[team_id].exp_data[y_attribute]
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		ax.invert_yaxis() 
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		figure_index += 1
+
+		########################################################################################################################
+		# Figure 3
+		plt.figure(figure_index)
+		# Subplot 1.1
+		ax = plt.subplot(3,1,1)
+		marker_idx = 0
+		x_attribute = 'cf_pcg'
+		y_attribute = 'scf_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].cf_pcg
+			y = t_db[team_id].scf_pcg
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		start = float(np.min([np.min(gen_x),np.min(gen_y)]))
+		stop = float(np.max([np.max(gen_x),np.max(gen_y)]))
+		plt.plot([0.95*start,1.05*stop],[0.95*start,1.05*stop],'k--',label='50% threshold')
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		font_size = np.min([200/len(ACTIVE_TEAMS),9])
+		ax.legend(loc='upper left', bbox_to_anchor=(1.0, 1.03), ncol=1, fontsize=font_size)
+		plt.grid(True)
+		
+		# Subplot 1.2
+		ax = plt.subplot(3,1,2)
+		marker_idx = 0
+		x_attribute = 'scf_pcg'
+		y_attribute = 'xgf_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].scf_pcg
+			y = t_db[team_id].xgf_pcg
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		start = float(np.min([np.min(gen_x),np.min(gen_y)]))
+		stop = float(np.max([np.max(gen_x),np.max(gen_y)]))
+		plt.plot([0.95*start,1.05*stop],[0.95*start,1.05*stop],'k--',label='50% threshold')
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.subplots_adjust(left=0.05,bottom=0.07,top=0.95,right=0.82,hspace=0.3)
+		plt.grid(True)
+
+		# Subplot 1.3
+		ax = plt.subplot(3,1,3)
+		marker_idx = 0
+		x_attribute = 'This axis has no meaning'
+		y_attribute = 'CF-SCF diff [% units]'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = marker_idx
+			y = t_db[team_id].scf_pcg - t_db[team_id].cf_pcg
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		figure_index += 1
+		
+		########################################################################################################################
+		# Figure 4
+		plt.figure(figure_index)
+		# Subplot 1.1
+		ax = plt.subplot(2,2,1)
+		marker_idx = 0
+		x_attribute = 'sf_pcg'
+		y_attribute = 'p_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].rank[x_attribute]
+			y = t_db[team_id].rank[y_attribute]
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		#start = float(np.min([np.min(gen_x),np.min(gen_y)]))
+		#stop = float(np.max([np.max(gen_x),np.max(gen_y)]))
+		#plt.plot([0.95*start,1.05*stop],[0.95*start,1.05*stop],'k--',label='50% threshold')
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		# Subplot 1.2
+		ax = plt.subplot(2,2,2)
+		marker_idx = 0
+		x_attribute = 'ff_pcg'
+		y_attribute = 'p_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].rank[x_attribute]
+			y = t_db[team_id].rank[y_attribute]
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		font_size = np.min([200/len(ACTIVE_TEAMS),9])
+		ax.legend(loc='upper left', bbox_to_anchor=(1.0, 1.03), ncol=1, fontsize=font_size)		
+		plt.grid(True)
+		# Subplot 1.3
+		ax = plt.subplot(2,2,3)
+		marker_idx = 0
+		x_attribute = 'scf_pcg'
+		y_attribute = 'p_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].rank[x_attribute]
+			y = t_db[team_id].rank[y_attribute]
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		#start = float(np.min([np.min(gen_x),np.min(gen_y)]))
+		#stop = float(np.max([np.max(gen_x),np.max(gen_y)]))
+		#plt.plot([0.95*start,1.05*stop],[0.95*start,1.05*stop],'k--',label='50% threshold')
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		# Subplot 1.4
+		ax = plt.subplot(2,2,4)
+		marker_idx = 0
+		x_attribute = 'xgf_pcg'
+		y_attribute = 'p_pcg'
+		gen_x, gen_y = [],[]
+		for team_id in ACTIVE_TEAMS:
+			x = t_db[team_id].rank[x_attribute]
+			y = t_db[team_id].rank[y_attribute]
+			gen_x.append(x)
+			gen_y.append(y)
+			current_marker = markers[marker_idx]
+			plt.scatter(x,y,c=current_marker[1],marker=current_marker[0],label=team_id)
+			marker_idx += 1
+		plt.scatter(np.mean(gen_x),np.mean(gen_y),c='y',marker='s',label='NHL mean')
+		# Plot stuff
+		plt.xlabel(x_attribute)
+		plt.ylabel(y_attribute)
+		plt.grid(True)
+		figure_index += 1
 		plt.show()
 
 	
@@ -556,21 +788,21 @@ if simulation_param['do_exp']:
 
 	_filter['position'] = ['F']
 	print('\nBest ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
 	print('\nBest ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
-	print('\nBest ' + str(list_length) + ' combined forwards (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
-	print('\nBest ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nMost ' + str(list_length) + ' fun forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_fun_factor'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nLeast ' + str(list_length) + ' fun forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_fun_factor'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+	print('\nBest ' + str(list_length) + ' combined forwards (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+	print('\nBest ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
 	print('\nBest ' + str(list_length) + ' primary points per 60. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['primary_points_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
@@ -578,15 +810,15 @@ if simulation_param['do_exp']:
 
 	_filter['position'] = ['D']
 	print('\nBest ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
 	print('\nBest ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=False,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_sec'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=3600,high_to_low=True,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nBest ' + str(list_length) + ' combined defenders (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True,normalize=True) 
 	print('\nMost ' + str(list_length) + ' fun defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_fun_factor'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nLeast ' + str(list_length) + ' fun defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
@@ -596,6 +828,7 @@ if simulation_param['do_exp']:
 	print('\nWorst ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				 				
 
+	_filter['toi'] *= 6 # Goalies play more than skaters.
 	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
 	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
@@ -604,7 +837,16 @@ if simulation_param['do_exp']:
 	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
 	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-	
+	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+	op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+
+	_filter['toi'] /= 6 # Revert back to original TOI requirement.
 	if simulation_param['write_to_gsheet'] == True:
 		g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
 		output_sheet = g_wb.worksheet("SkaterData")
@@ -622,7 +864,6 @@ if simulation_param['do_exp']:
 						data_list.append(int(get_attribute_value(player,attribute))/60)
 					else:
 						data_list.append(get_attribute_value(player,attribute))
-
 		data_range = str('A2:' + end_col + str(1+num_of_rows))
 		cell_list = output_sheet.range(data_range)
 		for i,cell in enumerate(cell_list):
@@ -669,6 +910,12 @@ if (simulation_param['do_player_cards'] == True) and (simulation_param['do_plots
 		do_skater_plots = False
 
 	if do_skater_plots == True:
+		print('\nPlotting data according to: ')
+		print('   Team: ' + str(simulation_param['exp_team']))
+		print('   Position: ' + str(simulation_param['exp_position']))
+		print('   Players: ' + str(simulation_param['exp_additional_players']))
+		print('   Weighted scale: ' + str(simulation_param['exp_weighted_scale']) + '\n')
+
 		plt.figure(figure_index)
 		sub_plot_index = 1
 		n_rows = 2
