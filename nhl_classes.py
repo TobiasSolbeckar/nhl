@@ -182,6 +182,7 @@ class Goalie():
 	def __init__(self,bio,ind):
 		# Bio-data
 		self.bio = bio
+		self.bio['git_test'] = 'Tobias Solbeckar Andersson'
 		
 		# Ind
 		self.ind = {}
