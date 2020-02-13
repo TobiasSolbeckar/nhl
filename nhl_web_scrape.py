@@ -79,10 +79,8 @@ def write_skater_bio_csv(url,filename):
 			player_dict['age'] = str(data_table[4+i*data_length].contents[0])
 			player_dict['dob'] = str(data_table[5+i*data_length].contents[0])
 			player_dict['birth_city'] = str(data_table[6+i*data_length].contents[0])
-			# @TODO: Update this, due to None-values
 			player_dict['birth_state'] = '-' #str(data_table[7+i*data_length].contents[0])
 			player_dict['birth_country'] = str(data_table[8+i*data_length].contents[0])
-			# @TODO: Update this, due to None-values
 			player_dict['nationality'] = '-' #str(data_table[9+i*data_length].contents[0])
 			player_dict['height'] = str(data_table[10+i*data_length].contents[0])
 			player_dict['weight'] = str(data_table[11+i*data_length].contents[0])
@@ -168,6 +166,27 @@ def write_team_csv(url,filename):
 			for j,field in enumerate(fieldnames):
 				team_dict[field] = str(data_table[j+i*data_length].contents[0])
 			writer.writerow(team_dict)
+
+def write_unavailable_players_csv(filename):
+	with open(filename, mode='w', newline='') as csv_file:
+		writer = csv.writer(csv_file,delimiter=',')
+		unavailable_players = defaultdict(list)
+		writer.writerow(['team_id','unavailable_players'])		# Write header manually.
+		for team_id in ACTIVE_TEAMS:
+			url = get_daily_fo_url(team_id)
+			scraper = cfscrape.create_scraper()
+			html = scraper.get(url).content
+			soup = BeautifulSoup(html, 'html.parser')
+			ir_container = soup.find("div", {"id": "ir-container"})
+			try:
+				ir_players = ir_container.find_all("td")
+				for i in range(len(ir_players)):
+					name_content = ir_players[i].contents[2].find_all("span")[1].contents[0]
+					unavailable_players[team_id].append(generate_player_id(name_content))
+			except:
+				unavailable_players[team_id] = []
+				print('Could not read injury reserve for ' + team_id)
+			writer.writerow([team_id,unavailable_players[team_id]])
 
 def write_goalie_csv(url,filename):
 	soup = BeautifulSoup(requests.get(url).text,'html.parser')

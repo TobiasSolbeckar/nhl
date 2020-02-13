@@ -38,6 +38,12 @@ def create_databases(simulation_param):
 		write_team_csv(simulation_param['url_team_pp'],os.path.join(data_dir,'Team_PP_201920.csv'))
 		print('   Downloading PK team data')
 		write_team_csv(simulation_param['url_team_pk'],os.path.join(data_dir,'Team_PK_201920.csv'))
+		print('   Downloading team data, home venue')
+		write_team_csv(simulation_param['url_team_home'],os.path.join(data_dir,'Team_Home_201819_1920.csv'))
+		print('   Downloading team data, away venue')
+		write_team_csv(simulation_param['url_team_away'],os.path.join(data_dir,'Team_Away_201819_1920.csv'))
+		print('   Downloading unavailalbe players')
+		write_unavailable_players_csv(os.path.join(data_dir,'Unavailable_Players.csv'))
 	else:
 		print('Using local csv-files.')
 
@@ -53,10 +59,15 @@ def create_databases(simulation_param):
 	old_rating, new_rating, diff_rating = {},{},{}
 
 	# Find out who is available.
+	players_to_remove = []
 	simulation_param['databases']['unavailable_players'] = get_unavailable_players()
 	for player_id in simulation_param['databases']['unavailable_players']:
 		if (player_id not in s_db) and (player_id not in g_db):
-			raise ValueError('Unavailable player ' + player_id + ' not in skaterDB.')
+			#print('Unavailable player ' + player_id + ' not in skaterDB.')
+			players_to_remove.append(player_id)
+	for player_id in players_to_remove:
+		simulation_param['databases']['unavailable_players'].remove(player_id)
+
 
 	print('   Modifying databases manually')
 	[s_db,g_db] = modify_player_db(s_db,g_db)
@@ -138,6 +149,8 @@ def add_bio_data(simulation_param):
 				player_data[player_id]['ind']['s_assist'] = [0,0,0]
 				player_data[player_id]['ind']['isf'] = [0,0,0]
 				player_data[player_id]['ind']['icf'] = [0,0,0]
+				player_data[player_id]['ind']['iff'] = [0,0,0]
+				player_data[player_id]['ind']['iscf'] = [0,0,0]
 				player_data[player_id]['ind']['pt'] = [0,0,0]
 				player_data[player_id]['ind']['pd'] = [0,0,0]
 				player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]
@@ -154,7 +167,10 @@ def add_bio_data(simulation_param):
 				player_data[player_id]['on_ice']['cf_pcg'] = 0.0						
 				player_data[player_id]['on_ice']['sf'] = 0						
 				player_data[player_id]['on_ice']['sa'] = 0						
-				player_data[player_id]['on_ice']['sf_pcg'] = 0.0						
+				player_data[player_id]['on_ice']['sf_pcg'] = 0.0
+				player_data[player_id]['on_ice']['gf'] = 0						
+				player_data[player_id]['on_ice']['ga'] = 0						
+				player_data[player_id]['on_ice']['gf_pcg'] = 0.0
 				player_data[player_id]['on_ice']['xgf'] = 0						
 				player_data[player_id]['on_ice']['xga'] = 0						
 				player_data[player_id]['on_ice']['xgf_pcg'] = 0.0						
@@ -298,7 +314,17 @@ def add_es_data(simulation_param,player_data):
 							player_data[player_id]['ind']['icf'][STAT_ES] += 0
 						else:
 							player_data[player_id]['ind']['icf'][STAT_ES] += int(row[SKATER_DB_IND_ICF])
-							
+
+						if str(row[SKATER_DB_IND_ICF]) == '-':
+							player_data[player_id]['ind']['iff'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['iff'][STAT_ES] += int(row[SKATER_DB_IND_IFF])
+
+						if str(row[SKATER_DB_IND_ICF]) == '-':
+							player_data[player_id]['ind']['iscf'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['iscf'][STAT_ES] += int(row[SKATER_DB_IND_ISCF])
+
 						if str(row[SKATER_DB_IND_TOTAL_PENALTIES]) == '-':
 							player_data[player_id]['ind']['pt'][STAT_ES] += 0
 						else:
@@ -455,6 +481,16 @@ def add_on_ice_data(simulation_param,player_data):
 						else:
 							player_data[player_id]['on_ice']['ca'] += int(row[SKATER_DB_ON_ICE_CA])
 
+						if str(row[SKATER_DB_ON_ICE_GF]) == '-':
+							player_data[player_id]['on_ice']['gf'] += 0						
+						else:
+							player_data[player_id]['on_ice']['gf'] += int(row[SKATER_DB_ON_ICE_GF])
+
+						if str(row[SKATER_DB_ON_ICE_GA]) == '-':
+							player_data[player_id]['on_ice']['ga'] += 0						
+						else:
+							player_data[player_id]['on_ice']['ga'] += int(row[SKATER_DB_ON_ICE_GA])
+
 						if str(row[SKATER_DB_ON_ICE_SF]) == '-':
 							player_data[player_id]['on_ice']['sf'] += 0						
 						else:
@@ -533,6 +569,101 @@ def add_relative_data(simulation_param,player_data):
 			if row[1] != 'Player':
 				player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
 				if player_id in ACTIVE_SKATERS:
+					if str(row[SKATER_DB_RELATIVE_CF_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_cf_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_cf_per_60'] = float(row[SKATER_DB_RELATIVE_CF_PER_60])
+
+					if str(row[SKATER_DB_RELATIVE_CA_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_ca_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_ca_per_60'] = float(row[SKATER_DB_RELATIVE_CA_PER_60])
+					
+					if str(row[SKATER_DB_RELATIVE_CF_PCG]) == '-':
+						player_data[player_id]['on_ice']['rel_cf_pcg'] = 0		
+						player_data[player_id]['on_ice']['rel_cf_factor'] = 0		
+						player_data[player_id]['on_ice']['rel_ca_factor'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_cf_pcg'] = float(row[SKATER_DB_RELATIVE_CF_PCG])
+						player_data[player_id]['on_ice']['rel_cf_factor'] = (player_data[player_id]['on_ice']['rel_cf_pcg']/200 + 1.0) # Higher is better
+						player_data[player_id]['on_ice']['rel_ca_factor'] = (1.0 - player_data[player_id]['on_ice']['rel_cf_pcg']/200)# Lower is better
+
+					if str(row[SKATER_DB_RELATIVE_FF_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_ff_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_ff_per_60'] = float(row[SKATER_DB_RELATIVE_FF_PER_60])
+
+					if str(row[SKATER_DB_RELATIVE_FA_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_fa_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_fa_per_60'] = float(row[SKATER_DB_RELATIVE_FA_PER_60])
+					
+					if str(row[SKATER_DB_RELATIVE_FF_PCG]) == '-':
+						player_data[player_id]['on_ice']['rel_ff_pcg'] = 0		
+						player_data[player_id]['on_ice']['rel_ff_factor'] = 0		
+						player_data[player_id]['on_ice']['rel_fa_factor'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_ff_pcg'] = float(row[SKATER_DB_RELATIVE_FF_PCG])
+						player_data[player_id]['on_ice']['rel_ff_factor'] = (player_data[player_id]['on_ice']['rel_ff_pcg']/200 + 1.0) # Higher is better
+						player_data[player_id]['on_ice']['rel_fa_factor'] = (1.0 - player_data[player_id]['on_ice']['rel_ff_pcg']/200)# Lower is better
+
+					if str(row[SKATER_DB_RELATIVE_SF_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_sf_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_sf_per_60'] = float(row[SKATER_DB_RELATIVE_SF_PER_60])
+
+					if str(row[SKATER_DB_RELATIVE_SA_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_sa_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_sa_per_60'] = float(row[SKATER_DB_RELATIVE_SA_PER_60])
+					
+					if str(row[SKATER_DB_RELATIVE_SF_PCG]) == '-':
+						player_data[player_id]['on_ice']['rel_sf_pcg'] = 0		
+						player_data[player_id]['on_ice']['rel_sf_factor'] = 0		
+						player_data[player_id]['on_ice']['rel_sa_factor'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_sf_pcg'] = float(row[SKATER_DB_RELATIVE_SF_PCG])
+						player_data[player_id]['on_ice']['rel_sf_factor'] = (player_data[player_id]['on_ice']['rel_sf_pcg']/200 + 1.0) # Higher is better
+						player_data[player_id]['on_ice']['rel_sa_factor'] = (1.0 - player_data[player_id]['on_ice']['rel_sf_pcg']/200)# Lower is better
+
+					if str(row[SKATER_DB_RELATIVE_GF_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_gf_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_gf_per_60'] = float(row[SKATER_DB_RELATIVE_GF_PER_60])
+
+					if str(row[SKATER_DB_RELATIVE_GA_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_ga_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_ga_per_60'] = float(row[SKATER_DB_RELATIVE_GA_PER_60])
+					
+					if str(row[SKATER_DB_RELATIVE_GF_PCG]) == '-':
+						player_data[player_id]['on_ice']['rel_gf_pcg'] = 0		
+						player_data[player_id]['on_ice']['rel_gf_factor'] = 0		
+						player_data[player_id]['on_ice']['rel_ga_factor'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_gf_pcg'] = float(row[SKATER_DB_RELATIVE_GF_PCG])
+						player_data[player_id]['on_ice']['rel_gf_factor'] = (player_data[player_id]['on_ice']['rel_gf_pcg']/200 + 1.0) # Higher is better
+						player_data[player_id]['on_ice']['rel_ga_factor'] = (1.0 - player_data[player_id]['on_ice']['rel_gf_pcg']/200)# Lower is better
+
+					if str(row[SKATER_DB_RELATIVE_xGF_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_xgf_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_xgf_per_60'] = float(row[SKATER_DB_RELATIVE_xGF_PER_60])
+
+					if str(row[SKATER_DB_RELATIVE_XGA_PER_60]) == '-':
+						player_data[player_id]['on_ice']['rel_xga_per_60'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_xga_per_60'] = float(row[SKATER_DB_RELATIVE_XGA_PER_60])
+					
+					if str(row[SKATER_DB_RELATIVE_xGF_PCG]) == '-':
+						player_data[player_id]['on_ice']['rel_xgf_pcg'] = 0		
+						player_data[player_id]['on_ice']['rel_xgf_factor'] = 0		
+						player_data[player_id]['on_ice']['rel_xga_factor'] = 0		
+					else:
+						player_data[player_id]['on_ice']['rel_xgf_pcg'] = float(row[SKATER_DB_RELATIVE_xGF_PCG])
+						player_data[player_id]['on_ice']['rel_xgf_factor'] = (player_data[player_id]['on_ice']['rel_xgf_pcg']/200 + 1.0) # Higher is better
+						player_data[player_id]['on_ice']['rel_xga_factor'] = (1.0 - player_data[player_id]['on_ice']['rel_xgf_pcg']/200)# Lower is better
+
 					if str(row[SKATER_DB_RELATIVE_SCF_PER_60]) == '-':
 						player_data[player_id]['on_ice']['rel_scf_per_60'] = 0		
 					else:
@@ -555,9 +686,18 @@ def add_relative_data(simulation_param,player_data):
 					# DEBUG:
 					if player_data[player_id]['bio']['team_id'] == simulation_param['debug_team']:
 						print(player_id)
-						print('   Rel SCF%: ' + str(player_data[player_id]['on_ice']['rel_scf_pcg']))
-						print('   Rel SCF-factor: ' + str(player_data[player_id]['on_ice']['rel_scf_factor']))
-						print('   Rel SCA-factor: ' + str(player_data[player_id]['on_ice']['rel_sca_factor']))
+						print('   Rel CF factor:  ' + str(player_data[player_id]['on_ice']['rel_cf_factor']))
+						print('   Rel CA factor:  ' + str(player_data[player_id]['on_ice']['rel_ca_factor']))
+						print('   Rel FF factor:  ' + str(player_data[player_id]['on_ice']['rel_ff_factor']))
+						print('   Rel FA factor:  ' + str(player_data[player_id]['on_ice']['rel_fa_factor']))
+						print('   Rel SF factor:  ' + str(player_data[player_id]['on_ice']['rel_sf_factor']))
+						print('   Rel SA factor:  ' + str(player_data[player_id]['on_ice']['rel_sa_factor']))
+						print('   Rel GF factor:  ' + str(player_data[player_id]['on_ice']['rel_gf_factor']))
+						print('   Rel GA factor:  ' + str(player_data[player_id]['on_ice']['rel_ga_factor']))
+						print('   Rel xGF factor: ' + str(player_data[player_id]['on_ice']['rel_xgf_factor']))
+						print('   Rel xGA factor: ' + str(player_data[player_id]['on_ice']['rel_xga_factor']))
+						print('   Rel SCF factor: ' + str(player_data[player_id]['on_ice']['rel_scf_factor']))
+						print('   Rel SCA factor: ' + str(player_data[player_id]['on_ice']['rel_sca_factor']))
 					'''
 	return player_data
 	
@@ -615,6 +755,8 @@ def create_team_db(simulation_param):
 	global TOTAL_POINTS_PER_GAME
 	global PROBABILITY_FOR_OT
 	output = {}
+
+	fatigue_factors = generate_fatigue_factors()
 	with open(simulation_param['csvfiles']['team_es'],'rt') as f:
 		reader = csv.reader(f, delimiter=',')
 		names,reg_arrays,adv_arrays = [],[],[]
@@ -624,17 +766,32 @@ def create_team_db(simulation_param):
 				# Get data from row.
 				[name,gp,team_toi_es,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xga,xgf,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 
-				# Create special metrics.
-				sa_per_sec = sa/team_toi_es
-
 				reg_array = [gp,team_toi_es,w,l,otl,p,gf,ga,p_pcg]
-				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo,sa_per_sec]
+				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo]
+
+				fatigue_info = get_fatigue_factor(fatigue_factors,name)
 
 				total_gp += gp
 				total_otl += otl
 				total_gf += gf
 
-				output[name] = Team(name,reg_array,adv_array,simulation_param['databases']['team_schedules'][name])
+				output[name] = Team(name,reg_array,adv_array,simulation_param['databases']['team_schedules'][name],fatigue_info)
+
+
+	with open(simulation_param['csvfiles']['team_home'],'rt') as f:
+		reader = csv.reader(f,delimiter=',')		
+		for row in reader:
+			if row[1] != 'team_name':
+				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				output[name].home_p_pcg = p_pcg
+
+	with open(simulation_param['csvfiles']['team_away'],'rt') as f:
+		reader = csv.reader(f,delimiter=',')		
+		for row in reader:
+			if row[1] != 'team_name':
+				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				output[name].away_p_pcg = p_pcg
+
 	
 	with open(simulation_param['csvfiles']['team_pp'],'rt') as f:
 		reader = csv.reader(f,delimiter=',')		
@@ -668,35 +825,52 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	for skater_id in skater_db.keys():
 		skater = get_player(skater_db,skater_id)
 
-		# Calculate total shots/scf taken per team, only if player is available
-		if skater_id not in unavailable_players:
-			sf_dict[skater.bio['team_id']].append(skater.ind['isf'][STAT_ES])
-			gf_dict[skater.bio['team_id']].append(skater.ind['gf'][STAT_ES])
-			scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
-			sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
+
 
 		skater.ind['toi_pcg'] = [0,0,0]
 		skater.ind['toi_pcg'][STAT_ES] = skater.ind['toi_per_gp'][STAT_ES] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 		skater.ind['toi_pcg'][STAT_PP] = skater.ind['toi_per_gp'][STAT_PP] / team_db[skater.bio['team_id']].team_toi_pp_per_gp
 		skater.ind['toi_pcg'][STAT_PK] = skater.ind['toi_per_gp'][STAT_PK] / team_db[skater.bio['team_id']].team_toi_pk_per_gp
 
+		#
+		skater.on_ice['rel_gf_diff_per_60'] = skater.on_ice['gf_diff_per_60'] - team_db[skater.bio['team_id']].gf_diff_per_60
 
 		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
-		estimated_off = skater.on_ice['scf'] * skater.on_ice['rel_scf_factor']
-		estimated_def = skater.on_ice['sca'] * skater.on_ice['rel_sca_factor']
+		estimated_off_metric = 'sc'
+		estimated_off = skater.on_ice[estimated_off_metric + 'f'] * skater.on_ice['rel_' + estimated_off_metric + 'f_factor']
+		estimated_def = skater.on_ice[estimated_off_metric + 'a'] * skater.on_ice['rel_' + estimated_off_metric + 'a_factor']
+		
+		
+		# Not really sure if this code should be included...
+		# If included, it is assumed that the player will perform in line with his new team (however, still taking the relative factor into account).
+		# If excluded, the player might be "dragged down" by his previous club.
+		'''
 		if skater.bio['multiple_teams'] == True:
-			estimated_off = team_db[skater.bio['team_id']].scf_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_scf_factor']
-			estimated_def = team_db[skater.bio['team_id']].sca_per_sec * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_sca_factor']
+			estimated_off = team_db[skater.bio['team_id']].exp_data[estimated_off_metric + 'f_per_sec'] * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_' + estimated_off_metric + 'f_factor']
+			estimated_def = team_db[skater.bio['team_id']].exp_data[estimated_off_metric + 'a_per_sec'] * skater.ind['toi'][STAT_ES] * skater.on_ice['rel_' + estimated_off_metric + 'a_factor']
+		'''
+		skater.on_ice['estimated_off'] = estimated_off
+		skater.on_ice['estimated_def'] = estimated_def
+		skater.on_ice['estimated_off_diff'] = estimated_off - estimated_def
 		skater.on_ice['estimated_off_per_sec'] = estimated_off / skater.ind['toi'][STAT_ES]
 		skater.on_ice['estimated_def_per_sec'] = estimated_def / skater.ind['toi'][STAT_ES]
 		skater.on_ice['estimated_off_per_60'] = skater.on_ice['estimated_off_per_sec']*3600
 		skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
 		skater.on_ice['estimated_off_per_60_diff'] = skater.on_ice['estimated_off_per_60'] - skater.on_ice['estimated_def_per_60']
 		skater.on_ice['estimated_fun_factor'] = skater.on_ice['estimated_off_per_60'] + skater.on_ice['estimated_def_per_60']
-		# Store estimated offensive and defensive capabilities per team.
-		estimated_off_dict[skater.bio['team_id']].append(estimated_off)
-		estimated_def_dict[skater.bio['team_id']].append(estimated_def)
 		
+		
+		# Only use available players for the ranking data
+		# Store estimated offensive and defensive capabilities per team.
+		if skater_id not in unavailable_players:
+			sf_dict[skater.bio['team_id']].append(skater.ind['isf'][STAT_ES])
+			gf_dict[skater.bio['team_id']].append(skater.ind['gf'][STAT_ES])
+			scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
+			sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
+			# Store estimated offensive and defensive capabilities per team.
+			estimated_off_dict[skater.bio['team_id']].append(estimated_off)
+			estimated_def_dict[skater.bio['team_id']].append(estimated_def)
+
 		# Error/warning handling for weird input
 		if (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec']) == 0:
 			warnings.warn('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
@@ -711,7 +885,19 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			print('   PK-TOI: {0:.1f} s. PK-TOI/GP: {1:.1f} . PK-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_PK)/60,get_attribute_value(skater,'toi_per_gp',STAT_PK)/60,100*get_attribute_value(skater,'toi_pcg',STAT_PK)))
 			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(get_attribute_value(skater,'estimated_off_per_60'),get_attribute_value(skater,'estimated_def_per_60'),100*get_attribute_value(skater,'estimated_off_pcg')))
 			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(get_attribute_value(skater,'pt_per_60'),get_attribute_value(skater,'pd_per_60'),get_attribute_value(skater,'pd_diff_per_60')))
+	
+	# Add ranking data. 
+	values_dict = get_skater_values(skater_db)
+	for skater_id in ACTIVE_SKATERS:
+		skater_db[skater_id].rank['estimated_off_pcg'] = get_rank(skater_db[skater_id].on_ice['estimated_off_pcg'],values_dict['estimated_off_pcg'])
+		skater_db[skater_id].rank['primary_points_per_60'] = get_rank(skater_db[skater_id].ind['primary_points_per_60'][0],values_dict['primary_points_per_60'])
+		skater_db[skater_id].rank['goal_scoring_rating'] = get_rank(skater_db[skater_id].ind['goal_scoring_rating'][0],values_dict['goal_scoring_rating'])
 
+		if skater_db[skater_id].bio['position'] == 'F':
+			WS = WS_FWD
+		else:
+			WS = WS_DEF
+		skater_db[skater_id].rank['total'] = WS[0]*skater_db[skater_id].rank['estimated_off_pcg'] + WS[1]*skater_db[skater_id].rank['primary_points_per_60'] + WS[2]*skater_db[skater_id].rank['goal_scoring_rating']
 	for goalie_id in goalie_db.keys():
 		# Calculate total sa/ss per team, only if player is available
 		if goalie_id not in unavailable_players:
@@ -725,12 +911,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	if avg_gp > 20:
 		avg_gp = 20
 
-	hits_ok = True
-	try:
-		hits_dict = get_hits_dict()
-	except:
-		print('Could not download data for hits per game.')
-		hits_ok = False
+	hits_ok = False
 
 	print('\nTeam metrics:')
 	for team_id in ACTIVE_TEAMS:
@@ -759,7 +940,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 
 		print('   {0}: Rating: {1:.3f}. "Goodness": {2:.3f}. Play-control: {3:.1f}%. PDO: {4:.3f}. Shooting: {5:.1f}%. Saving: {6:.1f}%'.format(team_id,team_db[team_id].exp_data['in_season_rating'],team_db[team_id].exp_data['estimated_off_pcg'],100*team_db[team_id].exp_data['scf_pcg'],team_db[team_id].exp_data['pdo'],100*team_db[team_id].exp_data['sh_pcg'],100*team_db[team_id].exp_data['sv_pcg']))
 
-	# Add ranking data. This needs to be done in a separate for-loop because of hits_per_game. #@TODO: Move assignment of hits_per_game to general Team-constructor.
+	# Add ranking data. This needs to be done in a separate for-loop because of 'estimated_off_pcg'
 	# Get values for ranking
 	values_dict = get_team_values(team_db)
 	
@@ -776,6 +957,8 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		team_db[team_id].rank['sv_pcg'] = get_rank(team_db[team_id].sv_pcg,values_dict['sv_pcg'])
 		team_db[team_id].rank['pdo'] = get_rank(team_db[team_id].pdo,values_dict['pdo'])
 		team_db[team_id].rank['hits_per_game'] = get_rank(team_db[team_id].exp_data['hits_per_game'],values_dict['hits_per_game'])
+		team_db[team_id].rank['estimated_off_pcg'] = get_rank(team_db[team_id].exp_data['estimated_off_pcg'],values_dict['estimated_off_pcg'])
+		team_db[team_id].rank['in_season_rating'] = get_rank(team_db[team_id].exp_data['in_season_rating'],values_dict['in_season_rating'])
 
 	return [team_db,skater_db]
 
@@ -1052,37 +1235,35 @@ def update_new_team(db,player,new_team):
 			db[player].bio['multiple_teams'] = True
 	return db
 
+
+
 def get_unavailable_players():
-	# This structure is stored for historical reasons.
+
 	unavailable_players = defaultdict(list)
-	unavailable_players['LAK'].append('ILYA_KOVALCHUK')
-	unavailable_players['NSH'].append('VIKTOR_ARVIDSSON')
-	unavailable_players['SJS'].append('DALTON_PROUT')
-	unavailable_players['SJS'].append('LUKAS_RADIL')
-	unavailable_players['STL'].append('VLADIMIR_TARASENKO')
-	unavailable_players['VGK'].append('BRANDON_PIRRI')
-	unavailable_players['VGK'].append('VALENTIN_ZYKOV')
+	dict_output = generic_csv_reader('Data/Unavailable_Players.csv',dict_key_attribute='team_id')
+	for team_id in ACTIVE_TEAMS:
+		if dict_output[team_id]['unavailable_players'] == '[]':
+			unavailable_players[team_id] = []
+		else:
+			str_array = dict_output[team_id]['unavailable_players'][1:-1]
+			str_array = str_array.replace("'","")
+			str_array = str_array.replace(' ','')
+			names = str_array.split(',')
+			for name in names:
+				unavailable_players[team_id].append(name)
 
 	all_unavailable_players = set()
 	for team_id in unavailable_players.keys():
 		for player_id in unavailable_players[team_id]:
+			if player_id == 'DAN_DEKEYSER':
+				player_id = 'DANNY_DEKEYSER'
+			
 			all_unavailable_players.add(player_id)
-
 	return all_unavailable_players
 
 def get_team_id_for_player(name,team_id):
 	
 	manually_checked_players = set()
-	'''
-	manually_checked_players.add('CARL_HAGELIN')
-	manually_checked_players.add('CHRIS_WIDEMAN')
-	manually_checked_players.add('DERICK_BRASSARD')
-	manually_checked_players.add('JORDAN_WEAL')
-	manually_checked_players.add('MICHAEL_DEL_ZOTTO')
-	manually_checked_players.add('RYAN_SPOONER')
-	manually_checked_players.add('TANNER_PEARSON')
-	manually_checked_players.add('VALENTIN_ZYKOV')
-	'''
 	new_team = {}
 	team_id_arr = (team_id.replace(' ','').split(','))
 	if len(team_id_arr) > 1:
@@ -1102,6 +1283,13 @@ def get_team_id_for_player(name,team_id):
 		new_team['MARCO_SCANDELLA'] = 'MTL'
 		new_team['MIKE_REILLY'] = 'OTT'
 		new_team['ILYA_KOVALCHUK'] = 'MTL'
+		new_team['MICHAEL_FROLIK'] = 'BUF'
+		new_team['JACK_CAMPBELL'] = 'TOR'
+		new_team['KYLE_CLIFFORD'] = 'TOR'
+		new_team['TREVOR_MOORE'] = 'LAK'
+		new_team['NICK_SEELER'] = 'CHI'
+		new_team['JASON_ZUCKER'] = 'PIT'
+		new_team['ALEX_GALCHENYUK'] = 'MIN'
 
 		if name not in set(new_team.keys()):
 			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		
