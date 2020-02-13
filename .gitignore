@@ -1,3 +1,6 @@
 
 *.pyc
 creds.json
+sandbox.py
+Data/2019_2020_NHL_Schedule copy.xls
+Data/nhl_result_from_2018.csv
