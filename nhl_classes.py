@@ -179,28 +179,36 @@ class Skater():
 		print('   TOI/GP: {0:.1f}. Penalty difference/60: {1:.2f}. Avg. zone start: {2:.2f}'.format(self.ind['toi_per_gp'][0]/60,self.ind['pd_diff_per_60'][0],self.on_ice['avg_zone_start']))
 
 class Goalie():
-	def __init__(self,name,team_id,stats_arr):
-		# Meta-data
-		self.bio = {}
-		self.bio['name'] = name
-		self.bio['team_id'] = team_id
-		self.bio['position'] = 'G'
-		# Statistics
-		self.toi = stats_arr[0]
-		self.toi_pcg = stats_arr[1]
-		self.sa = stats_arr[2]
-		self.sa_per_sec = self.sa/self.toi
-		self.sv = stats_arr[3]
-		self.ga = stats_arr[4]
-		self.sv_pcg = self.sv/self.sa
-		self.gaa = stats_arr[5]
-		self.gsaa = stats_arr[6]
-		self.gsaa_per_60 = 3600*(self.gsaa/self.toi)
-		self.xga = stats_arr[7]
-		self.ga_above_xga = self.ga - self.xga
-		self.ga_above_xga_per_60 = 3600*(self.ga_above_xga/self.toi)
-		self.avg_shot_dist = stats_arr[8]
-		self.avg_goal_dist = stats_arr[9]
+	def __init__(self,bio,ind):
+		# Bio-data
+		self.bio = bio
+		
+		# Ind
+		self.ind = {}
+		for attribute in ind.keys():
+			self.ind[attribute] = ind[attribute]
+		
+		# Special attributes
+		self.ind['sv_pcg'] = [None,None,None]
+		self.ind['sa_per_sec'] = [None,None,None]
+		self.ind['gsaa_per_60'] = [None,None,None]
+		self.ind['ga_above_xga'] = [None,None,None]
+		self.ind['ga_above_xga_per_60'] = [None,None,None]
+		for index in [STAT_ES,STAT_PP,STAT_PK]:
+			self.ind['ga_above_xga'][index] = ind['ga'][index] - ind['xga'][index]
+			if ind['toi'][index] == 0:
+				self.ind['sa_per_sec'][index] = 0
+				self.ind['gsaa_per_60'][index] = 0
+				self.ind['ga_above_xga_per_60'][index] = 0
+			else:
+				self.ind['sa_per_sec'][index] = ind['sa'][index]/ind['toi'][index]
+				self.ind['gsaa_per_60'][index] = 3600*(ind['gsaa'][index])/ind['toi'][index]
+				self.ind['ga_above_xga_per_60'][index] = 3600*(self.ind['ga_above_xga'][index])/ind['toi'][index]
+			if ind['sa'][index] == 0:
+				self.ind['sv_pcg'][index] = 0
+			else:
+				self.ind['sv_pcg'][index] = ind['sv'][index]/ind['sa'][index]
+		
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
 

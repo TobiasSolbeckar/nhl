@@ -242,7 +242,7 @@ def simulate_ot(simulation_param,data_param,game_status):
 		game_status = get_time_str(game_status)
 		
 		# 5: Simulate gameplay for one second
-		[game_status, data_param] = simulate_gameplay(game_status,data_param,verbose)
+		[game_status, data_param] = simulate_gameplay_per_line(game_status,data_param,verbose)
 
 		# 6: Update penalties after gameplay simulation, if there are someone in the penalty box.
 		if game_status['players_in_pbox'] != []:
@@ -291,8 +291,14 @@ def simulate_gameplay(game_status,data_param,verbose=False):
 					game_status[ct + '_shots'] += 1
 					skater.in_game_stats['shots'] += 1
 
-					# Calculate the probability that the shot taken is a goal.	
-					goal_prob = (sh_pcg + (1-opponent_goalie.sv_pcg))/2
+					# Calculate the probability that the shot taken is a goal.
+					if game_status[ot + '_pp'] == True:
+						OPPONENT_GOALIE_STAT_INDEX = STAT_PP
+					elif game_status[ot + '_pk'] == True:
+						OPPONENT_GOALIE_STAT_INDEX = STAT_PK
+					else:
+						OPPONENT_GOALIE_STAT_INDEX = STAT_ES
+					goal_prob = (sh_pcg + (1-opponent_goalie.ind['sv_pcg'][OPPONENT_GOALIE_STAT_INDEX]))/2
 					if random.uniform(0,1) < goal_prob:
 						if verbose:
 							print(game_status['time_str'] + ':    Goal (' + game_status[ct + '_penalty_status'] + ') for ' + game_status[ct + '_id'] + ' (' + skater_id + ')')
@@ -329,7 +335,8 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 			game_status[ct + '_exp_shots'] += 1
 			shot_taken = True
 
-		if random.uniform(0,1) < (current_team_pt_per_time + opponent_team_pd_per_time)/2:
+		if (random.uniform(0,1) < (current_team_pt_per_time + opponent_team_pd_per_time)/2) and (game_status['gameplay_state'] == GAMEPLAY_ES):
+			# Only possible to take penalties during even strength
 			penalty_taken = True
 
 		if penalty_taken == True:
@@ -344,9 +351,13 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 				skater_id = get_from_distribution(game_status[ct + '_on_ice_db'],'isf_per_time',normalize=True)
 				if verbose:
 					print(game_status['time_str'] + ':    Shot (' + game_status[ct + '_penalty_status'] + ') by ' + skater_id + ' (' + game_status[ct + '_id'] + ')')
-				
-				if random.uniform(0,1) < (game_status[ct + '_on_ice_db'][skater_id][1] + (1-opponent_goalie.sv_pcg))/2:
-				#if random.uniform(0,1) < (current_team+sh_pcg + (1-opponent_goalie.sv_pcg))/2:
+				if game_status[ot + '_pp'] == True:
+					OPPONENT_GOALIE_STAT_INDEX = STAT_PP
+				elif game_status[ot + '_pk'] == True:
+					OPPONENT_GOALIE_STAT_INDEX = STAT_PK
+				else:
+					OPPONENT_GOALIE_STAT_INDEX = STAT_ES
+				if random.uniform(0,1) < (game_status[ct + '_on_ice_db'][skater_id][1] + (1-opponent_goalie.ind['sv_pcg'][OPPONENT_GOALIE_STAT_INDEX]))/2:
 					# Goal is scored.
 					if verbose:
 						print(game_status['time_str'] + ':    Goal (' + game_status[ct + '_penalty_status'] + ') for ' + game_status[ct + '_id'] + ' (' + skater_id + ')')					
@@ -357,7 +368,7 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 					game_status[ct + '_goals'] += 1
 					
 					# Sudden death if OT
-					if game_status['current_period'] >= 4: 
+					if game_status['current_period'] >= 4:
 						game_status['game_active'] = False
 	
 	return [game_status,data_param]
@@ -471,7 +482,14 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		players_on_ice = set()
 		added_skaters = [0,0]
 		add_more_f, add_more_d = True, True
-		#while added_skaters[0] < game_status[ct + '_number_of_skaters'][0] or added_skaters[1] < game_status[ct + '_number_of_skaters'][1]:
+		if game_status['gameplay_state'] == GAMEPLAY_ES:
+			index = STAT_ES
+		elif game_status[ct + '_pp'] == True:
+			index = STAT_PP
+		elif game_status[ct + '_pk'] == True:
+			index = STAT_PK
+		else:
+			raise ValueError('Incorrect game_status')
 		while add_more_d or add_more_f:
 			for skater_id in set(data_param[ct + '_skaters']):  # using a set for randomizing purposes
 				skater = get_player(data_param[ct + '_skaters'],skater_id)				
@@ -479,23 +497,14 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 				sa_per_time = game_status['time_step']*skater.on_ice['sa_per_sec']
 				off_per_time = game_status['time_step']*skater.on_ice['estimated_off_per_sec']
 				def_per_time = game_status['time_step']*skater.on_ice['estimated_def_per_sec']
-				pt_per_time = 0 # No penalties during PP/PK are allowed for now.
-				pd_per_time = 0 # No penalties during PP/PK are allowed for now.
-				if game_status['gameplay_state'] == GAMEPLAY_ES:
-					index = STAT_ES
-					pt_per_time = game_status['time_step']*skater.ind['pt_per_sec'][STAT_ES]
-					pd_per_time = game_status['time_step']*skater.ind['pd_per_sec'][STAT_ES]
-				elif game_status[ct + '_pp'] == True:
-					index = STAT_PP
-				elif game_status[ct + '_pk'] == True:
-					index = STAT_PK
-				else:
-					raise ValueError('Incorrect game_status')
+				pt_per_time = game_status['time_step']*skater.ind['pt_per_sec'][index]
+				pd_per_time = game_status['time_step']*skater.ind['pd_per_sec'][index]
 				toi_pcg = skater.ind['toi_pcg'][index]
 				sf = skater.ind['isf'][index]
 				gf = skater.ind['gf'][index]
 				isf_per_time = game_status['time_step']*skater.ind['isf_per_sec'][index]
-				sh_pcg = skater.ind['ish_pcg'][STAT_ES]
+				#sh_pcg = skater.ind['ish_pcg'][STAT_ES]
+				sh_pcg = skater.ind['ish_pcg'][index]
 				if game_status[ot + '_goalie_in_net'] == False:
 					sf_per_time *= 3 # Estimation of how much more often a shot is taken when the goalie is pulled
 					sh_pcg = 1.7 # Ugly hack to get the total goal-prob to be about 90% when the goalie is pulled
@@ -553,7 +562,7 @@ def get_starting_goalie(simulation_param,team_id):
 	while found_goalie == False:
 		for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
 			goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
-			if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.toi_pcg) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
+			if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
 				found_goalie = True
 				return goalie_id				
 

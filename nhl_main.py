@@ -12,7 +12,7 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['team_pk'] = 'Data/Team_PK_201920.csv'
 	simulation_param['csvfiles']['team_home'] = 'Data/Team_Home_201819_201920.csv'
 	simulation_param['csvfiles']['team_away'] = 'Data/Team_Away_201819_201920.csv'
-	simulation_param['csvfiles']['goalie_bio'] = 'Data/Goalie_201920.csv'
+	simulation_param['csvfiles']['goalie_bio'] = 'Data/Goalie_ES_201920.csv'
 	simulation_param['csvfiles']['skater_relative'] = 'Data/Skater_Relative_201819_201920.csv'
 	simulation_param['csvfiles']['skater_old_bio'] = 'Data/Skater_Bio_201819.csv'
 	simulation_param['csvfiles']['skater_bio'] = 'Data/Skater_Bio_201920.csv'
@@ -21,19 +21,20 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['skater_pp'] = []
 	simulation_param['csvfiles']['skater_pk'] = []
 	simulation_param['csvfiles']['skater_on_ice'] = []
-	for season in simulation_param['seasons']:
-		simulation_param['csvfiles']['skater_es'].append('Data/Skater_Individual_ES_' + season + '.csv')
-		simulation_param['csvfiles']['skater_pp'].append('Data/Skater_Individual_PP_' + season + '.csv')
-		simulation_param['csvfiles']['skater_pk'].append('Data/Skater_Individual_PK_' + season + '.csv')
-		simulation_param['csvfiles']['skater_on_ice'].append('Data/Skater_OnIce_' + season + '.csv')	
-
-	if simulation_param['seasons'] == ['201920']:
-		simulation_param['csvfiles']['goalie'] = 'Data/Goalie_201920.csv'
-	elif simulation_param['seasons'] == ['201819','201920']:
-		simulation_param['csvfiles']['goalie'] = 'Data/Goalie_201819_201920.csv'		
+	simulation_param['csvfiles']['goalie_es'] = []
+	simulation_param['csvfiles']['goalie_pp'] = []
+	simulation_param['csvfiles']['goalie_pk'] = []
+	if simulation_param['seasons'] != ['201920']:
+		raise ValueError('Not possible to use seasons other than "201920" for now.')
 	else:
-		raise ValueError('Not possible to use seasons other than "201819,201920" and "201920" for now.')
-
+		for season in simulation_param['seasons']:
+			simulation_param['csvfiles']['skater_es'].append('Data/Skater_Individual_ES_' + season + '.csv')
+			simulation_param['csvfiles']['skater_pp'].append('Data/Skater_Individual_PP_' + season + '.csv')
+			simulation_param['csvfiles']['skater_pk'].append('Data/Skater_Individual_PK_' + season + '.csv')
+			simulation_param['csvfiles']['skater_on_ice'].append('Data/Skater_OnIce_' + season + '.csv')	
+			simulation_param['csvfiles']['goalie_es'].append('Data/Goalie_ES_' + season + '.csv')
+			simulation_param['csvfiles']['goalie_pp'].append('Data/Goalie_PP_' + season + '.csv')
+			simulation_param['csvfiles']['goalie_pk'].append('Data/Goalie_PK_' + season + '.csv')
 	return simulation_param
 
 def create_simulation_parameters(sp):
@@ -64,7 +65,9 @@ def create_simulation_parameters(sp):
 	sp['url_skater_on_ice'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 	sp['url_skater_relative'] = "http://naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_goalie_201819_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-	sp['url_goalie_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+	sp['url_goalie_es_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+	sp['url_goalie_pp_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+	sp['url_goalie_pk_201920'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_team_es'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pp'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 	sp['url_team_pk'] = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
@@ -170,8 +173,8 @@ if simulation_param['simulate_ind_games']:
 		simulation_param['at_id'] = game[1]
 		in_game_data = create_game_specific_db(simulation_param)
 		print('\n\nSimulating outcome of ' + simulation_param['ht_id'] + ' (HOME) vs. ' + simulation_param['at_id'] + ' (AWAY). Number of simulations = ' + str(N_sim) + '. Simulation model = ' + str(simulation_param['simulation_mode']))
-		print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(simulation_param['ht_id'],in_game_data['ht_goalie'],100*simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].sv_pcg,simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].gaa))
-		print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(simulation_param['at_id'],in_game_data['at_goalie'],100*simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].sv_pcg,simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].gaa))
+		print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(simulation_param['ht_id'],in_game_data['ht_goalie'],100*simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['sv_pcg'][STAT_ES],simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['gaa'][STAT_ES]))
+		print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(simulation_param['at_id'],in_game_data['at_goalie'],100*simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['sv_pcg'][STAT_ES],simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['gaa'][STAT_ES]))
 		if simulation_param['verbose']:
 			for ct in CURRENT_TEAM:
 				# Print roster information
