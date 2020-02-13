@@ -117,7 +117,7 @@ simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['print_ul_stats'] = True 									# Default value = False
-#simulation_param['do_exp'] = True 											# Default value = False
+simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters

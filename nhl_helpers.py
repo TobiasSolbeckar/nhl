@@ -406,7 +406,7 @@ def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_fac
 
 def get_attribute_value(player,attribute,playform_index=STAT_ES):
 	if player.bio['position'] == 'G':
-		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
+		player.get_attribute(attribute,playform_index)
 	if playform_index == 'ranking':
 		return player.rank[attribute]
 	if attribute in player.bio.keys():
