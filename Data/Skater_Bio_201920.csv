@@ -1,752 +1,858 @@
-﻿"","Player","Team","Position","Age","Date of Birth","Birth City","Birth State/Province","Birth Country","Nationality","Height (in)","Weight (lbs)","Draft Year","Draft Team","Draft Round","Round Pick","Overall Draft Position"
-"491","Aaron Ekblad","FLA","D","23","1996-02-07","Windsor","ON","CAN","CAN","76","215","2014","FLA","1","1","1"
-"153","Aaron Ness","ARI","D","29","1990-05-18","Roseau","MN","USA","USA","70","184","2008","NYI","2","10","40"
-"727","Adam Boqvist","CHI","D","19","2000-08-15","Falun","","SWE","SWE","71","179","2018","CHI","1","8","8"
-"444","Adam Erne","DET","L","24","1995-04-20","New Haven","CT","USA","USA","73","212","2013","T.B","2","3","33"
-"622","Adam Fox","NYR","D","21","1998-02-17","Jericho","NY","USA","USA","71","181","2016","CGY","3","5","66"
-"608","Adam Gaudette","VAN","C","23","1996-10-03","Braintree","MA","USA","USA","73","170","2015","VAN","5","28","149"
-"158","Adam Henrique","ANA","C","29","1990-02-06","Brantford","ON","CAN","CAN","72","188","2008","N.J","3","21","82"
-"712","Adam Johnson","PIT","C","25","1994-06-22","Grand Rapids","MN","USA","USA","72","174","-","-","-","-","-"
-"321","Adam Larsson","EDM","D","27","1992-11-12","Skellefteå","","SWE","SWE","75","208","2011","N.J","1","4","4"
-"294","Adam Lowry","WPG","L","26","1993-03-29","St. Louis","MO","USA","USA","77","210","2011","WPG","3","6","67"
-"376","Adam Pelech","NYI","D","25","1994-08-16","Toronto","ON","CAN","CAN","75","218","2012","NYI","3","4","65"
-"514","Adrian Kempe","L.A","L","23","1996-09-13","Kramfors","","SWE","SWE","74","201","2014","L.A","1","29","29"
-"300","Alan Quine","CGY","C","26","1993-02-25","Belleville","ON","CAN","CAN","72","203","2013","NYI","6","15","166"
-"126","Alec Martinez","L.A","D","32","1987-07-26","Rochester Hills","MI","USA","USA","73","209","2007","L.A","4","4","95"
-"459","Aleksander Barkov","FLA","C","24","1995-09-02","Tampere","","FIN","FIN","75","210","2013","FLA","1","2","2"
-"73","Alex Biega","DET","D","31","1988-04-04","Montreal","QC","CAN","CAN","70","199","2006","BUF","5","24","147"
-"179","Alex Chiasson","EDM","R","29","1990-10-01","Montreal","QC","CAN","CAN","76","208","2009","DAL","2","8","38"
-"629","Alex DeBrincat","CHI","R","21","1997-12-18","Farmington Hills","MI","USA","USA","67","165","2016","CHI","2","9","39"
-"347","Alex Galchenyuk","PIT","C","25","1994-02-12","Milwaukee","WI","USA","USA","73","207","2012","MTL","1","3","3"
-"45","Alex Goligoski","ARI","D","34","1985-07-30","Grand Rapids","MN","USA","USA","71","185","2004","PIT","2","31","61"
-"700","Alex Iafallo","L.A","L","25","1993-12-21","Eden","NY","USA","USA","72","188","-","-","-","-","-"
-"96","Alex Killorn","T.B","C","30","1989-09-14","Halifax","NS","CAN","CAN","73","197","2007","T.B","3","16","77"
-"659","Alex Nylander","CHI","L","21","1998-03-02","Calgary","AB","CAN","CAN","73","192","2016","BUF","1","8","8"
-"37","Alex Ovechkin","WSH","L","34","1985-09-17","Moscow","","RUS","RUS","75","236","2004","WSH","1","1","1"
-"137","Alex Pietrangelo","STL","D","29","1990-01-18","King City","ON","CAN","CAN","75","210","2008","STL","1","4","4"
-"507","Alex Tuch","VGK","R","23","1996-05-10","Syracuse","NY","USA","USA","76","220","2014","MIN","1","18","18"
-"48","Alexander Edler","VAN","D","33","1986-04-21","Ostersund","","SWE","SWE","75","212","2004","VAN","3","26","91"
-"403","Alexander Kerfoot","TOR","C","25","1994-08-11","Vancouver","BC","CAN","CAN","70","185","2012","N.J","5","29","150"
-"40","Alexander Radulov","DAL","R","33","1986-07-05","Nizhny Tagil","","RUS","RUS","73","205","2004","NSH","1","15","15"
-"15","Alexander Steen","STL","L","35","1984-03-01","Winnipeg","MB","CAN","SWE","72","211","2002","TOR","1","24","24"
-"706","Alexander Volkov","T.B","R","22","1997-08-02","Moscow","","RUS","RUS","73","191","2017","T.B","2","17","48"
-"471","Alexander Wennberg","CBJ","C","25","1994-09-22","Stockholm","","SWE","SWE","74","197","2013","CBJ","1","14","14"
-"698","Alexandre Texier","CBJ","C","20","1999-09-13","St. Martin D'heres","","FRA","FRA","72","192","2017","CBJ","2","14","45"
-"534","Anders Bjork","BOS","L","23","1996-08-05","Mequon","WI","USA","USA","72","190","2014","BOS","5","26","146"
-"216","Anders Lee","NYI","C","29","1990-07-03","Edina","MN","USA","USA","75","231","2009","NYI","6","1","152"
-"440","Andre Burakovsky","COL","L","24","1995-02-09","Klagenfurt","","AUT","SWE","75","201","2013","WSH","1","23","23"
-"391","Andreas Athanasiou","DET","C","25","1994-08-06","London","ON","CAN","CAN","74","188","2012","DET","4","19","110"
-"418","Andreas Johnsson","TOR","L","25","1994-11-21","Gävle","","SWE","SWE","70","194","2013","TOR","7","21","202"
-"723","Andrei Svechnikov","CAR","R","19","2000-03-26","Barnual","","RUS","RUS","74","195","2018","CAR","1","2","2"
-"47","Andrej Sekera","DAL","D","33","1986-06-08","Bojnice","","SVK","SVK","72","195","2004","BUF","3","6","71"
-"222","Andrew Agozzino","PIT","L","28","1991-01-03","Kleinburg","ON","CAN","CAN","70","187","-","-","-","-","-"
-"57","Andrew Cogliano","DAL","C","32","1987-06-14","Toronto","ON","CAN","CAN","70","175","2005","EDM","1","25","25"
-"438","Andrew Copp","WPG","C","25","1994-07-08","Ann Arbor","MI","USA","USA","73","206","2013","WPG","4","13","104"
-"543","Andrew Mangiapane","CGY","L","23","1996-04-04","Toronto","ON","CAN","CAN","70","184","2015","CGY","6","15","166"
-"291","Andrew Shaw","CHI","C","28","1991-07-20","Belleville","ON","CAN","CAN","71","182","2011","CHI","5","18","139"
-"298","Andy Andreoff","PHI","C","28","1991-05-17","Pickering","ON","CAN","CAN","73","203","2011","L.A","3","19","80"
-"71","Andy Greene","N.J","D","37","1982-10-30","Trenton","MI","USA","USA","71","190","-","-","-","-","-"
-"578","Anthony Beauvillier","NYI","L","22","1997-06-08","Sorel-Tracy","QC","CAN","CAN","71","182","2015","NYI","1","28","28"
-"270","Anthony Bitetto","WPG","D","29","1990-07-15","Island Park","NY","USA","USA","73","210","2010","NSH","6","18","168"
-"595","Anthony Cirelli","T.B","C","22","1997-07-15","Etobicoke","ON","CAN","CAN","72","193","2015","T.B","3","11","72"
-"432","Anthony Duclair","OTT","L","24","1995-08-26","Pointe-Claire","QC","CAN","CAN","71","198","2013","NYR","3","19","80"
-"476","Anthony Mantha","DET","R","25","1994-09-16","Longueuil","QC","CAN","CAN","77","234","2013","DET","1","20","20"
-"556","Anthony Richard","NSH","C","22","1996-12-20","Trois-Rivieres","QC","CAN","CAN","70","163","2015","NSH","4","9","100"
-"69","Anton Stralman","FLA","D","33","1986-08-01","Tibro","","SWE","SWE","71","186","2005","TOR","7","22","216"
-"735","Antti Suomela","S.J","C","25","1994-03-17","Espoo","","FIN","FIN","72","180","-","-","-","-","-"
-"54","Anze Kopitar","L.A","C","32","1987-08-24","Jesenice","","SVN","SVN","75","225","2005","L.A","1","11","11"
-"92","Artem Anisimov","OTT","C","31","1988-05-24","Yaroslavl","","RUS","RUS","76","199","2006","NYR","2","24","54"
-"597","Artemi Panarin","NYR","C","28","1991-10-30","Korkino","","RUS","RUS","71","170","-","-","-","-","-"
-"453","Artturi Lehkonen","MTL","L","24","1995-07-04","Piikkio","","FIN","FIN","72","176","2013","MTL","2","25","55"
-"407","Ashton Sautner","VAN","D","25","1994-05-27","Flin Flon","MB","CAN","CAN","73","195","-","-","-","-","-"
-"594","Austin Czarnik","CGY","C","26","1992-12-12","Detroit","MI","USA","USA","69","170","-","-","-","-","-"
-"574","Austin Wagner","L.A","L","22","1997-06-23","Calgary","AB","CAN","CAN","73","185","2015","L.A","4","8","99"
-"246","Austin Watson","NSH","L","27","1992-01-13","Ann Arbor","MI","USA","USA","76","204","2010","NSH","1","18","18"
-"621","Auston Matthews","TOR","C","22","1997-09-17","San Ramon","CA","USA","USA","75","220","2016","TOR","1","1","1"
-"340","Barclay Goodrow","S.J","C","26","1993-02-26","Toronto","ON","CAN","CAN","74","215","-","-","-","-","-"
-"725","Barrett Hayton","ARI","C","19","2000-06-09","Peterborough","ON","CAN","CAN","73","190","2018","ARI","1","5","5"
-"637","Beck Malenstyn","WSH","L","21","1998-02-04","Delta","BC","CAN","CAN","74","198","2016","WSH","5","24","145"
-"214","Ben Chiarot","MTL","D","28","1991-05-09","Hamilton","ON","CAN","CAN","75","225","2009","ATL","4","29","120"
-"402","Ben Hutton","L.A","D","26","1993-04-20","Brockville","ON","CAN","CAN","74","206","2012","VAN","5","26","147"
-"296","Blake Coleman","N.J","C","27","1991-11-28","Plano","TX","USA","USA","71","200","2011","N.J","3","14","75"
-"43","Blake Comeau","DAL","L","33","1986-02-18","Meadow Lake","SK","CAN","CAN","73","200","2004","NYI","2","17","47"
-"739","Blake Lizotte","L.A","C","21","1997-12-13","Lindstrom","MN","USA","USA","67","172","-","-","-","-","-"
-"39","Blake Wheeler","WPG","R","33","1986-08-31","Plymouth","MN","USA","USA","77","225","2004","PHX","1","5","5"
-"466","Bo Horvat","VAN","C","24","1995-04-05","London","ON","CAN","CAN","72","215","2013","VAN","1","9","9"
-"52","Bobby Ryan","OTT","R","32","1987-03-17","Cherry Hill","NJ","USA","USA","74","208","2005","ANA","1","2","2"
-"307","Boone Jenner","CBJ","C","26","1993-06-15","Dorchester","ON","CAN","CAN","74","208","2011","CBJ","2","7","37"
-"341","Brad Hunt","MIN","D","31","1988-08-24","Maple Ridge","BC","CAN","CAN","69","176","-","-","-","-","-"
-"74","Brad Marchand","BOS","C","31","1988-05-11","Halifax","NS","CAN","CAN","69","181","2006","BOS","3","8","71"
-"33","Brad Richardson","ARI","R","34","1985-02-04","Belleville","ON","CAN","CAN","72","190","2003","COL","5","27","163"
-"351","Brady Skjei","NYR","D","25","1994-03-26","Lakeville","MN","USA","USA","75","210","2012","NYR","1","28","28"
-"720","Brady Tkachuk","OTT","L","20","1999-09-16","Scottsdale","AZ","USA","USA","75","212","2018","OTT","1","4","4"
-"568","Brandon Carlo","BOS","D","22","1996-11-26","Colorado Springs","CO","USA","USA","77","212","2015","BOS","2","7","37"
-"271","Brandon Davidson","CGY","D","28","1991-08-21","Taber","AB","CAN","CAN","74","208","2010","EDM","6","12","162"
-"220","Brandon Manning","EDM","D","29","1990-06-04","Prince George","BC","CAN","CAN","73","205","-","-","-","-","-"
-"520","Brandon Montour","BUF","D","25","1994-04-11","Brantford","ON","CAN","CAN","72","189","2014","ANA","2","25","55"
-"199","Brandon Pirri","VGK","C","28","1991-04-10","Toronto","ON","CAN","CAN","72","180","2009","CHI","2","29","59"
-"309","Brandon Saad","CHI","L","27","1992-10-27","Pittsburgh","PA","USA","USA","73","206","2011","CHI","2","13","43"
-"113","Brandon Sutter","VAN","C","30","1989-02-14","Huntington","NY","USA","CAN","75","190","2007","CAR","1","11","11"
-"618","Brandon Tanev","PIT","L","27","1991-12-31","Toronto","ON","CAN","CAN","72","180","-","-","-","-","-"
-"194","Brayden McNabb","VGK","D","28","1991-01-21","Davidson","SK","CAN","CAN","76","213","2009","BUF","3","5","66"
-"524","Brayden Point","T.B","C","23","1996-03-13","Calgary","AB","CAN","CAN","70","166","2014","T.B","3","19","79"
-"185","Brayden Schenn","STL","C","28","1991-08-22","Saskatoon","SK","CAN","CAN","73","200","2009","L.A","1","5","5"
-"20","Braydon Coburn","T.B","D","34","1985-02-27","Shaunavon","SK","CAN","CAN","77","223","2003","ATL","1","8","8"
-"267","Brendan Gallagher","MTL","R","27","1992-05-06","Edmonton","AB","CAN","CAN","69","184","2010","MTL","5","27","147"
-"561","Brendan Guhle","ANA","D","22","1997-07-29","Edmonton","AB","CAN","CAN","74","197","2015","BUF","2","21","51"
-"368","Brendan Leipsic","WSH","L","25","1994-05-19","Winnipeg","MB","CAN","CAN","70","180","2012","NSH","3","28","89"
-"515","Brendan Lemieux","NYR","L","23","1996-03-15","Denver","CO","USA","USA","73","213","2014","BUF","2","1","31"
-"502","Brendan Perlini","CHI, DET","L","23","1996-04-27","Guildford","","GBR","GBR","75","211","2014","ARI","1","12","12"
-"112","Brendan Smith","NYR","D","30","1989-02-08","Mimico","ON","CAN","CAN","74","200","2007","DET","1","27","27"
-"221","Brenden Dillon","S.J","D","29","1990-11-13","New Westminster","BC","CAN","CAN","76","225","-","-","-","-","-"
-"26","Brent Burns","S.J","D","34","1985-03-09","Barrie","ON","CAN","CAN","77","230","2003","MIN","1","20","20"
-"23","Brent Seabrook","CHI","D","34","1985-04-20","Richmond","BC","CAN","CAN","75","220","2003","CHI","1","14","14"
-"254","Brett Connolly","FLA","R","27","1992-05-02","Campbell River","BC","CAN","CAN","75","192","2010","T.B","1","6","6"
-"635","Brett Howden","NYR","C","21","1998-03-29","Calgary","AB","CAN","CAN","74","197","2016","T.B","1","27","27"
-"393","Brett Kulak","MTL","D","25","1994-01-06","Edmonton","AB","CAN","CAN","74","190","2012","CGY","4","14","105"
-"457","Brett Pesce","CAR","D","25","1994-11-15","Tarrytown","NY","USA","USA","75","206","2013","CAR","3","5","66"
-"310","Brett Ritchie","BOS","R","26","1993-07-01","Orangeville","ON","CAN","CAN","75","220","2011","DAL","2","14","44"
-"27","Brian Boyle","FLA","C","34","1984-12-18","Hingham","MA","USA","USA","78","245","2003","L.A","1","26","26"
-"200","Brian Dumoulin","PIT","D","28","1991-09-06","Biddeford","ME","USA","USA","76","207","2009","CAR","2","21","51"
-"279","Brian Gibbons","CAR","C","31","1988-02-26","Braintree","MA","USA","USA","68","175","-","-","-","-","-"
-"569","Brock Boeser","VAN","R","22","1997-02-25","Burnsville","MN","USA","USA","73","208","2015","VAN","1","23","23"
-"384","Brock McGinn","CAR","L","25","1994-02-02","Fergus","ON","CAN","CAN","72","187","2012","CAR","2","17","47"
-"241","Brock Nelson","NYI","C","28","1991-10-15","Warroad","MN","USA","USA","75","212","2010","NYI","1","30","30"
-"72","Bryan Little","WPG","C","32","1987-11-12","Edmonton","AB","CAN","CAN","72","191","2006","ATL","1","12","12"
-"262","Bryan Rust","PIT","R","27","1992-05-11","Pontiac","MI","USA","USA","71","192","2010","PIT","3","20","80"
-"82","Cal Clutterbuck","NYI","R","32","1987-11-18","Welland","ON","CAN","CAN","71","216","2006","MIN","3","9","72"
-"679","Cale Fleury","MTL","D","21","1998-11-19","Carlyle","SK","CAN","CAN","73","205","2017","MTL","3","25","87"
-"695","Cale Makar","COL","D","21","1998-10-30","Calgary","AB","CAN","CAN","71","187","2017","COL","1","4","4"
-"573","Caleb Jones","EDM","D","22","1997-06-06","Arlington","TX","USA","USA","73","194","2015","EDM","4","26","117"
-"227","Calle Jarnkrok","NSH","C","28","1991-09-25","Gävle","","SWE","SWE","71","186","2010","DET","2","21","51"
-"189","Calvin de Haan","CHI","D","28","1991-05-09","Carp","ON","CAN","CAN","73","195","2009","NYI","1","12","12"
-"165","Cam Atkinson","CBJ","R","30","1989-06-05","Riverside","CT","USA","USA","68","175","2008","CBJ","6","6","157"
-"244","Cam Fowler","ANA","D","27","1991-12-05","Windsor","ON","CAN","USA","73","207","2010","ANA","1","12","12"
-"610","Cameron Hughes","BOS","C","23","1996-10-09","Edmonton","AB","CAN","CAN","71","160","2015","BOS","6","14","165"
-"451","Carl Dahlstrom","WPG","D","24","1995-01-28","Stockholm","","SWE","SWE","76","231","2013","CHI","2","21","51"
-"628","Carl Grundstrom","L.A","R","21","1997-12-01","Umea","","SWE","SWE","72","201","2016","TOR","2","27","57"
-"116","Carl Gunnarsson","STL","D","33","1986-11-09","Orebro","","SWE","SWE","74","198","2007","TOR","7","13","194"
-"127","Carl Hagelin","WSH","L","31","1988-08-23","Sodertalje","","SWE","SWE","71","185","2007","NYR","6","17","168"
-"44","Carl Soderberg","ARI","C","34","1985-10-12","Malmö","","SWE","SWE","75","210","2004","STL","2","19","49"
-"636","Carsen Twarynski","PHI","L","21","1997-11-24","St. Albert","AB","CAN","CAN","74","198","2016","PHI","3","21","82"
-"425","Carson Soucy","MIN","D","25","1994-07-27","Viking","AB","CAN","CAN","77","210","2013","MIN","5","16","137"
-"413","Carter Rowney","ANA","R","30","1989-05-10","Grand Prairie","AB","CAN","CAN","74","208","-","-","-","-","-"
-"433","Carter Verhaeghe","T.B","C","24","1995-08-14","Toronto","ON","CAN","CAN","73","177","2013","TOR","3","21","82"
-"207","Casey Cizikas","NYI","C","28","1991-02-27","Toronto","ON","CAN","CAN","71","195","2009","NYI","4","1","92"
-"681","Casey Mittelstadt","BUF","C","21","1998-11-22","Edina","MN","USA","USA","73","199","2017","BUF","1","8","8"
-"394","Cedric Paquette","T.B","C","26","1993-08-13","Gaspe","QC","CAN","CAN","73","204","2012","T.B","4","10","101"
-"414","Chad Ruhwedel","PIT","D","29","1990-05-07","San Diego","CA","USA","USA","71","191","-","-","-","-","-"
-"371","Chandler Stephenson","WSH","C","25","1994-04-22","Saskatoon","SK","CAN","CAN","72","208","2012","WSH","3","16","77"
-"387","Charles Hudon","MTL","L","25","1994-06-23","Alma","QC","CAN","CAN","70","190","2012","MTL","5","1","122"
-"236","Charlie Coyle","BOS","C","27","1992-03-02","E. Weymouth","MA","USA","USA","75","220","2010","S.J","1","28","28"
-"624","Charlie McAvoy","BOS","D","21","1997-12-21","Long Beach","NY","USA","USA","72","208","2016","BOS","1","14","14"
-"193","Chris Kreider","NYR","C","28","1991-04-30","Boxford","MA","USA","USA","75","217","2009","NYR","1","19","19"
-"81","Chris Stewart","PHI","R","32","1987-10-30","Toronto","ON","CAN","CAN","74","242","2006","COL","1","18","18"
-"378","Chris Tierney","OTT","C","25","1994-07-01","Keswick","ON","CAN","CAN","73","195","2012","S.J","2","25","55"
-"249","Chris Wagner","BOS","R","28","1991-05-27","Walpole","MA","USA","USA","72","198","2010","ANA","5","2","122"
-"522","Christian Dvorak","ARI","L","23","1996-02-02","Palos","IL","USA","USA","72","195","2014","ARI","2","28","58"
-"565","Christian Fischer","ARI","R","22","1997-04-15","Chicago","IL","USA","USA","74","214","2015","ARI","2","2","32"
-"484","Christian Folin","MTL","D","28","1991-02-09","Gothenburg","","SWE","SWE","75","204","-","-","-","-","-"
-"527","Christoffer Ehn","DET","C","23","1996-04-05","Skara","","SWE","SWE","75","195","2014","DET","4","16","106"
-"225","Christopher Tanev","VAN","D","29","1989-12-20","Toronto","ON","CAN","CAN","74","197","-","-","-","-","-"
-"532","CJ Suess","WPG","L","25","1994-03-17","St. Paul","MN","USA","USA","71","190","2014","WPG","5","9","129"
-"84","Claude Giroux","PHI","R","31","1988-01-12","Hearst","ON","CAN","CAN","71","185","2006","PHI","1","22","22"
-"631","Clayton Keller","ARI","C","21","1998-07-29","Chesterfield","MO","USA","USA","70","170","2016","ARI","1","7","7"
-"358","Cody Ceci","TOR","D","25","1993-12-21","Ottawa","ON","CAN","CAN","74","210","2012","OTT","1","15","15"
-"210","Cody Eakin","VGK","C","28","1991-05-24","Winnipeg","MB","CAN","CAN","72","183","2009","WSH","3","24","85"
-"680","Cody Glass","VGK","C","20","1999-04-01","Winnipeg","MB","CAN","CAN","74","192","2017","VGK","1","6","6"
-"150","Cody Goloubef","OTT","D","29","1989-11-30","Mississauga","ON","CAN","CAN","73","190","2008","CBJ","2","7","37"
-"479","Colby Cave","EDM","C","24","1994-12-26","Battleford","SK","CAN","CAN","73","200","-","-","-","-","-"
-"545","Cole Bardreau","NYI","C","26","1993-07-22","Fairport","NY","USA","USA","70","185","-","-","-","-","-"
-"338","Colin Miller","BUF","D","27","1992-10-29","Sault Ste. Marie","ON","CAN","CAN","73","193","2012","L.A","5","30","151"
-"550","Colin White","OTT","C","22","1997-01-30","Boston","MA","USA","USA","72","191","2015","OTT","1","21","21"
-"139","Colin Wilson","COL","C","30","1989-10-20","Greenwich","CT","USA","USA","73","215","2008","NSH","1","7","7"
-"367","Colton Parayko","STL","D","26","1993-05-12","St. Albert","AB","CAN","CAN","78","230","2012","STL","3","25","86"
-"114","Colton Sceviour","FLA","C","30","1989-04-20","Red Deer","AB","CAN","CAN","72","190","2007","DAL","4","21","112"
-"381","Colton Sissons","NSH","C","26","1993-11-05","North Vancouver","BC","CAN","CAN","73","200","2012","NSH","2","20","50"
-"401","Connor Brown","OTT","R","25","1994-01-14","Toronto","ON","CAN","CAN","72","186","2012","TOR","6","5","156"
-"648","Connor Bunnaman","PHI","C","21","1998-04-16","Guelph","ON","CAN","CAN","73","207","2016","PHI","4","18","109"
-"385","Connor Carrick","N.J","D","25","1994-04-13","Orland Park","IL","USA","USA","70","192","2012","WSH","5","16","137"
-"424","Connor Clifton","BOS","D","24","1995-04-28","Long Branch","NJ","USA","USA","71","175","2013","PHX","5","12","133"
-"552","Connor McDavid","EDM","C","22","1997-01-13","Richmond Hill","ON","CAN","CAN","73","193","2015","EDM","1","1","1"
-"334","Connor Murphy","CHI","D","26","1993-03-26","Dublin","OH","USA","USA","76","212","2011","PHX","1","20","20"
-"604","Conor Garland","ARI","R","23","1996-03-11","Scituate","MA","USA","USA","70","165","2015","ARI","5","2","123"
-"481","Conor Sheary","BUF","L","27","1992-06-08","Winchester","MA","USA","USA","68","179","-","-","-","-","-"
-"677","Conor Timmins","COL","D","21","1998-09-18","St. Catharines","ON","CAN","CAN","74","185","2017","COL","2","1","32"
-"28","Corey Perry","DAL","R","34","1985-05-16","Peterborough","ON","CAN","CAN","75","205","2003","ANA","1","28","28"
-"278","Cory Conacher","T.B","C","29","1989-12-14","Burlington","ON","CAN","CAN","68","185","-","-","-","-","-"
-"206","Craig Smith","NSH","C","30","1989-09-05","Madison","WI","USA","USA","73","208","2009","NSH","4","7","98"
-"474","Curtis Lazar","BUF","C","24","1995-02-02","Salmon Arm","BC","CAN","CAN","72","211","2013","OTT","1","17","17"
-"170","Dalton Prout","S.J","D","29","1990-03-13","Kingsville","ON","CAN","CAN","75","215","2010","CBJ","6","4","154"
-"380","Damon Severson","N.J","D","25","1994-08-07","Melville","SK","CAN","CAN","74","205","2012","N.J","2","30","60"
-"9","Dan Hamhuis","NSH","D","36","1982-12-13","Smithers","BC","CAN","CAN","73","204","2001","NSH","1","12","12"
-"486","Daniel Carr","NSH","L","28","1991-11-01","Sherwood Park","AB","CAN","CAN","72","193","-","-","-","-","-"
-"740","Danil Yurtaykin","S.J","L","22","1997-07-01","Belovo","","RUS","RUS","71","165","-","-","-","-","-"
-"411","Danny DeKeyser","DET","D","29","1990-03-07","Detroit","MI","USA","USA","75","190","-","-","-","-","-"
-"643","Dante Fabbro","NSH","D","21","1998-06-20","Coquitlam","BC","CAN","CAN","72","189","2016","NSH","1","17","17"
-"531","Danton Heinen","BOS","L","24","1995-07-05","Langley","BC","CAN","CAN","73","188","2014","BOS","4","26","116"
-"464","Darnell Nurse","EDM","D","24","1995-02-04","Hamilton","ON","CAN","CAN","76","221","2013","EDM","1","7","7"
-"67","Darren Helm","DET","C","32","1987-01-21","St. Andrews","MB","CAN","CAN","72","192","2005","DET","5","7","132"
-"32","David Backes","BOS","R","35","1984-05-01","Minneapolis","MN","USA","USA","75","215","2003","STL","2","32","62"
-"736","David Gustafsson","WPG","C","19","2000-04-11","Tingsryd","","SWE","SWE","74","196","2018","WPG","2","29","60"
-"701","David Kampf","CHI","C","24","1995-01-12","Chomutov","","CZE","CZE","74","188","-","-","-","-","-"
-"46","David Krejci","BOS","C","33","1986-04-28","Sternberk","","CZE","CZE","72","188","2004","BOS","2","33","63"
-"513","David Pastrnak","BOS","R","23","1996-05-25","Havirov","","CZE","CZE","72","194","2014","BOS","1","25","25"
-"115","David Perron","STL","L","31","1988-05-28","Sherbrooke","QC","CAN","CAN","72","200","2007","STL","1","26","26"
-"208","David Savard","CBJ","D","29","1990-10-22","St. Hyacinthe","QC","CAN","CAN","74","229","2009","CBJ","4","3","94"
-"598","Dean Kukan","CBJ","D","26","1993-07-08","Volketswil","","CHE","CHE","74","192","-","-","-","-","-"
-"588","Denis Gurianov","DAL","R","22","1997-06-07","Togliatti","","RUS","RUS","75","200","2015","DAL","1","12","12"
-"602","Denis Malgin","FLA","C","22","1997-01-18","Olten","","CHE","CHE","69","177","2015","FLA","4","11","102"
-"651","Dennis Cholowski","DET","D","21","1998-02-15","Langley","BC","CAN","CAN","72","197","2016","DET","1","20","20"
-"591","Dennis Gilbert","CHI","D","23","1996-10-30","Buffalo","NY","USA","USA","74","216","2015","CHI","3","30","91"
-"161","Derek Grant","ANA","C","29","1990-04-20","Abbotsford","BC","CAN","CAN","75","206","2008","OTT","4","28","119"
-"600","Derek Ryan","CGY","C","32","1986-12-29","Spokane","WA","USA","USA","71","185","-","-","-","-","-"
-"155","Derek Stepan","ARI","C","29","1990-06-18","Hastings","MN","USA","USA","72","196","2008","NYR","2","21","51"
-"86","Derick Brassard","NYI","C","32","1987-09-22","Hull","QC","CAN","CAN","73","202","2006","CBJ","1","6","6"
-"5","Deryk Engelland","VGK","D","37","1982-04-03","Edmonton","AB","CAN","CAN","74","212","2000","N.J","6","27","194"
-"374","Devin Shore","ANA","C","25","1994-07-19","Ajax","ON","CAN","CAN","72","206","2012","DAL","2","31","61"
-"528","Devon Toews","NYI","D","25","1994-02-21","Abbotsford","BC","CAN","CAN","73","191","2014","NYI","4","18","108"
-"633","Dillon Dube","CGY","C","21","1998-07-20","Golden","AB","CAN","CAN","71","187","2016","CGY","2","26","56"
-"191","Dmitry Kulikov","WPG","D","29","1990-10-29","Lipetsk","","RUS","RUS","73","204","2009","FLA","1","14","14"
-"198","Dmitry Orlov","WSH","D","28","1991-07-23","Novokuznetsk","","RUS","RUS","71","208","2009","WSH","2","25","55"
-"605","Dmytro Timashov","TOR","L","23","1996-10-01","Kirovograd","","UKR","UKR","70","192","2015","TOR","5","4","125"
-"388","Dominic Toninato","FLA","C","25","1994-03-09","Duluth","MN","USA","USA","74","191","2012","TOR","5","5","126"
-"733","Dominik Kahun","PIT","C","24","1995-07-02","Plana","","CZE","DEU","71","175","-","-","-","-","-"
-"416","Dominik Kubalik","CHI","L","24","1995-08-21","Plzen","","CZE","CZE","74","179","2013","L.A","7","10","191"
-"606","Dominik Simon","PIT","C","25","1994-08-08","Prague","","CZE","CZE","71","190","2015","PIT","5","16","137"
-"326","Dougie Hamilton","CAR","D","26","1993-06-17","Toronto","ON","CAN","CAN","78","229","2011","BOS","1","9","9"
-"708","Drake Batherson","OTT","C","21","1998-04-27","Fort Wayne","IN","USA","USA","73","206","2017","OTT","4","28","121"
-"664","Drake Caggiula","CHI","C","25","1994-06-20","Pickering","ON","CAN","CAN","70","176","-","-","-","-","-"
-"135","Drew Doughty","L.A","D","29","1989-12-08","London","ON","CAN","CAN","73","202","2008","L.A","1","2","2"
-"542","Dryden Hunt","FLA","L","23","1995-11-24","Cranbrook","BC","CAN","CAN","72","193","-","-","-","-","-"
-"16","Duncan Keith","CHI","D","36","1983-07-16","Winnipeg","MB","CAN","CAN","73","192","2002","CHI","2","24","54"
-"22","Dustin Brown","L.A","L","35","1984-11-04","Ithaca","NY","USA","USA","72","210","2003","L.A","1","13","13"
-"285","Dylan DeMelo","OTT","D","26","1993-05-01","London","ON","CAN","CAN","73","191","2011","S.J","6","28","179"
-"668","Dylan Gambrell","S.J","C","23","1996-08-26","Bonney Lake","WA","USA","USA","72","185","2016","S.J","2","30","60"
-"504","Dylan Larkin","DET","C","23","1996-07-30","Waterford","MI","USA","USA","73","198","2014","DET","1","15","15"
-"257","Dylan McIlrath","DET","D","27","1992-04-20","Winnipeg","MB","CAN","CAN","77","231","2010","NYR","1","10","10"
-"567","Dylan Strome","CHI","C","22","1997-03-07","Mississauga","ON","CAN","CAN","75","200","2015","ARI","1","3","3"
-"705","Eetu Luostarinen","CAR","C","21","1998-09-02","Siilinjarvi","","FIN","FIN","75","184","2017","CAR","2","11","42"
-"462","Elias Lindholm","CGY","C","24","1994-12-02","Boden","","SWE","SWE","73","195","2013","CAR","1","5","5"
-"686","Elias Pettersson","VAN","C","21","1998-11-12","Sundsvall","","SWE","SWE","74","176","2017","VAN","1","5","5"
-"707","Emil Bemstrom","CBJ","C","20","1999-06-01","Nykoping","","SWE","SWE","71","190","2017","CBJ","4","24","117"
-"713","Eric Robinson","CBJ","L","24","1995-06-14","BELLMAWR","NJ","USA","USA","74","197","-","-","-","-","-"
-"18","Eric Staal","MIN","C","35","1984-10-29","Thunder Bay","ON","CAN","CAN","76","206","2003","CAR","1","2","2"
-"697","Erik Brannstrom","OTT","D","20","1999-09-02","Eksjo","","SWE","SWE","70","181","2017","VGK","1","15","15"
-"559","Erik Cernak","T.B","D","22","1997-05-28","Kosice","","SVK","SVK","75","233","2015","L.A","2","13","43"
-"252","Erik Gudbranson","ANA, PIT","D","27","1992-01-07","Ottawa","ON","CAN","CAN","77","217","2010","FLA","1","3","3"
-"395","Erik Gustafsson","CHI","D","27","1992-03-14","Nynashamn","","SWE","SWE","72","197","2012","EDM","4","2","93"
-"215","Erik Haula","CAR","L","28","1991-03-23","Pori","","FIN","FIN","72","193","2009","MIN","7","1","182"
-"76","Erik Johnson","COL","D","31","1988-03-21","Bloomington","MN","USA","USA","76","225","2006","STL","1","1","1"
-"143","Erik Karlsson","S.J","D","29","1990-05-31","Landsbro","","SWE","SWE","72","190","2008","OTT","1","15","15"
-"370","Esa Lindell","DAL","D","25","1994-05-23","Vantaa","","FIN","FIN","75","215","2012","DAL","3","13","74"
-"572","Ethan Bear","EDM","D","22","1997-06-26","Regina","SK","CAN","CAN","71","197","2015","EDM","5","3","124"
-"596","Evan Rodrigues","BUF","C","26","1993-07-28","Toronto","ON","CAN","CAN","71","184","-","-","-","-","-"
-"184","Evander Kane","S.J","L","28","1991-08-02","Vancouver","BC","CAN","CAN","74","210","2009","ATL","1","4","4"
-"38","Evgeni Malkin","PIT","C","33","1986-07-31","Magnitogorsk","","RUS","RUS","75","195","2004","PIT","1","2","2"
-"120","Evgenii Dadonov","FLA","R","30","1989-03-12","Chelyabinsk","","RUS","RUS","71","185","2007","FLA","3","10","71"
-"235","Evgeny Kuznetsov","WSH","C","27","1992-05-19","Chelyabinsk","","RUS","RUS","74","197","2010","WSH","1","26","26"
-"564","Evgeny Svechnikov","DET","L","23","1996-10-31","Yuzhno-Sakhalinsk","","RUS","RUS","75","208","2015","DET","1","19","19"
-"585","Filip Chlapik","OTT","C","22","1997-06-03","Prague","","CZE","CZE","73","194","2015","OTT","2","18","48"
-"699","Filip Chytil","NYR","C","20","1999-09-05","Kromeriz","","CZE","CZE","74","206","2017","NYR","1","21","21"
-"364","Filip Forsberg","NSH","L","25","1994-08-13","Ostervala","","SWE","SWE","73","205","2012","WSH","1","11","11"
-"661","Filip Hronek","DET","D","22","1997-11-02","Hradec Králové","","CZE","CZE","72","183","2016","DET","2","23","53"
-"544","Frank Vatrano","FLA","C","25","1994-03-14","East Longmeadow","MA","USA","USA","69","197","-","-","-","-","-"
-"12","Frans Nielsen","DET","C","35","1984-04-24","Herning","","DNK","DNK","73","186","2002","NYI","3","24","87"
-"477","Frederik Gauthier","TOR","C","24","1995-04-26","Laval","QC","CAN","CAN","77","239","2013","TOR","1","21","21"
-"213","Gabriel Bourque","WPG","L","29","1990-09-23","Rimouski","QC","CAN","CAN","70","206","2009","NSH","5","11","132"
-"212","Gabriel Dumont","MIN","C","29","1990-10-06","Ville Degelis","QC","CAN","CAN","70","191","2009","MTL","5","18","139"
-"319","Gabriel Landeskog","COL","L","26","1992-11-23","Stockholm","","SWE","SWE","73","215","2011","COL","1","2","2"
-"751","Gaetan Haas","EDM","C","27","1992-01-31","Bonfol","","CHE","CHE","72","181","-","-","-","-","-"
-"487","Garnet Hathaway","WSH","R","27","1991-11-23","Kennebunkport","ME","USA","USA","74","210","-","-","-","-","-"
-"392","Gemel Smith","T.B","C","25","1994-04-16","Toronto","ON","CAN","CAN","70","196","2012","DAL","4","13","104"
-"674","Gerald Mayhew","MIN","C","26","1992-12-31","Wyandotte","MI","USA","USA","69","166","-","-","-","-","-"
-"660","German Rubtsov","PHI","C","21","1998-06-27","Chekhov","","RUS","RUS","74","178","2016","PHI","1","22","22"
-"646","Givani Smith","DET","R","21","1998-02-28","Thornhill","ON","CAN","CAN","74","210","2016","DET","2","16","46"
-"233","Greg McKegg","NYR","C","27","1992-06-17","St. Thomas","ON","CAN","CAN","72","192","2010","TOR","3","2","62"
-"160","Gustav Nyquist","CBJ","C","30","1989-09-01","Halmstad","","SWE","SWE","71","179","2008","DET","4","30","121"
-"349","Hampus Lindholm","ANA","D","25","1994-01-20","Helsingborg","","SWE","SWE","75","208","2012","ANA","1","6","6"
-"497","Haydn Fleury","CAR","D","23","1996-07-08","Carlyle","SK","CAN","CAN","75","208","2014","CAR","1","7","7"
-"691","Henri Jokiharju","BUF","D","20","1999-06-17","Oulu","","FIN","FIN","72","195","2017","CHI","1","29","29"
-"654","Henrik Borgstrom","FLA","C","22","1997-08-06","Helsinki","","FIN","FIN","75","199","2016","FLA","1","23","23"
-"101","Ian Cole","COL","D","30","1989-02-21","Ann Arbor","MI","USA","USA","73","225","2007","STL","1","18","18"
-"6","Ilya Kovalchuk","L.A","L","36","1983-04-15","Tver","","RUS","RUS","75","222","2001","ATL","1","1","1"
-"734","Ilya Lyubushkin","ARI","D","25","1994-04-06","Moscow","","RUS","RUS","74","201","-","-","-","-","-"
-"746","Ilya Mikheyev","TOR","R","25","1994-10-10","Omsk","","RUS","RUS","75","195","-","-","-","-","-"
-"721","Isac Lundestrom","ANA","C","20","1999-11-06","Gallivare","","SWE","SWE","72","187","2018","ANA","1","23","23"
-"517","Ivan Barbashev","STL","C","23","1995-12-14","Moscow","","RUS","RUS","72","187","2014","STL","2","3","33"
-"590","Ivan Provorov","PHI","D","22","1997-01-13","Yaroslavl","","RUS","RUS","73","201","2015","PHI","1","7","7"
-"601","J.C. Beaudin","OTT","C","22","1997-03-25","Longueuil","QC","CAN","CAN","73","196","2015","COL","3","10","71"
-"446","J.T. Compher","COL","L","24","1995-04-08","Northbrook","IL","USA","USA","72","190","2013","BUF","2","5","35"
-"330","J.T. Miller","VAN","C","26","1993-03-14","East Palestine","OH","USA","USA","73","218","2011","NYR","1","15","15"
-"390","Jaccob Slavin","CAR","D","25","1994-05-01","Denver","CO","USA","USA","75","207","2012","CAR","4","29","120"
-"553","Jack Eichel","BUF","C","23","1996-10-28","North Chelmsford","MA","USA","USA","74","203","2015","BUF","1","2","2"
-"743","Jack Hughes","N.J","C","18","2001-05-14","Orlando","FL","USA","USA","70","170","2019","N.J","1","1","1"
-"53","Jack Johnson","PIT","D","32","1987-01-13","Indianapolis","IN","USA","USA","73","227","2005","CAR","1","3","3"
-"575","Jack Roslovic","WPG","C","22","1997-01-29","Columbus","OH","USA","USA","73","187","2015","WPG","1","25","25"
-"445","Jacob de la Rose","DET, STL","C, L","24","1995-05-20","Arvika","","SWE","SWE","75","215","2013","MTL","2","4","34"
-"586","Jacob Larsson","ANA","D","22","1997-04-29","Ljungby","","SWE","SWE","74","190","2015","ANA","1","27","27"
-"540","Jacob Middleton","S.J","D","23","1996-01-02","Wainwright","AB","CAN","CAN","75","210","2014","L.A","7","30","210"
-"362","Jacob Trouba","NYR","D","25","1994-02-26","Rochester","MI","USA","USA","75","209","2012","WPG","1","9","9"
-"247","Jaden Schwartz","STL","C","27","1992-06-25","Wilcox","SK","CAN","CAN","70","190","2010","STL","1","14","14"
-"397","Jake Bischoff","VGK","D","25","1994-07-25","Cambridge","MN","USA","USA","73","194","2012","NYI","7","4","185"
-"589","Jake DeBrusk","BOS","L","23","1996-10-17","Edmonton","AB","CAN","CAN","72","188","2015","BOS","1","14","14"
-"145","Jake Gardiner","CAR","D","29","1990-07-04","Minnetonka","MN","USA","USA","74","203","2008","ANA","1","17","17"
-"430","Jake Guentzel","PIT","C","25","1994-10-06","Omaha","NE","USA","USA","71","180","2013","PIT","3","16","77"
-"383","Jake McCabe","BUF","D","26","1993-10-12","Eau Claire","WI","USA","USA","73","204","2012","BUF","2","14","44"
-"125","Jake Muzzin","TOR","D","30","1989-02-21","Woodstock","ON","CAN","CAN","75","217","2007","PIT","5","20","141"
-"496","Jake Virtanen","VAN","R","23","1996-08-17","New Westminster","BC","CAN","CAN","73","226","2014","VAN","1","6","6"
-"632","Jakob Chychrun","ARI","D","21","1998-03-31","Boca Raton","FL","USA","USA","74","210","2016","ARI","1","16","16"
-"750","Jakob Lilja","CBJ","L","26","1993-07-23","Malmo","","SWE","SWE","73","196","-","-","-","-","-"
-"180","Jakob Silfverberg","ANA","R","29","1990-10-13","Gävle","","SWE","SWE","74","208","2009","OTT","2","9","39"
-"124","Jakub Voracek","PHI","R","30","1989-08-15","Kladno","","CZE","CZE","74","214","2007","CBJ","1","7","7"
-"503","Jakub Vrana","WSH","L","23","1996-02-28","Prague","","CZE","CZE","72","195","2014","WSH","1","13","13"
-"59","James Neal","EDM","L","32","1987-09-03","Whitby","ON","CAN","CAN","74","212","2005","DAL","2","3","33"
-"105","James van Riemsdyk","PHI","L","30","1989-05-04","Middletown","NJ","USA","USA","75","217","2007","PHI","1","2","2"
-"97","Jamie Benn","DAL","L","30","1989-07-18","Victoria","BC","CAN","CAN","74","210","2007","DAL","5","8","129"
-"329","Jamie Oleksiak","DAL","D","26","1992-12-21","Toronto","ON","CAN","CAN","79","255","2011","DAL","1","14","14"
-"704","Jan Rutta","T.B","D","29","1990-07-29","Písek","","CZE","CZE","75","204","-","-","-","-","-"
-"512","Jared McCann","PIT","C","23","1996-05-31","Stratford","ON","CAN","CAN","73","185","2014","VAN","1","24","24"
-"166","Jared Spurgeon","MIN","D","29","1989-11-29","Edmonton","AB","CAN","CAN","69","167","2008","NYI","6","5","156"
-"131","Jason Demers","ARI","D","31","1988-06-09","Dorval","QC","CAN","CAN","73","195","2008","S.J","7","5","186"
-"442","Jason Dickinson","DAL","C","24","1995-07-04","Georgetown","ON","CAN","CAN","74","200","2013","DAL","1","29","29"
-"7","Jason Spezza","TOR","C","36","1983-06-13","Toronto","ON","CAN","CAN","75","216","2001","OTT","1","2","2"
-"230","Jason Zucker","MIN","L","27","1992-01-16","Newport Beach","CA","USA","USA","71","192","2010","MIN","2","29","59"
-"134","Jay Beagle","VAN","C","34","1985-10-16","Calgary","AB","CAN","CAN","75","210","-","-","-","-","-"
-"13","Jay Bouwmeester","STL","D","36","1983-09-27","Edmonton","AB","CAN","CAN","76","206","2002","FLA","1","3","3"
-"516","Jayce Hawryluk","FLA","C","23","1996-01-01","Yorkton","SK","CAN","CAN","71","196","2014","FLA","2","2","32"
-"408","Jayson Megna","COL","C","29","1990-02-01","Fort Lauderdale","FL","USA","USA","73","195","-","-","-","-","-"
-"302","Jean-Gabriel Pageau","OTT","C","27","1992-11-11","Ottawa","ON","CAN","CAN","70","180","2011","OTT","4","5","96"
-"21","Jeff Carter","L.A","C","34","1985-01-01","London","ON","CAN","CAN","75","219","2003","PHI","1","11","11"
-"83","Jeff Petry","MTL","D","31","1987-12-09","Ann Arbor","MI","USA","USA","75","201","2006","EDM","2","15","45"
-"250","Jeff Skinner","BUF","C","27","1992-05-16","Toronto","ON","CAN","CAN","71","195","2010","CAR","1","7","7"
-"684","Jesper Boqvist","N.J","C","21","1998-10-30","Falun","","SWE","SWE","72","180","2017","N.J","2","5","36"
-"655","Jesper Bratt","N.J","L","21","1998-07-30","Stockholm","","SWE","SWE","70","175","2016","N.J","6","11","162"
-"268","Jesper Fast","NYR","R","27","1991-12-02","Nassjo","","SWE","SWE","72","191","2010","NYR","6","7","157"
-"722","Jesperi Kotkaniemi","MTL","C","19","2000-07-06","Pori","","FIN","FIN","74","198","2018","MTL","1","3","3"
-"377","Jimmy Vesey","BUF","L","26","1993-05-26","Boston","MA","USA","USA","75","202","2012","NSH","3","5","66"
-"261","Joakim Nordstrom","BOS","C","27","1992-02-25","Stockholm","","SWE","SWE","73","194","2010","CHI","3","30","90"
-"747","Joakim Nygard","EDM","L","26","1993-01-08","Stockholm","","SWE","SWE","72","179","-","-","-","-","-"
-"405","Joakim Ryan","L.A","D","26","1993-06-17","Rumson","NJ","USA","USA","71","185","2012","S.J","7","17","198"
-"541","Joe Hicketts","DET","D","23","1996-05-04","Kamloops","BC","CAN","CAN","68","180","-","-","-","-","-"
-"35","Joe Pavelski","DAL","C","35","1984-07-11","Plover","WI","USA","USA","71","195","2003","S.J","7","8","205"
-"2","Joe Thornton","S.J","C","40","1979-07-02","London","ON","CAN","CAN","76","220","1997","BOS","1","1","1"
-"331","Joel Armia","MTL","R","26","1993-05-31","Pori","","FIN","FIN","75","213","2011","BUF","1","16","16"
-"312","Joel Edmundson","CAR","D","26","1993-06-28","Brandon","MB","CAN","CAN","76","215","2011","STL","2","16","46"
-"587","Joel Eriksson Ek","MIN","C","22","1997-01-29","Karlstad","","SWE","SWE","73","210","2015","MIN","1","20","20"
-"718","Joel Farabee","PHI","L","19","2000-02-25","Syracuse","NY","USA","USA","72","164","2018","PHI","1","14","14"
-"480","Joel Hanley","DAL","D","28","1991-06-08","Keswick","ON","CAN","CAN","71","190","-","-","-","-","-"
-"714","Joel L'Esperance","DAL","R","24","1995-08-18","Brighton","MI","USA","USA","74","215","-","-","-","-","-"
-"730","Joel Persson","EDM","D","25","1994-03-04","Kristianstad","","SWE","SWE","71","170","-","-","-","-","-"
-"232","Johan Larsson","BUF","L","27","1992-07-25","Lau","","SWE","SWE","71","204","2010","MIN","2","26","56"
-"149","John Carlson","WSH","D","29","1990-01-10","Natick","MA","USA","USA","75","217","2008","WSH","1","27","27"
-"417","John Gilmour","BUF","D","26","1993-05-17","Montreal","QC","CAN","CAN","72","188","2013","CGY","7","17","198"
-"428","John Hayden","N.J","C","24","1995-02-14","Chicago","IL","USA","USA","75","215","2013","CHI","3","13","74"
-"273","John Klingberg","DAL","D","27","1992-08-14","Gothenburg","","SWE","SWE","74","190","2010","DAL","5","11","131"
-"592","John Marino","PIT","D","22","1997-05-21","Brockton","MA","USA","USA","73","181","2015","EDM","6","3","154"
-"181","John Tavares","TOR","C","29","1990-09-20","Mississauga","ON","CAN","CAN","73","215","2009","NYI","1","1","1"
-"14","Johnny Boychuk","NYI","D","35","1984-01-19","Edmonton","AB","CAN","CAN","74","227","2002","COL","2","31","61"
-"287","Johnny Gaudreau","CGY","L","26","1993-08-13","Salem","NJ","USA","USA","69","165","2011","CGY","4","13","104"
-"238","Jon Merrill","VGK","D","27","1992-02-03","Oklahoma City","OK","USA","USA","75","195","2010","N.J","2","8","38"
-"327","Jonas Brodin","MIN","D","26","1993-07-12","Karlstad","","SWE","SWE","73","194","2011","MIN","1","10","10"
-"549","Jonas Siegenthaler","WSH","D","22","1997-05-06","Zurich","","CHE","CHE","75","210","2015","WSH","2","27","57"
-"709","Jonathan Davidsson","OTT","R","22","1997-03-12","Tyreso","","SWE","SWE","71","185","2017","CBJ","6","15","170"
-"460","Jonathan Drouin","MTL","L","24","1995-03-28","Ste-Agathe","QC","CAN","CAN","72","197","2013","T.B","1","3","3"
-"17","Jonathan Ericsson","DET","D","35","1984-03-02","Karlskrona","","SWE","SWE","76","218","2002","DET","9","31","291"
-"320","Jonathan Huberdeau","FLA","C","26","1993-06-04","Saint-Jerome","QC","CAN","CAN","73","202","2011","FLA","1","3","3"
-"339","Jonathan Marchessault","VGK","C","28","1990-12-27","Cap-Rouge","QC","CAN","CAN","69","180","-","-","-","-","-"
-"93","Jonathan Toews","CHI","C","31","1988-04-29","Winnipeg","MB","CAN","CAN","74","201","2006","CHI","1","3","3"
-"426","Jonny Brodzinski","S.J","C","26","1993-06-19","Ham Lake","MN","USA","USA","73","215","2013","L.A","5","27","148"
-"749","Joona Luoto","WPG","L","22","1997-09-26","TAMPERE","","FIN","FIN","75","192","-","-","-","-","-"
-"263","Joonas Donskoi","COL","R","27","1992-04-13","Raahe","","FIN","FIN","72","190","2010","FLA","4","9","99"
-"147","Jordan Eberle","NYI","C","29","1990-05-15","Regina","SK","CAN","CAN","71","187","2008","EDM","1","22","22"
-"557","Jordan Greenway","MIN","L","22","1997-02-16","Canton","NY","USA","USA","78","225","2015","MIN","2","20","50"
-"379","Jordan Martinook","CAR","L","27","1992-07-25","Brandon","MB","CAN","CAN","72","196","2012","PHX","2","28","58"
-"485","Jordan Oesterle","ARI","D","27","1992-06-25","Dearborn Heights","MI","USA","USA","72","182","-","-","-","-","-"
-"85","Jordan Staal","CAR","C","31","1988-09-10","Thunder Bay","ON","CAN","CAN","76","220","2006","PIT","1","2","2"
-"205","Jordan Szwarz","OTT","R","28","1991-05-14","Burlington","ON","CAN","CAN","71","192","2009","PHX","4","6","97"
-"234","Jordan Weal","MTL","C","27","1992-04-15","North Vancouver","BC","CAN","CAN","70","180","2010","L.A","3","10","70"
-"171","Jordie Benn","VAN","D","32","1987-07-26","Victoria","BC","CAN","CAN","74","199","-","-","-","-","-"
-"400","Joseph Blandisi","PIT","C","25","1994-07-18","Markham","ON","CAN","CAN","72","187","2012","COL","6","11","162"
-"396","Josh Anderson","CBJ","R","25","1994-05-07","Burlington","ON","CAN","CAN","75","222","2012","CBJ","4","4","95"
-"283","Josh Archibald","EDM","R","27","1992-10-06","Regina","SK","CAN","CAN","70","176","2011","PIT","6","23","174"
-"141","Josh Bailey","NYI","C, R","30","1989-10-02","Bowmanville","ON","CAN","CAN","73","200","2008","NYI","1","9","9"
-"427","Josh Brown","FLA","D","25","1994-01-21","London","ON","CAN","CAN","77","217","2013","FLA","6","1","152"
-"301","Josh Leivo","VAN","L","26","1993-05-26","Innisfil","ON","CAN","CAN","74","192","2011","TOR","3","25","86"
-"644","Josh Mahura","ANA","D","21","1998-05-05","St. Albert","AB","CAN","CAN","73","186","2016","ANA","3","24","85"
-"282","Josh Manson","ANA","D","28","1991-10-07","Hinsdale","IL","USA","CAN","75","224","2011","ANA","6","9","160"
-"470","Josh Morrissey","WPG","D","24","1995-03-28","Calgary","AB","CAN","CAN","72","195","2013","WPG","1","13","13"
-"375","Jujhar Khaira","EDM","L","25","1994-08-13","Surrey","BC","CAN","CAN","76","212","2012","EDM","3","2","63"
-"625","Julien Gauthier","CAR","R","22","1997-10-15","Pointe-aux-Trembles","QC","CAN","CAN","76","227","2016","CAR","1","21","21"
-"61","Justin Abdelkader","DET","L","32","1987-02-25","Muskegon","MI","USA","USA","74","213","2005","DET","2","12","42"
-"102","Justin Braun","PHI","D","32","1987-02-10","Minneapolis","MN","USA","USA","74","205","2007","S.J","7","20","201"
-"219","Justin Dowling","DAL","C","29","1990-10-01","Calgary","AB","CAN","CAN","70","180","-","-","-","-","-"
-"240","Justin Faulk","STL","D","27","1992-03-20","South St.Paul","MN","USA","USA","72","217","2010","CAR","2","7","37"
-"229","Justin Holl","TOR","D","27","1992-01-30","Tonka Bay","MN","USA","USA","75","210","2010","CHI","2","24","54"
-"152","Justin Schultz","PIT","D","29","1990-07-06","Kelowna","BC","CAN","CAN","74","193","2008","ANA","2","13","43"
-"732","Juuso Riikola","PIT","D","26","1993-11-09","Joensuu","","FIN","","72","189","-","-","-","-","-"
-"742","Kaapo Kakko","NYR","R","18","2001-02-13","Turku","","FIN","FIN","75","199","2019","NYR","1","2","2"
-"729","Karson Kuhlman","BOS","C","24","1995-09-26","Esko","MN","USA","USA","71","185","-","-","-","-","-"
-"511","Kasperi Kapanen","TOR","R","23","1996-07-23","Kuopio","","FIN","FIN","73","194","2014","PIT","1","22","22"
-"64","Keith Yandle","FLA","D","33","1986-09-09","Boston","MA","USA","USA","73","192","2005","PHX","4","14","105"
-"211","Kevin Connauton","COL","D","29","1990-02-23","Edmonton","AB","CAN","CAN","74","205","2009","VAN","3","22","83"
-"501","Kevin Fiala","MIN","L","23","1996-07-22","St. Gallen","","CHE","CHE","70","193","2014","NSH","1","11","11"
-"269","Kevin Gravel","TOR","D","27","1992-03-06","Kingsford","MI","USA","USA","76","205","2010","L.A","5","28","148"
-"243","Kevin Hayes","PHI","R","27","1992-05-08","Dorchester","MA","USA","USA","77","216","2010","CHI","1","24","24"
-"535","Kevin Labanc","S.J","R","23","1995-12-12","Brooklyn","NY","USA","USA","71","185","2014","S.J","6","21","171"
-"617","Kevin Rooney","N.J","C","26","1993-05-21","Canton","MA","USA","USA","74","190","-","-","-","-","-"
-"103","Kevin Shattenkirk","T.B","D","30","1989-01-29","New Rochelle","NY","USA","USA","72","203","2007","COL","1","14","14"
-"741","Kirby Dach","CHI","C","18","2001-01-21","Fort Saskatchewan","AB","CAN","CAN","76","197","2019","CHI","1","3","3"
-"685","Klim Kostin","STL","C","20","1999-05-05","Penza","","RUS","RUS","75","212","2017","STL","1","31","31"
-"615","Kole Sherwood","CBJ","R","22","1997-01-22","Columbus","OH","USA","USA","73","212","-","-","-","-","-"
-"89","Korbinian Holzer","ANA","D","31","1988-02-16","Munich","","DEU","DEU","75","213","2006","TOR","4","18","111"
-"62","Kris Letang","PIT","D","32","1987-04-24","Montreal","QC","CAN","CAN","72","201","2005","PIT","3","1","62"
-"63","Kris Russell","EDM","D","32","1987-05-02","Caroline","AB","CAN","CAN","70","170","2005","CBJ","3","6","67"
-"406","Kurtis MacDermid","L.A","D","25","1994-03-25","Sauble Beach","ON","CAN","CAN","77","233","-","-","-","-","-"
-"582","Kyle Capobianco","ARI","D","22","1997-08-13","Mississauga","ON","CAN","CAN","73","196","2015","ARI","3","2","63"
-"178","Kyle Clifford","L.A","L","28","1991-01-13","Ayr","ON","CAN","CAN","74","211","2009","L.A","2","5","35"
-"548","Kyle Connor","WPG","L","22","1996-12-09","Shelby Twp.","MI","USA","USA","73","182","2015","WPG","1","17","17"
-"77","Kyle Okposo","BUF","R","31","1988-04-16","St. Paul","MN","USA","USA","72","216","2006","NYI","1","7","7"
-"176","Kyle Palmieri","N.J","C","28","1991-02-01","Smithtown","NY","USA","USA","71","185","2009","ANA","1","26","26"
-"111","Kyle Turris","NSH","C","30","1989-08-14","New Westminster","BC","CAN","CAN","73","190","2007","PHX","1","3","3"
-"128","Lars Eller","WSH","C","30","1989-05-08","Rodovre","","DNK","DNK","74","205","2007","STL","1","13","13"
-"581","Lawson Crouse","ARI","L","22","1997-06-23","Mt. Brydges","ON","CAN","CAN","76","220","2015","FLA","1","11","11"
-"748","Lean Bergmann","S.J","C","21","1998-10-04","Hemer","","DEU","DEU","74","205","-","-","-","-","-"
-"79","Leo Komarov","NYI","C","32","1987-01-23","Narva","","EST","FIN","71","209","2006","TOR","6","27","180"
-"493","Leon Draisaitl","EDM","C","24","1995-10-27","Cologne","","DEU","DEU","74","208","2014","EDM","1","3","3"
-"696","Lias Andersson","NYR","C","21","1998-10-13","Smogen","","SWE","SWE","72","190","2017","NYR","1","7","7"
-"626","Libor Hajek","NYR","D","21","1998-02-04","Smrcek","","CZE","CZE","74","203","2016","T.B","2","7","37"
-"640","Logan Brown","OTT","C","21","1998-03-05","Raleigh","NC","USA","USA","78","220","2016","OTT","1","11","11"
-"108","Logan Couture","S.J","C","30","1989-03-28","Guelph","ON","CAN","CAN","73","200","2007","S.J","1","9","9"
-"737","Logan O'Connor","COL","R","23","1996-08-14","Missouri City","TX","USA","USA","72","175","-","-","-","-","-"
-"297","Logan Shaw","WPG","R","27","1992-10-05","Glace Bay","NS","CAN","CAN","75","208","2011","FLA","3","15","76"
-"29","Loui Eriksson","VAN","L","34","1985-07-17","Gothenburg","","SWE","SWE","74","179","2003","DAL","2","3","33"
-"144","Luca Sbisa","WPG","D","29","1990-01-30","Ozieri","","ITA","CHE","74","206","2008","PHI","1","19","19"
-"526","Lucas Wallmark","CAR","C","24","1995-09-05","Umea","","SWE","SWE","72","178","2014","CAR","4","7","97"
-"715","Lukas Radil","S.J","C","29","1990-08-05","Caslav","","CZE","CZE","74","205","-","-","-","-","-"
-"344","Luke Glendening","DET","C","30","1989-04-28","Grand Rapids","MI","USA","USA","71","191","-","-","-","-","-"
-"620","Luke Kunin","MIN","C","21","1997-12-04","Chesterfield","MO","USA","USA","72","197","2016","MIN","1","15","15"
-"138","Luke Schenn","T.B","D","30","1989-11-02","Saskatoon","SK","CAN","CAN","74","227","2008","TOR","1","5","5"
-"168","Luke Witkowski","T.B","R","29","1990-04-14","Holland","MI","USA","USA","74","217","2008","T.B","6","9","160"
-"373","Mackenzie MacEachern","STL","L","25","1994-03-09","Bloomfield Hills","MI","USA","USA","74","190","2012","STL","3","6","67"
-"420","MacKenzie Weegar","FLA","D","25","1994-01-07","Ottawa","ON","CAN","CAN","72","200","2013","FLA","7","25","206"
-"452","Madison Bowey","DET","D","24","1995-04-22","Winnipeg","MB","CAN","CAN","74","202","2013","WSH","2","23","53"
-"55","Marc Staal","NYR","D","32","1987-01-13","Thunder Bay","ON","CAN","CAN","76","209","2005","NYR","1","12","12"
-"60","Marc-Edouard Vlasic","S.J","D","32","1987-03-30","Montreal","QC","CAN","CAN","73","205","2005","S.J","2","5","35"
-"156","Marco Scandella","BUF","D","29","1990-02-23","Montreal","QC","CAN","CAN","75","212","2008","MIN","2","25","55"
-"203","Marcus Foligno","MIN","L","28","1991-08-10","Buffalo","NY","USA","CAN","75","224","2009","BUF","4","13","104"
-"175","Marcus Johansson","BUF","L","29","1990-10-06","Landskrona","","SWE","SWE","73","205","2009","WSH","1","24","24"
-"518","Marcus Pettersson","PIT","D","23","1996-05-08","Skellefteå","","SWE","SWE","76","177","2014","ANA","2","8","38"
-"265","Marcus Sorensen","S.J","L","27","1992-04-07","Sodertalje","","SWE","SWE","71","175","2010","OTT","4","16","106"
-"678","Mario Ferraro","S.J","D","21","1998-09-17","Toronto","ON","CAN","CAN","71","185","2017","S.J","2","18","49"
-"167","Mark Barberio","COL","D","29","1990-03-23","Montreal","QC","CAN","CAN","73","200","2008","T.B","6","1","152"
-"163","Mark Borowiecki","OTT","D","30","1989-07-12","Ottawa","ON","CAN","CAN","73","204","2008","OTT","5","18","139"
-"36","Mark Giordano","CGY","D","36","1983-10-03","Toronto","ON","CAN","CAN","72","200","-","-","-","-","-"
-"354","Mark Jankowski","CGY","C","25","1994-09-13","Hamilton","ON","CAN","CAN","76","212","2012","CGY","1","21","21"
-"95","Mark Letestu","WPG","C","34","1985-02-04","Elk Point","AB","CAN","CAN","70","195","-","-","-","-","-"
-"258","Mark Pysyk","FLA","D","27","1992-01-11","Sherwood Park","AB","CAN","CAN","73","196","2010","BUF","1","23","23"
-"324","Mark Scheifele","WPG","C","26","1993-03-15","Kitchener","ON","CAN","CAN","75","207","2011","WPG","1","7","7"
-"275","Mark Stone","VGK","R","27","1992-05-13","Winnipeg","MB","CAN","CAN","75","202","2010","OTT","6","28","178"
-"311","Markus Granlund","EDM","C","26","1993-04-16","Oulu","","FIN","FIN","72","180","2011","CGY","2","15","45"
-"612","Markus Nutivaara","CBJ","D","25","1994-06-06","Oulu","","FIN","FIN","73","187","2015","CBJ","7","8","189"
-"717","Martin Fehervary","WSH","D","20","1999-10-06","Bratislava","","SVK","SVK","74","200","2018","WSH","2","15","46"
-"228","Martin Marincin","TOR","D","27","1992-02-18","Kosice","","SVK","SVK","77","217","2010","EDM","2","16","46"
-"693","Martin Necas","CAR","C","20","1999-01-15","Nove Mesto na Morave","","CZE","CZE","73","189","2017","CAR","1","12","12"
-"611","Mason Appleton","WPG","C","23","1996-01-15","Green Bay","WI","USA","USA","74","193","2015","WPG","6","17","168"
-"570","Mathew Barzal","NYI","C","22","1997-05-26","Coquitlam","BC","CAN","CAN","72","187","2015","NYI","1","16","16"
-"580","Mathieu Joseph","T.B","R","22","1997-02-09","Laval","QC","CAN","CAN","73","190","2015","T.B","4","29","120"
-"671","Mathieu Olivier","NSH","R","22","1997-02-11","Biloxi","MS","USA","USA","74","210","-","-","-","-","-"
-"94","Mathieu Perreault","WPG","C","31","1988-01-05","Drummondville","QC","CAN","CAN","70","188","2006","WSH","6","24","177"
-"226","Mats Zuccarello","MIN","C","32","1987-09-01","Oslo","","NOR","NOR","68","178","-","-","-","-","-"
-"162","Matt Calvert","COL","L","29","1989-12-24","Brandon","MB","CAN","CAN","71","186","2008","CBJ","5","6","127"
-"183","Matt Duchene","NSH","C","28","1991-01-16","Haliburton","ON","CAN","CAN","71","195","2009","COL","1","3","3"
-"350","Matt Dumba","MIN","D","25","1994-07-25","Regina","SK","CAN","CAN","72","180","2012","MIN","1","7","7"
-"366","Matt Grzelcyk","BOS","D","25","1994-01-05","Charlestown","MA","USA","USA","69","174","2012","BOS","3","24","85"
-"224","Matt Irwin","NSH","D","31","1987-11-29","Victoria","BC","CAN","CAN","73","207","-","-","-","-","-"
-"670","Matt Luff","L.A","R","22","1997-05-05","Oakville","ON","CAN","CAN","74","196","-","-","-","-","-"
-"164","Matt Martin","NYI","L","30","1989-05-08","Windsor","ON","CAN","CAN","75","220","2008","NYI","5","27","148"
-"313","Matt Nieto","COL","L","27","1992-11-05","Long Beach","CA","USA","USA","71","185","2011","S.J","2","17","47"
-"58","Matt Niskanen","PHI","D","32","1986-12-06","Virginia","MN","USA","USA","73","203","2005","DAL","1","28","28"
-"613","Matt Roy","L.A","D","24","1995-03-01","Detroit","MI","USA","USA","73","200","2015","L.A","7","13","194"
-"343","Matt Tennyson","N.J","D","29","1990-04-23","Minneapolis","MN","USA","USA","74","205","-","-","-","-","-"
-"398","Matthew Benning","EDM","D","25","1994-05-25","Edmonton","AB","CAN","CAN","73","203","2012","BOS","6","24","175"
-"619","Matthew Tkachuk","CGY","L","21","1997-12-11","Scottsdale","AZ","USA","USA","74","202","2016","CGY","1","6","6"
-"202","Mattias Ekholm","NSH","D","29","1990-05-24","Borlange","","SWE","SWE","76","215","2009","NSH","4","11","102"
-"431","Mattias Janmark","DAL","C","26","1992-12-08","Stockholm","","SWE","SWE","73","195","2013","DET","3","18","79"
-"690","Max Comtois","ANA","L","20","1999-01-08","Longueuil","QC","CAN","CAN","74","215","2017","ANA","2","19","50"
-"469","Max Domi","MTL","C","24","1995-03-02","Winnipeg","MB","CAN","CAN","70","192","2013","PHX","1","12","12"
-"641","Max Jones","ANA","L","21","1998-02-17","Rochester","MI","USA","USA","75","220","2016","ANA","1","24","24"
-"123","Max Pacioretty","VGK","L","31","1988-11-20","New Canaan","CT","USA","USA","74","215","2007","MTL","1","22","22"
-"710","Max Veronneau","OTT","R","23","1995-12-12","Ottawa","ON","CAN","CAN","72","193","-","-","-","-","-"
-"488","Melker Karlsson","S.J","C","29","1990-07-18","Lycksele","","SWE","SWE","72","180","-","-","-","-","-"
-"525","Michael Amadio","L.A","C","23","1996-05-13","Sault Ste. Marie","ON","CAN","CAN","73","204","2014","L.A","3","30","90"
-"495","Michael Dal Colle","NYI","L","23","1996-06-20","Richmond Hill","ON","CAN","CAN","75","204","2014","NYI","1","5","5"
-"146","Michael Del Zotto","ANA","D","29","1990-06-24","Stouffville","ON","CAN","CAN","72","195","2008","NYR","1","20","20"
-"91","Michael Frolik","CGY","R","31","1988-02-17","Kladno","","CZE","CZE","73","190","2006","FLA","1","10","10"
-"87","Michael Grabner","ARI","R","32","1987-10-05","Villach","","AUT","AUT","73","188","2006","VAN","1","14","14"
-"415","Michael Raffl","PHI","L","30","1988-12-01","Villach","","AUT","AUT","72","200","-","-","-","-","-"
-"276","Michael Sgarbossa","WSH","C","27","1992-07-25","Campbellville","ON","CAN","CAN","72","186","-","-","-","-","-"
-"157","Michael Stone","CGY","D","29","1990-06-07","Winnipeg","MB","CAN","CAN","75","210","2008","PHX","3","8","69"
-"666","Michal Kempny","WSH","D","29","1990-09-08","Hodonin","","CZE","CZE","72","195","-","-","-","-","-"
-"274","Micheal Ferland","VAN","L","27","1992-04-20","Swan River","MB","CAN","CAN","74","217","2010","CGY","5","13","133"
-"132","Micheal Haley","NYR","C","33","1986-03-30","Guelph","ON","CAN","CAN","71","202","-","-","-","-","-"
-"314","Miikka Salomaki","NSH","R","26","1993-03-09","Raahe","","FIN","FIN","71","203","2011","NSH","2","22","52"
-"323","Mika Zibanejad","NYR","C","26","1993-04-18","Huddinge","","SWE","SWE","74","208","2011","OTT","1","6","6"
-"121","Mikael Backlund","CGY","C","30","1989-03-17","Vasteras","","SWE","SWE","73","200","2007","CGY","1","24","24"
-"259","Mikael Granlund","NSH","C","27","1992-02-26","Oulu","","FIN","FIN","70","185","2010","MIN","1","9","9"
-"42","Mike Green","DET","D","34","1985-10-12","Calgary","AB","CAN","CAN","73","210","2004","WSH","1","29","29"
-"173","Mike Hoffman","FLA","C","29","1989-11-24","Kitchener","ON","CAN","CAN","72","182","2009","OTT","5","9","130"
-"356","Mike Matheson","FLA","D","25","1994-02-27","Pointe-Claire","QC","CAN","CAN","74","188","2012","FLA","1","23","23"
-"303","Mike Reilly","MTL","D","26","1993-07-13","Chicago","IL","USA","USA","74","200","2011","CBJ","4","7","98"
-"656","Mikhail Sergachev","T.B","D","21","1998-06-25","Nizhnekamsk","","RUS","RUS","75","217","2016","MTL","1","9","9"
-"603","Mikhail Vorobyev","PHI","C","22","1997-01-05","Ufa","","RUS","RUS","74","194","2015","PHI","4","13","104"
-"140","Mikkel Boedker","OTT","L","29","1989-12-16","Brondby","","DNK","DNK","72","207","2008","PHX","1","8","8"
-"8","Mikko Koivu","MIN","C","36","1983-03-12","Turku","","FIN","FIN","75","213","2001","MIN","1","6","6"
-"560","Mikko Rantanen","COL","R","23","1996-10-29","Nousiainen","","FIN","FIN","76","215","2015","COL","1","10","10"
-"80","Milan Lucic","CGY","L","31","1988-06-07","Vancouver","BC","CAN","CAN","75","231","2006","BOS","2","20","50"
-"436","Miles Wood","N.J","L","24","1995-09-13","Buffalo","NY","USA","USA","74","195","2013","N.J","4","9","100"
-"475","Mirco Mueller","N.J","D","24","1995-03-21","Winterthur","","CHE","CHE","75","210","2013","S.J","1","18","18"
-"692","Miro Heiskanen","DAL","D","20","1999-07-18","Espoo","","FIN","FIN","73","190","2017","DAL","1","3","3"
-"583","Mitchell Marner","TOR","C","22","1997-05-05","Markham","ON","CAN","CAN","72","175","2015","TOR","1","4","4"
-"689","Morgan Frost","PHI","C","20","1999-05-14","Aurora","ON","CAN","CAN","71","170","2017","PHI","1","27","27"
-"348","Morgan Rielly","TOR","D","25","1994-03-09","Vancouver","BC","CAN","CAN","73","219","2012","TOR","1","5","5"
-"412","Nate Schmidt","VGK","D","28","1991-07-16","St. Cloud","MN","USA","USA","73","194","-","-","-","-","-"
-"34","Nate Thompson","MTL","C","35","1984-10-05","Anchorage","AK","USA","USA","72","205","2003","BOS","6","16","183"
-"332","Nathan Beaulieu","WPG","D","26","1992-12-05","Strathroy","ON","CAN","CAN","74","200","2011","MTL","1","17","17"
-"458","Nathan MacKinnon","COL","C","24","1995-09-01","Halifax","NS","CAN","CAN","72","200","2013","COL","1","1","1"
-"187","Nazem Kadri","COL","C","29","1990-10-06","London","ON","CAN","CAN","72","192","2009","TOR","1","7","7"
-"702","Neal Pionk","WPG","D","24","1995-07-29","Hermantown","MN","USA","USA","72","186","-","-","-","-","-"
-"218","Nic Dowd","WSH","C","29","1990-05-27","Huntsville","AL","USA","USA","74","195","2009","L.A","7","17","198"
-"450","Nic Petan","TOR","C","24","1995-03-22","Delta","BC","CAN","CAN","69","175","2013","WPG","2","13","43"
-"242","Nick Bjugstad","PIT","C","27","1992-07-17","Minneapolis","MN","USA","USA","78","215","2010","FLA","1","19","19"
-"100","Nick Bonino","NSH","C","31","1988-04-20","Hartford","CT","USA","USA","73","196","2007","S.J","6","22","173"
-"647","Nick Caamano","DAL","R","21","1998-09-07","Hamilton","ON","CAN","CAN","74","200","2016","DAL","5","25","146"
-"295","Nick Cousins","MTL","C","26","1993-07-20","Belleville","ON","CAN","CAN","71","183","2011","PHI","3","7","68"
-"75","Nick Foligno","CBJ","L","32","1987-10-31","Buffalo","NY","USA","USA","72","208","2006","OTT","1","28","28"
-"130","Nick Holden","VGK","D","32","1987-05-15","St. Albert","AB","CAN","CAN","76","212","-","-","-","-","-"
-"217","Nick Jensen","WSH","D","29","1990-09-21","St. Paul","MN","USA","USA","72","196","2009","DET","5","29","150"
-"192","Nick Leddy","NYI","D","28","1991-03-20","Eden Prairie","MN","USA","USA","72","207","2009","MIN","1","16","16"
-"437","Nick Paul","OTT","L","24","1995-03-20","Mississauga","ON","CAN","CAN","76","219","2013","DAL","4","10","101"
-"500","Nick Ritchie","ANA","L","23","1995-12-05","Orangeville","ON","CAN","CAN","74","230","2014","ANA","1","10","10"
-"509","Nick Schmaltz","ARI","C","23","1996-02-23","Madison","WI","USA","USA","72","177","2014","CHI","1","20","20"
-"289","Nick Seeler","MIN","D","26","1993-06-03","Eden Prairie","MN","USA","USA","74","201","2011","MIN","5","10","131"
-"299","Nick Shore","TOR","C","27","1992-09-26","Denver","CO","USA","USA","73","198","2011","L.A","3","21","82"
-"687","Nick Suzuki","MTL","C","20","1999-08-10","London","ON","CAN","CAN","71","201","2017","VGK","1","13","13"
-"90","Nicklas Backstrom","WSH","C","31","1987-11-23","Gävle","","SWE","SWE","73","206","2006","WSH","1","4","4"
-"683","Nico Hischier","N.J","C","20","1999-01-04","Brig","","CHE","CHE","73","175","2017","N.J","1","1","1"
-"209","Nicolas Deslauriers","ANA","L","28","1991-02-22","LaSalle","QC","CAN","CAN","73","219","2009","L.A","3","23","84"
-"676","Nicolas Hague","VGK","D","20","1998-12-05","Kitchener","ON","CAN","CAN","78","215","2017","VGK","2","3","34"
-"577","Nicolas Roy","VGK","C","22","1997-02-05","Amos","QC","CAN","CAN","76","200","2015","CAR","4","5","96"
-"404","Nikita Gusev","N.J","L","27","1992-07-08","Moscow","","RUS","RUS","69","163","2012","T.B","7","21","202"
-"317","Nikita Kucherov","T.B","R","26","1993-06-17","Maykop","","RUS","RUS","71","180","2011","T.B","2","28","58"
-"473","Nikita Zadorov","COL","D","24","1995-04-16","Moscow","","RUS","RUS","77","235","2013","BUF","1","16","16"
-"663","Nikita Zaitsev","OTT","D","28","1991-10-29","Moscow","","RUS","RUS","74","188","-","-","-","-","-"
-"66","Niklas Hjalmarsson","ARI","D","32","1987-06-06","Eksjo","","SWE","SWE","75","197","2005","CHI","4","17","108"
-"386","Nikolai Prokhorkin","L.A","L","26","1993-09-17","Chelyabinsk","","RUS","RUS","75","190","2012","L.A","4","30","121"
-"499","Nikolaj Ehlers","WPG","L","23","1996-02-14","Aalborg","","DNK","DNK","72","172","2014","WPG","1","9","9"
-"260","Nino Niederreiter","CAR","R","27","1992-09-08","Chur","","CHE","CHE","74","218","2010","NYI","1","5","5"
-"726","Noah Dobson","NYI","D","19","2000-01-07","Summerside","PE","CAN","CAN","75","184","2018","NYI","1","12","12"
-"650","Noah Gregor","S.J","C","21","1998-07-28","Beaumont","AB","CAN","CAN","72","185","2016","S.J","4","20","111"
-"546","Noah Hanifin","CGY","D","22","1997-01-25","Boston","MA","USA","USA","75","215","2015","CAR","1","5","5"
-"599","Noel Acciari","FLA","C","27","1991-12-01","Johnston","RI","USA","USA","70","203","-","-","-","-","-"
-"434","Oliver Bjorkstrand","CBJ","R","24","1995-04-10","Herning","","DNK","DNK","72","177","2013","CBJ","3","28","89"
-"186","Oliver Ekman-Larsson","ARI","D","28","1991-07-17","Karlskrona","","SWE","SWE","74","200","2009","PHX","1","6","6"
-"563","Oliver Kylington","CGY","D","22","1997-05-19","Stockholm","","SWE","SWE","72","183","2015","CGY","2","30","60"
-"716","Oliver Wahlstrom","NYI","R","19","2000-06-13","Portland","ME","USA","USA","73","211","2018","NYI","1","11","11"
-"355","Olli Maatta","CHI","D","25","1994-08-22","Jyväskylä","","FIN","FIN","74","206","2012","PIT","1","22","22"
-"539","Ondrej Kase","ANA","R","24","1995-11-08","Kadan","","CZE","CZE","72","190","2014","ANA","7","25","205"
-"281","Ondrej Palat","T.B","L","28","1991-03-28","Frydek-Mistek","","CZE","CZE","72","194","2011","T.B","7","27","208"
-"333","Oscar Klefbom","EDM","D","26","1993-07-20","Karlstad","","SWE","SWE","75","216","2011","EDM","1","19","19"
-"533","Oskar Lindblom","PHI","L","23","1996-08-15","Gävle","","SWE","SWE","73","191","2014","PHI","5","18","138"
-"369","Oskar Sundqvist","STL","C","25","1994-03-23","Boden","","SWE","SWE","75","209","2012","PIT","3","20","81"
-"667","Otto Koivula","NYI","L","21","1998-09-01","Nokia","","FIN","FIN","76","219","2016","NYI","4","29","120"
-"109","P.K. Subban","N.J","D","30","1989-05-13","Toronto","ON","CAN","CAN","72","210","2007","MTL","2","13","43"
-"731","Par Lindholm","BOS","C","28","1991-10-05","Kusmark","","SWE","SWE","72","183","-","-","-","-","-"
-"104","Pat Maroon","T.B","L","31","1988-04-23","St. Louis","MO","USA","USA","75","236","2007","PHI","6","10","161"
-"70","Patric Hornqvist","PIT","R","32","1987-01-01","Sollentuna","","SWE","SWE","71","189","2005","NSH","7","36","230"
-"30","Patrice Bergeron","BOS","C","34","1985-07-24","Ancienne-Lorette","QC","CAN","CAN","73","195","2003","BOS","2","15","45"
-"118","Patrick Kane","CHI","R","31","1988-11-19","Buffalo","NY","USA","USA","71","177","2007","CHI","1","1","1"
-"3","Patrick Marleau","S.J","C","40","1979-09-15","Aneroid","SK","CAN","CAN","74","215","1997","S.J","1","2","2"
-"665","Patrick Russell","EDM","R","26","1993-01-04","Bickenrod","","DNK","DNK","73","203","-","-","-","-","-"
-"630","Patrik Laine","WPG","R","21","1998-04-19","Tampere","","FIN","FIN","77","206","2016","WPG","1","2","2"
-"237","Patrik Nemeth","DET","D","27","1992-02-08","Stockholm","","SWE","SWE","75","228","2010","DAL","2","11","41"
-"106","Paul Byron","MTL","L","30","1989-04-27","Ottawa","ON","CAN","CAN","69","158","2007","BUF","6","28","179"
-"99","Paul Carey","BOS","C","31","1988-09-24","Boston","MA","USA","USA","73","200","2007","COL","5","14","135"
-"50","Paul Stastny","VGK","C","33","1985-12-27","Quebec City","QC","CAN","USA","72","193","2005","COL","2","14","44"
-"429","Pavel Buchnevich","NYR","L","24","1995-04-17","Cherepovets","","RUS","RUS","74","197","2013","NYR","3","14","75"
-"551","Pavel Zacha","N.J","C","22","1997-04-06","Brno","","CZE","CZE","75","210","2015","N.J","1","6","6"
-"435","Peter Cehlarik","BOS","L","24","1995-08-02","Zilina","","SVK","SVK","74","202","2013","BOS","3","29","90"
-"88","Phil Kessel","ARI","C","32","1987-10-02","Madison","WI","USA","USA","72","202","2006","BOS","1","5","5"
-"616","Philippe Myers","PHI","D","22","1997-01-25","Moncton","NB","CAN","CAN","77","210","-","-","-","-","-"
-"335","Phillip Danault","MTL","C, L","26","1993-02-24","Victoriaville","QC","CAN","CAN","73","201","2011","CHI","1","26","26"
-"538","Pierre Engvall","TOR","L","23","1996-05-31","Ljungby","","SWE","SWE","77","214","2014","TOR","7","8","188"
-"489","Pierre-Edouard Bellemare","COL","L","34","1985-03-06","Le Blanc-Mesnil","","FRA","FRA","72","198","-","-","-","-","-"
-"653","Pierre-Luc Dubois","CBJ","L","21","1998-06-24","Ste-Agathe-Des-Monts","QC","CAN","CAN","75","218","2016","CBJ","1","3","3"
-"719","Quinn Hughes","VAN","D","20","1999-10-14","Orlando","FL","USA","USA","70","170","2018","VAN","1","7","7"
-"365","Radek Faksa","DAL","C","25","1994-01-09","Vitkov","","CZE","CZE","75","220","2012","DAL","1","13","13"
-"703","Radim Simek","S.J","D","27","1992-09-20","Mlada Boleslav","","CZE","CZE","71","200","-","-","-","-","-"
-"223","Radko Gudas","WSH","D","29","1990-06-05","Prague","","CZE","CZE","72","205","2010","T.B","3","6","66"
-"547","Rasmus Andersson","CGY","D","23","1996-10-27","Malmö","","SWE","SWE","73","214","2015","CGY","2","23","53"
-"627","Rasmus Asplund","BUF","C","21","1997-12-03","Filipstad","","SWE","SWE","71","190","2016","BUF","2","3","33"
-"724","Rasmus Dahlin","BUF","D","19","2000-04-13","Trollhattan","","SWE","SWE","75","193","2018","BUF","1","1","1"
-"465","Rasmus Ristolainen","BUF","D","25","1994-10-27","Turku","","FIN","FIN","76","220","2013","BUF","1","8","8"
-"728","Rasmus Sandin","TOR","D","19","2000-03-07","Uppsala","","SWE","SWE","72","183","2018","TOR","1","29","29"
-"195","Reilly Smith","VGK","R","28","1991-04-01","Toronto","ON","CAN","CAN","72","183","2009","DAL","3","8","69"
-"669","Rhett Gardner","DAL","C","23","1996-02-28","Moose Jaw","SK","CAN","CAN","75","225","2016","DAL","4","25","116"
-"201","Richard Panik","WSH","R","28","1991-02-07","Martin","","SVK","SVK","73","202","2009","T.B","2","22","52"
-"337","Rickard Rakell","ANA","R","26","1993-05-05","Sundbyberg","","SWE","SWE","74","196","2011","ANA","1","30","30"
-"110","Riley Nash","CBJ","C","30","1989-05-09","Consort","AB","CAN","CAN","73","185","2007","EDM","1","21","21"
-"248","Riley Sheahan","EDM","C","27","1991-12-07","St. Catharines","ON","CAN","CAN","75","214","2010","DET","1","21","21"
-"649","Riley Stillman","FLA","D","21","1998-03-09","Peterborough","ON","CAN","CAN","73","196","2016","FLA","4","23","114"
-"510","Robby Fabbri","DET, STL","C","23","1996-01-22","Mississauga","ON","CAN","CAN","70","190","2014","STL","1","21","21"
-"119","Robert Bortuzzo","STL","D","30","1989-03-18","Thunder Bay","ON","CAN","CAN","76","216","2007","PIT","3","17","78"
-"448","Robert Hagg","PHI","D","24","1995-02-08","Uppsala","","SWE","SWE","74","204","2013","PHI","2","11","41"
-"688","Robert Thomas","STL","C","20","1999-07-02","Aurora","ON","CAN","CAN","72","188","2017","STL","1","20","20"
-"304","Rocco Grimaldi","NSH","C","26","1993-02-08","Anaheim","CA","USA","USA","66","180","2011","FLA","2","3","33"
-"151","Roman Josi","NSH","D","29","1990-06-01","Bern","","CHE","CHE","73","201","2008","NSH","2","8","38"
-"49","Roman Polak","DAL","D","33","1986-04-28","Ostrava","","CZE","CZE","74","240","2004","STL","6","17","180"
-"4","Ron Hainsey","OTT","D","38","1981-03-24","Bolton","CT","USA","USA","75","201","2000","MTL","1","13","13"
-"571","Roope Hintz","DAL","L","23","1996-11-17","Tampere","","FIN","FIN","75","220","2015","DAL","2","19","49"
-"478","Ross Johnston","NYI","L","25","1994-02-18","Charlottetown","PE","CAN","CAN","77","235","-","-","-","-","-"
-"483","Ryan Carpenter","CHI","C","28","1991-01-18","Oviedo","FL","USA","USA","72","200","-","-","-","-","-"
-"521","Ryan Donato","MIN","C","23","1996-04-09","Boston","MA","USA","USA","72","192","2014","BOS","2","26","56"
-"280","Ryan Dzingel","CAR","C","27","1992-03-09","Wheaton","IL","USA","USA","72","190","2011","OTT","7","23","204"
-"188","Ryan Ellis","NSH","D","28","1991-01-03","Hamilton","ON","CAN","CAN","70","180","2009","NSH","1","11","11"
-"25","Ryan Getzlaf","ANA","C","34","1985-05-10","Regina","SK","CAN","CAN","76","228","2003","ANA","1","19","19"
-"439","Ryan Graves","COL","D","24","1995-05-21","Yarmouth","NS","CAN","CAN","77","220","2013","NYR","4","19","110"
-"443","Ryan Hartman","MIN","R","25","1994-09-20","Hilton Head Isl.","SC","USA","USA","72","189","2013","CHI","1","30","30"
-"255","Ryan Johansen","NSH","C","27","1992-07-31","Vancouver","BC","CAN","CAN","75","218","2010","CBJ","1","4","4"
-"623","Ryan Lindgren","NYR","D","21","1998-02-11","Burnsville","MN","USA","USA","72","191","2016","BOS","2","19","49"
-"122","Ryan McDonagh","T.B","D","30","1989-06-13","St. Paul","MN","USA","USA","73","214","2007","MTL","1","12","12"
-"346","Ryan Murray","CBJ","D","26","1993-09-27","Regina","SK","CAN","CAN","73","206","2012","CBJ","1","2","2"
-"318","Ryan Nugent-Hopkins","EDM","C","26","1993-04-12","Burnaby","BC","CAN","CAN","72","184","2011","EDM","1","1","1"
-"177","Ryan O'Reilly","STL","C","28","1991-02-07","Clinton","ON","CAN","CAN","73","216","2009","COL","2","3","33"
-"694","Ryan Poehling","MTL","C","20","1999-01-03","Lakeville","MN","USA","USA","74","204","2017","MTL","1","25","25"
-"472","Ryan Pulock","NYI","D","25","1994-10-06","Dauphin","MB","CAN","CAN","74","217","2013","NYI","1","15","15"
-"68","Ryan Reaves","VGK","R","32","1987-01-20","Winnipeg","MB","CAN","CAN","73","225","2005","STL","5","31","156"
-"322","Ryan Strome","NYR","C","26","1993-07-11","Mississauga","ON","CAN","CAN","73","193","2011","NYI","1","5","5"
-"19","Ryan Suter","MIN","D","34","1985-01-21","Madison","WI","USA","USA","74","206","2003","NSH","1","7","7"
-"494","Sam Bennett","CGY","C","23","1996-06-20","Holland Landing","ON","CAN","CAN","73","195","2014","CGY","1","4","4"
-"107","Sam Gagner","EDM","C","30","1989-08-10","London","ON","CAN","CAN","71","200","2007","EDM","1","6","6"
-"530","Sam Lafferty","PIT","C","24","1995-03-06","Hollidaysburg","PA","USA","USA","73","195","2014","PIT","4","23","113"
-"492","Sam Reinhart","BUF","C","24","1995-11-06","West Vancouver","BC","CAN","CAN","73","194","2014","BUF","1","2","2"
-"634","Sam Steel","ANA","C","21","1998-02-03","Ardrossan","AB","CAN","CAN","71","189","2016","ANA","1","30","30"
-"614","Sami Niku","WPG","D","23","1996-10-10","Haapavesi","","FIN","FIN","73","176","2015","WPG","7","17","198"
-"204","Sami Vatanen","N.J","D","28","1991-06-03","Jyväskylä","","FIN","FIN","70","185","2009","ANA","4","15","106"
-"536","Sammy Blais","STL","L","23","1996-06-17","Montmagny","QC","CAN","CAN","74","205","2014","STL","6","26","176"
-"652","Samuel Girard","COL","D","21","1998-05-12","Roberval","QC","CAN","CAN","70","170","2016","NSH","2","17","47"
-"468","Samuel Morin","PHI","D","24","1995-07-12","Lac-Beauport","QC","CAN","CAN","78","202","2013","PHI","1","11","11"
-"316","Scott Harrington","CBJ","D","26","1993-03-10","Kingston","ON","CAN","CAN","74","204","2011","PIT","2","24","54"
-"353","Scott Laughton","PHI","L","25","1994-05-30","Oakville","ON","CAN","CAN","73","190","2012","PHI","1","20","20"
-"305","Scott Mayfield","NYI","D","27","1992-10-14","St. Louis","MO","USA","USA","76","223","2011","NYI","2","4","34"
-"409","Scott Sabourin","OTT","R","27","1992-07-30","Orleans","ON","CAN","CAN","75","208","-","-","-","-","-"
-"325","Sean Couturier","PHI","C","26","1992-12-07","Phoenix","AZ","USA","CAN","75","211","2011","PHI","1","8","8"
-"290","Sean Kuraly","BOS","C","26","1993-01-20","Dublin","OH","USA","USA","74","213","2011","S.J","5","12","133"
-"463","Sean Monahan","CGY","C","25","1994-10-12","Brampton","ON","CAN","CAN","75","200","2013","CGY","1","6","6"
-"711","Sean Walker","L.A","D","25","1994-11-13","Keswick","ON","CAN","CAN","71","196","-","-","-","-","-"
-"562","Sebastian Aho","CAR","R","22","1997-07-26","Rauma","","FIN","FIN","71","176","2015","CAR","2","5","35"
-"461","Seth Jones","CBJ","D","25","1994-10-03","Arlington","TX","USA","USA","76","209","2013","NSH","1","4","4"
-"372","Shayne Gostisbehere","PHI","D","26","1993-04-20","Pembroke Pines","FL","USA","USA","71","180","2012","PHI","3","17","78"
-"441","Shea Theodore","VGK","D","24","1995-08-03","Langley","BC","CAN","CAN","74","195","2013","ANA","1","26","26"
-"31","Shea Weber","MTL","D","34","1985-08-14","Sicamous","BC","CAN","CAN","76","230","2003","NSH","2","19","49"
-"51","Sidney Crosby","PIT","C","32","1987-08-07","Cole Harbour","NS","CAN","CAN","71","200","2005","PIT","1","1","1"
-"363","Slater Koekkoek","CHI","D","25","1994-02-18","Winchester","ON","CAN","CAN","74","193","2012","T.B","1","10","10"
-"505","Sonny Milano","CBJ","L","23","1996-05-12","Massapequa","NY","USA","USA","72","194","2014","CBJ","1","16","16"
-"98","Steven Kampfer","BOS","D","31","1988-09-24","Ann Arbor","MI","USA","USA","71","198","2007","ANA","4","2","93"
-"449","Steven Santini","NSH","D","24","1995-03-07","Bronxville","NY","USA","USA","74","205","2013","N.J","2","12","42"
-"136","Steven Stamkos","T.B","C","29","1990-02-07","Markham","ON","CAN","CAN","73","194","2008","T.B","1","1","1"
-"328","Sven Baertschi","VAN","L","27","1992-10-05","Bern","","CHE","CHE","71","190","2011","CGY","1","13","13"
-"56","T.J. Oshie","WSH","R","32","1986-12-23","Everett","WA","USA","USA","71","195","2005","STL","1","24","24"
-"293","T.J. Tynan","COL","C","27","1992-02-25","Orland Park","IL","USA","USA","68","165","2011","CBJ","3","5","66"
-"658","Tage Thompson","BUF","C","22","1997-10-30","Phoenix","AZ","USA","USA","77","215","2016","STL","1","26","26"
-"352","Tanner Pearson","VAN","L","27","1992-08-10","Kitchener","ON","CAN","CAN","73","201","2012","L.A","1","30","30"
-"738","Taro Hirose","DET","L","23","1996-06-30","Calgary","AB","CAN","CAN","70","162","-","-","-","-","-"
-"277","Taylor Fedun","DAL","D","31","1988-06-04","Edmonton","AB","CAN","CAN","73","200","-","-","-","-","-"
-"253","Taylor Hall","N.J","L","28","1991-11-14","Calgary","AB","CAN","CAN","73","205","2010","EDM","1","1","1"
-"382","Teddy Blueger","PIT","C","25","1994-08-15","Riga","","LVA","LVA","72","185","2012","PIT","2","22","52"
-"361","Teuvo Teravainen","CAR","L","25","1994-09-11","Helsinki","","FIN","FIN","71","191","2012","CHI","1","18","18"
-"579","Thomas Chabot","OTT","D","22","1997-01-30","Sainte-Marie","QC","CAN","CAN","74","190","2015","OTT","1","18","18"
-"638","Tim Gettinger","NYR","L","21","1998-04-14","Cleveland","OH","USA","USA","78","218","2016","NYR","5","20","141"
-"266","Tim Heed","S.J","D","28","1991-01-27","Gothenburg","","SWE","SWE","72","180","2010","ANA","5","12","132"
-"410","Tim Schaller","VAN","C","29","1990-11-16","Merrimack","NH","USA","USA","74","204","-","-","-","-","-"
-"558","Timo Meier","S.J","R","23","1996-10-08","Herisau","","CHE","CHE","72","210","2015","S.J","1","9","9"
-"159","TJ Brodie","CGY","D","29","1990-06-07","Chatham","ON","CAN","CAN","73","185","2008","CGY","4","23","114"
-"745","Tobias Bjornfot","L.A","D","18","2001-04-06","Upplands Vasby","","SWE","SWE","72","202","2019","L.A","1","22","22"
-"288","Tobias Rieder","CGY","C","26","1993-01-10","Landshut","","DEU","DEU","71","186","2011","EDM","4","23","114"
-"264","Tom Kuhnhackl","NYI","R","27","1992-01-21","Landshut","","DEU","DEU","74","196","2010","PIT","4","20","110"
-"359","Tom Wilson","WSH","R","25","1994-03-29","Toronto","ON","CAN","CAN","76","220","2012","WSH","1","16","16"
-"360","Tomas Hertl","S.J","C","26","1993-11-12","Praha","","CZE","CZE","74","215","2012","S.J","1","17","17"
-"306","Tomas Jurco","EDM","R","26","1992-12-28","Kosice","","SVK","SVK","74","188","2011","DET","2","5","35"
-"490","Tomas Nosek","VGK","L","27","1992-09-01","Pardubice","","CZE","CZE","75","205","-","-","-","-","-"
-"196","Tomas Tatar","MTL","L","28","1990-12-01","Ilava","","SVK","SVK","70","183","2009","DET","2","30","60"
-"508","Tony DeAngelo","NYR","D","24","1995-10-24","Sewell","NJ","USA","USA","71","180","2014","T.B","1","19","19"
-"342","Torey Krug","BOS","D","28","1991-04-12","Livonia","MI","USA","USA","69","186","-","-","-","-","-"
-"284","Travis Boyd","WSH","C","26","1993-09-14","Hopkins","MN","USA","USA","71","190","2011","WSH","6","26","177"
-"555","Travis Dermott","TOR","D","22","1996-12-22","Newmarket","ON","CAN","CAN","72","205","2015","TOR","2","4","34"
-"154","Travis Hamonic","CGY","D","29","1990-08-16","St. Malo","MB","CAN","CAN","74","205","2008","NYI","2","23","53"
-"566","Travis Konecny","PHI","C","22","1997-03-11","London","ON","CAN","CAN","70","175","2015","PHI","1","24","24"
-"506","Travis Sanheim","PHI","D","23","1996-03-29","Elkhorn","MB","CAN","CAN","75","181","2014","PHI","1","17","17"
-"41","Travis Zajac","N.J","C","34","1985-05-13","Winnipeg","MB","CAN","CAN","74","185","2004","N.J","1","20","20"
-"639","Trent Frederic","BOS","C","21","1998-02-11","St. Louis","MO","USA","USA","74","203","2016","BOS","1","29","29"
-"389","Trevor Carrick","S.J","D","25","1994-07-04","Stouffville","ON","CAN","CAN","74","196","2012","CAR","4","24","115"
-"11","Trevor Daley","DET","D","36","1983-10-09","Toronto","ON","CAN","CAN","71","199","2002","DAL","2","13","43"
-"78","Trevor Lewis","L.A","C","32","1987-01-08","Salt Lake City","UT","USA","USA","73","202","2006","L.A","1","17","17"
-"672","Trevor Moore","TOR","C","24","1995-03-31","Thousand Oaks","CA","USA","USA","70","185","-","-","-","-","-"
-"482","Trevor van Riemsdyk","CAR","D","28","1991-07-24","Middletown","NJ","USA","USA","74","192","-","-","-","-","-"
-"662","Troy Stecher","VAN","D","25","1994-04-07","Richmond","BC","CAN","CAN","70","186","-","-","-","-","-"
-"607","Troy Terry","ANA","C, R","22","1997-09-10","Denver","CO","USA","USA","73","180","2015","ANA","5","27","148"
-"423","Tucker Poolman","WPG","D","26","1993-06-08","Dubuque","IA","USA","USA","74","199","2013","WPG","5","6","127"
-"455","Tyler Bertuzzi","DET","L","24","1995-02-24","Sudbury","ON","CAN","CAN","72","199","2013","DET","2","28","58"
-"174","Tyler Bozak","STL","C","33","1986-03-19","Regina","SK","CAN","CAN","73","199","-","-","-","-","-"
-"148","Tyler Ennis","OTT","C","30","1989-10-06","Edmonton","AB","CAN","CAN","69","161","2008","BUF","1","26","26"
-"286","Tyler Graovac","VAN","C","26","1993-04-27","Brampton","ON","CAN","CAN","77","208","2011","MIN","7","10","191"
-"172","Tyler Johnson","T.B","C","29","1990-07-29","Spokane","WA","USA","USA","68","182","-","-","-","-","-"
-"419","Tyler Lewington","WSH","D","24","1994-12-05","Edmonton","AB","CAN","CAN","74","200","2013","WSH","7","23","204"
-"421","Tyler Motte","VAN","C","24","1995-03-10","St. Clair","MI","USA","USA","70","192","2013","CHI","4","30","121"
-"142","Tyler Myers","VAN","D","29","1990-02-01","Houston","TX","USA","CAN","80","229","2008","BUF","1","12","12"
-"239","Tyler Pitlick","PHI","C","28","1991-11-01","Minneapolis","MN","USA","USA","74","200","2010","EDM","2","1","31"
-"256","Tyler Seguin","DAL","C","27","1992-01-31","Brampton","ON","CAN","CAN","73","200","2010","BOS","1","2","2"
-"231","Tyler Toffoli","L.A","C","27","1992-04-24","Scarborough","ON","CAN","CAN","72","197","2010","L.A","2","17","47"
-"197","Tyson Barrie","TOR","D","28","1991-07-26","Victoria","BC","CAN","CAN","70","197","2009","COL","3","3","64"
-"642","Tyson Jost","COL","C","21","1998-03-14","St. Albert","AB","CAN","CAN","71","187","2016","COL","1","10","10"
-"682","Urho Vaakanainen","BOS","D","20","1999-01-01","Joensuu","","FIN","FIN","73","185","2017","BOS","1","18","18"
-"447","Valentin Zykov","VGK","L","24","1995-05-15","St. Petersburg","","RUS","RUS","73","220","2013","L.A","2","7","37"
-"467","Valeri Nichushkin","COL","R","24","1995-03-04","Chelyabinsk","","RUS","RUS","76","210","2013","DAL","1","10","10"
-"10","Valtteri Filppula","DET","C","35","1984-03-20","Vantaa","","FIN","FIN","72","189","2002","DET","3","32","95"
-"182","Victor Hedman","T.B","D","28","1990-12-18","Ornskoldsvik","","SWE","SWE","78","229","2009","T.B","1","2","2"
-"645","Victor Mete","MTL","D","21","1998-06-07","Woodbridge","ON","CAN","CAN","69","187","2016","MTL","4","9","100"
-"537","Victor Olofsson","BUF","R","24","1995-07-18","Ornskoldsvik","","SWE","SWE","71","183","2014","BUF","7","1","181"
-"308","Victor Rask","MIN","C","26","1993-03-01","Leksand","","SWE","SWE","74","193","2011","CAR","2","12","42"
-"529","Viktor Arvidsson","NSH","L","26","1993-04-08","Skellefteå","","SWE","SWE","69","180","2014","NSH","4","22","112"
-"744","Ville Heinola","WPG","D","18","2001-02-03","Honkajoki","","FIN","FIN","71","178","2019","WPG","1","20","20"
-"554","Vince Dunn","STL","D","23","1996-10-29","Mississauga","ON","CAN","CAN","72","203","2015","STL","2","26","56"
-"292","Vincent Trocheck","FLA","C","26","1993-07-11","Pittsburgh","PA","USA","USA","70","183","2011","FLA","3","3","64"
-"399","Vinnie Hinostroza","ARI","C","25","1994-04-03","Chicago","IL","USA","USA","69","173","2012","CHI","6","18","169"
-"657","Vitaly Abramov","OTT","R","21","1998-05-08","Chelyabinsk","","RUS","RUS","69","180","2016","CBJ","3","4","65"
-"65","Vladimir Sobotka","BUF","C","32","1987-07-02","Trebic","","CZE","CZE","70","191","2005","BOS","4","15","106"
-"245","Vladimir Tarasenko","STL","R","27","1991-12-13","Yaroslavl","","RUS","RUS","72","225","2010","STL","1","16","16"
-"609","Vladislav Gavrikov","CBJ","D","24","1995-11-21","Yaroslavl","","RUS","RUS","75","213","2015","CBJ","6","8","159"
-"519","Vladislav Kamenev","COL","C","23","1996-08-12","Orsk","","RUS","RUS","74","194","2014","NSH","2","12","42"
-"336","Vladislav Namestnikov","NYR, OTT","C","27","1992-11-22","Zhukovskiy","","RUS","RUS","71","183","2011","T.B","1","27","27"
-"523","Warren Foegele","CAR","L","23","1996-04-01","Markham","ON","CAN","CAN","74","198","2014","CAR","3","7","67"
-"129","Wayne Simmonds","N.J","R","31","1988-08-26","Scarborough","ON","CAN","CAN","74","185","2007","L.A","2","31","61"
-"422","Will Butcher","N.J","D","24","1995-01-06","Sun Prairie","WI","USA","USA","70","190","2013","COL","5","2","123"
-"454","William Carrier","VGK","L","24","1994-12-20","LaSalle","QC","CAN","CAN","74","218","2013","STL","2","27","57"
-"315","William Karlsson","VGK","C","26","1993-01-08","Marsta","","SWE","SWE","73","195","2011","ANA","2","23","53"
-"498","William Nylander","TOR","C","23","1996-05-01","Calgary","AB","CAN","SWE","72","196","2014","TOR","1","8","8"
-"593","Yakov Trenin","NSH","C","22","1997-01-13","Chelyabinsk","","RUS","RUS","74","201","2015","NSH","2","25","55"
-"345","Yanni Gourde","T.B","C","27","1991-12-15","Saint-Narcisse","QC","CAN","CAN","69","173","-","-","-","-","-"
-"117","Yannick Weber","NSH","D","31","1988-09-23","Morges","","CHE","CHE","71","200","2007","MTL","3","12","73"
-"169","Zac Rinaldo","CGY","C","29","1990-06-15","Mississauga","ON","CAN","CAN","70","192","2008","PHI","6","27","178"
-"675","Zach Aston-Reese","PIT","C","25","1994-08-10","Staten Island","NY","USA","USA","72","204","-","-","-","-","-"
-"251","Zach Hyman","TOR","C","27","1992-06-09","Toronto","ON","CAN","CAN","73","211","2010","FLA","5","3","123"
-"24","Zach Parise","MIN","L","35","1984-07-28","Minneapolis","MN","USA","USA","71","195","2003","N.J","1","17","17"
-"456","Zach Sanford","STL","L","25","1994-11-09","Salem","MA","USA","USA","76","207","2013","WSH","2","31","61"
-"584","Zach Senyshyn","BOS","R","22","1997-03-30","Ottawa","ON","CAN","CAN","73","192","2015","BOS","1","15","15"
-"272","Zach Trotman","PIT","D","29","1990-08-26","Carmel","IN","USA","USA","75","217","2010","BOS","7","30","210"
-"576","Zach Werenski","CBJ","D","22","1997-07-19","Grosse Pointe","MI","USA","USA","74","212","2015","CBJ","1","8","8"
-"190","Zack Kassian","EDM","R","28","1991-01-24","Windsor","ON","CAN","CAN","75","211","2009","BUF","1","13","13"
-"673","Zack MacEwen","VAN","C","23","1996-07-08","Charlottetown","PE","CAN","CAN","75","205","-","-","-","-","-"
-"133","Zack Smith","CHI","C","31","1988-04-05","Maple Creek","SK","CAN","CAN","74","208","2008","OTT","3","18","79"
-"1","Zdeno Chara","BOS","D","42","1977-03-18","Trencin","","SVK","SVK","81","250","1996","NYI","3","4","56"
-"357","Zemgus Girgensons","BUF","C","25","1994-01-05","Riga","","LVA","LVA","74","211","2012","BUF","1","14","14"
+id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nationality,height,weight,draft_year,draft_team,draft_round,draft_round_pick,total_draft_pick
+1,Zdeno Chara,BOS,D,42,1977-03-18,Trencin,-,SVK,-,81,250,1996,NYI,3,4,56
+2,Joe Thornton,S.J,C,40,1979-07-02,London,-,CAN,-,76,220,1997,BOS,1,1,1
+3,Patrick Marleau,S.J,"C, L",40,1979-09-15,Aneroid,-,CAN,-,74,215,1997,S.J,1,2,2
+4,Ron Hainsey,OTT,D,38,1981-03-24,Bolton,-,USA,-,75,201,2000,MTL,1,13,13
+5,Justin Williams,CAR,R,38,1981-10-04,Cobourg,-,CAN,-,73,184,2000,PHI,1,28,28
+6,Deryk Engelland,VGK,D,37,1982-04-03,Edmonton,-,CAN,-,74,212,2000,N.J,6,27,194
+7,Ilya Kovalchuk,"L.A, MTL",L,36,1983-04-15,Tver,-,RUS,-,75,222,2001,ATL,1,1,1
+8,Jason Spezza,TOR,C,36,1983-06-13,Toronto,-,CAN,-,75,216,2001,OTT,1,2,2
+9,Mikko Koivu,MIN,C,36,1983-03-12,Turku,-,FIN,-,75,213,2001,MIN,1,6,6
+10,Dan Hamhuis,NSH,D,37,1982-12-13,Smithers,-,CAN,-,73,204,2001,NSH,1,12,12
+11,Valtteri Filppula,DET,C,35,1984-03-20,Vantaa,-,FIN,-,72,189,2002,DET,3,32,95
+12,Trevor Daley,DET,D,36,1983-10-09,Toronto,-,CAN,-,71,199,2002,DAL,2,13,43
+13,Frans Nielsen,DET,C,35,1984-04-24,Herning,-,DNK,-,73,186,2002,NYI,3,24,87
+14,Jay Bouwmeester,STL,D,36,1983-09-27,Edmonton,-,CAN,-,76,206,2002,FLA,1,3,3
+15,Johnny Boychuk,NYI,D,36,1984-01-19,Edmonton,-,CAN,-,74,227,2002,COL,2,31,61
+16,Alexander Steen,STL,L,35,1984-03-01,Winnipeg,-,CAN,-,72,211,2002,TOR,1,24,24
+17,Duncan Keith,CHI,D,36,1983-07-16,Winnipeg,-,CAN,-,73,192,2002,CHI,2,24,54
+18,Jonathan Ericsson,DET,D,35,1984-03-02,Karlskrona,-,SWE,-,76,218,2002,DET,9,31,291
+19,Eric Staal,MIN,C,35,1984-10-29,Thunder Bay,-,CAN,-,76,206,2003,CAR,1,2,2
+20,Ryan Suter,MIN,D,35,1985-01-21,Madison,-,USA,-,74,206,2003,NSH,1,7,7
+21,Braydon Coburn,T.B,D,34,1985-02-27,Shaunavon,-,CAN,-,77,223,2003,ATL,1,8,8
+22,Jeff Carter,L.A,C,35,1985-01-01,London,-,CAN,-,75,219,2003,PHI,1,11,11
+23,Dustin Brown,L.A,"L, R",35,1984-11-04,Ithaca,-,USA,-,72,210,2003,L.A,1,13,13
+24,Brent Seabrook,CHI,D,34,1985-04-20,Richmond,-,CAN,-,75,220,2003,CHI,1,14,14
+25,Zach Parise,MIN,L,35,1984-07-28,Minneapolis,-,USA,-,71,195,2003,N.J,1,17,17
+26,Ryan Getzlaf,ANA,C,34,1985-05-10,Regina,-,CAN,-,76,228,2003,ANA,1,19,19
+27,Brent Burns,S.J,D,34,1985-03-09,Barrie,-,CAN,-,77,230,2003,MIN,1,20,20
+28,Brian Boyle,FLA,C,35,1984-12-18,Hingham,-,USA,-,78,245,2003,L.A,1,26,26
+29,Corey Perry,DAL,R,34,1985-05-16,Peterborough,-,CAN,-,75,205,2003,ANA,1,28,28
+30,Loui Eriksson,VAN,L,34,1985-07-17,Gothenburg,-,SWE,-,74,179,2003,DAL,2,3,33
+31,Patrice Bergeron,BOS,C,34,1985-07-24,Ancienne-Lorette,-,CAN,-,73,195,2003,BOS,2,15,45
+32,Shea Weber,MTL,D,34,1985-08-14,Sicamous,-,CAN,-,76,230,2003,NSH,2,19,49
+33,David Backes,BOS,R,35,1984-05-01,Minneapolis,-,USA,-,75,215,2003,STL,2,32,62
+34,Brad Richardson,ARI,"C, R",35,1985-02-04,Belleville,-,CAN,-,72,190,2003,COL,5,27,163
+35,Nate Thompson,MTL,C,35,1984-10-05,Anchorage,-,USA,-,72,205,2003,BOS,6,16,183
+36,Joe Pavelski,DAL,C,35,1984-07-11,Plover,-,USA,-,71,195,2003,S.J,7,8,205
+37,Mark Giordano,CGY,D,36,1983-10-03,Toronto,-,CAN,-,72,200,-,-,-,-,-
+38,Alex Ovechkin,WSH,L,34,1985-09-17,Moscow,-,RUS,-,75,236,2004,WSH,1,1,1
+39,Evgeni Malkin,PIT,C,33,1986-07-31,Magnitogorsk,-,RUS,-,75,195,2004,PIT,1,2,2
+40,Andrew Ladd,NYI,L,34,1985-12-12,Maple Ridge,-,CAN,-,75,192,2004,CAR,1,4,4
+41,Blake Wheeler,WPG,R,33,1986-08-31,Plymouth,-,USA,-,77,225,2004,PHX,1,5,5
+42,Alexander Radulov,DAL,R,33,1986-07-05,Nizhny Tagil,-,RUS,-,73,205,2004,NSH,1,15,15
+43,Travis Zajac,N.J,C,34,1985-05-13,Winnipeg,-,CAN,-,74,185,2004,N.J,1,20,20
+44,Mike Green,DET,D,34,1985-10-12,Calgary,-,CAN,-,73,210,2004,WSH,1,29,29
+45,Blake Comeau,DAL,L,33,1986-02-18,Meadow Lake,-,CAN,-,73,200,2004,NYI,2,17,47
+46,Carl Soderberg,ARI,C,34,1985-10-12,Malmö,-,SWE,-,75,210,2004,STL,2,19,49
+47,Alex Goligoski,ARI,D,34,1985-07-30,Grand Rapids,-,USA,-,71,185,2004,PIT,2,31,61
+48,David Krejci,BOS,C,33,1986-04-28,Sternberk,-,CZE,-,72,188,2004,BOS,2,33,63
+49,Andrej Sekera,DAL,D,33,1986-06-08,Bojnice,-,SVK,-,72,195,2004,BUF,3,6,71
+50,Alexander Edler,VAN,D,33,1986-04-21,Ostersund,-,SWE,-,75,212,2004,VAN,3,26,91
+51,Roman Polak,DAL,D,33,1986-04-28,Ostrava,-,CZE,-,74,240,2004,STL,6,17,180
+52,Troy Brouwer,STL,R,34,1985-08-17,Vancouver,-,CAN,-,75,213,2004,CHI,7,21,214
+53,Paul Stastny,VGK,C,34,1985-12-27,Quebec City,-,CAN,-,72,193,2005,COL,2,14,44
+54,Sidney Crosby,PIT,C,32,1987-08-07,Cole Harbour,-,CAN,-,71,200,2005,PIT,1,1,1
+55,Bobby Ryan,OTT,R,32,1987-03-17,Cherry Hill,-,USA,-,74,208,2005,ANA,1,2,2
+56,Jack Johnson,PIT,D,33,1987-01-13,Indianapolis,-,USA,-,73,227,2005,CAR,1,3,3
+57,Anze Kopitar,L.A,C,32,1987-08-24,Jesenice,-,SVN,-,75,225,2005,L.A,1,11,11
+58,Marc Staal,NYR,D,33,1987-01-13,Thunder Bay,-,CAN,-,76,209,2005,NYR,1,12,12
+59,T.J. Oshie,WSH,R,33,1986-12-23,Everett,-,USA,-,71,195,2005,STL,1,24,24
+60,Andrew Cogliano,DAL,C,32,1987-06-14,Toronto,-,CAN,-,70,175,2005,EDM,1,25,25
+61,Matt Niskanen,PHI,D,33,1986-12-06,Virginia,-,USA,-,73,203,2005,DAL,1,28,28
+62,James Neal,EDM,L,32,1987-09-03,Whitby,-,CAN,-,74,212,2005,DAL,2,3,33
+63,Marc-Edouard Vlasic,S.J,D,32,1987-03-30,Montreal,-,CAN,-,73,205,2005,S.J,2,5,35
+64,Justin Abdelkader,DET,L,32,1987-02-25,Muskegon,-,USA,-,74,213,2005,DET,2,12,42
+65,Kris Letang,PIT,D,32,1987-04-24,Montreal,-,CAN,-,72,201,2005,PIT,3,1,62
+66,Kris Russell,EDM,D,32,1987-05-02,Caroline,-,CAN,-,70,170,2005,CBJ,3,6,67
+67,Keith Yandle,FLA,D,33,1986-09-09,Boston,-,USA,-,73,192,2005,PHX,4,14,105
+68,Vladimir Sobotka,BUF,C,32,1987-07-02,Trebic,-,CZE,-,70,191,2005,BOS,4,15,106
+69,Niklas Hjalmarsson,ARI,D,32,1987-06-06,Eksjo,-,SWE,-,75,197,2005,CHI,4,17,108
+70,Darren Helm,DET,"C, L",33,1987-01-21,St. Andrews,-,CAN,-,72,192,2005,DET,5,7,132
+71,Nathan Gerbe,CBJ,C,32,1987-07-24,Oxford,-,USA,-,64,169,2005,BUF,5,17,142
+72,Ryan Reaves,VGK,R,33,1987-01-20,Winnipeg,-,CAN,-,73,225,2005,STL,5,31,156
+73,Anton Stralman,FLA,D,33,1986-08-01,Tibro,-,SWE,-,71,186,2005,TOR,7,22,216
+74,Patric Hornqvist,PIT,R,33,1987-01-01,Sollentuna,-,SWE,-,71,189,2005,NSH,7,36,230
+75,Andy Greene,N.J,D,37,1982-10-30,Trenton,-,USA,-,71,190,-,-,-,-,-
+76,Bryan Little,WPG,C,32,1987-11-12,Edmonton,-,CAN,-,72,191,2006,ATL,1,12,12
+77,Alex Biega,DET,D,31,1988-04-04,Montreal,-,CAN,-,70,199,2006,BUF,5,24,147
+78,Brad Marchand,BOS,"C, L",31,1988-05-11,Halifax,-,CAN,-,69,181,2006,BOS,3,8,71
+79,Nick Foligno,CBJ,L,32,1987-10-31,Buffalo,-,USA,-,72,208,2006,OTT,1,28,28
+80,Erik Johnson,COL,D,31,1988-03-21,Bloomington,-,USA,-,76,225,2006,STL,1,1,1
+81,Kyle Okposo,BUF,R,31,1988-04-16,St. Paul,-,USA,-,72,216,2006,NYI,1,7,7
+82,Trevor Lewis,L.A,C,33,1987-01-08,Salt Lake City,-,USA,-,73,202,2006,L.A,1,17,17
+83,Leo Komarov,NYI,"C, R",33,1987-01-23,Narva,-,EST,-,71,209,2006,TOR,6,27,180
+84,Milan Lucic,CGY,L,31,1988-06-07,Vancouver,-,CAN,-,75,231,2006,BOS,2,20,50
+85,Chris Stewart,PHI,R,32,1987-10-30,Toronto,-,CAN,-,74,242,2006,COL,1,18,18
+86,Cal Clutterbuck,NYI,R,32,1987-11-18,Welland,-,CAN,-,71,216,2006,MIN,3,9,72
+87,Jeff Petry,MTL,D,32,1987-12-09,Ann Arbor,-,USA,-,75,201,2006,EDM,2,15,45
+88,Claude Giroux,PHI,"C, R",32,1988-01-12,Hearst,-,CAN,-,71,185,2006,PHI,1,22,22
+89,Jordan Staal,CAR,C,31,1988-09-10,Thunder Bay,-,CAN,-,76,220,2006,PIT,1,2,2
+90,Derick Brassard,NYI,C,32,1987-09-22,Hull,-,CAN,-,73,202,2006,CBJ,1,6,6
+91,Michael Grabner,ARI,"L, R",32,1987-10-05,Villach,-,AUT,-,73,188,2006,VAN,1,14,14
+92,Phil Kessel,ARI,"C, R",32,1987-10-02,Madison,-,USA,-,72,202,2006,BOS,1,5,5
+93,Korbinian Holzer,ANA,D,31,1988-02-16,Munich,-,DEU,-,75,213,2006,TOR,4,18,111
+94,Nicklas Backstrom,WSH,C,32,1987-11-23,Gävle,-,SWE,-,73,206,2006,WSH,1,4,4
+95,Michael Frolik,"BUF, CGY",R,31,1988-02-17,Kladno,-,CZE,-,73,190,2006,FLA,1,10,10
+96,Artem Anisimov,OTT,C,31,1988-05-24,Yaroslavl,-,RUS,-,76,199,2006,NYR,2,24,54
+97,Jonathan Toews,CHI,C,31,1988-04-29,Winnipeg,-,CAN,-,74,201,2006,CHI,1,3,3
+98,Mathieu Perreault,WPG,"C, L",32,1988-01-05,Drummondville,-,CAN,-,70,188,2006,WSH,6,24,177
+99,Mark Letestu,WPG,C,35,1985-02-04,Elk Point,-,CAN,-,70,195,-,-,-,-,-
+100,Alex Killorn,T.B,"C, L",30,1989-09-14,Halifax,-,CAN,-,73,197,2007,T.B,3,16,77
+101,Jamie Benn,DAL,L,30,1989-07-18,Victoria,-,CAN,-,74,210,2007,DAL,5,8,129
+102,Steven Kampfer,BOS,D,31,1988-09-24,Ann Arbor,-,USA,-,71,198,2007,ANA,4,2,93
+103,Paul Carey,BOS,C,31,1988-09-24,Boston,-,USA,-,73,200,2007,COL,5,14,135
+104,Nick Bonino,NSH,C,31,1988-04-20,Hartford,-,USA,-,73,196,2007,S.J,6,22,173
+105,Ian Cole,COL,D,30,1989-02-21,Ann Arbor,-,USA,-,73,225,2007,STL,1,18,18
+106,Justin Braun,PHI,D,33,1987-02-10,Minneapolis,-,USA,-,74,205,2007,S.J,7,20,201
+107,Kevin Shattenkirk,T.B,D,31,1989-01-29,New Rochelle,-,USA,-,72,203,2007,COL,1,14,14
+108,Pat Maroon,T.B,L,31,1988-04-23,St. Louis,-,USA,-,75,236,2007,PHI,6,10,161
+109,James van Riemsdyk,PHI,L,30,1989-05-04,Middletown,-,USA,-,75,217,2007,PHI,1,2,2
+110,Paul Byron,MTL,L,30,1989-04-27,Ottawa,-,CAN,-,69,158,2007,BUF,6,28,179
+111,Sam Gagner,EDM,C,30,1989-08-10,London,-,CAN,-,71,200,2007,EDM,1,6,6
+112,Logan Couture,S.J,C,30,1989-03-28,Guelph,-,CAN,-,73,200,2007,S.J,1,9,9
+113,P.K. Subban,N.J,D,30,1989-05-13,Toronto,-,CAN,-,72,210,2007,MTL,2,13,43
+114,Riley Nash,CBJ,C,30,1989-05-09,Consort,-,CAN,-,73,185,2007,EDM,1,21,21
+115,Kyle Turris,NSH,C,30,1989-08-14,New Westminster,-,CAN,-,73,190,2007,PHX,1,3,3
+116,Brendan Smith,NYR,D,31,1989-02-08,Mimico,-,CAN,-,74,200,2007,DET,1,27,27
+117,Brandon Sutter,VAN,C,30,1989-02-14,Huntington,-,USA,-,75,190,2007,CAR,1,11,11
+118,Colton Sceviour,FLA,C,30,1989-04-20,Red Deer,-,CAN,-,72,190,2007,DAL,4,21,112
+119,David Perron,STL,L,31,1988-05-28,Sherbrooke,-,CAN,-,72,200,2007,STL,1,26,26
+120,Carl Gunnarsson,STL,D,33,1986-11-09,Orebro,-,SWE,-,74,198,2007,TOR,7,13,194
+121,Yannick Weber,NSH,D,31,1988-09-23,Morges,-,CHE,-,71,200,2007,MTL,3,12,73
+122,Patrick Kane,CHI,R,31,1988-11-19,Buffalo,-,USA,-,71,177,2007,CHI,1,1,1
+123,Robert Bortuzzo,STL,D,30,1989-03-18,Thunder Bay,-,CAN,-,76,216,2007,PIT,3,17,78
+124,Evgenii Dadonov,FLA,R,30,1989-03-12,Chelyabinsk,-,RUS,-,71,185,2007,FLA,3,10,71
+125,Mikael Backlund,CGY,C,30,1989-03-17,Vasteras,-,SWE,-,73,200,2007,CGY,1,24,24
+126,Ryan McDonagh,T.B,D,30,1989-06-13,St. Paul,-,USA,-,73,214,2007,MTL,1,12,12
+127,Max Pacioretty,VGK,L,31,1988-11-20,New Canaan,-,USA,-,74,215,2007,MTL,1,22,22
+128,Jakub Voracek,PHI,R,30,1989-08-15,Kladno,-,CZE,-,74,214,2007,CBJ,1,7,7
+129,Jake Muzzin,TOR,D,30,1989-02-21,Woodstock,-,CAN,-,75,217,2007,PIT,5,20,141
+130,Alec Martinez,L.A,D,32,1987-07-26,Rochester Hills,-,USA,-,73,209,2007,L.A,4,4,95
+131,Carl Hagelin,WSH,L,31,1988-08-23,Sodertalje,-,SWE,-,71,185,2007,NYR,6,17,168
+132,Lars Eller,WSH,C,30,1989-05-08,Rodovre,-,DNK,-,74,205,2007,STL,1,13,13
+133,Wayne Simmonds,N.J,R,31,1988-08-26,Scarborough,-,CAN,-,74,185,2007,L.A,2,31,61
+134,Nick Holden,VGK,D,32,1987-05-15,St. Albert,-,CAN,-,76,212,-,-,-,-,-
+135,Jason Demers,ARI,D,31,1988-06-09,Dorval,-,CAN,-,73,195,2008,S.J,7,5,186
+136,Micheal Haley,NYR,C,33,1986-03-30,Guelph,-,CAN,-,71,202,-,-,-,-,-
+137,Zack Smith,CHI,C,31,1988-04-05,Maple Creek,-,CAN,-,74,208,2008,OTT,3,18,79
+138,Jay Beagle,VAN,C,34,1985-10-16,Calgary,-,CAN,-,75,210,-,-,-,-,-
+139,Drew Doughty,L.A,D,30,1989-12-08,London,-,CAN,-,73,202,2008,L.A,1,2,2
+140,Steven Stamkos,T.B,C,30,1990-02-07,Markham,-,CAN,-,73,194,2008,T.B,1,1,1
+141,Alex Pietrangelo,STL,D,30,1990-01-18,King City,-,CAN,-,75,210,2008,STL,1,4,4
+142,Zach Bogosian,BUF,D,29,1990-07-15,Massena,-,USA,-,75,226,2008,ATL,1,3,3
+143,Luke Schenn,T.B,D,30,1989-11-02,Saskatoon,-,CAN,-,74,227,2008,TOR,1,5,5
+144,Colin Wilson,COL,C,30,1989-10-20,Greenwich,-,USA,-,73,215,2008,NSH,1,7,7
+145,Mikkel Boedker,OTT,L,30,1989-12-16,Brondby,-,DNK,-,72,207,2008,PHX,1,8,8
+146,Josh Bailey,NYI,"C, R",30,1989-10-02,Bowmanville,-,CAN,-,73,200,2008,NYI,1,9,9
+147,Tyler Myers,VAN,D,30,1990-02-01,Houston,-,USA,-,80,229,2008,BUF,1,12,12
+148,Erik Karlsson,S.J,D,29,1990-05-31,Landsbro,-,SWE,-,72,190,2008,OTT,1,15,15
+149,Luca Sbisa,WPG,D,30,1990-01-30,Ozieri,-,ITA,-,74,206,2008,PHI,1,19,19
+150,Jake Gardiner,CAR,D,29,1990-07-04,Minnetonka,-,USA,-,74,203,2008,ANA,1,17,17
+151,Michael Del Zotto,ANA,D,29,1990-06-24,Stouffville,-,CAN,-,72,195,2008,NYR,1,20,20
+152,Jordan Eberle,NYI,"C, R",29,1990-05-15,Regina,-,CAN,-,71,187,2008,EDM,1,22,22
+153,Tyler Ennis,OTT,"C, R",30,1989-10-06,Edmonton,-,CAN,-,69,161,2008,BUF,1,26,26
+154,John Carlson,WSH,D,30,1990-01-10,Natick,-,USA,-,75,217,2008,WSH,1,27,27
+155,Cody Goloubef,OTT,D,30,1989-11-30,Mississauga,-,CAN,-,73,190,2008,CBJ,2,7,37
+156,Roman Josi,NSH,D,29,1990-06-01,Bern,-,CHE,-,73,201,2008,NSH,2,8,38
+157,Justin Schultz,PIT,D,29,1990-07-06,Kelowna,-,CAN,-,74,193,2008,ANA,2,13,43
+158,Aaron Ness,ARI,D,29,1990-05-18,Roseau,-,USA,-,70,184,2008,NYI,2,10,40
+159,Travis Hamonic,CGY,D,29,1990-08-16,St. Malo,-,CAN,-,74,205,2008,NYI,2,23,53
+160,Derek Stepan,ARI,C,29,1990-06-18,Hastings,-,USA,-,72,196,2008,NYR,2,21,51
+161,Marco Scandella,"BUF, MTL",D,29,1990-02-23,Montreal,-,CAN,-,75,212,2008,MIN,2,25,55
+162,Michael Stone,CGY,D,29,1990-06-07,Winnipeg,-,CAN,-,75,210,2008,PHX,3,8,69
+163,Adam Henrique,ANA,C,30,1990-02-06,Brantford,-,CAN,-,72,188,2008,N.J,3,21,82
+164,Dale Weise,MTL,R,31,1988-08-05,Winnipeg,-,CAN,-,74,196,2008,NYR,4,20,111
+165,TJ Brodie,CGY,D,29,1990-06-07,Chatham,-,CAN,-,73,185,2008,CGY,4,23,114
+166,Gustav Nyquist,CBJ,C,30,1989-09-01,Halmstad,-,SWE,-,71,179,2008,DET,4,30,121
+167,Derek Grant,ANA,C,29,1990-04-20,Abbotsford,-,CAN,-,75,206,2008,OTT,4,28,119
+168,Matt Calvert,COL,L,30,1989-12-24,Brandon,-,CAN,-,71,186,2008,CBJ,5,6,127
+169,Greg Pateryn,MIN,D,29,1990-06-20,Sterling Heights,-,USA,-,75,220,2008,TOR,5,7,128
+170,Mark Borowiecki,OTT,D,30,1989-07-12,Ottawa,-,CAN,-,73,204,2008,OTT,5,18,139
+171,Matt Martin,NYI,L,30,1989-05-08,Windsor,-,CAN,-,75,220,2008,NYI,5,27,148
+172,Cam Atkinson,CBJ,R,30,1989-06-05,Riverside,-,USA,-,68,175,2008,CBJ,6,6,157
+173,Jared Spurgeon,MIN,D,30,1989-11-29,Edmonton,-,CAN,-,69,167,2008,NYI,6,5,156
+174,Mark Barberio,COL,D,29,1990-03-23,Montreal,-,CAN,-,73,200,2008,T.B,6,1,152
+175,Luke Witkowski,T.B,R,29,1990-04-14,Holland,-,USA,-,74,217,2008,T.B,6,9,160
+176,Zac Rinaldo,CGY,C,29,1990-06-15,Mississauga,-,CAN,-,70,192,2008,PHI,6,27,178
+177,Dalton Prout,S.J,D,29,1990-03-13,Kingsville,-,CAN,-,75,215,2010,CBJ,6,4,154
+178,Jordie Benn,VAN,D,32,1987-07-26,Victoria,-,CAN,-,74,199,-,-,-,-,-
+179,Antoine Roussel,VAN,L,30,1989-11-21,Roubaix,-,FRA,-,71,199,-,-,-,-,-
+180,Tyler Johnson,T.B,C,29,1990-07-29,Spokane,-,USA,-,68,182,-,-,-,-,-
+181,Brian Lashoff,DET,D,29,1990-07-16,Albany,-,USA,-,75,213,-,-,-,-,-
+182,Mike Hoffman,FLA,"C, L",30,1989-11-24,Kitchener,-,CAN,-,72,182,2009,OTT,5,9,130
+183,Tyler Bozak,STL,C,33,1986-03-19,Regina,-,CAN,-,73,199,-,-,-,-,-
+184,Marcus Johansson,BUF,L,29,1990-10-06,Landskrona,-,SWE,-,73,205,2009,WSH,1,24,24
+185,Kyle Palmieri,N.J,"C, R",29,1991-02-01,Smithtown,-,USA,-,71,185,2009,ANA,1,26,26
+186,Ryan O'Reilly,STL,C,29,1991-02-07,Clinton,-,CAN,-,73,216,2009,COL,2,3,33
+187,Kyle Clifford,"L.A, TOR",L,29,1991-01-13,Ayr,-,CAN,-,74,211,2009,L.A,2,5,35
+188,Alex Chiasson,EDM,R,29,1990-10-01,Montreal,-,CAN,-,76,208,2009,DAL,2,8,38
+189,Jakob Silfverberg,ANA,R,29,1990-10-13,Gävle,-,SWE,-,74,208,2009,OTT,2,9,39
+190,John Tavares,TOR,C,29,1990-09-20,Mississauga,-,CAN,-,73,215,2009,NYI,1,1,1
+191,Victor Hedman,T.B,D,29,1990-12-18,Ornskoldsvik,-,SWE,-,78,229,2009,T.B,1,2,2
+192,Matt Duchene,NSH,C,29,1991-01-16,Haliburton,-,CAN,-,71,195,2009,COL,1,3,3
+193,Evander Kane,S.J,L,28,1991-08-02,Vancouver,-,CAN,-,74,210,2009,ATL,1,4,4
+194,Brayden Schenn,STL,C,28,1991-08-22,Saskatoon,-,CAN,-,73,200,2009,L.A,1,5,5
+195,Oliver Ekman-Larsson,ARI,D,28,1991-07-17,Karlskrona,-,SWE,-,74,200,2009,PHX,1,6,6
+196,Nazem Kadri,COL,C,29,1990-10-06,London,-,CAN,-,72,192,2009,TOR,1,7,7
+197,Ryan Ellis,NSH,D,29,1991-01-03,Hamilton,-,CAN,-,70,180,2009,NSH,1,11,11
+198,Calvin de Haan,CHI,D,28,1991-05-09,Carp,-,CAN,-,73,195,2009,NYI,1,12,12
+199,Zack Kassian,EDM,R,29,1991-01-24,Windsor,-,CAN,-,75,211,2009,BUF,1,13,13
+200,Dmitry Kulikov,WPG,D,29,1990-10-29,Lipetsk,-,RUS,-,73,204,2009,FLA,1,14,14
+201,Nick Leddy,NYI,D,28,1991-03-20,Eden Prairie,-,USA,-,72,207,2009,MIN,1,16,16
+202,Chris Kreider,NYR,"C, L",28,1991-04-30,Boxford,-,USA,-,75,217,2009,NYR,1,19,19
+203,John Moore,BOS,D,29,1990-11-19,Winnetka,-,USA,-,74,210,2009,CBJ,1,21,21
+204,Brayden McNabb,VGK,D,29,1991-01-21,Davidson,-,CAN,-,76,213,2009,BUF,3,5,66
+205,Reilly Smith,VGK,R,28,1991-04-01,Toronto,-,CAN,-,72,183,2009,DAL,3,8,69
+206,Tomas Tatar,MTL,L,29,1990-12-01,Ilava,-,SVK,-,70,183,2009,DET,2,30,60
+207,Tyson Barrie,TOR,D,28,1991-07-26,Victoria,-,CAN,-,70,197,2009,COL,3,3,64
+208,Dmitry Orlov,WSH,D,28,1991-07-23,Novokuznetsk,-,RUS,-,71,208,2009,WSH,2,25,55
+209,Brandon Pirri,VGK,C,28,1991-04-10,Toronto,-,CAN,-,72,180,2009,CHI,2,29,59
+210,Brian Dumoulin,PIT,D,28,1991-09-06,Biddeford,-,USA,-,76,207,2009,CAR,2,21,51
+211,Richard Panik,WSH,R,29,1991-02-07,Martin,-,SVK,-,73,202,2009,T.B,2,22,52
+212,Mattias Ekholm,NSH,D,29,1990-05-24,Borlange,-,SWE,-,76,215,2009,NSH,4,11,102
+213,Marcus Foligno,MIN,L,28,1991-08-10,Buffalo,-,USA,-,75,224,2009,BUF,4,13,104
+214,Sami Vatanen,N.J,D,28,1991-06-03,Jyväskylä,-,FIN,-,70,185,2009,ANA,4,15,106
+215,Jordan Szwarz,OTT,R,28,1991-05-14,Burlington,-,CAN,-,71,192,2009,PHX,4,6,97
+216,Craig Smith,NSH,"C, R",30,1989-09-05,Madison,-,USA,-,73,208,2009,NSH,4,7,98
+217,Casey Cizikas,NYI,C,28,1991-02-27,Toronto,-,CAN,-,71,195,2009,NYI,4,1,92
+218,David Savard,CBJ,D,29,1990-10-22,St. Hyacinthe,-,CAN,-,74,229,2009,CBJ,4,3,94
+219,Nicolas Deslauriers,ANA,L,28,1991-02-22,LaSalle,-,CAN,-,73,219,2009,L.A,3,23,84
+220,Cody Eakin,VGK,C,28,1991-05-24,Winnipeg,-,CAN,-,72,183,2009,WSH,3,24,85
+221,Kevin Connauton,COL,D,29,1990-02-23,Edmonton,-,CAN,-,74,205,2009,VAN,3,22,83
+222,Gabriel Dumont,MIN,C,29,1990-10-06,Ville Degelis,-,CAN,-,70,191,2009,MTL,5,18,139
+223,Gabriel Bourque,WPG,L,29,1990-09-23,Rimouski,-,CAN,-,70,206,2009,NSH,5,11,132
+224,Ben Chiarot,MTL,D,28,1991-05-09,Hamilton,-,CAN,-,75,225,2009,ATL,4,29,120
+225,Erik Haula,CAR,L,28,1991-03-23,Pori,-,FIN,-,72,193,2009,MIN,7,1,182
+226,Anders Lee,NYI,"C, L",29,1990-07-03,Edina,-,USA,-,75,231,2009,NYI,6,1,152
+227,Nick Jensen,WSH,D,29,1990-09-21,St. Paul,-,USA,-,72,196,2009,DET,5,29,150
+228,Nic Dowd,WSH,C,29,1990-05-27,Huntsville,-,USA,-,74,195,2009,L.A,7,17,198
+229,Justin Dowling,DAL,C,29,1990-10-01,Calgary,-,CAN,-,70,180,-,-,-,-,-
+230,Brandon Manning,EDM,D,29,1990-06-04,Prince George,-,CAN,-,73,205,-,-,-,-,-
+231,Brenden Dillon,S.J,D,29,1990-11-13,New Westminster,-,CAN,-,76,225,-,-,-,-,-
+232,Andrew Agozzino,PIT,L,29,1991-01-03,Kleinburg,-,CAN,-,70,187,-,-,-,-,-
+233,Radko Gudas,WSH,D,29,1990-06-05,Prague,-,CZE,-,72,205,2010,T.B,3,6,66
+234,Matt Irwin,NSH,D,32,1987-11-29,Victoria,-,CAN,-,73,207,-,-,-,-,-
+235,Christopher Tanev,VAN,D,30,1989-12-20,Toronto,-,CAN,-,74,197,-,-,-,-,-
+236,Mats Zuccarello,MIN,"C, R",32,1987-09-01,Oslo,-,NOR,-,68,178,-,-,-,-,-
+237,Calle Jarnkrok,NSH,C,28,1991-09-25,Gävle,-,SWE,-,71,186,2010,DET,2,21,51
+238,Martin Marincin,TOR,D,27,1992-02-18,Kosice,-,SVK,-,77,217,2010,EDM,2,16,46
+239,Justin Holl,TOR,D,28,1992-01-30,Tonka Bay,-,USA,-,75,210,2010,CHI,2,24,54
+240,Jason Zucker,"MIN, PIT",L,28,1992-01-16,Newport Beach,-,USA,-,71,192,2010,MIN,2,29,59
+241,Tyler Toffoli,L.A,"C, R",27,1992-04-24,Scarborough,-,CAN,-,72,197,2010,L.A,2,17,47
+242,Johan Larsson,BUF,"C, L",27,1992-07-25,Lau,-,SWE,-,71,204,2010,MIN,2,26,56
+243,Stephen Johns,DAL,D,27,1992-04-18,Ellwood City,-,USA,-,76,225,2010,CHI,2,30,60
+244,Greg McKegg,NYR,C,27,1992-06-17,St. Thomas,-,CAN,-,72,192,2010,TOR,3,2,62
+245,Jordan Weal,MTL,C,27,1992-04-15,North Vancouver,-,CAN,-,70,180,2010,L.A,3,10,70
+246,Evgeny Kuznetsov,WSH,C,27,1992-05-19,Chelyabinsk,-,RUS,-,74,197,2010,WSH,1,26,26
+247,Charlie Coyle,BOS,C,27,1992-03-02,E. Weymouth,-,USA,-,75,220,2010,S.J,1,28,28
+248,Patrik Nemeth,DET,D,28,1992-02-08,Stockholm,-,SWE,-,75,228,2010,DAL,2,11,41
+249,Dalton Smith,BUF,L,27,1992-06-30,Markham,-,CAN,-,74,206,2010,CBJ,2,4,34
+250,Jon Merrill,VGK,D,28,1992-02-03,Oklahoma City,-,USA,-,75,195,2010,N.J,2,8,38
+251,Tyler Pitlick,PHI,C,28,1991-11-01,Minneapolis,-,USA,-,74,200,2010,EDM,2,1,31
+252,Justin Faulk,STL,D,27,1992-03-20,South St.Paul,-,USA,-,72,217,2010,CAR,2,7,37
+253,Brock Nelson,NYI,C,28,1991-10-15,Warroad,-,USA,-,75,212,2010,NYI,1,30,30
+254,Nick Bjugstad,PIT,C,27,1992-07-17,Minneapolis,-,USA,-,78,215,2010,FLA,1,19,19
+255,Derek Forbort,L.A,D,27,1992-03-04,Duluth,-,USA,-,76,219,2010,L.A,1,15,15
+256,Kevin Hayes,PHI,"C, R",27,1992-05-08,Dorchester,-,USA,-,77,216,2010,CHI,1,24,24
+257,Cam Fowler,ANA,D,28,1991-12-05,Windsor,-,CAN,-,73,207,2010,ANA,1,12,12
+258,Vladimir Tarasenko,STL,R,28,1991-12-13,Yaroslavl,-,RUS,-,72,225,2010,STL,1,16,16
+259,Austin Watson,NSH,L,28,1992-01-13,Ann Arbor,-,USA,-,76,204,2010,NSH,1,18,18
+260,Jaden Schwartz,STL,"C, L",27,1992-06-25,Wilcox,-,CAN,-,70,190,2010,STL,1,14,14
+261,Riley Sheahan,EDM,C,28,1991-12-07,St. Catharines,-,CAN,-,75,214,2010,DET,1,21,21
+262,Chris Wagner,BOS,R,28,1991-05-27,Walpole,-,USA,-,72,198,2010,ANA,5,2,122
+263,Jeff Skinner,BUF,"C, L",27,1992-05-16,Toronto,-,CAN,-,71,195,2010,CAR,1,7,7
+264,Zach Hyman,TOR,"C, L",27,1992-06-09,Toronto,-,CAN,-,73,211,2010,FLA,5,3,123
+265,Erik Gudbranson,"ANA, PIT",D,28,1992-01-07,Ottawa,-,CAN,-,77,217,2010,FLA,1,3,3
+266,Taylor Hall,"ARI, N.J",L,28,1991-11-14,Calgary,-,CAN,-,73,205,2010,EDM,1,1,1
+267,Brett Connolly,FLA,R,27,1992-05-02,Campbell River,-,CAN,-,75,192,2010,T.B,1,6,6
+268,Ryan Johansen,NSH,C,27,1992-07-31,Vancouver,-,CAN,-,75,218,2010,CBJ,1,4,4
+269,Tyler Seguin,DAL,C,28,1992-01-31,Brampton,-,CAN,-,73,200,2010,BOS,1,2,2
+270,Dylan McIlrath,DET,D,27,1992-04-20,Winnipeg,-,CAN,-,77,231,2010,NYR,1,10,10
+271,Mark Pysyk,FLA,D,28,1992-01-11,Sherwood Park,-,CAN,-,73,196,2010,BUF,1,23,23
+272,Jarred Tinordi,NSH,D,27,1992-02-20,Burnsville,-,USA,-,78,230,2010,MTL,1,22,22
+273,Mikael Granlund,NSH,C,27,1992-02-26,Oulu,-,FIN,-,70,185,2010,MIN,1,9,9
+274,Nino Niederreiter,CAR,R,27,1992-09-08,Chur,-,CHE,-,74,218,2010,NYI,1,5,5
+275,Joakim Nordstrom,BOS,C,27,1992-02-25,Stockholm,-,SWE,-,73,194,2010,CHI,3,30,90
+276,Michael Chaput,ARI,C,27,1992-04-09,Ile Bizard,-,CAN,-,74,199,2010,PHI,3,29,89
+277,Bryan Rust,PIT,R,27,1992-05-11,Pontiac,-,USA,-,71,192,2010,PIT,3,20,80
+278,Joonas Donskoi,COL,R,27,1992-04-13,Raahe,-,FIN,-,72,190,2010,FLA,4,9,99
+279,Tom Kuhnhackl,NYI,R,28,1992-01-21,Landshut,-,DEU,-,74,196,2010,PIT,4,20,110
+280,Marcus Sorensen,S.J,L,27,1992-04-07,Sodertalje,-,SWE,-,71,175,2010,OTT,4,16,106
+281,Tim Heed,S.J,D,29,1991-01-27,Gothenburg,-,SWE,-,72,180,2010,ANA,5,12,132
+282,Sam Carrick,ANA,C,28,1992-02-04,Markham,-,CAN,-,72,205,2010,TOR,5,24,144
+283,Brendan Gallagher,MTL,R,27,1992-05-06,Edmonton,-,CAN,-,69,184,2010,MTL,5,27,147
+284,Jesper Fast,NYR,R,28,1991-12-02,Nassjo,-,SWE,-,72,191,2010,NYR,6,7,157
+285,Kevin Gravel,TOR,D,27,1992-03-06,Kingsford,-,USA,-,76,205,2010,L.A,5,28,148
+286,Anthony Bitetto,WPG,D,29,1990-07-15,Island Park,-,USA,-,73,210,2010,NSH,6,18,168
+287,Brandon Davidson,CGY,D,28,1991-08-21,Taber,-,CAN,-,74,208,2010,EDM,6,12,162
+288,Zach Trotman,PIT,D,29,1990-08-26,Carmel,-,USA,-,75,217,2010,BOS,7,30,210
+289,John Klingberg,DAL,D,27,1992-08-14,Gothenburg,-,SWE,-,74,190,2010,DAL,5,11,131
+290,Micheal Ferland,VAN,L,27,1992-04-20,Swan River,-,CAN,-,74,217,2010,CGY,5,13,133
+291,Mark Stone,VGK,R,27,1992-05-13,Winnipeg,-,CAN,-,75,202,2010,OTT,6,28,178
+292,Michael Sgarbossa,WSH,C,27,1992-07-25,Campbellville,-,CAN,-,72,185,-,-,-,-,-
+293,Ben Street,N.J,C,33,1987-02-13,Coquitlam,-,CAN,-,71,190,-,-,-,-,-
+294,Taylor Fedun,DAL,D,31,1988-06-04,Edmonton,-,CAN,-,73,200,-,-,-,-,-
+295,Cory Conacher,T.B,C,30,1989-12-14,Burlington,-,CAN,-,68,185,-,-,-,-,-
+296,Brian Gibbons,CAR,C,31,1988-02-26,Braintree,-,USA,-,68,175,-,-,-,-,-
+297,Colin Blackwell,NSH,C,26,1993-03-28,Lawrence,-,USA,-,69,190,2011,S.J,7,13,193
+298,Matthew Peca,MTL,C,26,1993-04-27,Petawawa,-,CAN,-,68,182,2011,T.B,7,20,201
+299,Ryan Dzingel,CAR,C,27,1992-03-09,Wheaton,-,USA,-,72,190,2011,OTT,7,23,204
+300,Ondrej Palat,T.B,L,28,1991-03-28,Frydek-Mistek,-,CZE,-,72,194,2011,T.B,7,27,208
+301,Scott Wilson,BUF,L,27,1992-04-24,Oakville,-,CAN,-,71,177,2011,PIT,7,28,209
+302,Josh Manson,ANA,D,28,1991-10-07,Hinsdale,-,USA,-,75,224,2011,ANA,6,9,160
+303,Josh Archibald,EDM,R,27,1992-10-06,Regina,-,CAN,-,70,176,2011,PIT,6,23,174
+304,Travis Boyd,WSH,C,26,1993-09-14,Hopkins,-,USA,-,71,190,2011,WSH,6,26,177
+305,Dylan DeMelo,OTT,D,26,1993-05-01,London,-,CAN,-,73,191,2011,S.J,6,28,179
+306,Tyler Graovac,VAN,C,26,1993-04-27,Brampton,-,CAN,-,77,208,2011,MIN,7,10,191
+307,Johnny Gaudreau,CGY,L,26,1993-08-13,Salem,-,USA,-,69,165,2011,CGY,4,13,104
+308,Tobias Rieder,CGY,C,27,1993-01-10,Landshut,-,DEU,-,71,186,2011,EDM,4,23,114
+309,Nick Seeler,"CHI, MIN",D,26,1993-06-03,Eden Prairie,-,USA,-,74,201,2011,MIN,5,10,131
+310,Sean Kuraly,BOS,C,27,1993-01-20,Dublin,-,USA,-,74,213,2011,S.J,5,12,133
+311,Andrew Shaw,CHI,"C, R",28,1991-07-20,Belleville,-,CAN,-,71,182,2011,CHI,5,18,139
+312,Vincent Trocheck,FLA,C,26,1993-07-11,Pittsburgh,-,USA,-,70,183,2011,FLA,3,3,64
+313,T.J. Tynan,COL,C,27,1992-02-25,Orland Park,-,USA,-,68,165,2011,CBJ,3,5,66
+314,Adam Lowry,WPG,"C, L",26,1993-03-29,St. Louis,-,USA,-,77,210,2011,WPG,3,6,67
+315,Nick Cousins,MTL,C,26,1993-07-20,Belleville,-,CAN,-,71,183,2011,PHI,3,7,68
+316,Steven Fogarty,NYR,C,26,1993-04-19,Chambersburg,-,USA,-,75,208,2011,NYR,3,11,72
+317,Blake Coleman,N.J,C,28,1991-11-28,Plano,-,USA,-,71,200,2011,N.J,3,14,75
+318,Logan Shaw,WPG,R,27,1992-10-05,Glace Bay,-,CAN,-,75,208,2011,FLA,3,15,76
+319,Andy Andreoff,PHI,C,28,1991-05-17,Pickering,-,CAN,-,73,203,2011,L.A,3,19,80
+320,Nick Shore,"TOR, WPG",C,27,1992-09-26,Denver,-,USA,-,73,198,2011,L.A,3,21,82
+321,Alan Quine,CGY,C,26,1993-02-25,Belleville,-,CAN,-,72,203,2013,NYI,6,15,166
+322,Josh Leivo,VAN,L,26,1993-05-26,Innisfil,-,CAN,-,74,192,2011,TOR,3,25,86
+323,Jean-Gabriel Pageau,OTT,C,27,1992-11-11,Ottawa,-,CAN,-,70,180,2011,OTT,4,5,96
+324,Mike Reilly,"MTL, OTT",D,26,1993-07-13,Chicago,-,USA,-,74,200,2011,CBJ,4,7,98
+325,Rocco Grimaldi,NSH,"C, R",27,1993-02-08,Anaheim,-,USA,-,66,180,2011,FLA,2,3,33
+326,Scott Mayfield,NYI,D,27,1992-10-14,St. Louis,-,USA,-,76,223,2011,NYI,2,4,34
+327,Tomas Jurco,EDM,R,27,1992-12-28,Kosice,-,SVK,-,74,188,2011,DET,2,5,35
+328,Boone Jenner,CBJ,C,26,1993-06-15,Dorchester,-,CAN,-,74,208,2011,CBJ,2,7,37
+329,Victor Rask,MIN,C,26,1993-03-01,Leksand,-,SWE,-,74,193,2011,CAR,2,12,42
+330,Brandon Saad,CHI,L,27,1992-10-27,Pittsburgh,-,USA,-,73,206,2011,CHI,2,13,43
+331,Brett Ritchie,BOS,R,26,1993-07-01,Orangeville,-,CAN,-,75,220,2011,DAL,2,14,44
+332,Markus Granlund,EDM,C,26,1993-04-16,Oulu,-,FIN,-,72,180,2011,CGY,2,15,45
+333,Joel Edmundson,CAR,D,26,1993-06-28,Brandon,-,CAN,-,76,215,2011,STL,2,16,46
+334,Matt Nieto,COL,L,27,1992-11-05,Long Beach,-,USA,-,71,185,2011,S.J,2,17,47
+335,Xavier Ouellet,MTL,D,26,1993-07-29,Bayonne,-,FRA,-,73,193,2011,DET,2,18,48
+336,Miikka Salomaki,NSH,R,26,1993-03-09,Raahe,-,FIN,-,71,203,2011,NSH,2,22,52
+337,William Karlsson,VGK,C,27,1993-01-08,Marsta,-,SWE,-,73,195,2011,ANA,2,23,53
+338,Scott Harrington,CBJ,D,26,1993-03-10,Kingston,-,CAN,-,74,204,2011,PIT,2,24,54
+339,Nikita Kucherov,T.B,R,26,1993-06-17,Maykop,-,RUS,-,71,180,2011,T.B,2,28,58
+340,Ryan Nugent-Hopkins,EDM,C,26,1993-04-12,Burnaby,-,CAN,-,72,184,2011,EDM,1,1,1
+341,Gabriel Landeskog,COL,L,27,1992-11-23,Stockholm,-,SWE,-,73,215,2011,COL,1,2,2
+342,Jonathan Huberdeau,FLA,"C, L",26,1993-06-04,Saint-Jerome,-,CAN,-,73,202,2011,FLA,1,3,3
+343,Adam Larsson,EDM,D,27,1992-11-12,Skellefteå,-,SWE,-,75,208,2011,N.J,1,4,4
+344,Ryan Strome,NYR,C,26,1993-07-11,Mississauga,-,CAN,-,73,193,2011,NYI,1,5,5
+345,Mika Zibanejad,NYR,C,26,1993-04-18,Huddinge,-,SWE,-,74,208,2011,OTT,1,6,6
+346,Mark Scheifele,WPG,C,26,1993-03-15,Kitchener,-,CAN,-,75,207,2011,WPG,1,7,7
+347,Sean Couturier,PHI,C,27,1992-12-07,Phoenix,-,USA,-,75,211,2011,PHI,1,8,8
+348,Dougie Hamilton,CAR,D,26,1993-06-17,Toronto,-,CAN,-,78,229,2011,BOS,1,9,9
+349,Jonas Brodin,MIN,D,26,1993-07-12,Karlstad,-,SWE,-,73,194,2011,MIN,1,10,10
+350,Sven Baertschi,VAN,L,27,1992-10-05,Bern,-,CHE,-,71,190,2011,CGY,1,13,13
+351,Jamie Oleksiak,DAL,D,27,1992-12-21,Toronto,-,CAN,-,79,255,2011,DAL,1,14,14
+352,J.T. Miller,VAN,C,26,1993-03-14,East Palestine,-,USA,-,73,218,2011,NYR,1,15,15
+353,Joel Armia,MTL,R,26,1993-05-31,Pori,-,FIN,-,75,213,2011,BUF,1,16,16
+354,Nathan Beaulieu,WPG,D,27,1992-12-05,Strathroy,-,CAN,-,74,200,2011,MTL,1,17,17
+355,Oscar Klefbom,EDM,D,26,1993-07-20,Karlstad,-,SWE,-,75,216,2011,EDM,1,19,19
+356,Connor Murphy,CHI,D,26,1993-03-26,Dublin,-,USA,-,76,212,2011,PHX,1,20,20
+357,Stefan Noesen,"PIT, S.J",R,27,1993-02-12,Plano,-,USA,-,73,205,2011,OTT,1,21,21
+358,Phillip Danault,MTL,"C, L",26,1993-02-24,Victoriaville,-,CAN,-,73,201,2011,CHI,1,26,26
+359,Vladislav Namestnikov,"NYR, OTT","C, L",27,1992-11-22,Zhukovskiy,-,RUS,-,71,183,2011,T.B,1,27,27
+360,Rickard Rakell,ANA,"L, R",26,1993-05-05,Sundbyberg,-,SWE,-,74,196,2011,ANA,1,30,30
+361,Colin Miller,BUF,D,27,1992-10-29,Sault Ste. Marie,-,CAN,-,73,193,2012,L.A,5,30,151
+362,Jonathan Marchessault,VGK,C,29,1990-12-27,Cap-Rouge,-,CAN,-,69,180,-,-,-,-,-
+363,Barclay Goodrow,S.J,"C, R",26,1993-02-26,Toronto,-,CAN,-,74,215,-,-,-,-,-
+364,Brad Hunt,MIN,D,31,1988-08-24,Maple Ridge,-,CAN,-,69,176,-,-,-,-,-
+365,Torey Krug,BOS,D,28,1991-04-12,Livonia,-,USA,-,69,186,-,-,-,-,-
+366,Matt Tennyson,N.J,D,29,1990-04-23,Minneapolis,-,USA,-,74,205,-,-,-,-,-
+367,Luke Glendening,DET,C,30,1989-04-28,Grand Rapids,-,USA,-,71,191,-,-,-,-,-
+368,Yanni Gourde,T.B,C,28,1991-12-15,Saint-Narcisse,-,CAN,-,69,173,-,-,-,-,-
+369,Ryan Murray,CBJ,D,26,1993-09-27,Regina,-,CAN,-,73,206,2012,CBJ,1,2,2
+370,Alex Galchenyuk,"MIN, PIT",C,26,1994-02-12,Milwaukee,-,USA,-,73,207,2012,MTL,1,3,3
+371,Morgan Rielly,TOR,D,25,1994-03-09,Vancouver,-,CAN,-,73,219,2012,TOR,1,5,5
+372,Hampus Lindholm,ANA,D,26,1994-01-20,Helsingborg,-,SWE,-,75,208,2012,ANA,1,6,6
+373,Matt Dumba,MIN,D,25,1994-07-25,Regina,-,CAN,-,72,180,2012,MIN,1,7,7
+374,Pontus Aberg,TOR,L,26,1993-09-23,Stockholm,-,SWE,-,71,194,2012,NSH,2,7,37
+375,Phillip Di Giuseppe,NYR,L,26,1993-10-09,Toronto,-,CAN,-,72,193,2012,CAR,2,8,38
+376,Brendan Gaunce,BOS,C,25,1994-03-25,Sudbury,-,CAN,-,74,217,2012,VAN,1,26,26
+377,Brady Skjei,NYR,D,25,1994-03-26,Lakeville,-,USA,-,75,210,2012,NYR,1,28,28
+378,Tanner Pearson,VAN,L,27,1992-08-10,Kitchener,-,CAN,-,73,201,2012,L.A,1,30,30
+379,Scott Laughton,PHI,"C, L",25,1994-05-30,Oakville,-,CAN,-,73,190,2012,PHI,1,20,20
+380,Mark Jankowski,CGY,C,25,1994-09-13,Hamilton,-,CAN,-,76,212,2012,CGY,1,21,21
+381,Olli Maatta,CHI,D,25,1994-08-22,Jyväskylä,-,FIN,-,74,206,2012,PIT,1,22,22
+382,Mike Matheson,FLA,D,25,1994-02-27,Pointe-Claire,-,CAN,-,74,188,2012,FLA,1,23,23
+383,Zemgus Girgensons,BUF,C,26,1994-01-05,Riga,-,LVA,-,74,211,2012,BUF,1,14,14
+384,Cody Ceci,TOR,D,26,1993-12-21,Ottawa,-,CAN,-,74,210,2012,OTT,1,15,15
+385,Tom Wilson,WSH,R,25,1994-03-29,Toronto,-,CAN,-,76,220,2012,WSH,1,16,16
+386,Tomas Hertl,S.J,C,26,1993-11-12,Praha,-,CZE,-,74,215,2012,S.J,1,17,17
+387,Teuvo Teravainen,CAR,L,25,1994-09-11,Helsinki,-,FIN,-,71,191,2012,CHI,1,18,18
+388,Derrick Pouliot,STL,D,26,1994-01-16,Estevan,-,CAN,-,72,196,2012,PIT,1,8,8
+389,Jacob Trouba,NYR,D,25,1994-02-26,Rochester,-,USA,-,75,209,2012,WPG,1,9,9
+390,Slater Koekkoek,CHI,D,25,1994-02-18,Winchester,-,CAN,-,74,193,2012,T.B,1,10,10
+391,Filip Forsberg,NSH,L,25,1994-08-13,Ostervala,-,SWE,-,73,205,2012,WSH,1,11,11
+392,Radek Faksa,DAL,C,26,1994-01-09,Vitkov,-,CZE,-,75,220,2012,DAL,1,13,13
+393,Matt Grzelcyk,BOS,D,26,1994-01-05,Charlestown,-,USA,-,69,174,2012,BOS,3,24,85
+394,Colton Parayko,STL,D,26,1993-05-12,St. Albert,-,CAN,-,78,230,2012,STL,3,25,86
+395,Brendan Leipsic,WSH,L,25,1994-05-19,Winnipeg,-,CAN,-,70,180,2012,NSH,3,28,89
+396,Oskar Sundqvist,STL,C,25,1994-03-23,Boden,-,SWE,-,75,209,2012,PIT,3,20,81
+397,Esa Lindell,DAL,D,25,1994-05-23,Vantaa,-,FIN,-,75,215,2012,DAL,3,13,74
+398,Chandler Stephenson,"VGK, WSH",C,25,1994-04-22,Saskatoon,-,CAN,-,72,208,2012,WSH,3,16,77
+399,Shayne Gostisbehere,PHI,D,26,1993-04-20,Pembroke Pines,-,USA,-,71,180,2012,PHI,3,17,78
+400,Mackenzie MacEachern,STL,L,25,1994-03-09,Bloomfield Hills,-,USA,-,74,190,2012,STL,3,6,67
+401,Devin Shore,ANA,C,25,1994-07-19,Ajax,-,CAN,-,72,206,2012,DAL,2,31,61
+402,Jujhar Khaira,EDM,L,25,1994-08-13,Surrey,-,CAN,-,76,212,2012,EDM,3,2,63
+403,Adam Pelech,NYI,D,25,1994-08-16,Toronto,-,CAN,-,75,218,2012,NYI,3,4,65
+404,Jimmy Vesey,BUF,L,26,1993-05-26,Boston,-,USA,-,75,202,2012,NSH,3,5,66
+405,Chris Tierney,OTT,C,25,1994-07-01,Keswick,-,CAN,-,73,195,2012,S.J,2,25,55
+406,Jordan Martinook,CAR,L,27,1992-07-25,Brandon,-,CAN,-,72,196,2012,PHX,2,28,58
+407,Boo Nieves,NYR,C,26,1994-01-23,Syracuse,-,USA,-,75,214,2012,NYR,2,29,59
+408,Damon Severson,N.J,D,25,1994-08-07,Melville,-,CAN,-,74,205,2012,N.J,2,30,60
+409,Martin Frk,L.A,R,26,1993-10-05,Pelhrimov,-,CZE,-,73,205,2012,DET,2,19,49
+410,Colton Sissons,NSH,C,26,1993-11-05,North Vancouver,-,CAN,-,73,200,2012,NSH,2,20,50
+411,Teddy Blueger,PIT,C,25,1994-08-15,Riga,-,LVA,-,72,185,2012,PIT,2,22,52
+412,Jake McCabe,BUF,D,26,1993-10-12,Eau Claire,-,USA,-,73,204,2012,BUF,2,14,44
+413,Brock McGinn,CAR,L,26,1994-02-02,Fergus,-,CAN,-,72,187,2012,CAR,2,17,47
+414,Connor Carrick,N.J,D,25,1994-04-13,Orland Park,-,USA,-,70,192,2012,WSH,5,16,137
+415,Nikolai Prokhorkin,L.A,L,26,1993-09-17,Chelyabinsk,-,RUS,-,75,190,2012,L.A,4,30,121
+416,Charles Hudon,MTL,L,25,1994-06-23,Alma,-,CAN,-,70,190,2012,MTL,5,1,122
+417,Dominic Toninato,FLA,C,25,1994-03-09,Duluth,-,USA,-,74,191,2012,TOR,5,5,126
+418,Trevor Carrick,S.J,D,25,1994-07-04,Stouffville,-,CAN,-,74,196,2012,CAR,4,24,115
+419,Jaccob Slavin,CAR,D,25,1994-05-01,Denver,-,USA,-,75,207,2012,CAR,4,29,120
+420,Andreas Athanasiou,DET,"C, L",25,1994-08-06,London,-,CAN,-,74,188,2012,DET,4,19,110
+421,Gemel Smith,T.B,C,25,1994-04-16,Toronto,-,CAN,-,70,196,2012,DAL,4,13,104
+422,Brett Kulak,MTL,D,26,1994-01-06,Edmonton,-,CAN,-,74,190,2012,CGY,4,14,105
+423,Thomas Di Pauli,PIT,C,25,1994-04-29,Woodbridge,-,USA,-,71,188,2012,WSH,4,9,100
+424,Cedric Paquette,T.B,C,26,1993-08-13,Gaspe,-,CAN,-,73,204,2012,T.B,4,10,101
+425,Erik Gustafsson,CHI,D,27,1992-03-14,Nynashamn,-,SWE,-,72,197,2012,EDM,4,2,93
+426,Josh Anderson,CBJ,R,25,1994-05-07,Burlington,-,CAN,-,75,222,2012,CBJ,4,4,95
+427,Paul LaDue,L.A,D,27,1992-09-06,Grand Forks,-,USA,-,74,200,2012,L.A,6,30,181
+428,Jake Bischoff,VGK,D,25,1994-07-25,Cambridge,-,USA,-,73,194,2012,NYI,7,4,185
+429,Matthew Benning,EDM,D,25,1994-05-25,Edmonton,-,CAN,-,73,203,2012,BOS,6,24,175
+430,Vinnie Hinostroza,ARI,"C, R",25,1994-04-03,Chicago,-,USA,-,69,173,2012,CHI,6,18,169
+431,Riley Barber,MTL,R,26,1994-02-07,Pittsburgh,-,USA,-,72,203,2012,WSH,6,16,167
+432,Joseph Blandisi,PIT,C,25,1994-07-18,Markham,-,CAN,-,72,187,2012,COL,6,11,162
+433,Connor Brown,OTT,R,26,1994-01-14,Toronto,-,CAN,-,72,186,2012,TOR,6,5,156
+434,Ben Hutton,L.A,D,26,1993-04-20,Brockville,-,CAN,-,74,206,2012,VAN,5,26,147
+435,Alexander Kerfoot,TOR,C,25,1994-08-11,Vancouver,-,CAN,-,70,185,2012,N.J,5,29,150
+436,Nikita Gusev,N.J,L,27,1992-07-08,Moscow,-,RUS,-,69,163,2012,T.B,7,21,202
+437,Christian Djoos,WSH,D,25,1994-08-06,Gothenburg,-,SWE,-,72,180,2012,WSH,7,14,195
+438,Joakim Ryan,L.A,D,26,1993-06-17,Rumson,-,USA,-,71,185,2012,S.J,7,17,198
+439,Kurtis MacDermid,L.A,D,25,1994-03-25,Sauble Beach,-,CAN,-,77,233,-,-,-,-,-
+440,Ashton Sautner,VAN,D,25,1994-05-27,Flin Flon,-,CAN,-,73,195,-,-,-,-,-
+441,Jayson Megna,COL,C,30,1990-02-01,Fort Lauderdale,-,USA,-,73,195,-,-,-,-,-
+442,Scott Sabourin,OTT,R,27,1992-07-30,Orleans,-,CAN,-,75,208,-,-,-,-,-
+443,Buddy Robinson,CGY,R,28,1991-09-30,Bellmawr,-,USA,-,78,232,-,-,-,-,-
+444,Tim Schaller,VAN,C,29,1990-11-16,Merrimack,-,USA,-,74,204,-,-,-,-,-
+445,Danny DeKeyser,DET,D,29,1990-03-07,Detroit,-,USA,-,75,190,-,-,-,-,-
+446,Nate Schmidt,VGK,D,28,1991-07-16,St. Cloud,-,USA,-,73,194,-,-,-,-,-
+447,Carter Rowney,ANA,"C, R",30,1989-05-10,Grand Prairie,-,CAN,-,74,208,-,-,-,-,-
+448,Chad Ruhwedel,PIT,D,29,1990-05-07,San Diego,-,USA,-,71,191,-,-,-,-,-
+449,Michael Raffl,PHI,L,31,1988-12-01,Villach,-,AUT,-,72,200,-,-,-,-,-
+450,Anton Blidh,BOS,L,24,1995-03-14,Molnlycke,-,SWE,-,72,201,2013,BOS,6,29,180
+451,Dominik Kubalik,CHI,L,24,1995-08-21,Plzen,-,CZE,-,74,179,2013,L.A,7,10,191
+452,John Gilmour,BUF,D,26,1993-05-17,Montreal,-,CAN,-,72,188,2013,CGY,7,17,198
+453,Andreas Johnsson,TOR,L,25,1994-11-21,Gävle,-,SWE,-,70,194,2013,TOR,7,21,202
+454,Tyler Lewington,WSH,D,25,1994-12-05,Edmonton,-,CAN,-,74,200,2013,WSH,7,23,204
+455,MacKenzie Weegar,FLA,D,26,1994-01-07,Ottawa,-,CAN,-,72,200,2013,FLA,7,25,206
+456,Tyler Motte,VAN,C,24,1995-03-10,St. Clair,-,USA,-,70,192,2013,CHI,4,30,121
+457,Will Butcher,N.J,D,25,1995-01-06,Sun Prairie,-,USA,-,70,190,2013,COL,5,2,123
+458,Tucker Poolman,WPG,D,26,1993-06-08,Dubuque,-,USA,-,74,199,2013,WPG,5,6,127
+459,Connor Clifton,BOS,D,24,1995-04-28,Long Branch,-,USA,-,71,175,2013,PHX,5,12,133
+460,Luke Johnson,MIN,C,25,1994-09-19,Grand Forks,-,USA,-,71,177,2013,CHI,5,13,134
+461,Carson Soucy,MIN,D,25,1994-07-27,Viking,-,CAN,-,77,210,2013,MIN,5,16,137
+462,Jonny Brodzinski,S.J,C,26,1993-06-19,Ham Lake,-,USA,-,73,215,2013,L.A,5,27,148
+463,Josh Brown,FLA,D,26,1994-01-21,London,-,CAN,-,77,217,2013,FLA,6,1,152
+464,John Hayden,N.J,C,24,1995-02-14,Chicago,-,USA,-,75,215,2013,CHI,3,13,74
+465,Pavel Buchnevich,NYR,"L, R",24,1995-04-17,Cherepovets,-,RUS,-,74,197,2013,NYR,3,14,75
+466,Jake Guentzel,PIT,"C, L",25,1994-10-06,Omaha,-,USA,-,71,180,2013,PIT,3,16,77
+467,Mattias Janmark,DAL,C,27,1992-12-08,Stockholm,-,SWE,-,73,195,2013,DET,3,18,79
+468,Anthony Duclair,OTT,L,24,1995-08-26,Pointe-Claire,-,CAN,-,71,198,2013,NYR,3,19,80
+469,Carter Verhaeghe,T.B,C,24,1995-08-14,Toronto,-,CAN,-,73,177,2013,TOR,3,21,82
+470,Oliver Bjorkstrand,CBJ,R,24,1995-04-10,Herning,-,DNK,-,72,177,2013,CBJ,3,28,89
+471,Peter Cehlarik,BOS,L,24,1995-08-02,Zilina,-,SVK,-,74,202,2013,BOS,3,29,90
+472,Miles Wood,N.J,L,24,1995-09-13,Buffalo,-,USA,-,74,195,2013,N.J,4,9,100
+473,Nick Paul,OTT,L,24,1995-03-20,Mississauga,-,CAN,-,76,219,2013,DAL,4,10,101
+474,Andrew Copp,WPG,C,25,1994-07-08,Ann Arbor,-,USA,-,73,206,2013,WPG,4,13,104
+475,Ryan Graves,COL,D,24,1995-05-21,Yarmouth,-,CAN,-,77,220,2013,NYR,4,19,110
+476,Andre Burakovsky,COL,L,25,1995-02-09,Klagenfurt,-,AUT,-,75,201,2013,WSH,1,23,23
+477,Shea Theodore,VGK,D,24,1995-08-03,Langley,-,CAN,-,74,195,2013,ANA,1,26,26
+478,Marko Dano,CBJ,L,25,1994-11-30,Eisenstadt,-,AUT,-,71,201,2013,CBJ,1,27,27
+479,Jason Dickinson,DAL,C,24,1995-07-04,Georgetown,-,CAN,-,74,200,2013,DAL,1,29,29
+480,Ryan Hartman,MIN,R,25,1994-09-20,Hilton Head Isl.,-,USA,-,72,189,2013,CHI,1,30,30
+481,Adam Erne,DET,L,24,1995-04-20,New Haven,-,USA,-,73,212,2013,T.B,2,3,33
+482,Jacob de la Rose,"DET, STL","C, L",24,1995-05-20,Arvika,-,SWE,-,75,215,2013,MTL,2,4,34
+483,J.T. Compher,COL,L,24,1995-04-08,Northbrook,-,USA,-,72,190,2013,BUF,2,5,35
+484,Valentin Zykov,VGK,L,24,1995-05-15,St. Petersburg,-,RUS,-,73,220,2013,L.A,2,7,37
+485,Robert Hagg,PHI,D,25,1995-02-08,Uppsala,-,SWE,-,74,204,2013,PHI,2,11,41
+486,Steven Santini,NSH,D,24,1995-03-07,Bronxville,-,USA,-,74,205,2013,N.J,2,12,42
+487,Nic Petan,TOR,C,24,1995-03-22,Delta,-,CAN,-,69,175,2013,WPG,2,13,43
+488,Gustav Olofsson,MTL,D,25,1994-12-01,Boras,-,SWE,-,75,200,2013,MIN,2,16,46
+489,Carl Dahlstrom,WPG,D,25,1995-01-28,Stockholm,-,SWE,-,76,231,2013,CHI,2,21,51
+490,Justin Bailey,VAN,R,24,1995-07-01,Buffalo,-,USA,-,76,214,2013,BUF,2,22,52
+491,Madison Bowey,DET,D,24,1995-04-22,Winnipeg,-,CAN,-,74,202,2013,WSH,2,23,53
+492,Artturi Lehkonen,MTL,L,24,1995-07-04,Piikkio,-,FIN,-,72,176,2013,MTL,2,25,55
+493,William Carrier,VGK,L,25,1994-12-20,LaSalle,-,CAN,-,74,218,2013,STL,2,27,57
+494,Tyler Bertuzzi,DET,L,24,1995-02-24,Sudbury,-,CAN,-,72,199,2013,DET,2,28,58
+495,Zach Sanford,STL,L,25,1994-11-09,Salem,-,USA,-,76,207,2013,WSH,2,31,61
+496,Brett Pesce,CAR,D,25,1994-11-15,Tarrytown,-,USA,-,75,206,2013,CAR,3,5,66
+497,Nathan MacKinnon,COL,C,24,1995-09-01,Halifax,-,CAN,-,72,200,2013,COL,1,1,1
+498,Aleksander Barkov,FLA,C,24,1995-09-02,Tampere,-,FIN,-,75,210,2013,FLA,1,2,2
+499,Jonathan Drouin,MTL,L,24,1995-03-28,Ste-Agathe,-,CAN,-,72,197,2013,T.B,1,3,3
+500,Seth Jones,CBJ,D,25,1994-10-03,Arlington,-,USA,-,76,209,2013,NSH,1,4,4
+501,Elias Lindholm,CGY,C,25,1994-12-02,Boden,-,SWE,-,73,195,2013,CAR,1,5,5
+502,Sean Monahan,CGY,C,25,1994-10-12,Brampton,-,CAN,-,75,200,2013,CGY,1,6,6
+503,Darnell Nurse,EDM,D,25,1995-02-04,Hamilton,-,CAN,-,76,221,2013,EDM,1,7,7
+504,Rasmus Ristolainen,BUF,D,25,1994-10-27,Turku,-,FIN,-,76,220,2013,BUF,1,8,8
+505,Bo Horvat,VAN,C,24,1995-04-05,London,-,CAN,-,72,215,2013,VAN,1,9,9
+506,Valeri Nichushkin,COL,R,24,1995-03-04,Chelyabinsk,-,RUS,-,76,210,2013,DAL,1,10,10
+507,Samuel Morin,PHI,D,24,1995-07-12,Lac-Beauport,-,CAN,-,78,202,2013,PHI,1,11,11
+508,Max Domi,MTL,C,24,1995-03-02,Winnipeg,-,CAN,-,70,192,2013,PHX,1,12,12
+509,Josh Morrissey,WPG,D,24,1995-03-28,Calgary,-,CAN,-,72,195,2013,WPG,1,13,13
+510,Alexander Wennberg,CBJ,C,25,1994-09-22,Stockholm,-,SWE,-,74,197,2013,CBJ,1,14,14
+511,Ryan Pulock,NYI,D,25,1994-10-06,Dauphin,-,CAN,-,74,217,2013,NYI,1,15,15
+512,Nikita Zadorov,COL,D,24,1995-04-16,Moscow,-,RUS,-,77,235,2013,BUF,1,16,16
+513,Curtis Lazar,BUF,C,25,1995-02-02,Salmon Arm,-,CAN,-,72,211,2013,OTT,1,17,17
+514,Mirco Mueller,N.J,D,24,1995-03-21,Winterthur,-,CHE,-,75,210,2013,S.J,1,18,18
+515,Anthony Mantha,DET,R,25,1994-09-16,Longueuil,-,CAN,-,77,234,2013,DET,1,20,20
+516,Frederik Gauthier,TOR,C,24,1995-04-26,Laval,-,CAN,-,77,239,2013,TOR,1,21,21
+517,Jean-Sebastien Dea,BUF,C,26,1994-02-08,Laval,-,CAN,-,71,168,-,-,-,-,-
+518,Ross Johnston,NYI,L,25,1994-02-18,Charlottetown,-,CAN,-,77,235,-,-,-,-,-
+519,Colby Cave,EDM,C,25,1994-12-26,Battleford,-,CAN,-,73,200,-,-,-,-,-
+520,Nathan Walker,STL,L,26,1994-02-07,Cardiff,-,GBR,-,69,186,2014,WSH,3,29,89
+521,Joel Hanley,DAL,D,28,1991-06-08,Keswick,-,CAN,-,71,190,-,-,-,-,-
+522,Conor Sheary,BUF,L,27,1992-06-08,Winchester,-,USA,-,68,179,-,-,-,-,-
+523,Trevor van Riemsdyk,CAR,D,28,1991-07-24,Middletown,-,USA,-,74,192,-,-,-,-,-
+524,Ryan Carpenter,CHI,C,29,1991-01-18,Oviedo,-,USA,-,72,200,-,-,-,-,-
+525,Christian Folin,MTL,D,29,1991-02-09,Gothenburg,-,SWE,-,75,204,-,-,-,-,-
+526,Jordan Oesterle,ARI,D,27,1992-06-25,Dearborn Heights,-,USA,-,72,182,-,-,-,-,-
+527,Daniel Carr,NSH,L,28,1991-11-01,Sherwood Park,-,CAN,-,72,193,-,-,-,-,-
+528,Garnet Hathaway,WSH,R,28,1991-11-23,Kennebunkport,-,USA,-,74,210,-,-,-,-,-
+529,Melker Karlsson,S.J,C,29,1990-07-18,Lycksele,-,SWE,-,72,180,-,-,-,-,-
+530,Pierre-Edouard Bellemare,COL,"C, L",34,1985-03-06,Le Blanc-Mesnil,-,FRA,-,72,198,-,-,-,-,-
+531,Tomas Nosek,VGK,L,27,1992-09-01,Pardubice,-,CZE,-,75,205,-,-,-,-,-
+532,Aaron Ekblad,FLA,D,24,1996-02-07,Windsor,-,CAN,-,76,215,2014,FLA,1,1,1
+533,Sam Reinhart,BUF,C,24,1995-11-06,West Vancouver,-,CAN,-,73,194,2014,BUF,1,2,2
+534,Leon Draisaitl,EDM,C,24,1995-10-27,Cologne,-,DEU,-,74,208,2014,EDM,1,3,3
+535,Sam Bennett,CGY,C,23,1996-06-20,Holland Landing,-,CAN,-,73,195,2014,CGY,1,4,4
+536,Michael Dal Colle,NYI,L,23,1996-06-20,Richmond Hill,-,CAN,-,75,204,2014,NYI,1,5,5
+537,Jake Virtanen,VAN,R,23,1996-08-17,New Westminster,-,CAN,-,73,226,2014,VAN,1,6,6
+538,Haydn Fleury,CAR,D,23,1996-07-08,Carlyle,-,CAN,-,75,208,2014,CAR,1,7,7
+539,William Nylander,TOR,"C, R",23,1996-05-01,Calgary,-,CAN,-,72,196,2014,TOR,1,8,8
+540,Nikolaj Ehlers,WPG,L,23,1996-02-14,Aalborg,-,DNK,-,72,172,2014,WPG,1,9,9
+541,Nick Ritchie,ANA,L,24,1995-12-05,Orangeville,-,CAN,-,74,230,2014,ANA,1,10,10
+542,Kevin Fiala,MIN,L,23,1996-07-22,St. Gallen,-,CHE,-,70,193,2014,NSH,1,11,11
+543,Brendan Perlini,"CHI, DET",L,23,1996-04-27,Guildford,-,GBR,-,75,211,2014,ARI,1,12,12
+544,Jakub Vrana,WSH,L,23,1996-02-28,Prague,-,CZE,-,72,195,2014,WSH,1,13,13
+545,Dylan Larkin,DET,C,23,1996-07-30,Waterford,-,USA,-,73,198,2014,DET,1,15,15
+546,Sonny Milano,CBJ,L,23,1996-05-12,Massapequa,-,USA,-,72,194,2014,CBJ,1,16,16
+547,Travis Sanheim,PHI,D,23,1996-03-29,Elkhorn,-,CAN,-,75,181,2014,PHI,1,17,17
+548,Alex Tuch,VGK,R,23,1996-05-10,Syracuse,-,USA,-,76,220,2014,MIN,1,18,18
+549,Tony DeAngelo,NYR,D,24,1995-10-24,Sewell,-,USA,-,71,180,2014,T.B,1,19,19
+550,Nick Schmaltz,ARI,C,23,1996-02-23,Madison,-,USA,-,72,177,2014,CHI,1,20,20
+551,Robby Fabbri,"DET, STL",C,24,1996-01-22,Mississauga,-,CAN,-,70,190,2014,STL,1,21,21
+552,Kasperi Kapanen,TOR,R,23,1996-07-23,Kuopio,-,FIN,-,73,194,2014,PIT,1,22,22
+553,Jared McCann,PIT,C,23,1996-05-31,Stratford,-,CAN,-,73,185,2014,VAN,1,24,24
+554,David Pastrnak,BOS,R,23,1996-05-25,Havirov,-,CZE,-,72,194,2014,BOS,1,25,25
+555,Nikolay Goldobin,VAN,R,24,1995-10-07,Moscow,-,RUS,-,71,196,2014,S.J,1,27,27
+556,Adrian Kempe,L.A,"C, L",23,1996-09-13,Kramfors,-,SWE,-,74,201,2014,L.A,1,29,29
+557,John Quenneville,CHI,C,23,1996-04-16,Edmonton,-,CAN,-,73,195,2014,N.J,1,30,30
+558,Brendan Lemieux,NYR,L,23,1996-03-15,Denver,-,USA,-,73,213,2014,BUF,2,1,31
+559,Jayce Hawryluk,FLA,C,24,1996-01-01,Yorkton,-,CAN,-,71,196,2014,FLA,2,2,32
+560,Ivan Barbashev,STL,C,24,1995-12-14,Moscow,-,RUS,-,72,187,2014,STL,2,3,33
+561,Marcus Pettersson,PIT,D,23,1996-05-08,Skellefteå,-,SWE,-,76,177,2014,ANA,2,8,38
+562,Andreas Englund,OTT,D,24,1996-01-21,Stockholm,-,SWE,-,75,189,2014,OTT,2,10,40
+563,Vladislav Kamenev,COL,C,23,1996-08-12,Orsk,-,RUS,-,74,194,2014,NSH,2,12,42
+564,Ryan MacInnis,CBJ,C,23,1996-02-14,St. Louis,-,USA,-,75,200,2014,ARI,2,13,43
+565,Nicolas Aube-Kubel,PHI,R,23,1996-05-10,Slave Lake,-,CAN,-,71,187,2014,PHI,2,18,48
+566,Maxim Letunov,S.J,C,23,1996-02-20,Moscow,-,RUS,-,76,180,2014,STL,2,22,52
+567,Brandon Montour,BUF,D,25,1994-04-11,Brantford,-,CAN,-,72,189,2014,ANA,2,25,55
+568,Ryan Donato,MIN,C,23,1996-04-09,Boston,-,USA,-,72,192,2014,BOS,2,26,56
+569,Christian Dvorak,ARI,"C, L",24,1996-02-02,Palos,-,USA,-,72,195,2014,ARI,2,28,58
+570,Warren Foegele,CAR,L,23,1996-04-01,Markham,-,CAN,-,74,198,2014,CAR,3,7,67
+571,Brayden Point,T.B,C,23,1996-03-13,Calgary,-,CAN,-,70,166,2014,T.B,3,19,79
+572,Jake Walman,STL,D,23,1996-02-20,Toronto,-,CAN,-,73,170,2014,STL,3,22,82
+573,Mark Friedman,PHI,D,24,1995-12-25,Toronto,-,CAN,-,71,185,2014,PHI,3,26,86
+574,Michael Amadio,L.A,C,23,1996-05-13,Sault Ste. Marie,-,CAN,-,73,204,2014,L.A,3,30,90
+575,William Lagesson,EDM,D,23,1996-02-22,Gothenburg,-,SWE,-,74,207,2014,EDM,4,1,91
+576,Lucas Wallmark,CAR,C,24,1995-09-05,Umea,-,SWE,-,72,178,2014,CAR,4,7,97
+577,Chase De Leo,ANA,C,24,1995-10-25,La Mirada,-,USA,-,69,186,2014,WPG,4,9,99
+578,Christoffer Ehn,DET,C,23,1996-04-05,Skara,-,SWE,-,75,195,2014,DET,4,16,106
+579,Devon Toews,NYI,D,25,1994-02-21,Abbotsford,-,CAN,-,73,191,2014,NYI,4,18,108
+580,Austin Poganski,STL,R,23,1996-02-16,St. Cloud,-,USA,-,73,198,2014,STL,4,20,110
+581,Viktor Arvidsson,NSH,"L, R",26,1993-04-08,Skellefteå,-,SWE,-,69,180,2014,NSH,4,22,112
+582,Sam Lafferty,PIT,C,24,1995-03-06,Hollidaysburg,-,USA,-,73,195,2014,PIT,4,23,113
+583,Danton Heinen,BOS,"C, L",24,1995-07-05,Langley,-,CAN,-,73,188,2014,BOS,4,26,116
+584,Clark Bishop,CAR,C,23,1996-03-29,St. John's,-,CAN,-,72,199,2014,CAR,5,7,127
+585,CJ Suess,WPG,L,25,1994-03-17,St. Paul,-,USA,-,71,190,2014,WPG,5,9,129
+586,Oskar Lindblom,PHI,L,23,1996-08-15,Gävle,-,SWE,-,73,191,2014,PHI,5,18,138
+587,Anton Lindholm,COL,D,25,1994-11-29,Skellefteå,-,SWE,-,71,191,2014,COL,5,24,144
+588,Anthony Angello,PIT,C,23,1996-03-06,Albany,-,USA,-,77,210,2014,PIT,5,25,145
+589,Anders Bjork,BOS,L,23,1996-08-05,Mequon,-,USA,-,72,190,2014,BOS,5,26,146
+590,Kevin Labanc,S.J,R,24,1995-12-12,Brooklyn,-,USA,-,71,185,2014,S.J,6,21,171
+591,Sammy Blais,STL,L,23,1996-06-17,Montmagny,-,CAN,-,74,205,2014,STL,6,26,176
+592,Dylan Sikura,CHI,R,24,1995-06-01,Aurora,-,CAN,-,71,166,2014,CHI,6,28,178
+593,Victor Olofsson,BUF,"L, R",24,1995-07-18,Ornskoldsvik,-,SWE,-,71,183,2014,BUF,7,1,181
+594,Pierre Engvall,TOR,L,23,1996-05-31,Ljungby,-,SWE,-,77,214,2014,TOR,7,8,188
+595,Ondrej Kase,ANA,R,24,1995-11-08,Kadan,-,CZE,-,72,190,2014,ANA,7,25,205
+596,Jake Evans,MTL,C,23,1996-06-02,Toronto,-,CAN,-,73,181,2014,MTL,7,27,207
+597,Jacob Middleton,S.J,D,24,1996-01-02,Wainwright,-,CAN,-,75,210,2014,L.A,7,30,210
+598,Matthew Highmore,CHI,C,23,1996-02-27,Halifax,-,CAN,-,71,188,-,-,-,-,-
+599,Joe Hicketts,DET,D,23,1996-05-04,Kamloops,-,CAN,-,68,180,-,-,-,-,-
+600,Dryden Hunt,FLA,L,24,1995-11-24,Cranbrook,-,CAN,-,72,193,-,-,-,-,-
+601,Andrew Mangiapane,CGY,L,23,1996-04-04,Toronto,-,CAN,-,70,184,2015,CGY,6,15,166
+602,Frank Vatrano,FLA,C,25,1994-03-14,East Longmeadow,-,USA,-,69,197,-,-,-,-,-
+603,Cole Bardreau,NYI,C,26,1993-07-22,Fairport,-,USA,-,70,185,-,-,-,-,-
+604,Noah Hanifin,CGY,D,23,1997-01-25,Boston,-,USA,-,75,215,2015,CAR,1,5,5
+605,Rasmus Andersson,CGY,D,23,1996-10-27,Malmö,-,SWE,-,73,214,2015,CGY,2,23,53
+606,Kyle Connor,WPG,L,23,1996-12-09,Shelby Twp.,-,USA,-,73,182,2015,WPG,1,17,17
+607,Jonas Siegenthaler,WSH,D,22,1997-05-06,Zurich,-,CHE,-,75,210,2015,WSH,2,27,57
+608,Colin White,OTT,C,23,1997-01-30,Boston,-,USA,-,72,191,2015,OTT,1,21,21
+609,Pavel Zacha,N.J,C,22,1997-04-06,Brno,-,CZE,-,75,210,2015,N.J,1,6,6
+610,Connor McDavid,EDM,C,23,1997-01-13,Richmond Hill,-,CAN,-,73,193,2015,EDM,1,1,1
+611,Jack Eichel,BUF,C,23,1996-10-28,North Chelmsford,-,USA,-,74,203,2015,BUF,1,2,2
+612,Vince Dunn,STL,D,23,1996-10-29,Mississauga,-,CAN,-,72,203,2015,STL,2,26,56
+613,Travis Dermott,TOR,D,23,1996-12-22,Newmarket,-,CAN,-,72,205,2015,TOR,2,4,34
+614,Anthony Richard,NSH,C,23,1996-12-20,Trois-Rivieres,-,CAN,-,70,163,2015,NSH,4,9,100
+615,Jordan Greenway,MIN,L,22,1997-02-16,Canton,-,USA,-,78,225,2015,MIN,2,20,50
+616,Timo Meier,S.J,R,23,1996-10-08,Herisau,-,CHE,-,72,210,2015,S.J,1,9,9
+617,Erik Cernak,T.B,D,22,1997-05-28,Kosice,-,SVK,-,75,233,2015,L.A,2,13,43
+618,Mikko Rantanen,COL,R,23,1996-10-29,Nousiainen,-,FIN,-,76,215,2015,COL,1,10,10
+619,Jansen Harkins,WPG,C,22,1997-05-23,Cleveland,-,USA,-,73,182,2015,WPG,2,17,47
+620,Brendan Guhle,ANA,D,22,1997-07-29,Edmonton,-,CAN,-,74,197,2015,BUF,2,21,51
+621,Sebastian Aho,CAR,"C, R",22,1997-07-26,Rauma,-,FIN,-,71,176,2015,CAR,2,5,35
+622,Oliver Kylington,CGY,D,22,1997-05-19,Stockholm,-,SWE,-,72,183,2015,CGY,2,30,60
+623,Evgeny Svechnikov,DET,L,23,1996-10-31,Yuzhno-Sakhalinsk,-,RUS,-,75,208,2015,DET,1,19,19
+624,Christian Fischer,ARI,R,22,1997-04-15,Chicago,-,USA,-,74,214,2015,ARI,2,2,32
+625,Keegan Kolesar,VGK,R,22,1997-04-08,Brandon,-,CAN,-,74,227,2015,CBJ,3,8,69
+626,David Kase,PHI,R,23,1997-01-28,Kadan,-,CZE,-,71,169,2015,PHI,5,7,128
+627,Travis Konecny,PHI,"C, R",22,1997-03-11,London,-,CAN,-,70,175,2015,PHI,1,24,24
+628,Dylan Strome,CHI,C,22,1997-03-07,Mississauga,-,CAN,-,75,200,2015,ARI,1,3,3
+629,Brandon Carlo,BOS,D,23,1996-11-26,Colorado Springs,-,USA,-,77,212,2015,BOS,2,7,37
+630,Brock Boeser,VAN,R,22,1997-02-25,Burnsville,-,USA,-,73,208,2015,VAN,1,23,23
+631,Mathew Barzal,NYI,C,22,1997-05-26,Coquitlam,-,CAN,-,72,187,2015,NYI,1,16,16
+632,Roope Hintz,DAL,L,23,1996-11-17,Tampere,-,FIN,-,75,220,2015,DAL,2,19,49
+633,Ethan Bear,EDM,D,22,1997-06-26,Regina,-,CAN,-,71,197,2015,EDM,5,3,124
+634,Caleb Jones,EDM,D,22,1997-06-06,Arlington,-,USA,-,73,194,2015,EDM,4,26,117
+635,Austin Wagner,L.A,L,22,1997-06-23,Calgary,-,CAN,-,73,185,2015,L.A,4,8,99
+636,Jack Roslovic,WPG,C,23,1997-01-29,Columbus,-,USA,-,73,187,2015,WPG,1,25,25
+637,Zach Werenski,CBJ,D,22,1997-07-19,Grosse Pointe,-,USA,-,74,212,2015,CBJ,1,8,8
+638,Nicolas Roy,VGK,C,23,1997-02-05,Amos,-,CAN,-,76,200,2015,CAR,4,5,96
+639,Anthony Beauvillier,NYI,L,22,1997-06-08,Sorel-Tracy,-,CAN,-,71,182,2015,NYI,1,28,28
+640,Daniel Sprong,ANA,R,22,1997-03-17,Amsterdam,-,NLD,-,72,191,2015,PIT,2,16,46
+641,Jeremy Lauzon,BOS,D,22,1997-04-28,Val D'or,-,CAN,-,73,204,2015,BOS,2,22,52
+642,Thomas Chabot,OTT,D,23,1997-01-30,Sainte-Marie,-,CAN,-,74,190,2015,OTT,1,18,18
+643,Mathieu Joseph,T.B,R,23,1997-02-09,Laval,-,CAN,-,73,190,2015,T.B,4,29,120
+644,Lawson Crouse,ARI,L,22,1997-06-23,Mt. Brydges,-,CAN,-,76,220,2015,FLA,1,11,11
+645,Kyle Capobianco,ARI,D,22,1997-08-13,Mississauga,-,CAN,-,73,196,2015,ARI,3,2,63
+646,Mitchell Stephens,T.B,C,23,1997-02-05,Peterborough,-,CAN,-,72,193,2015,T.B,2,3,33
+647,Mitchell Marner,TOR,"C, R",22,1997-05-05,Markham,-,CAN,-,72,175,2015,TOR,1,4,4
+648,Zach Senyshyn,BOS,R,22,1997-03-30,Ottawa,-,CAN,-,73,192,2015,BOS,1,15,15
+649,Filip Chlapik,OTT,C,22,1997-06-03,Prague,-,CZE,-,73,194,2015,OTT,2,18,48
+650,Jacob Larsson,ANA,D,22,1997-04-29,Ljungby,-,SWE,-,74,190,2015,ANA,1,27,27
+651,Joel Eriksson Ek,MIN,C,23,1997-01-29,Karlstad,-,SWE,-,73,210,2015,MIN,1,20,20
+652,Denis Gurianov,DAL,R,22,1997-06-07,Togliatti,-,RUS,-,75,200,2015,DAL,1,12,12
+653,Jake DeBrusk,BOS,L,23,1996-10-17,Edmonton,-,CAN,-,72,188,2015,BOS,1,14,14
+654,Ivan Provorov,PHI,D,23,1997-01-13,Yaroslavl,-,RUS,-,73,201,2015,PHI,1,7,7
+655,Dennis Gilbert,CHI,D,23,1996-10-30,Buffalo,-,USA,-,74,216,2015,CHI,3,30,91
+656,Gabriel Carlsson,CBJ,D,23,1997-01-02,Orebro,-,SWE,-,77,192,2015,CBJ,1,29,29
+657,John Marino,PIT,D,22,1997-05-21,Brockton,-,USA,-,73,181,2015,EDM,6,3,154
+658,Yakov Trenin,NSH,C,23,1997-01-13,Chelyabinsk,-,RUS,-,74,201,2015,NSH,2,25,55
+659,Austin Czarnik,CGY,C,27,1992-12-12,Detroit,-,USA,-,69,170,-,-,-,-,-
+660,Anthony Cirelli,T.B,C,22,1997-07-15,Etobicoke,-,CAN,-,72,193,2015,T.B,3,11,72
+661,Evan Rodrigues,BUF,"C, L",26,1993-07-28,Toronto,-,CAN,-,71,184,-,-,-,-,-
+662,Artemi Panarin,NYR,"C, L",28,1991-10-30,Korkino,-,RUS,-,71,170,-,-,-,-,-
+663,Dean Kukan,CBJ,D,26,1993-07-08,Volketswil,-,CHE,-,74,192,-,-,-,-,-
+664,Noel Acciari,FLA,C,28,1991-12-01,Johnston,-,USA,-,70,203,-,-,-,-,-
+665,Derek Ryan,CGY,C,33,1986-12-29,Spokane,-,USA,-,71,185,-,-,-,-,-
+666,Kevin Stenlund,CBJ,C,23,1996-09-20,Huddinge,-,SWE,-,76,209,2015,CBJ,2,28,58
+667,J.C. Beaudin,OTT,C,22,1997-03-25,Longueuil,-,CAN,-,73,196,2015,COL,3,10,71
+668,Lukas Vejdemo,MTL,C,24,1996-01-25,Stockholm,-,SWE,-,74,194,2015,MTL,3,26,87
+669,Aleksi Saarela,FLA,C,23,1997-01-07,Helsinki,-,FIN,-,71,200,2015,NYR,3,28,89
+670,Colton White,N.J,D,22,1997-05-03,London,-,CAN,-,73,185,2015,N.J,4,6,97
+671,Denis Malgin,FLA,C,23,1997-01-18,Olten,-,CHE,-,69,177,2015,FLA,4,11,102
+672,Mikhail Vorobyev,PHI,C,23,1997-01-05,Ufa,-,RUS,-,74,194,2015,PHI,4,13,104
+673,Alexandre Carrier,NSH,D,23,1996-10-08,Quebec City,-,CAN,-,71,174,2015,NSH,4,24,115
+674,Conor Garland,ARI,R,23,1996-03-11,Scituate,-,USA,-,70,165,2015,ARI,5,2,123
+675,Dmytro Timashov,TOR,L,23,1996-10-01,Kirovograd,-,UKR,-,70,192,2015,TOR,5,4,125
+676,Niko Mikkola,STL,D,23,1996-04-27,Finland,-,FIN,-,76,185,2015,STL,5,6,127
+677,Dominik Simon,PIT,C,25,1994-08-08,Prague,-,CZE,-,71,190,2015,PIT,5,16,137
+678,Christian Jaros,OTT,D,23,1996-04-02,Kosice,-,SVK,-,75,222,2015,OTT,5,18,139
+679,Rudolfs Balcers,OTT,L,22,1997-04-08,Latvia,-,LVA,-,71,180,2015,S.J,5,21,142
+680,Troy Terry,ANA,"C, R",22,1997-09-10,Denver,-,USA,-,73,180,2015,ANA,5,27,148
+681,Adam Gaudette,VAN,C,23,1996-10-03,Braintree,-,USA,-,73,170,2015,VAN,5,28,149
+682,Brett Seney,N.J,L,23,1996-02-28,London,-,CAN,-,69,156,2015,N.J,6,6,157
+683,Vladislav Gavrikov,CBJ,D,24,1995-11-21,Yaroslavl,-,RUS,-,75,213,2015,CBJ,6,8,159
+684,Cameron Hughes,BOS,C,23,1996-10-09,Edmonton,-,CAN,-,71,160,2015,BOS,6,14,165
+685,Mason Appleton,WPG,C,24,1996-01-15,Green Bay,-,USA,-,74,193,2015,WPG,6,17,168
+686,Markus Nutivaara,CBJ,D,25,1994-06-06,Oulu,-,FIN,-,73,187,2015,CBJ,7,8,189
+687,Matt Roy,L.A,D,24,1995-03-01,Detroit,-,USA,-,73,200,2015,L.A,7,13,194
+688,Sami Niku,WPG,D,23,1996-10-10,Haapavesi,-,FIN,-,73,176,2015,WPG,7,17,198
+689,Kole Sherwood,CBJ,R,23,1997-01-22,Columbus,-,USA,-,73,212,-,-,-,-,-
+690,Mason Marchment,TOR,L,24,1995-06-18,Uxbridge,-,CAN,-,75,210,-,-,-,-,-
+691,Adam Brooks,TOR,C,23,1996-05-06,Winnipeg,-,CAN,-,71,180,2016,TOR,4,1,92
+692,Philippe Myers,PHI,D,23,1997-01-25,Moncton,-,CAN,-,77,210,-,-,-,-,-
+693,Kevin Rooney,N.J,C,26,1993-05-21,Canton,-,USA,-,74,190,-,-,-,-,-
+694,Brandon Tanev,PIT,L,28,1991-12-31,Toronto,-,CAN,-,72,180,-,-,-,-,-
+695,Matthew Tkachuk,CGY,L,22,1997-12-11,Scottsdale,-,USA,-,74,202,2016,CGY,1,6,6
+696,Joey Anderson,N.J,R,21,1998-06-19,Roseville,-,USA,-,71,190,2016,N.J,3,12,73
+697,Luke Kunin,MIN,C,22,1997-12-04,Chesterfield,-,USA,-,72,197,2016,MIN,1,15,15
+698,Auston Matthews,TOR,C,22,1997-09-17,San Ramon,-,USA,-,75,220,2016,TOR,1,1,1
+699,Maxime Lajoie,OTT,D,22,1997-11-05,Quebec City,-,CAN,-,73,196,2016,OTT,5,12,133
+700,Adam Fox,NYR,D,21,1998-02-17,Jericho,-,USA,-,71,181,2016,CGY,3,5,66
+701,Ryan Lindgren,NYR,D,22,1998-02-11,Burnsville,-,USA,-,72,191,2016,BOS,2,19,49
+702,Charlie McAvoy,BOS,D,22,1997-12-21,Long Beach,-,USA,-,72,208,2016,BOS,1,14,14
+703,Julien Gauthier,CAR,R,22,1997-10-15,Pointe-aux-Trembles,-,CAN,-,76,227,2016,CAR,1,21,21
+704,Libor Hajek,NYR,D,22,1998-02-04,Smrcek,-,CZE,-,74,203,2016,T.B,2,7,37
+705,Rasmus Asplund,BUF,C,22,1997-12-03,Filipstad,-,SWE,-,71,190,2016,BUF,2,3,33
+706,Carl Grundstrom,L.A,R,22,1997-12-01,Umea,-,SWE,-,72,201,2016,TOR,2,27,57
+707,Alex DeBrincat,CHI,"L, R",22,1997-12-18,Farmington Hills,-,USA,-,67,165,2016,CHI,2,9,39
+708,Patrik Laine,WPG,R,21,1998-04-19,Tampere,-,FIN,-,77,206,2016,WPG,1,2,2
+709,Clayton Keller,ARI,"C, R",21,1998-07-29,Chesterfield,-,USA,-,70,170,2016,ARI,1,7,7
+710,Jakob Chychrun,ARI,D,21,1998-03-31,Boca Raton,-,USA,-,74,210,2016,ARI,1,16,16
+711,Dillon Dube,CGY,C,21,1998-07-20,Golden,-,CAN,-,71,187,2016,CGY,2,26,56
+712,Tyler Benson,EDM,L,21,1998-03-15,Edmonton,-,CAN,-,71,190,2016,EDM,2,2,32
+713,Kale Clague,L.A,D,21,1998-06-05,Regina,-,CAN,-,72,177,2016,L.A,2,21,51
+714,Sam Steel,ANA,C,22,1998-02-03,Ardrossan,-,CAN,-,71,189,2016,ANA,1,30,30
+715,Brett Howden,NYR,C,21,1998-03-29,Calgary,-,CAN,-,74,197,2016,T.B,1,27,27
+716,Kieffer Bellows,NYI,L,21,1998-06-10,Edina,-,USA,-,72,195,2016,NYI,1,19,19
+717,Carsen Twarynski,PHI,L,22,1997-11-24,St. Albert,-,CAN,-,74,198,2016,PHI,3,21,82
+718,Beck Malenstyn,WSH,L,22,1998-02-04,Delta,-,CAN,-,74,200,2016,WSH,5,24,145
+719,Tim Gettinger,NYR,L,21,1998-04-14,Cleveland,-,USA,-,78,218,2016,NYR,5,20,141
+720,Trent Frederic,BOS,C,22,1998-02-11,St. Louis,-,USA,-,74,203,2016,BOS,1,29,29
+721,Logan Brown,OTT,C,21,1998-03-05,Raleigh,-,USA,-,78,220,2016,OTT,1,11,11
+722,Max Jones,ANA,L,21,1998-02-17,Rochester,-,USA,-,75,220,2016,ANA,1,24,24
+723,Andrew Peeke,CBJ,D,21,1998-03-17,Parkland,-,USA,-,75,194,2016,CBJ,2,4,34
+724,Tyson Jost,COL,C,21,1998-03-14,St. Albert,-,CAN,-,71,187,2016,COL,1,10,10
+725,Dante Fabbro,NSH,D,21,1998-06-20,Coquitlam,-,CAN,-,72,189,2016,NSH,1,17,17
+726,Josh Mahura,ANA,D,21,1998-05-05,St. Albert,-,CAN,-,73,186,2016,ANA,3,24,85
+727,Victor Mete,MTL,D,21,1998-06-07,Woodbridge,-,CAN,-,69,187,2016,MTL,4,9,100
+728,Givani Smith,DET,R,21,1998-02-28,Thornhill,-,CAN,-,74,210,2016,DET,2,16,46
+729,Nick Caamano,DAL,R,21,1998-09-07,Hamilton,-,CAN,-,74,200,2016,DAL,5,25,146
+730,Connor Bunnaman,PHI,C,21,1998-04-16,Guelph,-,CAN,-,73,207,2016,PHI,4,18,109
+731,Jordan Kyrou,STL,C,21,1998-05-05,Toronto,-,CAN,-,72,175,2016,STL,2,5,35
+732,Riley Stillman,FLA,D,21,1998-03-09,Peterborough,-,CAN,-,73,196,2016,FLA,4,23,114
+733,Noah Gregor,S.J,C,21,1998-07-28,Beaumont,-,CAN,-,72,185,2016,S.J,4,20,111
+734,Dennis Cholowski,DET,D,21,1998-02-15,Langley,-,CAN,-,72,197,2016,DET,1,20,20
+735,Samuel Girard,COL,D,21,1998-05-12,Roberval,-,CAN,-,70,170,2016,NSH,2,17,47
+736,Pierre-Luc Dubois,CBJ,"C, L",21,1998-06-24,Ste-Agathe-Des-Monts,-,CAN,-,75,218,2016,CBJ,1,3,3
+737,Henrik Borgstrom,FLA,C,22,1997-08-06,Helsinki,-,FIN,-,75,199,2016,FLA,1,23,23
+738,Jesper Bratt,N.J,L,21,1998-07-30,Stockholm,-,SWE,-,70,175,2016,N.J,6,11,162
+739,Mikhail Sergachev,T.B,D,21,1998-06-25,Nizhnekamsk,-,RUS,-,75,217,2016,MTL,1,9,9
+740,Vitaly Abramov,OTT,R,21,1998-05-08,Chelyabinsk,-,RUS,-,69,180,2016,CBJ,3,4,65
+741,Michael McLeod,N.J,C,22,1998-02-03,Mississauga,-,CAN,-,74,188,2016,N.J,1,12,12
+742,Tage Thompson,BUF,C,22,1997-10-30,Phoenix,-,USA,-,77,215,2016,STL,1,26,26
+743,Alex Nylander,CHI,L,21,1998-03-02,Calgary,-,CAN,-,73,192,2016,BUF,1,8,8
+744,German Rubtsov,PHI,C,21,1998-06-27,Chekhov,-,RUS,-,74,178,2016,PHI,1,22,22
+745,Filip Hronek,DET,D,22,1997-11-02,Hradec Králové,-,CZE,-,72,183,2016,DET,2,23,53
+746,Troy Stecher,VAN,D,25,1994-04-07,Richmond,-,CAN,-,70,186,-,-,-,-,-
+747,Nikita Zaitsev,OTT,D,28,1991-10-29,Moscow,-,RUS,-,74,188,-,-,-,-,-
+748,Drake Caggiula,CHI,C,25,1994-06-20,Pickering,-,CAN,-,70,176,-,-,-,-,-
+749,Patrick Russell,EDM,R,27,1993-01-04,Bickenrod,-,DNK,-,73,203,-,-,-,-,-
+750,Michal Kempny,WSH,D,29,1990-09-08,Hodonin,-,CZE,-,72,195,-,-,-,-,-
+751,Otto Koivula,NYI,L,21,1998-09-01,Nokia,-,FIN,-,76,219,2016,NYI,4,29,120
+752,Joachim Blichfeld,S.J,R,21,1998-07-17,Frederikshavn,-,DNK,-,74,180,2016,S.J,7,29,210
+753,Dylan Gambrell,S.J,C,23,1996-08-26,Bonney Lake,-,USA,-,72,185,2016,S.J,2,30,60
+754,Rhett Gardner,DAL,C,23,1996-02-28,Moose Jaw,-,CAN,-,75,225,2016,DAL,4,25,116
+755,Matt Luff,L.A,R,22,1997-05-05,Oakville,-,CAN,-,74,196,-,-,-,-,-
+756,Mathieu Olivier,NSH,R,23,1997-02-11,Biloxi,-,USA,-,74,210,-,-,-,-,-
+757,Trevor Moore,"L.A, TOR","C, L",24,1995-03-31,Thousand Oaks,-,USA,-,70,185,-,-,-,-,-
+758,Brennan Menell,MIN,D,22,1997-05-24,Woodbury,-,USA,-,71,177,-,-,-,-,-
+759,Zack MacEwen,VAN,C,23,1996-07-08,Charlottetown,-,CAN,-,75,205,-,-,-,-,-
+760,Gerald Mayhew,MIN,C,27,1992-12-31,Wyandotte,-,USA,-,69,166,-,-,-,-,-
+761,Zach Aston-Reese,PIT,C,25,1994-08-10,Staten Island,-,USA,-,72,204,-,-,-,-,-
+762,Kailer Yamamoto,EDM,R,21,1998-09-29,Spokane,-,USA,-,68,153,2017,EDM,1,22,22
+763,Nicolas Hague,VGK,D,21,1998-12-05,Kitchener,-,CAN,-,78,221,2017,VGK,2,3,34
+764,Conor Timmins,COL,D,21,1998-09-18,St. Catharines,-,CAN,-,74,185,2017,COL,2,1,32
+765,Mario Ferraro,S.J,D,21,1998-09-17,Toronto,-,CAN,-,71,185,2017,S.J,2,18,49
+766,Cale Fleury,MTL,D,21,1998-11-19,Carlyle,-,CAN,-,73,205,2017,MTL,3,25,87
+767,Jaret Anderson-Dolan,L.A,C,20,1999-09-12,Calgary,-,CAN,-,71,188,2017,L.A,2,10,41
+768,Cody Glass,VGK,C,20,1999-04-01,Winnipeg,-,CAN,-,74,192,2017,VGK,1,6,6
+769,Casey Mittelstadt,BUF,C,21,1998-11-22,Edina,-,USA,-,73,199,2017,BUF,1,8,8
+770,Urho Vaakanainen,BOS,D,21,1999-01-01,Joensuu,-,FIN,-,73,185,2017,BOS,1,18,18
+771,Nico Hischier,N.J,C,21,1999-01-04,Brig,-,CHE,-,73,175,2017,N.J,1,1,1
+772,Jesper Boqvist,N.J,C,21,1998-10-30,Falun,-,SWE,-,72,180,2017,N.J,2,5,36
+773,Klim Kostin,STL,C,20,1999-05-05,Penza,-,RUS,-,75,212,2017,STL,1,31,31
+774,Elias Pettersson,VAN,C,21,1998-11-12,Sundsvall,-,SWE,-,74,176,2017,VAN,1,5,5
+775,Nick Suzuki,MTL,C,20,1999-08-10,London,-,CAN,-,71,201,2017,VGK,1,13,13
+776,Jack Studnicka,BOS,C,20,1999-02-18,Windsor,-,CAN,-,73,171,2017,BOS,2,22,53
+777,Robert Thomas,STL,C,20,1999-07-02,Aurora,-,CAN,-,72,188,2017,STL,1,20,20
+778,Morgan Frost,PHI,C,20,1999-05-14,Aurora,-,CAN,-,71,170,2017,PHI,1,27,27
+779,Max Comtois,ANA,L,21,1999-01-08,Longueuil,-,CAN,-,74,215,2017,ANA,2,19,50
+780,Henri Jokiharju,BUF,D,20,1999-06-17,Oulu,-,FIN,-,72,195,2017,CHI,1,29,29
+781,Miro Heiskanen,DAL,D,20,1999-07-18,Espoo,-,FIN,-,73,190,2017,DAL,1,3,3
+782,Martin Necas,CAR,C,21,1999-01-15,Nove Mesto na Morave,-,CZE,-,73,189,2017,CAR,1,12,12
+783,Timothy Liljegren,TOR,D,20,1999-04-30,Kristianstad,-,SWE,-,72,192,2017,TOR,1,17,17
+784,Ryan Poehling,MTL,C,21,1999-01-03,Lakeville,-,USA,-,74,204,2017,MTL,1,25,25
+785,Cale Makar,COL,D,21,1998-10-30,Calgary,-,CAN,-,71,187,2017,COL,1,4,4
+786,Lias Andersson,NYR,C,21,1998-10-13,Smogen,-,SWE,-,72,190,2017,NYR,1,7,7
+787,Erik Brannstrom,OTT,D,20,1999-09-02,Eksjo,-,SWE,-,70,181,2017,VGK,1,15,15
+788,Alexandre Texier,CBJ,C,20,1999-09-13,St. Martin D'heres,-,FRA,-,72,192,2017,CBJ,2,14,45
+789,Filip Chytil,NYR,C,20,1999-09-05,Kromeriz,-,CZE,-,74,206,2017,NYR,1,21,21
+790,Alex Iafallo,L.A,L,26,1993-12-21,Eden,-,USA,-,72,188,-,-,-,-,-
+791,David Kampf,CHI,C,25,1995-01-12,Chomutov,-,CZE,-,74,188,-,-,-,-,-
+792,Neal Pionk,WPG,D,24,1995-07-29,Hermantown,-,USA,-,72,186,-,-,-,-,-
+793,Oscar Fantenberg,VAN,D,28,1991-10-07,Ljunby,-,SWE,-,72,206,-,-,-,-,-
+794,Calle Rosen,COL,D,26,1994-02-02,Vaxjo,-,SWE,-,73,186,-,-,-,-,-
+795,Radim Simek,S.J,D,27,1992-09-20,Mlada Boleslav,-,CZE,-,71,200,-,-,-,-,-
+796,Jan Rutta,T.B,D,29,1990-07-29,Písek,-,CZE,-,75,204,-,-,-,-,-
+797,Gustav Lindstrom,DET,D,21,1998-10-20,Ostervala,-,SWE,-,74,190,2017,DET,2,7,38
+798,Eetu Luostarinen,CAR,C,21,1998-09-02,Siilinjarvi,-,FIN,-,75,184,2017,CAR,2,11,42
+799,Alexander Volkov,T.B,R,22,1997-08-02,Moscow,-,RUS,-,73,191,2017,T.B,2,17,48
+800,Emil Bemstrom,CBJ,C,20,1999-06-01,Nykoping,-,SWE,-,71,190,2017,CBJ,4,24,117
+801,Drake Batherson,OTT,"C, R",21,1998-04-27,Fort Wayne,-,USA,-,73,206,2017,OTT,4,28,121
+802,Jonathan Davidsson,OTT,R,22,1997-03-12,Tyreso,-,SWE,-,71,185,2017,CBJ,6,15,170
+803,Max Veronneau,OTT,R,24,1995-12-12,Ottawa,-,CAN,-,72,193,-,-,-,-,-
+804,Sheldon Dries,COL,C,25,1994-04-23,Macomb Township,-,USA,-,69,180,-,-,-,-,-
+805,Sean Walker,L.A,D,25,1994-11-13,Keswick,-,CAN,-,71,196,-,-,-,-,-
+806,Adam Johnson,PIT,C,25,1994-06-22,Grand Rapids,-,USA,-,72,174,-,-,-,-,-
+807,Alexander True,S.J,C,22,1997-07-17,Kobenhavn,-,DNK,-,77,200,-,-,-,-,-
+808,Zach Whitecloud,VGK,D,23,1996-11-28,Brandon,-,CAN,-,74,209,-,-,-,-,-
+809,Eric Robinson,CBJ,L,24,1995-06-14,BELLMAWR,-,USA,-,74,197,-,-,-,-,-
+810,Joel L'Esperance,DAL,R,24,1995-08-18,Brighton,-,USA,-,74,215,-,-,-,-,-
+811,Lukas Radil,S.J,C,29,1990-08-05,Caslav,-,CZE,-,74,205,-,-,-,-,-
+812,Oliver Wahlstrom,NYI,R,19,2000-06-13,Portland,-,USA,-,73,211,2018,NYI,1,11,11
+813,Martin Fehervary,WSH,D,20,1999-10-06,Bratislava,-,SVK,-,74,200,2018,WSH,2,15,46
+814,Joel Farabee,PHI,L,19,2000-02-25,Syracuse,-,USA,-,72,164,2018,PHI,1,14,14
+815,Quinn Hughes,VAN,D,20,1999-10-14,Orlando,-,USA,-,70,170,2018,VAN,1,7,7
+816,Brady Tkachuk,OTT,L,20,1999-09-16,Scottsdale,-,USA,-,75,212,2018,OTT,1,4,4
+817,Isac Lundestrom,ANA,C,20,1999-11-06,Gallivare,-,SWE,-,72,187,2018,ANA,1,23,23
+818,Filip Zadina,DET,R,20,1999-11-27,Pardubice,-,CZE,-,72,189,2018,DET,1,6,6
+819,Jesperi Kotkaniemi,MTL,C,19,2000-07-06,Pori,-,FIN,-,74,198,2018,MTL,1,3,3
+820,Andrei Svechnikov,CAR,R,19,2000-03-26,Barnual,-,RUS,-,74,195,2018,CAR,1,2,2
+821,Rasmus Dahlin,BUF,D,19,2000-04-13,Trollhattan,-,SWE,-,75,193,2018,BUF,1,1,1
+822,Barrett Hayton,ARI,C,19,2000-06-09,Peterborough,-,CAN,-,73,190,2018,ARI,1,5,5
+823,Liam Foudy,CBJ,C,20,2000-02-04,Toronto,-,CAN,-,72,175,2018,CBJ,1,18,18
+824,Noah Dobson,NYI,D,20,2000-01-07,Summerside,-,CAN,-,75,184,2018,NYI,1,12,12
+825,Adam Boqvist,CHI,D,19,2000-08-15,Falun,-,SWE,-,71,179,2018,CHI,1,8,8
+826,Rasmus Sandin,TOR,D,19,2000-03-07,Uppsala,-,SWE,-,72,183,2018,TOR,1,29,29
+827,Karson Kuhlman,BOS,C,24,1995-09-26,Esko,-,USA,-,71,185,-,-,-,-,-
+828,Jordan Gross,ARI,D,24,1995-05-09,Maple Grove,-,USA,-,70,190,-,-,-,-,-
+829,Lawrence Pilut,BUF,D,24,1995-12-30,Tingsryd,-,SWE,-,71,194,-,-,-,-,-
+830,Joel Persson,EDM,D,25,1994-03-04,Kristianstad,-,SWE,-,71,170,-,-,-,-,-
+831,Par Lindholm,BOS,C,28,1991-10-05,Kusmark,-,SWE,-,72,183,-,-,-,-,-
+832,Juuso Riikola,PIT,D,26,1993-11-09,Joensuu,-,FIN,-,72,189,-,-,-,-,-
+833,Dominik Kahun,PIT,C,24,1995-07-02,Plana,-,CZE,-,71,175,-,-,-,-,-
+834,Ilya Lyubushkin,ARI,D,25,1994-04-06,Moscow,-,RUS,-,74,201,-,-,-,-,-
+835,Antti Suomela,S.J,C,25,1994-03-17,Espoo,-,FIN,-,72,180,-,-,-,-,-
+836,David Gustafsson,WPG,C,19,2000-04-11,Tingsryd,-,SWE,-,74,196,2018,WPG,2,29,60
+837,Otto Leskinen,MTL,D,23,1997-02-06,Pieksämäki,-,FIN,-,71,183,-,-,-,-,-
+838,Logan O'Connor,COL,R,23,1996-08-14,Missouri City,-,USA,-,72,175,-,-,-,-,-
+839,Taro Hirose,DET,L,23,1996-06-30,Calgary,-,CAN,-,70,162,-,-,-,-,-
+840,Nico Sturm,MIN,C,24,1995-05-03,Augsburg,-,DEU,-,75,206,-,-,-,-,-
+841,Blake Lizotte,L.A,C,22,1997-12-13,Lindstrom,-,USA,-,67,172,-,-,-,-,-
+842,Danil Yurtaykin,S.J,L,22,1997-07-01,Belovo,-,RUS,-,71,165,-,-,-,-,-
+843,Joel Kellman,S.J,C,25,1994-05-25,Karlskrona,-,SWE,-,71,192,-,-,-,-,-
+844,Kirby Dach,CHI,C,19,2001-01-21,Fort Saskatchewan,-,CAN,-,76,197,2019,CHI,1,3,3
+845,Kaapo Kakko,NYR,R,19,2001-02-13,Turku,-,FIN,-,75,199,2019,NYR,1,2,2
+846,Jack Hughes,N.J,C,18,2001-05-14,Orlando,-,USA,-,70,170,2019,N.J,1,1,1
+847,Ville Heinola,WPG,D,19,2001-02-03,Honkajoki,-,FIN,-,71,178,2019,WPG,1,20,20
+848,Tobias Bjornfot,L.A,D,18,2001-04-06,Upplands Vasby,-,SWE,-,72,202,2019,L.A,1,22,22
+849,Ilya Mikheyev,TOR,R,25,1994-10-10,Omsk,-,RUS,-,75,195,-,-,-,-,-
+850,Alexander Yelesin,CGY,D,24,1996-02-07,Yaroslavl,-,RUS,-,72,195,-,-,-,-,-
+851,Anton Wedin,CHI,L,26,1993-03-01,Sundsvall,-,SWE,-,71,195,-,-,-,-,-
+852,Joakim Nygard,EDM,L,27,1993-01-08,Stockholm,-,SWE,-,72,179,-,-,-,-,-
+853,Lean Bergmann,S.J,C,21,1998-10-04,Hemer,-,DEU,-,74,205,-,-,-,-,-
+854,Joel Kiviranta,DAL,L,23,1996-03-23,Vantaa,-,FIN,-,70,180,-,-,-,-,-
+855,Joona Luoto,WPG,L,22,1997-09-26,TAMPERE,-,FIN,-,75,192,-,-,-,-,-
+856,Jakob Lilja,CBJ,L,26,1993-07-23,Malmo,-,SWE,-,73,196,-,-,-,-,-
+857,Gaetan Haas,EDM,C,28,1992-01-31,Bonfol,-,CHE,-,72,181,-,-,-,-,-

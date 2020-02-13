@@ -13,6 +13,7 @@ import copy
 import warnings
 import json
 import gspread
+import cfscrape
 from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
@@ -90,6 +91,116 @@ def generate_all_teams_dict(return_type):
 	output['WPG'] = return_type
 	output['WSH'] = return_type
 	return output
+
+def get_daily_fo_url(team_id):
+	daily_fo_url_dict = {}
+	daily_fo_url_dict['ANA'] = "https://www.dailyfaceoff.com/teams/anaheim-ducks/line-combinations/"
+	daily_fo_url_dict['ARI'] = "https://www.dailyfaceoff.com/teams/arizona-coyotes/line-combinations/"
+	daily_fo_url_dict['BOS'] = "https://www.dailyfaceoff.com/teams/boston-bruins/line-combinations/"	
+	daily_fo_url_dict['BUF'] = "https://www.dailyfaceoff.com/teams/buffalo-sabres/line-combinations/"
+	daily_fo_url_dict['CAR'] = "https://www.dailyfaceoff.com/teams/carolina-hurricanes/line-combinations/"
+	daily_fo_url_dict['CBJ'] = "https://www.dailyfaceoff.com/teams/columbus-blue-jackets/line-combinations/"
+	daily_fo_url_dict['CGY'] = "https://www.dailyfaceoff.com/teams/calgary-flames/line-combinations/"
+	daily_fo_url_dict['CHI'] = "https://www.dailyfaceoff.com/teams/chigaco-blackhawks/line-combinations/"
+	daily_fo_url_dict['COL'] = "https://www.dailyfaceoff.com/teams/colorado-avalanche/line-combinations/"
+	daily_fo_url_dict['DAL'] = "https://www.dailyfaceoff.com/teams/dallas-stars/line-combinations/"
+	daily_fo_url_dict['DET'] = "https://www.dailyfaceoff.com/teams/detroit-red-wings/line-combinations/"
+	daily_fo_url_dict['EDM'] = "https://www.dailyfaceoff.com/teams/edmonton-oilers/line-combinations/"
+	daily_fo_url_dict['FLA'] = "https://www.dailyfaceoff.com/teams/florida-panthers/line-combinations/"
+	daily_fo_url_dict['LAK'] = "https://www.dailyfaceoff.com/teams/los-angeles-kings/line-combinations/"
+	daily_fo_url_dict['MIN'] = "https://www.dailyfaceoff.com/teams/minnesota-wild/line-combinations/"
+	daily_fo_url_dict['MTL'] = "https://www.dailyfaceoff.com/teams/montreal-canadiens/line-combinations/"
+	daily_fo_url_dict['NJD'] = "https://www.dailyfaceoff.com/teams/new-jersey-devils/line-combinations/"
+	daily_fo_url_dict['NSH'] = "https://www.dailyfaceoff.com/teams/nashville-predators/line-combinations/"
+	daily_fo_url_dict['NYI'] = "https://www.dailyfaceoff.com/teams/new-york-islanders/line-combinations/"
+	daily_fo_url_dict['NYR'] = "https://www.dailyfaceoff.com/teams/new-york-rangers/line-combinations/"
+	daily_fo_url_dict['OTT'] = "https://www.dailyfaceoff.com/teams/ottawa-senators/line-combinations/"
+	daily_fo_url_dict['PHI'] = "https://www.dailyfaceoff.com/teams/philadelphia-flyers/line-combinations/"
+	daily_fo_url_dict['PIT'] = "https://www.dailyfaceoff.com/teams/pittsburgh-penguins/line-combinations/"
+	daily_fo_url_dict['SJS'] = "https://www.dailyfaceoff.com/teams/san-jose-sharks/line-combinations/"
+	daily_fo_url_dict['STL'] = "https://www.dailyfaceoff.com/teams/st-louis-blues/line-combinations/"
+	daily_fo_url_dict['TBL'] = "https://www.dailyfaceoff.com/teams/tampa-bay-lightning/line-combinations/"
+	daily_fo_url_dict['TOR'] = "https://www.dailyfaceoff.com/teams/toronto-maple-leafs/line-combinations/"
+	daily_fo_url_dict['VAN'] = "https://www.dailyfaceoff.com/teams/vancouver-canucks/line-combinations/"
+	daily_fo_url_dict['VGK'] = "https://www.dailyfaceoff.com/teams/vegas-golden-knights/line-combinations/"
+	daily_fo_url_dict['WPG'] = "https://www.dailyfaceoff.com/teams/winnipeg-jets/line-combinations/"
+	daily_fo_url_dict['WSH'] = "https://www.dailyfaceoff.com/teams/washington-capitals/line-combinations/"
+	return daily_fo_url_dict[team_id]
+
+def get_home_team_advantage(t_db,ht_id,at_id=None):
+	ht = t_db[ht_id]
+	ht_rel_pcg = ht.home_p_pcg/(ht.home_p_pcg+ht.away_p_pcg)
+	if at_id == None:	
+		return ht_rel_pcg
+	else:
+		at = t_db[at_id]
+		at_rel_pcg = at.home_p_pcg/(at.home_p_pcg+at.away_p_pcg)
+		return ht_rel_pcg/(1-at_rel_pcg)
+
+def get_days_rested(team_id,simulation_param):
+	# For now, only takes the most recent rest into account.
+	maximum_rest = 3 # number of days after the team is fully healthy/rested.
+	i = 0
+	found = False
+	days_rested = maximum_rest
+	while i < maximum_rest and found == False:
+		games_on_date = simulation_param['databases']['season_schedule'][get_previous_day(simulation_param['simulation_date'],i+1)] # i+1 since there is not need to check the same day as the game.
+		for game in games_on_date:
+			if team_id in game:
+				days_rested = i
+				found = True
+		i += 1
+	return days_rested
+
+def is_skipp_year(year):
+	if ((year%4) == 0) and ((year%400) == 0):
+		return True
+	else:
+		return False
+
+def get_previous_day(start_date,number_of_days):
+	# This is very ugly and should be done by using datetime.dateime libraray instead.
+	# Date needs to be in str-format: 'YYYY-MM-DD'
+	if number_of_days == 0:
+		return start_date
+	else:
+		datestr = start_date
+		i = 0
+		while i < number_of_days:
+			[year,month,day] = datestr.split('-')
+			if int(day) > 1:
+				day = int(day)-1
+			else:
+				if int(month) in [2,4,6,8,9,11]:
+					month = int(month)-1
+					day = 31
+				elif int(month) in [5,7,10,12]:
+					month = int(month)-1
+					day = 30
+				elif int(month) == 3:
+					month = int(month)-1
+					if is_skipp_year:
+						day = 29
+					else:
+						day = 28
+				else:
+					year = int(year)-1
+					month = 12
+					day = 31
+			datestr = str(str(year) + '-' + str(month) + '-' + str(day))
+			i += 1
+		return datestr
+
+def get_delta_days(date0,date1):
+	# Assumes 'YYYY-MM-DD'
+	[year0,month0,day0] = date0.split('-')
+	[year1,month1,day1] = date1.split('-')
+
+	d0 = datetime.date(int(year0),int(month0),int(day0))
+	d1 = datetime.date(int(year1),int(month1),int(day1))
+
+	delta = d1-d0
+	return delta.days
 
 def get_long_name(team_id):
 	tmp = generate_long_name()
@@ -191,9 +302,12 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 		skater = db[skater_id]
 		if (skater.ind['toi'][STAT_ES] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
 			if len(attributes) > 1:
-				val_a = get_attribute_value(skater,attributes[0],playform)
-				val_b = get_attribute_value(skater,attributes[1],playform)
-				val = operation(val_a,val_b)
+				if attributes[0] == 'ranking':
+					val = get_attribute_value(skater,attributes[1],playform_index='ranking')
+				else:
+					val_a = get_attribute_value(skater,attributes[0],playform)
+					val_b = get_attribute_value(skater,attributes[1],playform)
+					val = operation(val_a,val_b)
 			else:
 				val = get_attribute_value(skater,attributes[0],playform)
 			val *= scale_factor
@@ -223,24 +337,78 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 	else:
 		norm_factor = 1
 	if do_print == True:
-		print(str(attributes) + '. Scale factor=' + str(scale_factor) + '. Min. TOI=' + str(_filter['toi']))
+		print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}. Stdev={5:.2f}.'.format(attributes,scale_factor,_filter['toi'],len(sorted_list),output['mu'],output['sigma']))
 		ranking = 0
 		for pair in sorted_list:
 			ranking += 1
 			skater_id = pair[1]
 			skater = db[skater_id]
 			if ranking <= print_list_length or skater_id in _filter['additional_players']:
-				#print('{0}: {1} ({2}) - "{3}"({4}): {5:.1f}.'.format(ranking,skater.bio['name'],skater.bio['team_id'],attributes,playform.upper(),pair[0]))
-				print('{0}: {1} ({2}) - {3:.2f}'.format(ranking,skater.bio['name'],skater.bio['team_id'],norm_factor*pair[0]))
-				for attribute in attributes:
-					print('   {0}: {1:.2f}'.format(attribute,scale_factor*get_attribute_value(skater,attribute,playform)))
+				if attributes[0] == 'ranking':
+					val = norm_factor*pair[0]
+					print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma']))
+					#print('   Ranking: {0:.0f}'.format(get_attribute_value(skater,attributes[1],'ranking')))
+				else:
+					val = norm_factor*pair[0]
+					print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma']))
+					print('   TOI: {0:.1f} minutes'.format(get_attribute_value(skater,'toi',playform)/60))
+					for attribute in attributes:
+						print('   {0}: {1:.2f}'.format(attribute,scale_factor*get_attribute_value(skater,attribute,playform)))
 	return output
 
+def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
+	if _filter == None:
+		_filter['toi'] = 0
+		_filter['additional_players'] = []
+		_filter['team'] = None
+	output = {}
+	added_players = set()
+	sorted_list,data_list = [],[]
+	for goalie_id in db.keys():
+		goalie = db[goalie_id]
+		if goalie.get_attribute('toi') >= 60*_filter['toi'] or goalie_id in _filter['additional_players']:
+			val = goalie.get_attribute(attribute) * scale_factor
+			if _filter['team'] == None:
+				sorted_list.append((val,goalie_id))
+				data_list.append(val)
+				added_players.add(goalie_id)
+			else:
+				if goalie.get_attribute('team_id') in _filter['team']:
+					sorted_list.append((val,goalie_id))
+					data_list.append(val)
+					added_players.add(goalie_id)
+			if (goalie_id in _filter['additional_players']) and (goalie_id not in added_players):
+				sorted_list.append((val,goalie_id))
+				data_list.append(val)
 
+	# This is not very nice.
+	sorted_list.sort(reverse=high_to_low)
+	data_list.sort(reverse=high_to_low)
+	output['mu'] = np.mean(data_list)
+	output['sigma'] = np.std(data_list)
+	output['list'] = sorted_list
+	output['data'] = data_list
+	if normalize == True:
+		norm_factor = 1/np.max(data_list)
+	else:
+		norm_factor = 1
+	if do_print == True:
+		print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}.'.format(attribute,scale_factor,_filter['toi'],len(sorted_list),output['mu']))
+		ranking = 0
+		for pair in sorted_list:
+			ranking += 1
+			goalie_id = pair[1]
+			goalie = db[goalie_id]
+			if ranking <= print_list_length or goalie_id in _filter['additional_players']:
+				val = norm_factor*pair[0]
+				print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,goalie.get_attribute('name'),goalie.get_attribute('team_id'),val,(val-output['mu'])/output['sigma']))
+	return output
 
 def get_attribute_value(player,attribute,playform_index=STAT_ES):
 	if player.bio['position'] == 'G':
 		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
+	if playform_index == 'ranking':
+		return player.rank[attribute]
 	if attribute in player.bio.keys():
 		return player.bio[attribute]
 	elif attribute in player.ind.keys():
@@ -491,7 +659,8 @@ def evaluate_combination(s_db,player_ids,attributes=['estimated_off_per_60','est
 				for i,attribute in enumerate(attributes):
 					data_values[i] += get_attribute_value(s_db[player_id],attribute)
 			for i,attribute in enumerate(attributes):
-				print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))				
+				print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))
+	return data_values		
 
 def print_player_from_team(player_db,team_id,position=[]):
 	if position == []:
@@ -550,4 +719,159 @@ def create_player_list(s_db,_filter):
 	
 	return list_of_players
 
+def get_probability(values,idx=0):
+	if isinstance(values, list) == False:
+		raise ValueError('Uncompatible types. Input must be a list.')
+	else:
+		val = values[idx]
+		return val/sum(values)
 
+def get_skater_values(skater_db):
+	values_dict = defaultdict(list)
+	for skater_id in ACTIVE_SKATERS:
+		skater = skater_db[skater_id]
+		values_dict['estimated_off_pcg'].append(skater.on_ice['estimated_off_pcg'])
+		values_dict['primary_points_per_60'].append(skater.ind['primary_points_per_60'][0])
+		values_dict['goal_scoring_rating'].append(skater.ind['goal_scoring_rating'][0])
+	return values_dict
+
+def get_team_values(team_db):
+	values_dict = defaultdict(list)
+	for team_id in ACTIVE_TEAMS:
+		team = team_db[team_id]
+		values_dict['p_pcg'].append(team.p_pcg)
+		values_dict['gf_pcg'].append(team.gf_pcg)
+		values_dict['sf_pcg'].append(team.sf_pcg)
+		values_dict['cf_pcg'].append(team.cf_pcg)
+		values_dict['ff_pcg'].append(team.ff_pcg)
+		values_dict['xgf_pcg'].append(team.xgf_pcg)
+		values_dict['scf_pcg'].append(team.scf_pcg)
+		values_dict['hdcf_pcg'].append(team.hdcf_pcg)
+		values_dict['sv_pcg'].append(team.sv_pcg)
+		values_dict['pdo'].append(team.pdo)
+		values_dict['hits_per_game'].append(team.exp_data['hits_per_game'])
+		values_dict['estimated_off_pcg'].append(team.exp_data['estimated_off_pcg'])
+		values_dict['in_season_rating'].append(team.exp_data['in_season_rating'])
+	return values_dict
+
+def get_rank(value,lst):
+	'''
+	Returns the rank of the value in the list
+	'''
+	lst.sort(reverse=False)
+	rank = 1
+	for lst_val in lst:
+		if lst_val == value:
+			return rank
+		rank += 1
+	if rank > len(lst):
+		raise ValueError('Could not find value ' + str(value) + ' in the list.')
+
+def generate_fatigue_factors(csv_path='Data/nhl_result_from_2018.csv'):
+	fatigue_factors = {}
+	for team_id in ACTIVE_TEAMS:
+		team = get_long_name(team_id)
+		fatigue_factors[team_id] = {}
+		op_days = {}
+		op_days[0],op_days[1],op_days[2] = defaultdict(int),defaultdict(int),defaultdict(int)
+		op_all = defaultdict(int)
+		all_gf, all_ga, all_p, all_p_total = 0,0,0,0
+		ht_gf_idx = 2
+		at_gf_idx = 4
+		ot_idx = 5
+		prev_date = -1
+		with open(csv_path,'rt') as f:
+				reader = csv.reader(f, delimiter=',')
+				for row in reader:
+					if row[1] != 'Date':
+						ht = row[1]
+						at = row[3]
+						if (ht == team) or (at == team):
+							if team == ht:
+								gf = int(row[ht_gf_idx])
+								ga = int(row[at_gf_idx])
+							else:
+								gf = int(row[at_gf_idx])
+								ga = int(row[ht_gf_idx])
+							this_date = row[0]
+							if prev_date != -1:
+								days_since_last_game = get_delta_days(prev_date,this_date) - 1
+								if days_since_last_game >= 2:
+									days_since_last_game = 2
+								if gf > ga:
+									p = 2
+								elif row[ot_idx] != '':
+									p = 1
+								else:
+									p = 0
+								op_days[days_since_last_game]['games_played'] += 1
+								op_days[days_since_last_game]['gf'] += gf
+								op_days[days_since_last_game]['ga'] += ga
+								op_days[days_since_last_game]['p'] += p
+								op_days[days_since_last_game]['p_total'] += 2
+								op_all['gf'] += gf
+								op_all['ga'] += ga
+								op_all['p'] += p
+								op_all['p_total'] += 2
+							prev_date = this_date
+
+		total_gf_pcg = get_probability([op_all['gf'],op_all['ga']])
+		total_p_pcg = op_all['p']/op_all['p_total']
+		for i in range(3):
+			days_gf_pcg = get_probability([op_days[i]['gf'],op_days[i]['ga']])
+			days_p_pcg = op_days[i]['p']/op_days[i]['p_total']
+			op_days[i]['gf_pcg'] = days_gf_pcg
+			op_days[i]['gf_pcg_rel'] = days_gf_pcg/total_gf_pcg
+			op_days[i]['p_pcg'] = days_p_pcg
+			op_days[i]['p_pcg_rel'] = days_p_pcg/total_p_pcg
+		fatigue_factors[team_id]['per_days_rested'] = op_days
+		fatigue_factors[team_id]['total'] = op_all
+	return fatigue_factors
+
+def get_fatigue_factor(fatigue_factors,team_id,days_rested=-1):
+	if days_rested == -1:
+		return fatigue_factors[team_id]
+	else:
+		if days_rested > 2:
+			warnings.warn('2 days of rest is maximum. Returning fatigue factor for 2 rest days (' + str(days_rested) + ' selected).')
+			days_rested = 2
+		return fatigue_factors[team_id]['per_days_rested'][days_rested]['p_pcg_rel']
+
+def generic_csv_reader(csv_file_path,dict_key_attribute='name',output_attributes=False):
+	'''
+	Assuming first line is the headers.
+	Returns an dict with accoridng to input dict_key;
+   		output[dict_key] = {}
+   		output[dict_key][header_1] = value_1
+   		output[dict_key][header_2] = value_2
+   		...
+   		output[dict_key][header_n] = value_n
+	'''
+	output = {}
+	attributes = []
+	with open(csv_file_path,'rt') as f:
+		reader = csv.reader(f, delimiter=',')
+		first_row = True
+		for row in reader:
+			if first_row == True:
+				first_row = False
+				# Extract headers
+				'''
+				for value in row:
+					attributes.append(str(value).lower())
+				'''
+				attributes = row
+				if output_attributes == True:
+					output['attributes'] = attributes
+				if dict_key_attribute not in attributes:
+					raise ValueError('Could not find dictionary key "' + dict_key_attribute + '" in attributes: ' + str(attributes))
+				dict_key_index = attributes.index(dict_key_attribute)
+				#print(attributes)
+			else:
+				# Add data to dict
+				dict_key = row[dict_key_index]
+				output[dict_key] = {}
+				for i,value in enumerate(row):
+					attribute = attributes[i]
+					output[dict_key][attribute] = value
+	return output

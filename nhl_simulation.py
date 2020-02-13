@@ -173,8 +173,8 @@ def simulate_regulation_time(simulation_param,data_param,game_status):
 		# 1: Update the state machine
 		game_status = update_state_machine(game_status)
 
-		# 2: Put new players on the ice, if the old shift is done
-		if ((game_status['time']%simulation_param['shift_length']) == 0) or (game_status['gameplay_changed'] == True):
+		# 2: Put new players on the ice, if the old shift is done or if it is the beginning of the game.
+		if ((game_status['time']%simulation_param['shift_length']) == 0) or (game_status['gameplay_changed'] == True) or (game_status['time'] == simulation_param['initial_time']):
 			game_status = put_players_on_ice(game_status,data_param,verbose)
 
 		# 3: Update game clock before simulating the gameplay.
@@ -186,7 +186,7 @@ def simulate_regulation_time(simulation_param,data_param,game_status):
 		# 5a: Simulate gameplay for one second
 		#[game_status, data_param] = simulate_gameplay(game_status,data_param,verbose)
 
-		# 5b: Simulate gameplay for one second
+		# 5b: Simulate gameplay for one second. By putting a complete line on the ice computation time is reduced.
 		[game_status, data_param] = simulate_gameplay_per_line(game_status,data_param,verbose)
 
 		# 6: Update penalties after gameplay simulation, if there are someone in the penalty box.
@@ -474,8 +474,7 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		#while added_skaters[0] < game_status[ct + '_number_of_skaters'][0] or added_skaters[1] < game_status[ct + '_number_of_skaters'][1]:
 		while add_more_d or add_more_f:
 			for skater_id in set(data_param[ct + '_skaters']):  # using a set for randomizing purposes
-				skater = get_player(data_param[ct + '_skaters'],skater_id)
-				# @TODO: This should depend on gameplay_state
+				skater = get_player(data_param[ct + '_skaters'],skater_id)				
 				sf_per_time = game_status['time_step']*skater.on_ice['sf_per_sec']
 				sa_per_time = game_status['time_step']*skater.on_ice['sa_per_sec']
 				off_per_time = game_status['time_step']*skater.on_ice['estimated_off_per_sec']
@@ -550,7 +549,6 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 	return game_status
 
 def get_starting_goalie(simulation_param,team_id):
-	##data_param['ht_goalie'] = get_starting_goalie(simulation_param['databases']['goalie_db'],simulation_param['ht_id'])
 	found_goalie = False
 	while found_goalie == False:
 		for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
@@ -878,6 +876,7 @@ def create_game_specific_db(simulation_param):
 	available_ht_players = set(simulation_param['databases']['team_specific_db'][simulation_param['ht_id']].keys())
 	available_at_players = set(simulation_param['databases']['team_specific_db'][simulation_param['at_id']].keys())
 	
+	# Home team
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_ht_players:
 		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
@@ -897,6 +896,7 @@ def create_game_specific_db(simulation_param):
 		skater_id = pair[1]
 		ht_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
 
+	# Away team
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_at_players:
 		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
@@ -915,7 +915,6 @@ def create_game_specific_db(simulation_param):
 	for pair in list_of_fwds:
 		skater_id = pair[1]
 		at_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
-
 
 	# Set up data_param, containing information about the players in the game.
 	data_param = {}
