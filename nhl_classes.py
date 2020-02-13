@@ -178,6 +178,24 @@ class Skater():
 		print('   Rank-Off%: {0:.0f}. Rank-Primary points/60: {1:.0f}. Rank-Goal scoring: {2:.0f}'.format(self.rank['estimated_off_pcg'],self.rank['primary_points_per_60'],self.rank['goal_scoring_rating']))
 		print('   TOI/GP: {0:.1f}. Penalty difference/60: {1:.2f}. Avg. zone start: {2:.2f}'.format(self.ind['toi_per_gp'][0]/60,self.ind['pd_diff_per_60'][0],self.on_ice['avg_zone_start']))
 
+	def get_attribute(self,attribute,playform_index=STAT_ES):
+		if self.bio['position'] == 'G':
+			self.get_attribute(attribute,playform_index)
+		if playform_index == 'ranking':
+			return self.rank[attribute]
+		if attribute in self.bio.keys():
+			return self.bio[attribute]
+		elif attribute in self.ind.keys():
+			return self.ind[attribute][playform_index]
+		elif attribute in self.on_ice.keys():
+			return self.on_ice[attribute]
+		else:
+			raise ValueError('Unknown attribute ' + attribute)
+
+	def get_toi(self,playform_index=STAT_ES):
+		return self.get_attribute('toi',playform_index)
+
+
 class Goalie():
 	def __init__(self,bio,ind):
 		# Bio-data
@@ -189,7 +207,6 @@ class Goalie():
 			self.ind[attribute] = ind[attribute]
 		
 		# Special attributes
-		# En till temp text
 		self.ind['sv_pcg'] = [None,None,None]
 		self.ind['sa_per_sec'] = [None,None,None]
 		self.ind['gsaa_per_60'] = [None,None,None]
@@ -220,6 +237,9 @@ class Goalie():
 			return self.ind[attribute][playform_index]
 		else:
 			raise ValueError('Unknown attribute ' + attribute)
+
+	def get_toi(self,playform_index=STAT_ES):
+		return self.get_attribute('toi',playform_index)
 
 	def print_player(self):
 		print('Information for player ' + self.bio['name'])

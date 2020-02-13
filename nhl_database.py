@@ -1064,13 +1064,13 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
-		if skater.bio['team_id'] == debug_team_id:
+		if skater.get_attribute('team_id') == debug_team_id:
 			print(skater_id)
-			print('   5v5-TOI: {0:.1f} min. 5v5-TOI/GP: {1:.1f} min. 5v5-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_ES)/60,get_attribute_value(skater,'toi_per_gp',STAT_ES)/60,100*get_attribute_value(skater,'toi_pcg',STAT_ES)))
-			print('   PP-TOI: {0:.1f} s. PP-TOI/GP: {1:.1f} s. PP-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_PP)/60,get_attribute_value(skater,'toi_per_gp',STAT_PP)/60,100*get_attribute_value(skater,'toi_pcg',STAT_PP)))
-			print('   PK-TOI: {0:.1f} s. PK-TOI/GP: {1:.1f} . PK-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_PK)/60,get_attribute_value(skater,'toi_per_gp',STAT_PK)/60,100*get_attribute_value(skater,'toi_pcg',STAT_PK)))
-			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(get_attribute_value(skater,'estimated_off_per_60'),get_attribute_value(skater,'estimated_def_per_60'),100*get_attribute_value(skater,'estimated_off_pcg')))
-			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(get_attribute_value(skater,'pt_per_60'),get_attribute_value(skater,'pd_per_60'),get_attribute_value(skater,'pd_diff_per_60')))	
+			print('   5v5-TOI: {0:.1f} min. 5v5-TOI/GP: {1:.1f} min. 5v5-TOI%: {2:.1f}%'.format(skater.get_toi()/60,skater.get_attribute('toi_per_gp',STAT_ES)/60,100*skater.get_attribute('toi_pcg',STAT_ES)))
+			print('   PP-TOI: {0:.1f} s. PP-TOI/GP: {1:.1f}. PP-TOI%: {2:.1f}%'.format(skater.get_toi(STAT_PP)/60,skater.get_attribute('toi_per_gp',STAT_PP)/60,100*skater.get_attribute('toi_pcg',STAT_PP)))
+			print('   PK-TOI: {0:.1f} s. PK-TOI/GP: {1:.1f}. PK-TOI%: {2:.1f}%'.format(skater.get_toi(STAT_PK)/60,skater.get_attribute('toi_per_gp',STAT_PK)/60,100*skater.get_attribute('toi_pcg',STAT_PK)))
+			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(skater.get_attribute('estimated_off_per_60'),skater.get_attribute('estimated_def_per_60'),100*skater.get_attribute('estimated_off_pcg')))
+			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(skater.get_attribute('pt_per_60'),skater.get_attribute('pd_per_60'),skater.get_attribute('pd_diff_per_60')))	
 	# Add ranking data. 
 	values_dict = get_skater_values(skater_db)
 	for skater_id in ACTIVE_SKATERS:

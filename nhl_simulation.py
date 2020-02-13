@@ -889,8 +889,8 @@ def create_game_specific_db(simulation_param):
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_ht_players:
 		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
-		toi_per_gp = get_attribute_value(skater,'toi_per_gp')
-		if get_attribute_value(skater,'position') == 'D':
+		toi_per_gp = skater.get_attribute('toi_per_gp')
+		if skater.get_attribute('position') == 'D':
 			list_of_defs.append((toi_per_gp,skater_id))
 		else:
 			list_of_fwds.append((toi_per_gp,skater_id))
@@ -909,8 +909,8 @@ def create_game_specific_db(simulation_param):
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_at_players:
 		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
-		toi_per_gp = get_attribute_value(skater,'toi_per_gp')
-		if get_attribute_value(skater,'position') == 'D':
+		toi_per_gp = skater.get_attribute('toi_per_gp')
+		if skater.get_attribute('position') == 'D':
 			list_of_defs.append((toi_per_gp,skater_id))
 		else:
 			list_of_fwds.append((toi_per_gp,skater_id))

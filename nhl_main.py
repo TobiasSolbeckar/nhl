@@ -113,16 +113,16 @@ simulation_param['include_offseason_moves'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-simulation_param['simulate_ind_games'] = True								# Default value = False
+#simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['print_ul_stats'] = True 									# Default value = False
-simulation_param['do_exp'] = True 											# Default value = False
-#simulation_param['do_player_cards'] = True
+#simulation_param['do_exp'] = True 											# Default value = False
+simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [50000,2500]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [500,25]											# Number of simulations for each game/season. Default = [50000,2500]
 simulation_param['debug_team'] = None
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
@@ -146,7 +146,7 @@ simulation_param['exp_list_length'] = 5
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['TOR_F']
+simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 #simulation_param['exp_additional_players'] = ['CONNOR_MCDAVID','LEON_DRAISAITL','SIDNEY_CROSBY','MARK_STONE']
 #simulation_param['exp_additional_players'] = ['ONDREJ_KASE']
 simulation_param['exp_show_player_ranking'] = False
@@ -970,13 +970,13 @@ if simulation_param['do_exp']:
 		data_list = []
 		for player_id in s_db.keys():
 			player = s_db[player_id]
-			if get_attribute_value(player,'toi') > _filter['toi']*60:
+			if player.get_toi() > _filter['toi']*60:
 				num_of_rows += 1
 				for attribute in attributes:
 					if attribute == 'toi':
-						data_list.append(int(get_attribute_value(player,attribute))/60)
+						data_list.append(player.get_toi()/60)
 					else:
-						data_list.append(get_attribute_value(player,attribute))
+						data_list.append(player.get_attribute(attribute))
 		data_range = str('A2:' + end_col + str(1+num_of_rows))
 		cell_list = output_sheet.range(data_range)
 		for i,cell in enumerate(cell_list):
