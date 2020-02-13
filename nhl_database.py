@@ -29,9 +29,13 @@ def create_databases(simulation_param):
 		write_skater_on_ice_csv(simulation_param['url_skater_on_ice'],os.path.join(data_dir,'Skater_OnIce_201920.csv'))
 		print('   Downloading relative data')
 		write_skater_relative_csv(simulation_param['url_skater_relative'],os.path.join(data_dir,'Skater_Relative_201819_201920.csv'))
-		print('   Downloading goalie data')
+		print('   Downloading goalie ES data')
 		write_goalie_csv(simulation_param['url_goalie_201819_201920'],os.path.join(data_dir,'Goalie_201819_201920.csv'))
-		write_goalie_csv(simulation_param['url_goalie_201920'],os.path.join(data_dir,'Goalie_201920.csv'))
+		write_goalie_csv(simulation_param['url_goalie_es_201920'],os.path.join(data_dir,'Goalie_ES_201920.csv'))
+		print('   Downloading goalie PP data')
+		write_goalie_csv(simulation_param['url_goalie_pp_201920'],os.path.join(data_dir,'Goalie_PP_201920.csv'))
+		print('   Downloading goalie PK data')
+		write_goalie_csv(simulation_param['url_goalie_pk_201920'],os.path.join(data_dir,'Goalie_PK_201920.csv'))
 		print('   Downloading ES team data')
 		write_team_csv(simulation_param['url_team_es'],os.path.join(data_dir,'Team_ES_201920.csv'))
 		print('   Downloading PP team data')
@@ -74,7 +78,7 @@ def create_databases(simulation_param):
 	
 	# Add experimental data - needs to be done after creation of SkaterDB (and GoalieDB).
 	print('   Adding experimental data')
-	[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db,simulation_param['databases']['unavailable_players'],simulation_param['debug_team'])
+	[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db'],simulation_param['databases']['goalie_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db,simulation_param['databases']['unavailable_players'],simulation_param['debug_team'])
 	
 	for team_id in ACTIVE_TEAMS:
 		team = simulation_param['databases']['team_db'][team_id]
@@ -140,7 +144,7 @@ def add_bio_data(simulation_param):
 				# Bio
 				player_data[player_id]['bio'] = {}
 
-				# Individual
+				# Individual_SKATER
 				player_data[player_id]['ind'] = {}
 				player_data[player_id]['ind']['toi'] = [0,0,0]
 				player_data[player_id]['ind']['gf'] = [0,0,0]
@@ -156,7 +160,7 @@ def add_bio_data(simulation_param):
 				player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]
 				player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
 
-				# On-ice data
+				# On-ice data_SKATER
 				player_data[player_id]['on_ice'] = {}
 				player_data[player_id]['on_ice']['rel_scf_per_60'] = 1.0
 				player_data[player_id]['on_ice']['rel_sca_per_60'] = 1.0
@@ -248,6 +252,57 @@ def add_bio_data(simulation_param):
 					player_data[player_id]['bio']['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
 
 	return player_data
+
+
+def add_bio_data_goalie(simulation_param):
+	global ACTIVE_GOALIES
+	player_data = {}
+	with open(simulation_param['csvfiles']['goalie_bio'],'rt') as f:
+		reader = csv.reader(f, delimiter=',')
+		for row in reader:
+			if row[1] != 'player_name':
+				# NAME
+				# Create and store player-ID.
+				player_id = generate_player_id(row[GOALIE_DB_NAME])
+				ACTIVE_GOALIES.add(player_id)
+				# Initialize structs.
+				player_data[player_id] = {}
+				# Bio
+				player_data[player_id]['bio'] = {}
+
+				# Individual_GOALIE
+				player_data[player_id]['ind'] = {}
+				player_data[player_id]['ind']['toi'] = [0,0,0]
+				player_data[player_id]['ind']['toi_pcg'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['sa'] = [0,0,0]
+				player_data[player_id]['ind']['sa_per_sec'] = [0,0,0]
+				player_data[player_id]['ind']['sv'] = [0,0,0]
+				player_data[player_id]['ind']['sv_pcg'] = [0,0,0]
+				player_data[player_id]['ind']['ga'] = [0,0,0]
+				player_data[player_id]['ind']['gaa'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['gsaa'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['gsaa_per_60'] = [0,0,0]
+				player_data[player_id]['ind']['xga'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['ga_above_xga'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['ga_above_xga_per_60'] = [0.0,0.0,0.0]
+				player_data[player_id]['ind']['avg_shot_dist'] = [0,0,0]
+				player_data[player_id]['ind']['avg_goal_dist'] = [0,0,0]
+			
+				# Read player data.
+				if str(row[SKATER_DB_BIO_NAME]) == '-':
+					raise ValueError('Incorrect Player-ID')
+				else:
+					name = generate_player_id(row[GOALIE_DB_NAME])
+					player_data[player_id]['bio']['name'] = name
+				# TEAM
+				if str(row[GOALIE_DB_TEAM_ID]) == '-':
+					raise ValueError('Incorrect Team-ID')
+				else:
+					player_data[player_id]['bio']['team_id'] = get_team_id_for_player(name,str(row[GOALIE_DB_TEAM_ID]))
+
+	return player_data
+
+
 
 def get_old_data(simulation_param):
 	previous_skaters = set()
@@ -341,6 +396,63 @@ def add_es_data(simulation_param,player_data):
 							player_data[player_id]['ind']['ixgf'][STAT_ES] += float(row[SKATER_DB_IND_IXG])
 	return player_data
 
+
+
+def add_es_data_goalie(simulation_param,player_data):
+	for season_data in simulation_param['csvfiles']['goalie_es']:
+		with open(season_data,'rt') as f:
+			reader = csv.reader(f, delimiter=',')
+			for row in reader:
+				if row[1] != 'player_name':
+					# Only add players that are playing today.
+					player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+					if player_id in ACTIVE_GOALIES:
+						if str(row[GOALIE_DB_TOI]) == '-':
+							player_data[player_id]['ind']['toi'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['toi'][STAT_ES] += int(60*float(row[GOALIE_DB_TOI]))
+
+						if str(row[GOALIE_DB_SA]) == '-':
+							player_data[player_id]['ind']['sa'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['sa'][STAT_ES] += int(row[GOALIE_DB_SA])
+						
+						if str(row[GOALIE_DB_SV]) == '-':
+							player_data[player_id]['ind']['sv'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['sv'][STAT_ES] += int(row[GOALIE_DB_SV])
+
+						if str(row[GOALIE_DB_GA]) == '-':
+							player_data[player_id]['ind']['ga'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['ga'][STAT_ES] += int(row[GOALIE_DB_GA])
+
+						if str(row[GOALIE_DB_GAA]) == '-':
+							player_data[player_id]['ind']['gaa'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['gaa'][STAT_ES] += float(row[GOALIE_DB_GAA])
+
+						if str(row[GOALIE_DB_GSAA]) == '-':
+							player_data[player_id]['ind']['gsaa'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['gsaa'][STAT_ES] += float(row[GOALIE_DB_GSAA])
+
+						if str(row[GOALIE_DB_XGA]) == '-':
+							player_data[player_id]['ind']['xga'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['xga'][STAT_ES] += float(row[GOALIE_DB_XGA])
+
+						if str(row[GOALIE_DB_AVG_SHOT_DIST]) == '-':
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_ES] += int(row[GOALIE_DB_AVG_SHOT_DIST])
+
+						if str(row[GOALIE_DB_AVG_GOAL_DIST]) == '-':
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_ES] += 0
+						else:
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_ES] += int(row[GOALIE_DB_AVG_GOAL_DIST])
+	return player_data
+
 def add_pp_data(simulation_param,player_data):
 	for season_data in simulation_param['csvfiles']['skater_pp']:
 		with open(season_data,'rt') as f:
@@ -396,6 +508,66 @@ def add_pp_data(simulation_param,player_data):
 							player_data[player_id]['ind']['pd'][STAT_PP] += int(row[SKATER_DB_IND_PENALTIES_DRAWN])
 	return player_data
 
+def add_pp_data_goalie(simulation_param,player_data):
+	for season_data in simulation_param['csvfiles']['goalie_pp']:
+		with open(season_data,'rt') as f:
+			reader = csv.reader(f, delimiter=',')
+			for row in reader:
+				if row[1] != 'player_name':
+					# Only add players that are playing today.
+					player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+					if player_id in ACTIVE_GOALIES:
+						if str(row[GOALIE_DB_TOI]) == '-':
+							player_data[player_id]['ind']['toi'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['toi'][STAT_PP] += int(60*float(row[GOALIE_DB_TOI]))
+
+						if str(row[GOALIE_DB_SA]) == '-':
+							player_data[player_id]['ind']['sa'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['sa'][STAT_PP] += int(row[GOALIE_DB_SA])
+						
+						if str(row[GOALIE_DB_SV]) == '-':
+							player_data[player_id]['ind']['sv'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['sv'][STAT_PP] += int(row[GOALIE_DB_SV])
+
+						if str(row[GOALIE_DB_GA]) == '-':
+							player_data[player_id]['ind']['ga'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['ga'][STAT_PP] += int(row[GOALIE_DB_GA])
+
+						if str(row[GOALIE_DB_SV_PCG]) == '-':
+							player_data[player_id]['ind']['sv_pcg'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['sv_pcg'][STAT_PP] += float(row[GOALIE_DB_SV_PCG])
+
+						if str(row[GOALIE_DB_GAA]) == '-':
+							player_data[player_id]['ind']['gaa'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['gaa'][STAT_PP] += float(row[GOALIE_DB_GAA])
+
+						if str(row[GOALIE_DB_GSAA]) == '-':
+							player_data[player_id]['ind']['gsaa'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['gsaa'][STAT_PP] += float(row[GOALIE_DB_GSAA])
+
+						if str(row[GOALIE_DB_XGA]) == '-':
+							player_data[player_id]['ind']['xga'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['xga'][STAT_PP] += float(row[GOALIE_DB_XGA])
+
+						if str(row[GOALIE_DB_AVG_SHOT_DIST]) == '-':
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_PP] += int(row[GOALIE_DB_AVG_SHOT_DIST])
+
+						if str(row[GOALIE_DB_AVG_GOAL_DIST]) == '-':
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_PP] += 0
+						else:
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_PP] += int(row[GOALIE_DB_AVG_GOAL_DIST])
+	return player_data
+
 def add_pk_data(simulation_param,player_data):
 	for season_data in simulation_param['csvfiles']['skater_pk']:
 		with open(season_data,'rt') as f:
@@ -449,6 +621,66 @@ def add_pk_data(simulation_param,player_data):
 							player_data[player_id]['ind']['pd'][STAT_PK] += 0
 						else:
 							player_data[player_id]['ind']['pd'][STAT_PK] += int(row[SKATER_DB_IND_PENALTIES_DRAWN])
+	return player_data
+
+def add_pk_data_goalie(simulation_param,player_data):
+	for season_data in simulation_param['csvfiles']['goalie_pk']:
+		with open(season_data,'rt') as f:
+			reader = csv.reader(f, delimiter=',')
+			for row in reader:
+				if row[1] != 'player_name':
+					# Only add players that are playing today.
+					player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+					if player_id in ACTIVE_GOALIES:
+						if str(row[GOALIE_DB_TOI]) == '-':
+							player_data[player_id]['ind']['toi'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['toi'][STAT_PK] += int(60*float(row[GOALIE_DB_TOI]))
+
+						if str(row[GOALIE_DB_SA]) == '-':
+							player_data[player_id]['ind']['sa'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['sa'][STAT_PK] += int(row[GOALIE_DB_SA])
+						
+						if str(row[GOALIE_DB_SV]) == '-':
+							player_data[player_id]['ind']['sv'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['sv'][STAT_PK] += int(row[GOALIE_DB_SV])
+
+						if str(row[GOALIE_DB_GA]) == '-':
+							player_data[player_id]['ind']['ga'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['ga'][STAT_PK] += int(row[GOALIE_DB_GA])
+
+						if str(row[GOALIE_DB_SV_PCG]) == '-':
+							player_data[player_id]['ind']['sv_pcg'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['sv_pcg'][STAT_PK] += float(row[GOALIE_DB_SV_PCG])
+
+						if str(row[GOALIE_DB_GAA]) == '-':
+							player_data[player_id]['ind']['gaa'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['gaa'][STAT_PK] += float(row[GOALIE_DB_GAA])
+
+						if str(row[GOALIE_DB_GSAA]) == '-':
+							player_data[player_id]['ind']['gsaa'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['gsaa'][STAT_PK] += float(row[GOALIE_DB_GSAA])
+
+						if str(row[GOALIE_DB_XGA]) == '-':
+							player_data[player_id]['ind']['xga'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['xga'][STAT_PK] += float(row[GOALIE_DB_XGA])
+
+						if str(row[GOALIE_DB_AVG_SHOT_DIST]) == '-':
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['avg_shot_dist'][STAT_PK] += int(row[GOALIE_DB_AVG_SHOT_DIST])
+
+						if str(row[GOALIE_DB_AVG_GOAL_DIST]) == '-':
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_PK] += 0
+						else:
+							player_data[player_id]['ind']['avg_goal_dist'][STAT_PK] += int(row[GOALIE_DB_AVG_GOAL_DIST])
 	return player_data
 
 def add_on_ice_data(simulation_param,player_data):
@@ -702,52 +934,13 @@ def add_relative_data(simulation_param,player_data):
 	return player_data
 	
 def create_goalie_db(simulation_param):
-	output = get_active_goalies(simulation_param)
-	team_db = simulation_param['databases']['team_db']
-	with open(simulation_param['csvfiles']['goalie'],'rt') as f:
-		reader = csv.reader(f, delimiter=',')
-		for row in reader:
-			if row[1] != 'player_name':
-				# Get data from row.
-				[name,toi,sa,sv,ga,sv_pcg,gaa,gsaa,xga,avg_shot_dist,avg_goal_dist] = get_row_values_for_goalie_db(row)
-				if name in ACTIVE_GOALIES:
-					team_id = output[name]
-
-					# Create specifc stats.
-					toi_pcg = (toi/get_team(team_db,team_id).team_toi_es)
-
-					'''
-					# DEBUG:
-					if team_id == simulation_param['debug_team']:
-						print('Name: ' + name)
-						print('   TOI: ' + str(toi))
-						print('   TOI-PCG: ' + str(toi_pcg))
-						print('   Shots against: ' + str(sa))
-						print('   Saves: ' + str(sv))
-						print('   Sv%: ' + str(100*sv_pcg))
-					'''
-					output[name] = Goalie(name,team_id,[toi,toi_pcg,sa,sv,ga,gaa,gsaa,xga,avg_shot_dist,avg_goal_dist])
-	return output
-
-def get_active_goalies(simulation_param):
-	global ACTIVE_GOALIES
 	output = {}
-	with open(simulation_param['csvfiles']['goalie_bio'],'rt') as f:
-		reader = csv.reader(f, delimiter=',')
-		for row in reader:
-			if row[1] != 'player_name':
-				if str(row[GOALIE_DB_NAME]) == '-':
-					raise ValueError('Incorrect Player-ID')
-				else:
-					name = generate_player_id(row[GOALIE_DB_NAME])
-				# TEAM
-				if str(row[SKATER_DB_BIO_TEAM_ID]) == '-':
-					raise ValueError('Incorrect Team-ID')
-				else:
-					team_id = get_team_id_for_player(name,str(row[SKATER_DB_BIO_TEAM_ID]))
-				if team_id != None:
-					ACTIVE_GOALIES.add(name)
-					output[name] = team_id
+	goalie_data = add_bio_data_goalie(simulation_param)
+	goalie_data = add_es_data_goalie(simulation_param,goalie_data)
+	goalie_data = add_pp_data_goalie(simulation_param,goalie_data)
+	goalie_data = add_pk_data_goalie(simulation_param,goalie_data)	
+	for goalie_id in goalie_data.keys():
+		output[goalie_id] = Goalie(goalie_data[goalie_id]['bio'],goalie_data[goalie_id]['ind'])
 	return output
 
 def create_team_db(simulation_param):
@@ -822,25 +1015,22 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 
 	if debug_team_id != None:
 		print('\n' + debug_team_id + ' roster (DEBUG):')
+	
+	# Update Skater data
 	for skater_id in skater_db.keys():
 		skater = get_player(skater_db,skater_id)
-
-
-
 		skater.ind['toi_pcg'] = [0,0,0]
 		skater.ind['toi_pcg'][STAT_ES] = skater.ind['toi_per_gp'][STAT_ES] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 		skater.ind['toi_pcg'][STAT_PP] = skater.ind['toi_per_gp'][STAT_PP] / team_db[skater.bio['team_id']].team_toi_pp_per_gp
 		skater.ind['toi_pcg'][STAT_PK] = skater.ind['toi_per_gp'][STAT_PK] / team_db[skater.bio['team_id']].team_toi_pk_per_gp
 
-		#
 		skater.on_ice['rel_gf_diff_per_60'] = skater.on_ice['gf_diff_per_60'] - team_db[skater.bio['team_id']].gf_diff_per_60
 
 		# Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
 		estimated_off_metric = 'sc'
 		estimated_off = skater.on_ice[estimated_off_metric + 'f'] * skater.on_ice['rel_' + estimated_off_metric + 'f_factor']
 		estimated_def = skater.on_ice[estimated_off_metric + 'a'] * skater.on_ice['rel_' + estimated_off_metric + 'a_factor']
-		
-		
+				
 		# Not really sure if this code should be included...
 		# If included, it is assumed that the player will perform in line with his new team (however, still taking the relative factor into account).
 		# If excluded, the player might be "dragged down" by his previous club.
@@ -858,8 +1048,6 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
 		skater.on_ice['estimated_off_per_60_diff'] = skater.on_ice['estimated_off_per_60'] - skater.on_ice['estimated_def_per_60']
 		skater.on_ice['estimated_fun_factor'] = skater.on_ice['estimated_off_per_60'] + skater.on_ice['estimated_def_per_60']
-		
-		
 		# Only use available players for the ranking data
 		# Store estimated offensive and defensive capabilities per team.
 		if skater_id not in unavailable_players:
@@ -870,41 +1058,48 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			# Store estimated offensive and defensive capabilities per team.
 			estimated_off_dict[skater.bio['team_id']].append(estimated_off)
 			estimated_def_dict[skater.bio['team_id']].append(estimated_def)
-
 		# Error/warning handling for weird input
 		if (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec']) == 0:
 			warnings.warn('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
-
 		if skater.bio['team_id'] == debug_team_id:
 			print(skater_id)
 			print('   5v5-TOI: {0:.1f} min. 5v5-TOI/GP: {1:.1f} min. 5v5-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_ES)/60,get_attribute_value(skater,'toi_per_gp',STAT_ES)/60,100*get_attribute_value(skater,'toi_pcg',STAT_ES)))
 			print('   PP-TOI: {0:.1f} s. PP-TOI/GP: {1:.1f} s. PP-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_PP)/60,get_attribute_value(skater,'toi_per_gp',STAT_PP)/60,100*get_attribute_value(skater,'toi_pcg',STAT_PP)))
 			print('   PK-TOI: {0:.1f} s. PK-TOI/GP: {1:.1f} . PK-TOI%: {2:.1f}%'.format(get_attribute_value(skater,'toi',STAT_PK)/60,get_attribute_value(skater,'toi_per_gp',STAT_PK)/60,100*get_attribute_value(skater,'toi_pcg',STAT_PK)))
 			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(get_attribute_value(skater,'estimated_off_per_60'),get_attribute_value(skater,'estimated_def_per_60'),100*get_attribute_value(skater,'estimated_off_pcg')))
-			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(get_attribute_value(skater,'pt_per_60'),get_attribute_value(skater,'pd_per_60'),get_attribute_value(skater,'pd_diff_per_60')))
-	
+			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(get_attribute_value(skater,'pt_per_60'),get_attribute_value(skater,'pd_per_60'),get_attribute_value(skater,'pd_diff_per_60')))	
 	# Add ranking data. 
 	values_dict = get_skater_values(skater_db)
 	for skater_id in ACTIVE_SKATERS:
 		skater_db[skater_id].rank['estimated_off_pcg'] = get_rank(skater_db[skater_id].on_ice['estimated_off_pcg'],values_dict['estimated_off_pcg'])
 		skater_db[skater_id].rank['primary_points_per_60'] = get_rank(skater_db[skater_id].ind['primary_points_per_60'][0],values_dict['primary_points_per_60'])
 		skater_db[skater_id].rank['goal_scoring_rating'] = get_rank(skater_db[skater_id].ind['goal_scoring_rating'][0],values_dict['goal_scoring_rating'])
-
 		if skater_db[skater_id].bio['position'] == 'F':
 			WS = WS_FWD
 		else:
 			WS = WS_DEF
 		skater_db[skater_id].rank['total'] = WS[0]*skater_db[skater_id].rank['estimated_off_pcg'] + WS[1]*skater_db[skater_id].rank['primary_points_per_60'] + WS[2]*skater_db[skater_id].rank['goal_scoring_rating']
-	for goalie_id in goalie_db.keys():
-		# Calculate total sa/ss per team, only if player is available
-		if goalie_id not in unavailable_players:
-			goalie = get_player(goalie_db,goalie_id)
-			shots_against_dict[goalie.bio['team_id']].append(goalie.sa)
-			shots_saved_dict[goalie.bio['team_id']].append(goalie.sv)
 	
+
+	# Update goalie data
+	toi_dict = defaultdict(list)
+	for g_id in goalie_db.keys():
+		goalie = goalie_db[g_id]
+		# Calculate total sa/ss per team, only if player is available
+		if g_id not in unavailable_players:
+			goalie = get_player(goalie_db,g_id)
+			shots_against_dict[goalie.bio['team_id']].append(sum(goalie.ind['sa']))			# Using sum to get sa/sv for all strengths (EV/PP/PK)
+			shots_saved_dict[goalie.bio['team_id']].append(sum(goalie.ind['sv']))
+			toi_dict[goalie.bio['team_id']].append(goalie.ind['toi'][STAT_ES])
+
+	for g_id in goalie_db.keys():
+		goalie = goalie_db[g_id]
+		goalie.ind['toi_pcg'][STAT_ES] = goalie.ind['toi'][STAT_ES] / sum(toi_dict[goalie.bio['team_id']])
+
+	# Update team data
 	for team_id in team_db.keys():
 		gp_array.append(team_db[team_id].gp)
 	avg_gp = np.mean(gp_array)
@@ -960,7 +1155,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		team_db[team_id].rank['estimated_off_pcg'] = get_rank(team_db[team_id].exp_data['estimated_off_pcg'],values_dict['estimated_off_pcg'])
 		team_db[team_id].rank['in_season_rating'] = get_rank(team_db[team_id].exp_data['in_season_rating'],values_dict['in_season_rating'])
 
-	return [team_db,skater_db]
+	return [team_db,skater_db,goalie_db]
 
 def generate_schedule(csvfiles):
 	schedule_per_team = defaultdict(list)

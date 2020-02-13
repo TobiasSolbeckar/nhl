@@ -406,7 +406,7 @@ def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_fac
 
 def get_attribute_value(player,attribute,playform_index=STAT_ES):
 	if player.bio['position'] == 'G':
-		raise ValueError('Function "get_attribute_value" does not support Class Goalies.')
+		player.get_attribute(attribute,playform_index)
 	if playform_index == 'ranking':
 		return player.rank[attribute]
 	if attribute in player.bio.keys():
@@ -586,7 +586,6 @@ def get_from_distribution(val_dict,attribute,normalize=False):
 	# ct_on_ice_db[skater_id] = [isf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
 	
 	sum_value = 1.0
-	p_ids = set()
 	if attribute == 'isf_per_time':		
 		index = 0
 	elif attribute == 'sh_pcg':
@@ -607,9 +606,6 @@ def get_from_distribution(val_dict,attribute,normalize=False):
 			player_values = val_dict[p_id]
 			vals.append(player_values[index])
 		sum_value = np.sum(vals)
-
-
-
 	while True:
 		for p_id in set(val_dict.keys()):  # set for randomizing purposes
 			player_values = val_dict[p_id]

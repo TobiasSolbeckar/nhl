@@ -179,67 +179,62 @@ class Skater():
 		print('   TOI/GP: {0:.1f}. Penalty difference/60: {1:.2f}. Avg. zone start: {2:.2f}'.format(self.ind['toi_per_gp'][0]/60,self.ind['pd_diff_per_60'][0],self.on_ice['avg_zone_start']))
 
 class Goalie():
-	def __init__(self,name,team_id,stats_arr):
-		# Meta-data
-		self.bio = {}
-		self.bio['name'] = name
-		self.bio['team_id'] = team_id
-		self.bio['position'] = 'G'
-		# Statistics
-		self.toi = stats_arr[0]
-		self.toi_pcg = stats_arr[1]
-		self.sa = stats_arr[2]
-		self.sa_per_sec = self.sa/self.toi
-		self.sv = stats_arr[3]
-		self.ga = stats_arr[4]
-		self.sv_pcg = self.sv/self.sa
-		self.gaa = stats_arr[5]
-		self.gsaa = stats_arr[6]
-		self.gsaa_per_60 = 3600*(self.gsaa/self.toi)
-		self.xga = stats_arr[7]
-		self.ga_above_xga = self.ga - self.xga
-		self.ga_above_xga_per_60 = 3600*(self.ga_above_xga/self.toi)
-		self.avg_shot_dist = stats_arr[8]
-		self.avg_goal_dist = stats_arr[9]
+	def __init__(self,bio,ind):
+		# Bio-data
+		self.bio = bio
+		
+		# Ind
+		self.ind = {}
+		for attribute in ind.keys():
+			self.ind[attribute] = ind[attribute]
+		
+		# Special attributes
+		self.ind['sv_pcg'] = [None,None,None]
+		self.ind['sa_per_sec'] = [None,None,None]
+		self.ind['gsaa_per_60'] = [None,None,None]
+		self.ind['ga_above_xga'] = [None,None,None]
+		self.ind['ga_above_xga_per_60'] = [None,None,None]
+		for index in [STAT_ES,STAT_PP,STAT_PK]:
+			self.ind['ga_above_xga'][index] = ind['ga'][index] - ind['xga'][index]
+			if ind['toi'][index] == 0:
+				self.ind['sa_per_sec'][index] = 0
+				self.ind['gsaa_per_60'][index] = 0
+				self.ind['ga_above_xga_per_60'][index] = 0
+			else:
+				self.ind['sa_per_sec'][index] = ind['sa'][index]/ind['toi'][index]
+				self.ind['gsaa_per_60'][index] = 3600*(ind['gsaa'][index])/ind['toi'][index]
+				self.ind['ga_above_xga_per_60'][index] = 3600*(self.ind['ga_above_xga'][index])/ind['toi'][index]
+			if ind['sa'][index] == 0:
+				self.ind['sv_pcg'][index] = 0
+			else:
+				self.ind['sv_pcg'][index] = ind['sv'][index]/ind['sa'][index]
+		
 		# Simulated stats
 		self.in_game_stats = defaultdict(int)
 
-	def get_attribute(self,attribute):
+	def get_attribute(self,attribute,playform_index=STAT_ES):
 		if attribute in self.bio.keys():
 			return self.bio[attribute]
-		elif attribute == 'toi':
-			return self.toi
-		elif attribute == 'toi_pcg':
-			return self.toi_pcg
-		elif attribute == 'sa':
-			return self.sa
-		elif attribute == 'sa_per_sec':
-			return self.sa_per_sec
-		elif attribute == 'sv':
-			return self.sv
-		elif attribute == 'ga':
-			return self.ga
-		elif attribute == 'sv_pcg':
-			return self.sv_pcg
-		elif attribute == 'gaa':
-			return self.gaa
-		elif attribute == 'gsaa':
-			return self.gsaa
-		elif attribute == 'gsaa_per_60':
-			return self.gsaa_per_60
-		elif attribute == 'xga':
-			return self.xga
-		elif attribute == 'ga_above_xga':
-			return self.ga_above_xga
-		elif attribute == 'ga_above_xga_per_60':
-			return self.ga_above_xga_per_60
-		elif attribute == 'avg_shot_dist':
-			return self.avg_shot_dist
-		elif attribute == 'avg_goal_dist':
-			return self.avg_goal_dist
+		elif attribute in self.ind.keys():
+			return self.ind[attribute][playform_index]
 		else:
 			raise ValueError('Unknown attribute ' + attribute)
 
+	def print_player(self):
+		print('Information for player ' + self.bio['name'])
+		print('	5v5:')
+		print('		Shots against: {0:.0f}. Goals against: {1:.0f}. Save%: {2:.1f}'.format(self.ind['sa'][0],self.ind['ga'][0],100*self.ind['sv_pcg'][0]))
+		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][0],self.ind['ga_above_xga'][0]))
+		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][0],self.ind['ga_above_xga_per_60'][0]))
+		print('	PP:')
+		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][1],self.ind['ga'][1],100*self.ind['sv_pcg'][1]))
+		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][1],self.ind['ga_above_xga'][1]))
+		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][1],self.ind['ga_above_xga_per_60'][1]))
+		print('	PK:')
+		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][2],self.ind['ga'][2],100*self.ind['sv_pcg'][2]))
+		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][2],self.ind['ga_above_xga'][2]))
+		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][2],self.ind['ga_above_xga_per_60'][2]))
+		
 
 class Team():
 	def __init__(self,name,reg_array,adv_array,team_schedule,fatigue_info):
