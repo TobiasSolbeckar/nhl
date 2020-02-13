@@ -189,6 +189,7 @@ class Goalie():
 			self.ind[attribute] = ind[attribute]
 		
 		# Special attributes
+		# En till temp text
 		self.ind['sv_pcg'] = [None,None,None]
 		self.ind['sa_per_sec'] = [None,None,None]
 		self.ind['gsaa_per_60'] = [None,None,None]
