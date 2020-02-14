@@ -72,7 +72,6 @@ def create_databases(simulation_param):
 	for player_id in players_to_remove:
 		simulation_param['databases']['unavailable_players'].remove(player_id)
 
-
 	print('   Modifying databases manually')
 	[s_db,g_db] = modify_player_db(s_db,g_db)
 	
@@ -94,7 +93,7 @@ def create_databases(simulation_param):
 	# Save the goalie database.
 	simulation_param['databases']['goalie_db'] = g_db
 
-	simulation_param['databases']['starting_goalies'] = generate_all_teams_dict(return_type=None)
+	simulation_param['databases']['starting_goalies'] = generate_starting_goalies()
 	simulation_param['databases']['team_specific_db'] = create_team_specific_db(simulation_param)	
 	
 	# Create roster lists split up on team and position.
@@ -106,10 +105,39 @@ def create_databases(simulation_param):
 		roster_output[str(team_id + '_D')] = create_player_list(simulation_param['databases']['skater_db'],flt)
 		flt['position'] = 'F'
 		roster_output[str(team_id + '_F')] = create_player_list(simulation_param['databases']['skater_db'],flt)
-
 	simulation_param['databases']['team_rosters'] = roster_output
-
 	return simulation_param
+
+def download_old_season_data(seasons=None):
+	if seasons == None:
+		raise ValueError('No seasons specified for download')
+	print('Downloading new csv-files from www.naturalstattrick.com')
+	for season in seasons:
+		url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+		url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+		url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+		url_skater_on_ice = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_skater_relative = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		print('   Downloading individual ES data for season ' + season)
+		write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + season + '.csv'))
+		print('   Downloading individual PP data for season ' + season)
+		write_skater_ind_csv(url_skater_ind_pp,os.path.join(data_dir,'Skater_Individual_PP_' + season + '.csv'))
+		print('   Downloading individual PK data for season ' + season)
+		write_skater_ind_csv(url_skater_ind_pk,os.path.join(data_dir,'Skater_Individual_PK_' + season + '.csv'))
+		print('   Downloading on-ice data for season ' + season)
+		write_skater_on_ice_csv(url_skater_on_ice,os.path.join(data_dir,'Skater_OnIce_' + season + '.csv'))
+		print('   Downloading relative data for season ' + season)
+		write_skater_relative_csv(url_skater_relative,os.path.join(data_dir,'Skater_Relative_' + season + '.csv'))
+		print('   Downloading goalie ES data for season ' + season)
+		write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + season + '.csv'))
+		print('   Downloading goalie PP data for season ' + season)
+		write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + season + '.csv'))
+		print('   Downloading goalie PK data for season ' + season)
+		write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + season + '.csv'))
+
 
 def create_skater_db(simulation_param):
 	output = {}
@@ -961,15 +989,11 @@ def create_team_db(simulation_param):
 
 				reg_array = [gp,team_toi_es,w,l,otl,p,gf,ga,p_pcg]
 				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo]
-
 				fatigue_info = get_fatigue_factor(fatigue_factors,name)
-
 				total_gp += gp
 				total_otl += otl
 				total_gf += gf
-
 				output[name] = Team(name,reg_array,adv_array,simulation_param['databases']['team_schedules'][name],fatigue_info)
-
 
 	with open(simulation_param['csvfiles']['team_home'],'rt') as f:
 		reader = csv.reader(f,delimiter=',')		
@@ -1108,7 +1132,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 
 	hits_ok = False
 
-	print('\nTeam metrics:')
+	print('\nTeam metrics (5v5):')
 	for team_id in ACTIVE_TEAMS:
 		team_sh_pcg = sum(gf_dict[team_id])/sum(sf_dict[team_id])
 		team_sv_pcg = sum(shots_saved_dict[team_id])/sum(shots_against_dict[team_id])
@@ -1503,24 +1527,25 @@ def get_team_id_for_player(name,team_id):
 	else:
 		return team_id
 
-def update_team_db_from_web(team_db):
-	team_dict = get_team_data_from_url()
-	for team_id in ACTIVE_TEAMS:
-		team_db[team_id].gp = team_dict[team_id][0]
-		team_db[team_id].w = team_dict[team_id][1]
-		team_db[team_id].l = team_dict[team_id][2]
-		team_db[team_id].otl = team_dict[team_id][3]
-		team_db[team_id].p = team_dict[team_id][4]
-		team_db[team_id].gf = team_dict[team_id][5]
-		team_db[team_id].ga = team_dict[team_id][6]
-		team_db[team_id].p_pcg = team_dict[team_id][7]
-	return team_db
+def generate_starting_goalies():
+	starting_goalies_dict = generate_all_teams_dict(return_type=None)
+	return starting_goalies_dict
 
-'''
-def modify_attribute(db,player_id,attribute,value):
-	# This only works with even-strength
-	if attribute == 'sv_pcg':
-		db[player_id].sv_pcg = value
-#g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',,0.915)
-	return db
-'''
+def set_starting_goalie(simulation_param,team_id,player_id):
+	if player_id not in ACTIVE_GOALIES:
+		raise ValueError('Goalie ' + player_id + ' not included in database')
+	simulation_param['databases']['starting_goalies'][team_id] = player_id
+	return simulation_param
+
+def get_starting_goalie(simulation_param,team_id):
+	if simulation_param['databases']['starting_goalies'][team_id] != None:
+		return simulation_param['databases']['starting_goalies'][team_id]
+	else:
+		found_goalie = False
+		while found_goalie == False:
+			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
+				goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
+				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
+					found_goalie = True
+					return goalie_id
+

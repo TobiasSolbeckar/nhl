@@ -5,17 +5,18 @@ from nhl_helpers import *
 from nhl_classes import *
 
 def setup_csv_path(simulation_param):
+	data_dir = simulation_param['data_dir']
 	simulation_param['csvfiles'] = {}
-	simulation_param['csvfiles']['schedule'] = 'Data/2019_2020_NHL_Schedule.csv'
-	simulation_param['csvfiles']['team_es'] = 'Data/Team_ES_201920.csv'
-	simulation_param['csvfiles']['team_pp'] = 'Data/Team_PP_201920.csv'
-	simulation_param['csvfiles']['team_pk'] = 'Data/Team_PK_201920.csv'
-	simulation_param['csvfiles']['team_home'] = 'Data/Team_Home_201819_201920.csv'
-	simulation_param['csvfiles']['team_away'] = 'Data/Team_Away_201819_201920.csv'
-	simulation_param['csvfiles']['goalie_bio'] = 'Data/Goalie_ES_201920.csv'
-	simulation_param['csvfiles']['skater_relative'] = 'Data/Skater_Relative_201819_201920.csv'
-	simulation_param['csvfiles']['skater_old_bio'] = 'Data/Skater_Bio_201819.csv'
-	simulation_param['csvfiles']['skater_bio'] = 'Data/Skater_Bio_201920.csv'
+	simulation_param['csvfiles']['schedule'] = os.path.join(data_dir,'2019_2020_NHL_Schedule.csv')
+	simulation_param['csvfiles']['team_es'] = os.path.join(data_dir,'Team_ES_201920.csv')
+	simulation_param['csvfiles']['team_pp'] = os.path.join(data_dir,'Team_PP_201920.csv')
+	simulation_param['csvfiles']['team_pk'] = os.path.join(data_dir,'Team_PK_201920.csv')
+	simulation_param['csvfiles']['team_home'] = os.path.join(data_dir,'Team_Home_201819_201920.csv')
+	simulation_param['csvfiles']['team_away'] = os.path.join(data_dir,'Team_Away_201819_201920.csv')
+	simulation_param['csvfiles']['goalie_bio'] = os.path.join(data_dir,'Goalie_ES_201920.csv')
+	simulation_param['csvfiles']['skater_relative'] = os.path.join(data_dir,'Skater_Relative_201819_201920.csv')
+	simulation_param['csvfiles']['skater_old_bio'] = os.path.join(data_dir,'Skater_Bio_201819.csv')
+	simulation_param['csvfiles']['skater_bio'] = os.path.join(data_dir,'Skater_Bio_201920.csv')
 
 	simulation_param['csvfiles']['skater_es'] = []
 	simulation_param['csvfiles']['skater_pp'] = []
@@ -24,17 +25,27 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['goalie_es'] = []
 	simulation_param['csvfiles']['goalie_pp'] = []
 	simulation_param['csvfiles']['goalie_pk'] = []
-	if simulation_param['seasons'] != ['201920']:
-		raise ValueError('Not possible to use seasons other than "201920" for now.')
-	else:
-		for season in simulation_param['seasons']:
-			simulation_param['csvfiles']['skater_es'].append('Data/Skater_Individual_ES_' + season + '.csv')
-			simulation_param['csvfiles']['skater_pp'].append('Data/Skater_Individual_PP_' + season + '.csv')
-			simulation_param['csvfiles']['skater_pk'].append('Data/Skater_Individual_PK_' + season + '.csv')
-			simulation_param['csvfiles']['skater_on_ice'].append('Data/Skater_OnIce_' + season + '.csv')	
-			simulation_param['csvfiles']['goalie_es'].append('Data/Goalie_ES_' + season + '.csv')
-			simulation_param['csvfiles']['goalie_pp'].append('Data/Goalie_PP_' + season + '.csv')
-			simulation_param['csvfiles']['goalie_pk'].append('Data/Goalie_PK_' + season + '.csv')
+	for season in simulation_param['seasons']:
+		simulation_param['csvfiles']['skater_es'].append(os.path.join(data_dir,'Skater_Individual_ES_' + season + '.csv'))
+		simulation_param['csvfiles']['skater_pp'].append(os.path.join(data_dir,'Skater_Individual_PP_' + season + '.csv'))
+		simulation_param['csvfiles']['skater_pk'].append(os.path.join(data_dir,'Skater_Individual_PK_' + season + '.csv'))
+		simulation_param['csvfiles']['skater_on_ice'].append(os.path.join(data_dir,'Skater_OnIce_' + season + '.csv'))	
+		simulation_param['csvfiles']['goalie_es'].append(os.path.join(data_dir,'Goalie_ES_' + season + '.csv'))
+		simulation_param['csvfiles']['goalie_pp'].append(os.path.join(data_dir,'Goalie_PP_' + season + '.csv'))
+		simulation_param['csvfiles']['goalie_pk'].append(os.path.join(data_dir,'Goalie_PK_' + season + '.csv'))
+
+	# Make sure all CSV-files are availble
+	for key in simulation_param['csvfiles']:
+		filepath = simulation_param['csvfiles'][key]
+		if isinstance(filepath,list) == True:
+			for sub_path in filepath:
+				if os.path.exists(sub_path) == False:
+					print(os.path.basename(sub_path).split('.')[0])
+					raise ValueError('CSV file ' + sub_path + ' does not exist.')
+		else:
+			if os.path.exists(filepath) == False:
+				raise ValueError('CSV file ' + filepath + ' does not exist.')
+
 	return simulation_param
 
 def create_simulation_parameters(sp):
@@ -48,7 +59,6 @@ def create_simulation_parameters(sp):
 	sp['simulate_playoff_series'] = False
 	sp['initial_wins'] = [[0,0]]
 	sp['days_rested'] = [[-1,-1]]
-	sp['print_ul_stats'] = False
 	sp['do_exp'] = False
 	sp['do_player_cards'] = False
 	sp['simulation_date'] = None
@@ -116,23 +126,27 @@ simulation_param['include_offseason_moves'] = False
 #simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
 #simulation_param['simulate_season'] = True									# Default value = False
-#simulation_param['print_ul_stats'] = True 									# Default value = False
-#simulation_param['do_exp'] = True 											# Default value = False
-simulation_param['do_player_cards'] = True
+simulation_param['do_exp'] = True 											# Default value = False
+#simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters
 #simulation_param['simulation_mode'] = SIMULATION_LIGHT 						# SIMULATION_LIGHT or SIMULATION_EXT
-simulation_param['N'] = [500,25]											# Number of simulations for each game/season. Default = [50000,2500]
+simulation_param['N'] = [50000,2500]											# Number of simulations for each game/season. Default = [50000,2500]
 simulation_param['debug_team'] = None
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
 # Create databases.
 simulation_param = create_databases(simulation_param)
+simulation_param = set_starting_goalie(simulation_param,'CAR','PETR_MRAZEK')
+simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE')
+simulation_param = set_starting_goalie(simulation_param,'NJD','LOUIS_DOMINGUE')
+simulation_param = set_starting_goalie(simulation_param,'SJS','AARON_DELL')
+simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK')
 
 # Gameplay parameters 
 simulation_param['simulation_date'] = today #'2020-01-22'
 simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][simulation_param['simulation_date']]
-simulation_param['games_to_simulate'] = [['NJD','DET']]
+#simulation_param['games_to_simulate'] = [['NJD','DET']]
 #simulation_param['days_rested'] = [[2,2]]
 #simulation_param['initial_wins'] = [[0,0]]
 simulation_param['down_sample'] = False
@@ -141,20 +155,20 @@ simulation_param['initial_ht_goals'] = 0
 simulation_param['initial_at_goals'] = 0
 
 # Analytics parameters
+simulation_param['team_plots'] = False
 simulation_param['exp_min_toi'] = 100
-simulation_param['exp_list_length'] = 5
+simulation_param['exp_list_length'] = 1
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
-#simulation_param['exp_additional_players'] = ['CONNOR_MCDAVID','LEON_DRAISAITL','SIDNEY_CROSBY','MARK_STONE']
-#simulation_param['exp_additional_players'] = ['ONDREJ_KASE']
+#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters
 simulation_param['print_times'] = False
 simulation_param['verbose'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 # For now, matplotlib cannot be loaded for Windows machines.
 if platform.system() == 'Windows':
 	print('Cannot do plots on Windows-platform')
@@ -488,9 +502,9 @@ if simulation_param['do_exp']:
 	#lines = [['EVANDER_KANE','TOMAS_HERTL','TIMO_MEIER'],['BARCLAY_GOODROW','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','DYLAN_GAMBRELL','PATRICK_MARLEAU'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	#now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['PATRICK_MARLEAU','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	old_lines = [['TIMO_MEIER','LOGAN_COUTURE','JOE_PAVELSKI'],['EVANDER_KANE','TOMAS_HERTL','JOONAS_DONSKOI'],['MARCUS_SORENSEN','JOE_THORNTON','KEVIN_LABANC'],['MELKER_KARLSSON','CHRIS_TIERNEY','BARCLAY_GOODROW']]
-	now_lines = [['EVANDER_KANE','LOGAN_COUTURE','TIMO_MEIER'],['PATRICK_MARLEAU','TOMAS_HERTL','KEVIN_LABANC'],['MARCUS_SORENSEN','JOE_THORNTON','BARCLAY_GOODROW'],['STEFAN_NOESEN','JOEL_KELLMAN','ANTTI_SUOMELA']]
-
-	all_lines = [old_lines,now_lines]
+	best_now_lines = [['EVANDER_KANE','LOGAN_COUTURE','TIMO_MEIER'],['PATRICK_MARLEAU','TOMAS_HERTL','KEVIN_LABANC'],['MARCUS_SORENSEN','JOE_THORNTON','BARCLAY_GOODROW'],['STEFAN_NOESEN','JOEL_KELLMAN','ANTTI_SUOMELA']]
+	now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','PATRICK_MARLEAU'],['TIMO_MEIER','JOE_THORNTON','KEVIN_LABANC'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','ALEXANDER_TRUE','DYLAN_GAMBRELL']]
+	all_lines = [old_lines,best_now_lines,now_lines]
 	for lines in all_lines:
 		for line in lines:
 			tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
@@ -518,7 +532,7 @@ if simulation_param['do_exp']:
 		print('   "Model ranking": ' + str(mse[attribute]))
 
 	# Print team stats
-	if simulation_param['do_plots'] == True:
+	if simulation_param['team_plots'] == True:
 		# Set up color/markers
 		markers = []
 		colors = ['c','m','g','r','b'] # black and yellow are protected colors.

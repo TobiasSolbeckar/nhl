@@ -418,6 +418,8 @@ def get_sigma_difference(db,player_id,attribute,playform=STAT_ES):
 	player_val = player.get_attribute(attribute,playform)
 	return (player_val-op['mu'])/op['sigma']
 
+
+
 def plot_player_cards(ax,axes_info,p_db,player_ids,_filter):
 	# Init
 	gen_x,gen_y,spec_x,spec_y,markers = [],[],[],[],[]
@@ -787,6 +789,28 @@ def get_fatigue_factor(fatigue_factors,team_id,days_rested=-1):
 			warnings.warn('2 days of rest is maximum. Returning fatigue factor for 2 rest days (' + str(days_rested) + ' selected).')
 			days_rested = 2
 		return fatigue_factors[team_id]['per_days_rested'][days_rested]['p_pcg_rel']
+
+def generate_starting_goalies():
+	starting_goalies_dict = generate_all_teams_dict(return_type=None)
+	return starting_goalies_dict
+
+def set_starting_goalie(simulation_param,team_id,player_id):
+	if player_id not in ACTIVE_GOALIES:
+		raise ValueError('Goalie ' + player_id + ' not included in database')
+	simulation_param['databases']['starting_goalies'][team_id] = player_id
+	return simulation_param
+
+def get_starting_goalie(simulation_param,team_id):
+	if simulation_param['databases']['starting_goalies'][team_id] != None:
+		return simulation_param['databases']['starting_goalies'][team_id]
+	else:
+		found_goalie = False
+		while found_goalie == False:
+			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
+				goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
+				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
+					found_goalie = True
+					return goalie_id
 
 def generic_csv_reader(csv_file_path,dict_key_attribute='name',output_attributes=False):
 	'''

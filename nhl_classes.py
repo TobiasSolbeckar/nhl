@@ -179,8 +179,9 @@ class Skater():
 		print('   TOI/GP: {0:.1f}. Penalty difference/60: {1:.2f}. Avg. zone start: {2:.2f}'.format(self.ind['toi_per_gp'][0]/60,self.ind['pd_diff_per_60'][0],self.on_ice['avg_zone_start']))
 
 	def get_attribute(self,attribute,playform_index=STAT_ES):
-		if self.bio['position'] == 'G':
-			self.get_attribute(attribute,playform_index)
+		'''
+		Class function to get player attribute
+		'''
 		if playform_index == 'ranking':
 			return self.rank[attribute]
 		if attribute in self.bio.keys():
@@ -193,6 +194,9 @@ class Skater():
 			raise ValueError('Unknown attribute ' + attribute)
 
 	def get_toi(self,playform_index=STAT_ES):
+		'''
+		Special function to get time on ice. Possible to get time on ice for different playforms
+		'''
 		return self.get_attribute('toi',playform_index)
 
 
@@ -289,6 +293,8 @@ class Team():
 		self.team_toi_pk_per_gp = 0
 		self.home_p_pcg = 0
 		self.away_p_pcg = 0
+
+		
 
 		self.sf = adv_array[0]
 		self.sa = adv_array[1]
