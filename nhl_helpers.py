@@ -14,6 +14,7 @@ import warnings
 import json
 import gspread
 import cfscrape
+import signal
 from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
@@ -811,6 +812,22 @@ def get_starting_goalie(simulation_param,team_id):
 				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
 					found_goalie = True
 					return goalie_id
+
+def handler(signum,frame):
+	#print('Connection timed out')
+	raise Exception("Connection timed out")
+
+def get_k_factor(x_array,y_array,do_plot=False):
+	fit = np.polyfit(x_array, y_array, 1)
+	fit_fn = np.poly1d(fit)
+	k = round(fit[0],4)
+	if do_plot == True:
+		plt.figure(1)
+		x_val = np.linspace(1,31,31)
+		plt.scatter(x_array,y_array,c='k',marker='.')
+		plt.plot(x_val,fit_fn(x_val),'y--',label='Data fit (k=' + str(k) + ')')
+		plt.show()
+	return k
 
 def generic_csv_reader(csv_file_path,dict_key_attribute='name',output_attributes=False):
 	'''

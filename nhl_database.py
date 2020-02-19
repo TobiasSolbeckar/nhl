@@ -5,6 +5,11 @@ from nhl_web_scrape import *
 
 def create_databases(simulation_param):
 	global ACTIVE_PLAYERS
+	'''
+	@TODO: The timeout functionality should be handled in the 'write_xxx_csv'-functions, with different degrees on the error functions.
+	For instance, it's OK if the unavailable players timeout (set a warning), but an error should be set if the (e.g.) bio cannot be read
+	'''
+	global DATABASE_BIT_REGISTER
 	simulation_param['databases'] = {}
 	# Create schedule database
 	[team_schedules,season_schedule] = generate_schedule(simulation_param['csvfiles'])
@@ -12,44 +17,61 @@ def create_databases(simulation_param):
 	simulation_param['databases']['season_schedule'] = season_schedule
 
 	# Download new csv-files if current files are too old.
+	DATABASE_BIT_REGISTER[UNAVAILABLE_PLAYERS_BIT] = False
 	data_dir = simulation_param['data_dir']
 	mod_time_db = os.stat(simulation_param['csvfiles']['skater_bio']).st_mtime
 	mod_time_db = datetime.datetime.fromtimestamp(mod_time_db)
 	if mod_time_db.strftime("%y%m%d") != datetime.datetime.now().strftime("%y%m%d") or simulation_param['generate_fresh_databases']:
 		print('Downloading new csv-files from www.naturalstattrick.com')
 		print('   Downloading bio-data')
-		write_skater_bio_csv(simulation_param['url_skater_bio'],os.path.join(data_dir,'Skater_Bio_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_BIO_BIT] = write_skater_bio_csv(simulation_param['url_skater_bio'],os.path.join(data_dir,'Skater_Bio_201920.csv'))
 		print('   Downloading individual ES data')
-		write_skater_ind_csv(simulation_param['url_skater_ind_es'],os.path.join(data_dir,'Skater_Individual_ES_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_ES_BIT] = write_skater_ind_csv(simulation_param['url_skater_ind_es'],os.path.join(data_dir,'Skater_Individual_ES_201920.csv'))
 		print('   Downloading individual PP data')
-		write_skater_ind_csv(simulation_param['url_skater_ind_pp'],os.path.join(data_dir,'Skater_Individual_PP_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_PP_BIT] = write_skater_ind_csv(simulation_param['url_skater_ind_pp'],os.path.join(data_dir,'Skater_Individual_PP_201920.csv'))
 		print('   Downloading individual PK data')
-		write_skater_ind_csv(simulation_param['url_skater_ind_pk'],os.path.join(data_dir,'Skater_Individual_PK_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_PK_BIT] = write_skater_ind_csv(simulation_param['url_skater_ind_pk'],os.path.join(data_dir,'Skater_Individual_PK_201920.csv'))
 		print('   Downloading on-ice data')
-		write_skater_on_ice_csv(simulation_param['url_skater_on_ice'],os.path.join(data_dir,'Skater_OnIce_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_ON_ICE_BIT] = write_skater_on_ice_csv(simulation_param['url_skater_on_ice'],os.path.join(data_dir,'Skater_OnIce_201920.csv'))
 		print('   Downloading relative data')
-		write_skater_relative_csv(simulation_param['url_skater_relative'],os.path.join(data_dir,'Skater_Relative_201819_201920.csv'))
+		DATABASE_BIT_REGISTER[SKATER_RELATIVE_BIT] = write_skater_relative_csv(simulation_param['url_skater_relative'],os.path.join(data_dir,'Skater_Relative_201819_201920.csv'))
 		print('   Downloading goalie ES data')
 		write_goalie_csv(simulation_param['url_goalie_201819_201920'],os.path.join(data_dir,'Goalie_201819_201920.csv'))
-		write_goalie_csv(simulation_param['url_goalie_es_201920'],os.path.join(data_dir,'Goalie_ES_201920.csv'))
+		DATABASE_BIT_REGISTER[GOALIE_ES_BIT] = write_goalie_csv(simulation_param['url_goalie_es_201920'],os.path.join(data_dir,'Goalie_ES_201920.csv'))
 		print('   Downloading goalie PP data')
-		write_goalie_csv(simulation_param['url_goalie_pp_201920'],os.path.join(data_dir,'Goalie_PP_201920.csv'))
+		DATABASE_BIT_REGISTER[GOALIE_PP_BIT] = write_goalie_csv(simulation_param['url_goalie_pp_201920'],os.path.join(data_dir,'Goalie_PP_201920.csv'))
 		print('   Downloading goalie PK data')
-		write_goalie_csv(simulation_param['url_goalie_pk_201920'],os.path.join(data_dir,'Goalie_PK_201920.csv'))
+		DATABASE_BIT_REGISTER[GOALIE_PK_BIT] = write_goalie_csv(simulation_param['url_goalie_pk_201920'],os.path.join(data_dir,'Goalie_PK_201920.csv'))
 		print('   Downloading ES team data')
-		write_team_csv(simulation_param['url_team_es'],os.path.join(data_dir,'Team_ES_201920.csv'))
+		DATABASE_BIT_REGISTER[TEAM_ES_BIT] = write_team_csv(simulation_param['url_team_es'],os.path.join(data_dir,'Team_ES_201920.csv'))
 		print('   Downloading PP team data')
-		write_team_csv(simulation_param['url_team_pp'],os.path.join(data_dir,'Team_PP_201920.csv'))
+		DATABASE_BIT_REGISTER[TEAM_PP_BIT] = write_team_csv(simulation_param['url_team_pp'],os.path.join(data_dir,'Team_PP_201920.csv'))
 		print('   Downloading PK team data')
-		write_team_csv(simulation_param['url_team_pk'],os.path.join(data_dir,'Team_PK_201920.csv'))
+		DATABASE_BIT_REGISTER[TEAM_PK_BIT] = write_team_csv(simulation_param['url_team_pk'],os.path.join(data_dir,'Team_PK_201920.csv'))
 		print('   Downloading team data, home venue')
-		write_team_csv(simulation_param['url_team_home'],os.path.join(data_dir,'Team_Home_201819_1920.csv'))
+		DATABASE_BIT_REGISTER[TEAM_HOME_BIT] = write_team_csv(simulation_param['url_team_home'],os.path.join(data_dir,'Team_Home_201819_1920.csv'))
 		print('   Downloading team data, away venue')
-		write_team_csv(simulation_param['url_team_away'],os.path.join(data_dir,'Team_Away_201819_1920.csv'))
+		DATABASE_BIT_REGISTER[TEAM_AWAY_BIT] = write_team_csv(simulation_param['url_team_away'],os.path.join(data_dir,'Team_Away_201819_1920.csv'))
 		print('   Downloading unavailalbe players')
-		write_unavailable_players_csv(os.path.join(data_dir,'Unavailable_Players.csv'))
+		DATABASE_BIT_REGISTER[UNAVAILABLE_PLAYERS_BIT] = write_unavailable_players_csv(os.path.join(data_dir,'Unavailable_Players.csv'))
 	else:
 		print('Using local csv-files.')
+
+	if (DATABASE_BIT_REGISTER[SKATER_BIO_BIT] == False) or (DATABASE_BIT_REGISTER[SKATER_ES_BIT] == False) or (DATABASE_BIT_REGISTER[SKATER_PP_BIT] == False) or (DATABASE_BIT_REGISTER[SKATER_PK_BIT] == False) or (DATABASE_BIT_REGISTER[SKATER_ON_ICE_BIT] == False):
+		raise ValueError('Cannot read skater information. Aborting.')
+
+	if (DATABASE_BIT_REGISTER[GOALIE_ES_BIT] == False) or (DATABASE_BIT_REGISTER[GOALIE_PP_BIT] == False) or (DATABASE_BIT_REGISTER[GOALIE_PK_BIT] == False):
+		raise ValueError('Cannot read goalie information. Aborting.')
+
+	if (DATABASE_BIT_REGISTER[TEAM_ES_BIT] == False) or (DATABASE_BIT_REGISTER[TEAM_PP_BIT] == False) or (DATABASE_BIT_REGISTER[TEAM_PK_BIT] == False):
+		raise ValueError('Cannot read team information. Aborting.')
+
+	if (DATABASE_BIT_REGISTER[TEAM_HOME_BIT] == False) or (DATABASE_BIT_REGISTER[TEAM_AWAY_BIT] == False):
+		print('Cannot read team venue information. No venue adjustment used.')
+
+	if DATABASE_BIT_REGISTER[UNAVAILABLE_PLAYERS_BIT] == False:
+		print('Cannot read information about unavailable players.')
+
 
 	# Create team and skater database.
 	print('   Creating Team-DB')
@@ -63,14 +85,17 @@ def create_databases(simulation_param):
 	old_rating, new_rating, diff_rating = {},{},{}
 
 	# Find out who is available.
-	players_to_remove = []
-	simulation_param['databases']['unavailable_players'] = get_unavailable_players()
-	for player_id in simulation_param['databases']['unavailable_players']:
-		if (player_id not in s_db) and (player_id not in g_db):
-			#print('Unavailable player ' + player_id + ' not in skaterDB.')
-			players_to_remove.append(player_id)
-	for player_id in players_to_remove:
-		simulation_param['databases']['unavailable_players'].remove(player_id)
+	if DATABASE_BIT_REGISTER[UNAVAILABLE_PLAYERS_BIT] == True:
+		players_to_remove = []
+		simulation_param['databases']['unavailable_players'] = get_unavailable_players()
+		for player_id in simulation_param['databases']['unavailable_players']:
+			if (player_id not in s_db) and (player_id not in g_db):
+				#print('Unavailable player ' + player_id + ' not in skaterDB.')
+				players_to_remove.append(player_id)
+		for player_id in players_to_remove:
+			simulation_param['databases']['unavailable_players'].remove(player_id)
+	else:
+		simulation_param['databases']['unavailable_players'] = set()
 
 	print('   Modifying databases manually')
 	[s_db,g_db] = modify_player_db(s_db,g_db)
@@ -995,20 +1020,27 @@ def create_team_db(simulation_param):
 				total_gf += gf
 				output[name] = Team(name,reg_array,adv_array,simulation_param['databases']['team_schedules'][name],fatigue_info)
 
-	with open(simulation_param['csvfiles']['team_home'],'rt') as f:
-		reader = csv.reader(f,delimiter=',')		
-		for row in reader:
-			if row[1] != 'team_name':
-				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
-				output[name].home_p_pcg = p_pcg
+	if DATABASE_BIT_REGISTER[TEAM_HOME_BIT] == True:
+		with open(simulation_param['csvfiles']['team_home'],'rt') as f:
+			reader = csv.reader(f,delimiter=',')		
+			for row in reader:
+				if row[1] != 'team_name':
+					[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+					output[name].home_p_pcg = p_pcg
+	else:
+		for team_id in ACTIVE_TEAMS:
+			output[name].home_p_pcg = 1.0
 
-	with open(simulation_param['csvfiles']['team_away'],'rt') as f:
-		reader = csv.reader(f,delimiter=',')		
-		for row in reader:
-			if row[1] != 'team_name':
-				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
-				output[name].away_p_pcg = p_pcg
-
+	if DATABASE_BIT_REGISTER[TEAM_AWAY_BIT] == True:
+		with open(simulation_param['csvfiles']['team_away'],'rt') as f:
+			reader = csv.reader(f,delimiter=',')		
+			for row in reader:
+				if row[1] != 'team_name':
+					[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+					output[name].away_p_pcg = p_pcg
+	else:
+		for team_id in ACTIVE_TEAMS:
+			output[name].away_p_pcg = 1.0	
 	
 	with open(simulation_param['csvfiles']['team_pp'],'rt') as f:
 		reader = csv.reader(f,delimiter=',')		
@@ -1017,8 +1049,8 @@ def create_team_db(simulation_param):
 				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 				total_gf += gf
 				output[name].team_toi_pp = team_toi
+				output[name].team_gf_per_pp = 120*gf/team_toi 			# This means how many goals per two minutes of PP the team gets.
 				output[name].team_toi_pp_per_gp = team_toi/gp
-
 
 	with open(simulation_param['csvfiles']['team_pk'],'rt') as f:
 		reader = csv.reader(f,delimiter=',')
@@ -1027,6 +1059,11 @@ def create_team_db(simulation_param):
 				[name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 				total_gf += gf
 				output[name].team_toi_pk = team_toi
+				output[name].team_ga_per_pp = 120*ga/team_toi 			# This means how many goals per two minutes of PK the team gives up.
+				if output[name].team_ga_per_pp == 0:
+					output[name].special_teams_rating = 0
+				else:	
+					output[name].special_teams_rating = output[name].team_gf_per_pp/output[name].team_ga_per_pp
 				output[name].team_toi_pk_per_gp = team_toi/gp
 
 	return output
@@ -1133,6 +1170,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	hits_ok = False
 
 	print('\nTeam metrics (5v5):')
+	tmp_list = []
 	for team_id in ACTIVE_TEAMS:
 		team_sh_pcg = sum(gf_dict[team_id])/sum(sf_dict[team_id])
 		team_sv_pcg = sum(shots_saved_dict[team_id])/sum(shots_against_dict[team_id])
@@ -1455,9 +1493,11 @@ def update_new_team(db,player,new_team):
 	return db
 
 
+def add_unavailable_player(simulation_param,player_id):
+	simulation_param['databases']['unavailable_players'].add(player_id)
+	return simulation_param
 
 def get_unavailable_players():
-
 	unavailable_players = defaultdict(list)
 	dict_output = generic_csv_reader('Data/Unavailable_Players.csv',dict_key_attribute='team_id')
 	for team_id in ACTIVE_TEAMS:
@@ -1469,7 +1509,7 @@ def get_unavailable_players():
 			str_array = str_array.replace(' ','')
 			names = str_array.split(',')
 			for name in names:
-				unavailable_players[team_id].append(name)
+				unavailable_players[team_id].append(name) 			# This output is not used at the moment.
 
 	all_unavailable_players = set()
 	for team_id in unavailable_players.keys():
@@ -1481,7 +1521,6 @@ def get_unavailable_players():
 	return all_unavailable_players
 
 def get_team_id_for_player(name,team_id):
-	
 	manually_checked_players = set()
 	new_team = {}
 	team_id_arr = (team_id.replace(' ','').split(','))
@@ -1509,6 +1548,8 @@ def get_team_id_for_player(name,team_id):
 		new_team['NICK_SEELER'] = 'CHI'
 		new_team['JASON_ZUCKER'] = 'PIT'
 		new_team['ALEX_GALCHENYUK'] = 'MIN'
+		new_team['ANDY_GREENE'] = 'NYI'
+		new_team['BRENDEN_DILLON'] = 'WSH'
 
 		if name not in set(new_team.keys()):
 			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		
@@ -1526,26 +1567,3 @@ def get_team_id_for_player(name,team_id):
 		return new_team[name]
 	else:
 		return team_id
-
-def generate_starting_goalies():
-	starting_goalies_dict = generate_all_teams_dict(return_type=None)
-	return starting_goalies_dict
-
-def set_starting_goalie(simulation_param,team_id,player_id):
-	if player_id not in ACTIVE_GOALIES:
-		raise ValueError('Goalie ' + player_id + ' not included in database')
-	simulation_param['databases']['starting_goalies'][team_id] = player_id
-	return simulation_param
-
-def get_starting_goalie(simulation_param,team_id):
-	if simulation_param['databases']['starting_goalies'][team_id] != None:
-		return simulation_param['databases']['starting_goalies'][team_id]
-	else:
-		found_goalie = False
-		while found_goalie == False:
-			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
-				goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
-				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
-					found_goalie = True
-					return goalie_id
-

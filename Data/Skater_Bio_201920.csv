@@ -43,7 +43,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 42,Alexander Radulov,DAL,R,33,1986-07-05,Nizhny Tagil,-,RUS,-,73,205,2004,NSH,1,15,15
 43,Travis Zajac,N.J,C,34,1985-05-13,Winnipeg,-,CAN,-,74,185,2004,N.J,1,20,20
 44,Mike Green,DET,D,34,1985-10-12,Calgary,-,CAN,-,73,210,2004,WSH,1,29,29
-45,Blake Comeau,DAL,L,33,1986-02-18,Meadow Lake,-,CAN,-,73,200,2004,NYI,2,17,47
+45,Blake Comeau,DAL,L,34,1986-02-18,Meadow Lake,-,CAN,-,73,200,2004,NYI,2,17,47
 46,Carl Soderberg,ARI,C,34,1985-10-12,Malmö,-,SWE,-,75,210,2004,STL,2,19,49
 47,Alex Goligoski,ARI,D,34,1985-07-30,Grand Rapids,-,USA,-,71,185,2004,PIT,2,31,61
 48,David Krejci,BOS,C,33,1986-04-28,Sternberk,-,CZE,-,72,188,2004,BOS,2,33,63
@@ -73,7 +73,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 72,Ryan Reaves,VGK,R,33,1987-01-20,Winnipeg,-,CAN,-,73,225,2005,STL,5,31,156
 73,Anton Stralman,FLA,D,33,1986-08-01,Tibro,-,SWE,-,71,186,2005,TOR,7,22,216
 74,Patric Hornqvist,PIT,R,33,1987-01-01,Sollentuna,-,SWE,-,71,189,2005,NSH,7,36,230
-75,Andy Greene,N.J,D,37,1982-10-30,Trenton,-,USA,-,71,190,-,-,-,-,-
+75,Andy Greene,"N.J, NYI",D,37,1982-10-30,Trenton,-,USA,-,71,190,-,-,-,-,-
 76,Bryan Little,WPG,C,32,1987-11-12,Edmonton,-,CAN,-,72,191,2006,ATL,1,12,12
 77,Alex Biega,DET,D,31,1988-04-04,Montreal,-,CAN,-,70,199,2006,BUF,5,24,147
 78,Brad Marchand,BOS,"C, L",31,1988-05-11,Halifax,-,CAN,-,69,181,2006,BOS,3,8,71
@@ -91,9 +91,9 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 90,Derick Brassard,NYI,C,32,1987-09-22,Hull,-,CAN,-,73,202,2006,CBJ,1,6,6
 91,Michael Grabner,ARI,"L, R",32,1987-10-05,Villach,-,AUT,-,73,188,2006,VAN,1,14,14
 92,Phil Kessel,ARI,"C, R",32,1987-10-02,Madison,-,USA,-,72,202,2006,BOS,1,5,5
-93,Korbinian Holzer,ANA,D,31,1988-02-16,Munich,-,DEU,-,75,213,2006,TOR,4,18,111
+93,Korbinian Holzer,ANA,D,32,1988-02-16,Munich,-,DEU,-,75,213,2006,TOR,4,18,111
 94,Nicklas Backstrom,WSH,C,32,1987-11-23,Gävle,-,SWE,-,73,206,2006,WSH,1,4,4
-95,Michael Frolik,"BUF, CGY",R,31,1988-02-17,Kladno,-,CZE,-,73,190,2006,FLA,1,10,10
+95,Michael Frolik,"BUF, CGY",R,32,1988-02-17,Kladno,-,CZE,-,73,190,2006,FLA,1,10,10
 96,Artem Anisimov,OTT,C,31,1988-05-24,Yaroslavl,-,RUS,-,76,199,2006,NYR,2,24,54
 97,Jonathan Toews,CHI,C,31,1988-04-29,Winnipeg,-,CAN,-,74,201,2006,CHI,1,3,3
 98,Mathieu Perreault,WPG,"C, L",32,1988-01-05,Drummondville,-,CAN,-,70,188,2006,WSH,6,24,177
@@ -237,7 +237,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 236,Christopher Tanev,VAN,D,30,1989-12-20,Toronto,-,CAN,-,74,197,-,-,-,-,-
 237,Mats Zuccarello,MIN,"C, R",32,1987-09-01,Oslo,-,NOR,-,68,178,-,-,-,-,-
 238,Calle Jarnkrok,NSH,C,28,1991-09-25,Gävle,-,SWE,-,71,186,2010,DET,2,21,51
-239,Martin Marincin,TOR,D,27,1992-02-18,Kosice,-,SVK,-,77,217,2010,EDM,2,16,46
+239,Martin Marincin,TOR,D,28,1992-02-18,Kosice,-,SVK,-,77,217,2010,EDM,2,16,46
 240,Justin Holl,TOR,D,28,1992-01-30,Tonka Bay,-,USA,-,75,210,2010,CHI,2,24,54
 241,Jason Zucker,"MIN, PIT",L,28,1992-01-16,Newport Beach,-,USA,-,71,192,2010,MIN,2,29,59
 242,Tyler Toffoli,L.A,"C, R",27,1992-04-24,Scarborough,-,CAN,-,72,197,2010,L.A,2,17,47
@@ -389,7 +389,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 388,Teuvo Teravainen,CAR,L,25,1994-09-11,Helsinki,-,FIN,-,71,191,2012,CHI,1,18,18
 389,Derrick Pouliot,STL,D,26,1994-01-16,Estevan,-,CAN,-,72,196,2012,PIT,1,8,8
 390,Jacob Trouba,NYR,D,25,1994-02-26,Rochester,-,USA,-,75,209,2012,WPG,1,9,9
-391,Slater Koekkoek,CHI,D,25,1994-02-18,Winchester,-,CAN,-,74,193,2012,T.B,1,10,10
+391,Slater Koekkoek,CHI,D,26,1994-02-18,Winchester,-,CAN,-,74,193,2012,T.B,1,10,10
 392,Filip Forsberg,NSH,L,25,1994-08-13,Ostervala,-,SWE,-,73,205,2012,WSH,1,11,11
 393,Radek Faksa,DAL,C,26,1994-01-09,Vitkov,-,CZE,-,75,220,2012,DAL,1,13,13
 394,Matt Grzelcyk,BOS,D,26,1994-01-05,Charlestown,-,USA,-,69,174,2012,BOS,3,24,85
@@ -517,7 +517,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 516,Anthony Mantha,DET,R,25,1994-09-16,Longueuil,-,CAN,-,77,234,2013,DET,1,20,20
 517,Frederik Gauthier,TOR,C,24,1995-04-26,Laval,-,CAN,-,77,239,2013,TOR,1,21,21
 518,Jean-Sebastien Dea,BUF,C,26,1994-02-08,Laval,-,CAN,-,71,168,-,-,-,-,-
-519,Ross Johnston,NYI,L,25,1994-02-18,Charlottetown,-,CAN,-,77,235,-,-,-,-,-
+519,Ross Johnston,NYI,L,26,1994-02-18,Charlottetown,-,CAN,-,77,235,-,-,-,-,-
 520,Colby Cave,EDM,C,25,1994-12-26,Battleford,-,CAN,-,73,200,-,-,-,-,-
 521,Nathan Walker,STL,L,26,1994-02-07,Cardiff,-,GBR,-,69,186,2014,WSH,3,29,89
 522,Joel Hanley,DAL,D,28,1991-06-08,Keswick,-,CAN,-,71,190,-,-,-,-,-
@@ -579,7 +579,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 578,Chase De Leo,ANA,C,24,1995-10-25,La Mirada,-,USA,-,69,186,2014,WPG,4,9,99
 579,Christoffer Ehn,DET,C,23,1996-04-05,Skara,-,SWE,-,75,195,2014,DET,4,16,106
 580,Devon Toews,NYI,D,25,1994-02-21,Abbotsford,-,CAN,-,73,191,2014,NYI,4,18,108
-581,Austin Poganski,STL,R,23,1996-02-16,St. Cloud,-,USA,-,73,198,2014,STL,4,20,110
+581,Austin Poganski,STL,R,24,1996-02-16,St. Cloud,-,USA,-,73,198,2014,STL,4,20,110
 582,Viktor Arvidsson,NSH,"L, R",26,1993-04-08,Skellefteå,-,SWE,-,69,180,2014,NSH,4,22,112
 583,Sam Lafferty,PIT,C,24,1995-03-06,Hollidaysburg,-,USA,-,73,195,2014,PIT,4,23,113
 584,Danton Heinen,BOS,"C, L",24,1995-07-05,Langley,-,CAN,-,73,188,2014,BOS,4,26,116
@@ -614,7 +614,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 613,Vince Dunn,STL,D,23,1996-10-29,Mississauga,-,CAN,-,72,203,2015,STL,2,26,56
 614,Travis Dermott,TOR,D,23,1996-12-22,Newmarket,-,CAN,-,72,205,2015,TOR,2,4,34
 615,Anthony Richard,NSH,C,23,1996-12-20,Trois-Rivieres,-,CAN,-,70,163,2015,NSH,4,9,100
-616,Jordan Greenway,MIN,L,22,1997-02-16,Canton,-,USA,-,78,225,2015,MIN,2,20,50
+616,Jordan Greenway,MIN,L,23,1997-02-16,Canton,-,USA,-,78,225,2015,MIN,2,20,50
 617,Timo Meier,S.J,R,23,1996-10-08,Herisau,-,CHE,-,72,210,2015,S.J,1,9,9
 618,Erik Cernak,T.B,D,22,1997-05-28,Kosice,-,SVK,-,75,233,2015,L.A,2,13,43
 619,Mikko Rantanen,COL,R,23,1996-10-29,Nousiainen,-,FIN,-,76,215,2015,COL,1,10,10
@@ -631,230 +631,233 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 630,Brandon Carlo,BOS,D,23,1996-11-26,Colorado Springs,-,USA,-,77,212,2015,BOS,2,7,37
 631,Brock Boeser,VAN,R,22,1997-02-25,Burnsville,-,USA,-,73,208,2015,VAN,1,23,23
 632,Mathew Barzal,NYI,C,22,1997-05-26,Coquitlam,-,CAN,-,72,187,2015,NYI,1,16,16
-633,Roope Hintz,DAL,L,23,1996-11-17,Tampere,-,FIN,-,75,220,2015,DAL,2,19,49
-634,Ethan Bear,EDM,D,22,1997-06-26,Regina,-,CAN,-,71,197,2015,EDM,5,3,124
-635,Caleb Jones,EDM,D,22,1997-06-06,Arlington,-,USA,-,73,194,2015,EDM,4,26,117
-636,Austin Wagner,L.A,L,22,1997-06-23,Calgary,-,CAN,-,73,185,2015,L.A,4,8,99
-637,Jack Roslovic,WPG,C,23,1997-01-29,Columbus,-,USA,-,73,187,2015,WPG,1,25,25
-638,Zach Werenski,CBJ,D,22,1997-07-19,Grosse Pointe,-,USA,-,74,212,2015,CBJ,1,8,8
-639,Nicolas Roy,VGK,C,23,1997-02-05,Amos,-,CAN,-,76,200,2015,CAR,4,5,96
-640,Anthony Beauvillier,NYI,L,22,1997-06-08,Sorel-Tracy,-,CAN,-,71,182,2015,NYI,1,28,28
-641,Daniel Sprong,ANA,R,22,1997-03-17,Amsterdam,-,NLD,-,72,191,2015,PIT,2,16,46
-642,Jeremy Lauzon,BOS,D,22,1997-04-28,Val D'or,-,CAN,-,73,204,2015,BOS,2,22,52
-643,Thomas Chabot,OTT,D,23,1997-01-30,Sainte-Marie,-,CAN,-,74,190,2015,OTT,1,18,18
-644,Mathieu Joseph,T.B,R,23,1997-02-09,Laval,-,CAN,-,73,190,2015,T.B,4,29,120
-645,Lawson Crouse,ARI,L,22,1997-06-23,Mt. Brydges,-,CAN,-,76,220,2015,FLA,1,11,11
-646,Kyle Capobianco,ARI,D,22,1997-08-13,Mississauga,-,CAN,-,73,196,2015,ARI,3,2,63
-647,Mitchell Stephens,T.B,C,23,1997-02-05,Peterborough,-,CAN,-,72,193,2015,T.B,2,3,33
-648,Mitchell Marner,TOR,"C, R",22,1997-05-05,Markham,-,CAN,-,72,175,2015,TOR,1,4,4
-649,Zach Senyshyn,BOS,R,22,1997-03-30,Ottawa,-,CAN,-,73,192,2015,BOS,1,15,15
-650,Filip Chlapik,OTT,C,22,1997-06-03,Prague,-,CZE,-,73,194,2015,OTT,2,18,48
-651,Jacob Larsson,ANA,D,22,1997-04-29,Ljungby,-,SWE,-,74,190,2015,ANA,1,27,27
-652,Joel Eriksson Ek,MIN,C,23,1997-01-29,Karlstad,-,SWE,-,73,210,2015,MIN,1,20,20
-653,Denis Gurianov,DAL,R,22,1997-06-07,Togliatti,-,RUS,-,75,200,2015,DAL,1,12,12
-654,Jake DeBrusk,BOS,L,23,1996-10-17,Edmonton,-,CAN,-,72,188,2015,BOS,1,14,14
-655,Ivan Provorov,PHI,D,23,1997-01-13,Yaroslavl,-,RUS,-,73,201,2015,PHI,1,7,7
-656,Dennis Gilbert,CHI,D,23,1996-10-30,Buffalo,-,USA,-,74,216,2015,CHI,3,30,91
-657,Gabriel Carlsson,CBJ,D,23,1997-01-02,Orebro,-,SWE,-,77,192,2015,CBJ,1,29,29
-658,John Marino,PIT,D,22,1997-05-21,Brockton,-,USA,-,73,181,2015,EDM,6,3,154
-659,Yakov Trenin,NSH,C,23,1997-01-13,Chelyabinsk,-,RUS,-,74,201,2015,NSH,2,25,55
-660,Austin Czarnik,CGY,C,27,1992-12-12,Detroit,-,USA,-,69,170,-,-,-,-,-
-661,Anthony Cirelli,T.B,C,22,1997-07-15,Etobicoke,-,CAN,-,72,193,2015,T.B,3,11,72
-662,Evan Rodrigues,BUF,"C, L",26,1993-07-28,Toronto,-,CAN,-,71,184,-,-,-,-,-
-663,Artemi Panarin,NYR,"C, L",28,1991-10-30,Korkino,-,RUS,-,71,170,-,-,-,-,-
-664,Dean Kukan,CBJ,D,26,1993-07-08,Volketswil,-,CHE,-,74,192,-,-,-,-,-
-665,Noel Acciari,FLA,C,28,1991-12-01,Johnston,-,USA,-,70,203,-,-,-,-,-
-666,Derek Ryan,CGY,C,33,1986-12-29,Spokane,-,USA,-,71,185,-,-,-,-,-
-667,Kevin Stenlund,CBJ,C,23,1996-09-20,Huddinge,-,SWE,-,76,209,2015,CBJ,2,28,58
-668,J.C. Beaudin,OTT,C,22,1997-03-25,Longueuil,-,CAN,-,73,196,2015,COL,3,10,71
-669,Lukas Vejdemo,MTL,C,24,1996-01-25,Stockholm,-,SWE,-,74,194,2015,MTL,3,26,87
-670,Aleksi Saarela,FLA,C,23,1997-01-07,Helsinki,-,FIN,-,71,200,2015,NYR,3,28,89
-671,Colton White,N.J,D,22,1997-05-03,London,-,CAN,-,73,185,2015,N.J,4,6,97
-672,Denis Malgin,FLA,C,23,1997-01-18,Olten,-,CHE,-,69,177,2015,FLA,4,11,102
-673,Mikhail Vorobyev,PHI,C,23,1997-01-05,Ufa,-,RUS,-,74,194,2015,PHI,4,13,104
-674,Alexandre Carrier,NSH,D,23,1996-10-08,Quebec City,-,CAN,-,71,174,2015,NSH,4,24,115
-675,Conor Garland,ARI,R,23,1996-03-11,Scituate,-,USA,-,70,165,2015,ARI,5,2,123
-676,Dmytro Timashov,TOR,L,23,1996-10-01,Kirovograd,-,UKR,-,70,192,2015,TOR,5,4,125
-677,Niko Mikkola,STL,D,23,1996-04-27,Finland,-,FIN,-,76,185,2015,STL,5,6,127
-678,Dominik Simon,PIT,C,25,1994-08-08,Prague,-,CZE,-,71,190,2015,PIT,5,16,137
-679,Christian Jaros,OTT,D,23,1996-04-02,Kosice,-,SVK,-,75,222,2015,OTT,5,18,139
-680,Rudolfs Balcers,OTT,L,22,1997-04-08,Latvia,-,LVA,-,71,180,2015,S.J,5,21,142
-681,Troy Terry,ANA,"C, R",22,1997-09-10,Denver,-,USA,-,73,180,2015,ANA,5,27,148
-682,Adam Gaudette,VAN,C,23,1996-10-03,Braintree,-,USA,-,73,170,2015,VAN,5,28,149
-683,Brett Seney,N.J,L,23,1996-02-28,London,-,CAN,-,69,156,2015,N.J,6,6,157
-684,Vladislav Gavrikov,CBJ,D,24,1995-11-21,Yaroslavl,-,RUS,-,75,213,2015,CBJ,6,8,159
-685,Cameron Hughes,BOS,C,23,1996-10-09,Edmonton,-,CAN,-,71,160,2015,BOS,6,14,165
-686,Mason Appleton,WPG,C,24,1996-01-15,Green Bay,-,USA,-,74,193,2015,WPG,6,17,168
-687,Markus Nutivaara,CBJ,D,25,1994-06-06,Oulu,-,FIN,-,73,187,2015,CBJ,7,8,189
-688,Matt Roy,L.A,D,24,1995-03-01,Detroit,-,USA,-,73,200,2015,L.A,7,13,194
-689,Sami Niku,WPG,D,23,1996-10-10,Haapavesi,-,FIN,-,73,176,2015,WPG,7,17,198
-690,Kole Sherwood,CBJ,R,23,1997-01-22,Columbus,-,USA,-,73,212,-,-,-,-,-
-691,Mason Marchment,TOR,L,24,1995-06-18,Uxbridge,-,CAN,-,75,210,-,-,-,-,-
-692,Adam Brooks,TOR,C,23,1996-05-06,Winnipeg,-,CAN,-,71,180,2016,TOR,4,1,92
-693,Philippe Myers,PHI,D,23,1997-01-25,Moncton,-,CAN,-,77,210,-,-,-,-,-
-694,Kevin Rooney,N.J,C,26,1993-05-21,Canton,-,USA,-,74,190,-,-,-,-,-
-695,Brandon Tanev,PIT,L,28,1991-12-31,Toronto,-,CAN,-,72,180,-,-,-,-,-
-696,Matthew Tkachuk,CGY,L,22,1997-12-11,Scottsdale,-,USA,-,74,202,2016,CGY,1,6,6
-697,Joey Anderson,N.J,R,21,1998-06-19,Roseville,-,USA,-,71,190,2016,N.J,3,12,73
-698,Luke Kunin,MIN,C,22,1997-12-04,Chesterfield,-,USA,-,72,197,2016,MIN,1,15,15
-699,Auston Matthews,TOR,C,22,1997-09-17,San Ramon,-,USA,-,75,220,2016,TOR,1,1,1
-700,Maxime Lajoie,OTT,D,22,1997-11-05,Quebec City,-,CAN,-,73,196,2016,OTT,5,12,133
-701,Adam Fox,NYR,D,21,1998-02-17,Jericho,-,USA,-,71,181,2016,CGY,3,5,66
-702,Ryan Lindgren,NYR,D,22,1998-02-11,Burnsville,-,USA,-,72,191,2016,BOS,2,19,49
-703,Charlie McAvoy,BOS,D,22,1997-12-21,Long Beach,-,USA,-,72,208,2016,BOS,1,14,14
-704,Julien Gauthier,CAR,R,22,1997-10-15,Pointe-aux-Trembles,-,CAN,-,76,227,2016,CAR,1,21,21
-705,Libor Hajek,NYR,D,22,1998-02-04,Smrcek,-,CZE,-,74,203,2016,T.B,2,7,37
-706,Rasmus Asplund,BUF,C,22,1997-12-03,Filipstad,-,SWE,-,71,190,2016,BUF,2,3,33
-707,Carl Grundstrom,L.A,R,22,1997-12-01,Umea,-,SWE,-,72,201,2016,TOR,2,27,57
-708,Alex DeBrincat,CHI,"L, R",22,1997-12-18,Farmington Hills,-,USA,-,67,165,2016,CHI,2,9,39
-709,Patrik Laine,WPG,R,21,1998-04-19,Tampere,-,FIN,-,77,206,2016,WPG,1,2,2
-710,Clayton Keller,ARI,"C, R",21,1998-07-29,Chesterfield,-,USA,-,70,170,2016,ARI,1,7,7
-711,Jakob Chychrun,ARI,D,21,1998-03-31,Boca Raton,-,USA,-,74,210,2016,ARI,1,16,16
-712,Dillon Dube,CGY,C,21,1998-07-20,Golden,-,CAN,-,71,187,2016,CGY,2,26,56
-713,Tyler Benson,EDM,L,21,1998-03-15,Edmonton,-,CAN,-,71,190,2016,EDM,2,2,32
-714,Kale Clague,L.A,D,21,1998-06-05,Regina,-,CAN,-,72,177,2016,L.A,2,21,51
-715,Sam Steel,ANA,C,22,1998-02-03,Ardrossan,-,CAN,-,71,189,2016,ANA,1,30,30
-716,Brett Howden,NYR,C,21,1998-03-29,Calgary,-,CAN,-,74,197,2016,T.B,1,27,27
-717,Kieffer Bellows,NYI,L,21,1998-06-10,Edina,-,USA,-,72,195,2016,NYI,1,19,19
-718,Carsen Twarynski,PHI,L,22,1997-11-24,St. Albert,-,CAN,-,74,198,2016,PHI,3,21,82
-719,Beck Malenstyn,WSH,L,22,1998-02-04,Delta,-,CAN,-,74,200,2016,WSH,5,24,145
-720,Tim Gettinger,NYR,L,21,1998-04-14,Cleveland,-,USA,-,78,218,2016,NYR,5,20,141
-721,Trent Frederic,BOS,C,22,1998-02-11,St. Louis,-,USA,-,74,203,2016,BOS,1,29,29
-722,Logan Brown,OTT,C,21,1998-03-05,Raleigh,-,USA,-,78,220,2016,OTT,1,11,11
-723,Max Jones,ANA,L,21,1998-02-17,Rochester,-,USA,-,75,220,2016,ANA,1,24,24
-724,Andrew Peeke,CBJ,D,21,1998-03-17,Parkland,-,USA,-,75,194,2016,CBJ,2,4,34
-725,Tyson Jost,COL,C,21,1998-03-14,St. Albert,-,CAN,-,71,187,2016,COL,1,10,10
-726,Dante Fabbro,NSH,D,21,1998-06-20,Coquitlam,-,CAN,-,72,189,2016,NSH,1,17,17
-727,Josh Mahura,ANA,D,21,1998-05-05,St. Albert,-,CAN,-,73,186,2016,ANA,3,24,85
-728,Victor Mete,MTL,D,21,1998-06-07,Woodbridge,-,CAN,-,69,187,2016,MTL,4,9,100
-729,Givani Smith,DET,R,21,1998-02-28,Thornhill,-,CAN,-,74,210,2016,DET,2,16,46
-730,Nick Caamano,DAL,R,21,1998-09-07,Hamilton,-,CAN,-,74,200,2016,DAL,5,25,146
-731,Connor Bunnaman,PHI,C,21,1998-04-16,Guelph,-,CAN,-,73,207,2016,PHI,4,18,109
-732,Jordan Kyrou,STL,C,21,1998-05-05,Toronto,-,CAN,-,72,175,2016,STL,2,5,35
-733,Riley Stillman,FLA,D,21,1998-03-09,Peterborough,-,CAN,-,73,196,2016,FLA,4,23,114
-734,Noah Gregor,S.J,C,21,1998-07-28,Beaumont,-,CAN,-,72,185,2016,S.J,4,20,111
-735,Dennis Cholowski,DET,D,21,1998-02-15,Langley,-,CAN,-,72,197,2016,DET,1,20,20
-736,Samuel Girard,COL,D,21,1998-05-12,Roberval,-,CAN,-,70,170,2016,NSH,2,17,47
-737,Pierre-Luc Dubois,CBJ,"C, L",21,1998-06-24,Ste-Agathe-Des-Monts,-,CAN,-,75,218,2016,CBJ,1,3,3
-738,Henrik Borgstrom,FLA,C,22,1997-08-06,Helsinki,-,FIN,-,75,199,2016,FLA,1,23,23
-739,Jesper Bratt,N.J,L,21,1998-07-30,Stockholm,-,SWE,-,70,175,2016,N.J,6,11,162
-740,Mikhail Sergachev,T.B,D,21,1998-06-25,Nizhnekamsk,-,RUS,-,75,217,2016,MTL,1,9,9
-741,Vitaly Abramov,OTT,R,21,1998-05-08,Chelyabinsk,-,RUS,-,69,180,2016,CBJ,3,4,65
-742,Michael McLeod,N.J,C,22,1998-02-03,Mississauga,-,CAN,-,74,188,2016,N.J,1,12,12
-743,Tage Thompson,BUF,C,22,1997-10-30,Phoenix,-,USA,-,77,215,2016,STL,1,26,26
-744,Alex Nylander,CHI,L,21,1998-03-02,Calgary,-,CAN,-,73,192,2016,BUF,1,8,8
-745,German Rubtsov,PHI,C,21,1998-06-27,Chekhov,-,RUS,-,74,178,2016,PHI,1,22,22
-746,Filip Hronek,DET,D,22,1997-11-02,Hradec Králové,-,CZE,-,72,183,2016,DET,2,23,53
-747,Troy Stecher,VAN,D,25,1994-04-07,Richmond,-,CAN,-,70,186,-,-,-,-,-
-748,Nikita Zaitsev,OTT,D,28,1991-10-29,Moscow,-,RUS,-,74,188,-,-,-,-,-
-749,Drake Caggiula,CHI,C,25,1994-06-20,Pickering,-,CAN,-,70,176,-,-,-,-,-
-750,Patrick Russell,EDM,R,27,1993-01-04,Bickenrod,-,DNK,-,73,203,-,-,-,-,-
-751,Michal Kempny,WSH,D,29,1990-09-08,Hodonin,-,CZE,-,72,195,-,-,-,-,-
-752,Otto Koivula,NYI,L,21,1998-09-01,Nokia,-,FIN,-,76,219,2016,NYI,4,29,120
-753,Joachim Blichfeld,S.J,R,21,1998-07-17,Frederikshavn,-,DNK,-,74,180,2016,S.J,7,29,210
-754,Dylan Gambrell,S.J,C,23,1996-08-26,Bonney Lake,-,USA,-,72,185,2016,S.J,2,30,60
-755,Rhett Gardner,DAL,C,23,1996-02-28,Moose Jaw,-,CAN,-,75,225,2016,DAL,4,25,116
-756,Matt Luff,L.A,R,22,1997-05-05,Oakville,-,CAN,-,74,196,-,-,-,-,-
-757,Mathieu Olivier,NSH,R,23,1997-02-11,Biloxi,-,USA,-,74,210,-,-,-,-,-
-758,Trevor Moore,"L.A, TOR","C, L",24,1995-03-31,Thousand Oaks,-,USA,-,70,185,-,-,-,-,-
-759,Brennan Menell,MIN,D,22,1997-05-24,Woodbury,-,USA,-,71,177,-,-,-,-,-
-760,Zack MacEwen,VAN,C,23,1996-07-08,Charlottetown,-,CAN,-,75,205,-,-,-,-,-
-761,Gerald Mayhew,MIN,C,27,1992-12-31,Wyandotte,-,USA,-,69,166,-,-,-,-,-
-762,Zach Aston-Reese,PIT,C,25,1994-08-10,Staten Island,-,USA,-,72,204,-,-,-,-,-
-763,Kailer Yamamoto,EDM,R,21,1998-09-29,Spokane,-,USA,-,68,153,2017,EDM,1,22,22
-764,Nicolas Hague,VGK,D,21,1998-12-05,Kitchener,-,CAN,-,78,221,2017,VGK,2,3,34
-765,Conor Timmins,COL,D,21,1998-09-18,St. Catharines,-,CAN,-,74,185,2017,COL,2,1,32
-766,Mario Ferraro,S.J,D,21,1998-09-17,Toronto,-,CAN,-,71,185,2017,S.J,2,18,49
-767,Cale Fleury,MTL,D,21,1998-11-19,Carlyle,-,CAN,-,73,205,2017,MTL,3,25,87
-768,Jaret Anderson-Dolan,L.A,C,20,1999-09-12,Calgary,-,CAN,-,71,188,2017,L.A,2,10,41
-769,Cody Glass,VGK,C,20,1999-04-01,Winnipeg,-,CAN,-,74,192,2017,VGK,1,6,6
-770,Casey Mittelstadt,BUF,C,21,1998-11-22,Edina,-,USA,-,73,199,2017,BUF,1,8,8
-771,Urho Vaakanainen,BOS,D,21,1999-01-01,Joensuu,-,FIN,-,73,185,2017,BOS,1,18,18
-772,Nico Hischier,N.J,C,21,1999-01-04,Brig,-,CHE,-,73,175,2017,N.J,1,1,1
-773,Jesper Boqvist,N.J,C,21,1998-10-30,Falun,-,SWE,-,72,180,2017,N.J,2,5,36
-774,Klim Kostin,STL,C,20,1999-05-05,Penza,-,RUS,-,75,212,2017,STL,1,31,31
-775,Elias Pettersson,VAN,C,21,1998-11-12,Sundsvall,-,SWE,-,74,176,2017,VAN,1,5,5
-776,Nick Suzuki,MTL,C,20,1999-08-10,London,-,CAN,-,71,201,2017,VGK,1,13,13
-777,Jack Studnicka,BOS,C,20,1999-02-18,Windsor,-,CAN,-,73,171,2017,BOS,2,22,53
-778,Robert Thomas,STL,C,20,1999-07-02,Aurora,-,CAN,-,72,188,2017,STL,1,20,20
-779,Jason Robertson,DAL,L,20,1999-07-22,Arcadia,-,USA,-,74,195,2017,DAL,2,8,39
-780,Morgan Frost,PHI,C,20,1999-05-14,Aurora,-,CAN,-,71,170,2017,PHI,1,27,27
-781,Max Comtois,ANA,L,21,1999-01-08,Longueuil,-,CAN,-,74,215,2017,ANA,2,19,50
-782,Henri Jokiharju,BUF,D,20,1999-06-17,Oulu,-,FIN,-,72,195,2017,CHI,1,29,29
-783,Miro Heiskanen,DAL,D,20,1999-07-18,Espoo,-,FIN,-,73,190,2017,DAL,1,3,3
-784,Martin Necas,CAR,C,21,1999-01-15,Nove Mesto na Morave,-,CZE,-,73,189,2017,CAR,1,12,12
-785,Timothy Liljegren,TOR,D,20,1999-04-30,Kristianstad,-,SWE,-,72,192,2017,TOR,1,17,17
-786,Ryan Poehling,MTL,C,21,1999-01-03,Lakeville,-,USA,-,74,204,2017,MTL,1,25,25
-787,Cale Makar,COL,D,21,1998-10-30,Calgary,-,CAN,-,71,187,2017,COL,1,4,4
-788,Lias Andersson,NYR,C,21,1998-10-13,Smogen,-,SWE,-,72,190,2017,NYR,1,7,7
-789,Erik Brannstrom,OTT,D,20,1999-09-02,Eksjo,-,SWE,-,70,181,2017,VGK,1,15,15
-790,Alexandre Texier,CBJ,C,20,1999-09-13,St. Martin D'heres,-,FRA,-,72,192,2017,CBJ,2,14,45
-791,Filip Chytil,NYR,C,20,1999-09-05,Kromeriz,-,CZE,-,74,206,2017,NYR,1,21,21
-792,Alex Iafallo,L.A,L,26,1993-12-21,Eden,-,USA,-,72,188,-,-,-,-,-
-793,David Kampf,CHI,C,25,1995-01-12,Chomutov,-,CZE,-,74,188,-,-,-,-,-
-794,Neal Pionk,WPG,D,24,1995-07-29,Hermantown,-,USA,-,72,186,-,-,-,-,-
-795,Oscar Fantenberg,VAN,D,28,1991-10-07,Ljunby,-,SWE,-,72,206,-,-,-,-,-
-796,Calle Rosen,COL,D,26,1994-02-02,Vaxjo,-,SWE,-,73,186,-,-,-,-,-
-797,Radim Simek,S.J,D,27,1992-09-20,Mlada Boleslav,-,CZE,-,71,200,-,-,-,-,-
-798,Jan Rutta,T.B,D,29,1990-07-29,Písek,-,CZE,-,75,204,-,-,-,-,-
-799,Gustav Lindstrom,DET,D,21,1998-10-20,Ostervala,-,SWE,-,74,190,2017,DET,2,7,38
-800,Eetu Luostarinen,CAR,C,21,1998-09-02,Siilinjarvi,-,FIN,-,75,184,2017,CAR,2,11,42
-801,Alexander Volkov,T.B,R,22,1997-08-02,Moscow,-,RUS,-,73,191,2017,T.B,2,17,48
-802,Emil Bemstrom,CBJ,C,20,1999-06-01,Nykoping,-,SWE,-,71,190,2017,CBJ,4,24,117
-803,Drake Batherson,OTT,"C, R",21,1998-04-27,Fort Wayne,-,USA,-,73,206,2017,OTT,4,28,121
-804,Jonathan Davidsson,OTT,R,22,1997-03-12,Tyreso,-,SWE,-,71,185,2017,CBJ,6,15,170
-805,Max Veronneau,OTT,R,24,1995-12-12,Ottawa,-,CAN,-,72,193,-,-,-,-,-
-806,Sheldon Dries,COL,C,25,1994-04-23,Macomb Township,-,USA,-,69,180,-,-,-,-,-
-807,Sean Walker,L.A,D,25,1994-11-13,Keswick,-,CAN,-,71,196,-,-,-,-,-
-808,Adam Johnson,PIT,C,25,1994-06-22,Grand Rapids,-,USA,-,72,174,-,-,-,-,-
-809,Alexander True,S.J,C,22,1997-07-17,Kobenhavn,-,DNK,-,77,200,-,-,-,-,-
-810,Zach Whitecloud,VGK,D,23,1996-11-28,Brandon,-,CAN,-,74,209,-,-,-,-,-
-811,Eric Robinson,CBJ,L,24,1995-06-14,BELLMAWR,-,USA,-,74,197,-,-,-,-,-
-812,Joel L'Esperance,DAL,R,24,1995-08-18,Brighton,-,USA,-,74,215,-,-,-,-,-
-813,Lukas Radil,S.J,C,29,1990-08-05,Caslav,-,CZE,-,74,205,-,-,-,-,-
-814,Oliver Wahlstrom,NYI,R,19,2000-06-13,Portland,-,USA,-,73,211,2018,NYI,1,11,11
-815,Martin Fehervary,WSH,D,20,1999-10-06,Bratislava,-,SVK,-,74,200,2018,WSH,2,15,46
-816,Joel Farabee,PHI,L,19,2000-02-25,Syracuse,-,USA,-,72,164,2018,PHI,1,14,14
-817,Quinn Hughes,VAN,D,20,1999-10-14,Orlando,-,USA,-,70,170,2018,VAN,1,7,7
-818,Brady Tkachuk,OTT,L,20,1999-09-16,Scottsdale,-,USA,-,75,212,2018,OTT,1,4,4
-819,Isac Lundestrom,ANA,C,20,1999-11-06,Gallivare,-,SWE,-,72,187,2018,ANA,1,23,23
-820,Filip Zadina,DET,R,20,1999-11-27,Pardubice,-,CZE,-,72,189,2018,DET,1,6,6
-821,Jesperi Kotkaniemi,MTL,C,19,2000-07-06,Pori,-,FIN,-,74,198,2018,MTL,1,3,3
-822,Andrei Svechnikov,CAR,R,19,2000-03-26,Barnual,-,RUS,-,74,195,2018,CAR,1,2,2
-823,Rasmus Dahlin,BUF,D,19,2000-04-13,Trollhattan,-,SWE,-,75,193,2018,BUF,1,1,1
-824,Barrett Hayton,ARI,C,19,2000-06-09,Peterborough,-,CAN,-,73,190,2018,ARI,1,5,5
-825,Liam Foudy,CBJ,C,20,2000-02-04,Toronto,-,CAN,-,72,182,2018,CBJ,1,18,18
-826,Noah Dobson,NYI,D,20,2000-01-07,Summerside,-,CAN,-,75,184,2018,NYI,1,12,12
-827,Adam Boqvist,CHI,D,19,2000-08-15,Falun,-,SWE,-,71,179,2018,CHI,1,8,8
-828,Rasmus Sandin,TOR,D,19,2000-03-07,Uppsala,-,SWE,-,72,183,2018,TOR,1,29,29
-829,Karson Kuhlman,BOS,C,24,1995-09-26,Esko,-,USA,-,71,185,-,-,-,-,-
-830,Jordan Gross,ARI,D,24,1995-05-09,Maple Grove,-,USA,-,70,190,-,-,-,-,-
-831,Lawrence Pilut,BUF,D,24,1995-12-30,Tingsryd,-,SWE,-,71,194,-,-,-,-,-
-832,Joel Persson,EDM,D,25,1994-03-04,Kristianstad,-,SWE,-,71,170,-,-,-,-,-
-833,Par Lindholm,BOS,C,28,1991-10-05,Kusmark,-,SWE,-,72,183,-,-,-,-,-
-834,Juuso Riikola,PIT,D,26,1993-11-09,Joensuu,-,FIN,-,72,189,-,-,-,-,-
-835,Dominik Kahun,PIT,C,24,1995-07-02,Plana,-,CZE,-,71,175,-,-,-,-,-
-836,Ilya Lyubushkin,ARI,D,25,1994-04-06,Moscow,-,RUS,-,74,201,-,-,-,-,-
-837,Antti Suomela,S.J,C,25,1994-03-17,Espoo,-,FIN,-,72,180,-,-,-,-,-
-838,David Gustafsson,WPG,C,19,2000-04-11,Tingsryd,-,SWE,-,74,196,2018,WPG,2,29,60
-839,Otto Leskinen,MTL,D,23,1997-02-06,Pieksämäki,-,FIN,-,71,183,-,-,-,-,-
-840,Logan O'Connor,COL,R,23,1996-08-14,Missouri City,-,USA,-,72,175,-,-,-,-,-
-841,Taro Hirose,DET,L,23,1996-06-30,Calgary,-,CAN,-,70,162,-,-,-,-,-
-842,Nico Sturm,MIN,C,24,1995-05-03,Augsburg,-,DEU,-,75,206,-,-,-,-,-
-843,Blake Lizotte,L.A,C,22,1997-12-13,Lindstrom,-,USA,-,67,172,-,-,-,-,-
-844,Danil Yurtaykin,S.J,L,22,1997-07-01,Belovo,-,RUS,-,71,165,-,-,-,-,-
-845,Joel Kellman,S.J,C,25,1994-05-25,Karlskrona,-,SWE,-,71,192,-,-,-,-,-
-846,Kirby Dach,CHI,C,19,2001-01-21,Fort Saskatchewan,-,CAN,-,76,197,2019,CHI,1,3,3
-847,Kaapo Kakko,NYR,R,19,2001-02-13,Turku,-,FIN,-,75,199,2019,NYR,1,2,2
-848,Jack Hughes,N.J,C,18,2001-05-14,Orlando,-,USA,-,70,170,2019,N.J,1,1,1
-849,Ville Heinola,WPG,D,19,2001-02-03,Honkajoki,-,FIN,-,71,178,2019,WPG,1,20,20
-850,Tobias Bjornfot,L.A,D,18,2001-04-06,Upplands Vasby,-,SWE,-,72,202,2019,L.A,1,22,22
-851,Ilya Mikheyev,TOR,R,25,1994-10-10,Omsk,-,RUS,-,75,195,-,-,-,-,-
-852,Alexander Yelesin,CGY,D,24,1996-02-07,Yaroslavl,-,RUS,-,72,195,-,-,-,-,-
-853,Anton Wedin,CHI,L,26,1993-03-01,Sundsvall,-,SWE,-,71,195,-,-,-,-,-
-854,Joakim Nygard,EDM,L,27,1993-01-08,Stockholm,-,SWE,-,72,179,-,-,-,-,-
-855,Lean Bergmann,S.J,C,21,1998-10-04,Hemer,-,DEU,-,74,205,-,-,-,-,-
-856,Joel Kiviranta,DAL,L,23,1996-03-23,Vantaa,-,FIN,-,70,180,-,-,-,-,-
-857,Joona Luoto,WPG,L,22,1997-09-26,TAMPERE,-,FIN,-,75,192,-,-,-,-,-
-858,Jakob Lilja,CBJ,L,26,1993-07-23,Malmo,-,SWE,-,73,196,-,-,-,-,-
-859,Gaetan Haas,EDM,C,28,1992-01-31,Bonfol,-,CHE,-,72,181,-,-,-,-,-
+633,Nicholas Merkley,N.J,R,22,1997-05-23,Calgary,-,CAN,-,70,194,2015,ARI,1,30,30
+634,Roope Hintz,DAL,L,23,1996-11-17,Tampere,-,FIN,-,75,220,2015,DAL,2,19,49
+635,Ethan Bear,EDM,D,22,1997-06-26,Regina,-,CAN,-,71,197,2015,EDM,5,3,124
+636,Caleb Jones,EDM,D,22,1997-06-06,Arlington,-,USA,-,73,194,2015,EDM,4,26,117
+637,Austin Wagner,L.A,L,22,1997-06-23,Calgary,-,CAN,-,73,185,2015,L.A,4,8,99
+638,Jack Roslovic,WPG,C,23,1997-01-29,Columbus,-,USA,-,73,187,2015,WPG,1,25,25
+639,Zach Werenski,CBJ,D,22,1997-07-19,Grosse Pointe,-,USA,-,74,212,2015,CBJ,1,8,8
+640,Nicolas Roy,VGK,C,23,1997-02-05,Amos,-,CAN,-,76,200,2015,CAR,4,5,96
+641,Anthony Beauvillier,NYI,L,22,1997-06-08,Sorel-Tracy,-,CAN,-,71,182,2015,NYI,1,28,28
+642,Daniel Sprong,ANA,R,22,1997-03-17,Amsterdam,-,NLD,-,72,191,2015,PIT,2,16,46
+643,Jeremy Lauzon,BOS,D,22,1997-04-28,Val D'or,-,CAN,-,73,204,2015,BOS,2,22,52
+644,Thomas Chabot,OTT,D,23,1997-01-30,Sainte-Marie,-,CAN,-,74,190,2015,OTT,1,18,18
+645,Mathieu Joseph,T.B,R,23,1997-02-09,Laval,-,CAN,-,73,190,2015,T.B,4,29,120
+646,Lawson Crouse,ARI,L,22,1997-06-23,Mt. Brydges,-,CAN,-,76,220,2015,FLA,1,11,11
+647,Kyle Capobianco,ARI,D,22,1997-08-13,Mississauga,-,CAN,-,73,196,2015,ARI,3,2,63
+648,Mitchell Stephens,T.B,C,23,1997-02-05,Peterborough,-,CAN,-,72,193,2015,T.B,2,3,33
+649,Mitchell Marner,TOR,"C, R",22,1997-05-05,Markham,-,CAN,-,72,175,2015,TOR,1,4,4
+650,Zach Senyshyn,BOS,R,22,1997-03-30,Ottawa,-,CAN,-,73,192,2015,BOS,1,15,15
+651,Filip Chlapik,OTT,C,22,1997-06-03,Prague,-,CZE,-,73,194,2015,OTT,2,18,48
+652,Jacob Larsson,ANA,D,22,1997-04-29,Ljungby,-,SWE,-,74,190,2015,ANA,1,27,27
+653,Joel Eriksson Ek,MIN,C,23,1997-01-29,Karlstad,-,SWE,-,73,210,2015,MIN,1,20,20
+654,Denis Gurianov,DAL,R,22,1997-06-07,Togliatti,-,RUS,-,75,200,2015,DAL,1,12,12
+655,Jake DeBrusk,BOS,L,23,1996-10-17,Edmonton,-,CAN,-,72,188,2015,BOS,1,14,14
+656,Ivan Provorov,PHI,D,23,1997-01-13,Yaroslavl,-,RUS,-,73,201,2015,PHI,1,7,7
+657,Dennis Gilbert,CHI,D,23,1996-10-30,Buffalo,-,USA,-,74,216,2015,CHI,3,30,91
+658,Gabriel Carlsson,CBJ,D,23,1997-01-02,Orebro,-,SWE,-,77,192,2015,CBJ,1,29,29
+659,John Marino,PIT,D,22,1997-05-21,Brockton,-,USA,-,73,181,2015,EDM,6,3,154
+660,Yakov Trenin,NSH,C,23,1997-01-13,Chelyabinsk,-,RUS,-,74,201,2015,NSH,2,25,55
+661,Austin Czarnik,CGY,C,27,1992-12-12,Detroit,-,USA,-,69,170,-,-,-,-,-
+662,Anthony Cirelli,T.B,C,22,1997-07-15,Etobicoke,-,CAN,-,72,193,2015,T.B,3,11,72
+663,Evan Rodrigues,BUF,"C, L",26,1993-07-28,Toronto,-,CAN,-,71,184,-,-,-,-,-
+664,Artemi Panarin,NYR,"C, L",28,1991-10-30,Korkino,-,RUS,-,71,170,-,-,-,-,-
+665,Dean Kukan,CBJ,D,26,1993-07-08,Volketswil,-,CHE,-,74,192,-,-,-,-,-
+666,Noel Acciari,FLA,C,28,1991-12-01,Johnston,-,USA,-,70,203,-,-,-,-,-
+667,Derek Ryan,CGY,C,33,1986-12-29,Spokane,-,USA,-,71,185,-,-,-,-,-
+668,Kevin Stenlund,CBJ,C,23,1996-09-20,Huddinge,-,SWE,-,76,209,2015,CBJ,2,28,58
+669,J.C. Beaudin,OTT,C,22,1997-03-25,Longueuil,-,CAN,-,73,196,2015,COL,3,10,71
+670,Lukas Vejdemo,MTL,C,24,1996-01-25,Stockholm,-,SWE,-,74,194,2015,MTL,3,26,87
+671,Aleksi Saarela,FLA,C,23,1997-01-07,Helsinki,-,FIN,-,71,200,2015,NYR,3,28,89
+672,Colton White,N.J,D,22,1997-05-03,London,-,CAN,-,73,185,2015,N.J,4,6,97
+673,Denis Malgin,FLA,C,23,1997-01-18,Olten,-,CHE,-,69,177,2015,FLA,4,11,102
+674,Mikhail Vorobyev,PHI,C,23,1997-01-05,Ufa,-,RUS,-,74,194,2015,PHI,4,13,104
+675,Alexandre Carrier,NSH,D,23,1996-10-08,Quebec City,-,CAN,-,71,174,2015,NSH,4,24,115
+676,Conor Garland,ARI,R,23,1996-03-11,Scituate,-,USA,-,70,165,2015,ARI,5,2,123
+677,Dmytro Timashov,TOR,L,23,1996-10-01,Kirovograd,-,UKR,-,70,192,2015,TOR,5,4,125
+678,Niko Mikkola,STL,D,23,1996-04-27,Finland,-,FIN,-,76,185,2015,STL,5,6,127
+679,Dominik Simon,PIT,C,25,1994-08-08,Prague,-,CZE,-,71,190,2015,PIT,5,16,137
+680,Christian Jaros,OTT,D,23,1996-04-02,Kosice,-,SVK,-,75,222,2015,OTT,5,18,139
+681,Rudolfs Balcers,OTT,L,22,1997-04-08,Latvia,-,LVA,-,71,180,2015,S.J,5,21,142
+682,Troy Terry,ANA,"C, R",22,1997-09-10,Denver,-,USA,-,73,180,2015,ANA,5,27,148
+683,Adam Gaudette,VAN,C,23,1996-10-03,Braintree,-,USA,-,73,170,2015,VAN,5,28,149
+684,Brett Seney,N.J,L,23,1996-02-28,London,-,CAN,-,69,156,2015,N.J,6,6,157
+685,Vladislav Gavrikov,CBJ,D,24,1995-11-21,Yaroslavl,-,RUS,-,75,213,2015,CBJ,6,8,159
+686,Cameron Hughes,BOS,C,23,1996-10-09,Edmonton,-,CAN,-,71,160,2015,BOS,6,14,165
+687,Mason Appleton,WPG,C,24,1996-01-15,Green Bay,-,USA,-,74,193,2015,WPG,6,17,168
+688,Markus Nutivaara,CBJ,D,25,1994-06-06,Oulu,-,FIN,-,73,187,2015,CBJ,7,8,189
+689,Matt Roy,L.A,D,24,1995-03-01,Detroit,-,USA,-,73,200,2015,L.A,7,13,194
+690,Sami Niku,WPG,D,23,1996-10-10,Haapavesi,-,FIN,-,73,176,2015,WPG,7,17,198
+691,Kole Sherwood,CBJ,R,23,1997-01-22,Columbus,-,USA,-,73,212,-,-,-,-,-
+692,Mason Marchment,TOR,L,24,1995-06-18,Uxbridge,-,CAN,-,75,220,-,-,-,-,-
+693,Adam Brooks,TOR,C,23,1996-05-06,Winnipeg,-,CAN,-,71,180,2016,TOR,4,1,92
+694,Philippe Myers,PHI,D,23,1997-01-25,Moncton,-,CAN,-,77,210,-,-,-,-,-
+695,Kevin Rooney,N.J,C,26,1993-05-21,Canton,-,USA,-,74,190,-,-,-,-,-
+696,Brandon Tanev,PIT,L,28,1991-12-31,Toronto,-,CAN,-,72,180,-,-,-,-,-
+697,Matthew Tkachuk,CGY,L,22,1997-12-11,Scottsdale,-,USA,-,74,202,2016,CGY,1,6,6
+698,Joey Anderson,N.J,R,21,1998-06-19,Roseville,-,USA,-,71,190,2016,N.J,3,12,73
+699,Luke Kunin,MIN,C,22,1997-12-04,Chesterfield,-,USA,-,72,197,2016,MIN,1,15,15
+700,Auston Matthews,TOR,C,22,1997-09-17,San Ramon,-,USA,-,75,220,2016,TOR,1,1,1
+701,Maxime Lajoie,OTT,D,22,1997-11-05,Quebec City,-,CAN,-,73,196,2016,OTT,5,12,133
+702,Adam Fox,NYR,D,22,1998-02-17,Jericho,-,USA,-,71,181,2016,CGY,3,5,66
+703,Ryan Lindgren,NYR,D,22,1998-02-11,Burnsville,-,USA,-,72,191,2016,BOS,2,19,49
+704,Charlie McAvoy,BOS,D,22,1997-12-21,Long Beach,-,USA,-,72,208,2016,BOS,1,14,14
+705,Julien Gauthier,CAR,R,22,1997-10-15,Pointe-aux-Trembles,-,CAN,-,76,227,2016,CAR,1,21,21
+706,Libor Hajek,NYR,D,22,1998-02-04,Smrcek,-,CZE,-,74,203,2016,T.B,2,7,37
+707,Rasmus Asplund,BUF,C,22,1997-12-03,Filipstad,-,SWE,-,71,190,2016,BUF,2,3,33
+708,Carl Grundstrom,L.A,R,22,1997-12-01,Umea,-,SWE,-,72,201,2016,TOR,2,27,57
+709,Alex DeBrincat,CHI,"L, R",22,1997-12-18,Farmington Hills,-,USA,-,67,165,2016,CHI,2,9,39
+710,Patrik Laine,WPG,R,21,1998-04-19,Tampere,-,FIN,-,77,206,2016,WPG,1,2,2
+711,Clayton Keller,ARI,"C, R",21,1998-07-29,Chesterfield,-,USA,-,70,170,2016,ARI,1,7,7
+712,Jakob Chychrun,ARI,D,21,1998-03-31,Boca Raton,-,USA,-,74,210,2016,ARI,1,16,16
+713,Dillon Dube,CGY,C,21,1998-07-20,Golden,-,CAN,-,71,187,2016,CGY,2,26,56
+714,Tyler Benson,EDM,L,21,1998-03-15,Edmonton,-,CAN,-,71,190,2016,EDM,2,2,32
+715,Kale Clague,L.A,D,21,1998-06-05,Regina,-,CAN,-,72,177,2016,L.A,2,21,51
+716,Sam Steel,ANA,C,22,1998-02-03,Ardrossan,-,CAN,-,71,189,2016,ANA,1,30,30
+717,Brett Howden,NYR,C,21,1998-03-29,Calgary,-,CAN,-,74,197,2016,T.B,1,27,27
+718,Kieffer Bellows,NYI,L,21,1998-06-10,Edina,-,USA,-,72,195,2016,NYI,1,19,19
+719,Carsen Twarynski,PHI,L,22,1997-11-24,St. Albert,-,CAN,-,74,198,2016,PHI,3,21,82
+720,Beck Malenstyn,WSH,L,22,1998-02-04,Delta,-,CAN,-,74,200,2016,WSH,5,24,145
+721,Tim Gettinger,NYR,L,21,1998-04-14,Cleveland,-,USA,-,78,218,2016,NYR,5,20,141
+722,Trent Frederic,BOS,C,22,1998-02-11,St. Louis,-,USA,-,74,203,2016,BOS,1,29,29
+723,Logan Brown,OTT,C,21,1998-03-05,Raleigh,-,USA,-,78,220,2016,OTT,1,11,11
+724,Max Jones,ANA,L,22,1998-02-17,Rochester,-,USA,-,75,220,2016,ANA,1,24,24
+725,Andrew Peeke,CBJ,D,21,1998-03-17,Parkland,-,USA,-,75,194,2016,CBJ,2,4,34
+726,Tyson Jost,COL,C,21,1998-03-14,St. Albert,-,CAN,-,71,187,2016,COL,1,10,10
+727,Dante Fabbro,NSH,D,21,1998-06-20,Coquitlam,-,CAN,-,72,189,2016,NSH,1,17,17
+728,Josh Mahura,ANA,D,21,1998-05-05,St. Albert,-,CAN,-,73,186,2016,ANA,3,24,85
+729,Victor Mete,MTL,D,21,1998-06-07,Woodbridge,-,CAN,-,69,187,2016,MTL,4,9,100
+730,Givani Smith,DET,R,21,1998-02-28,Thornhill,-,CAN,-,74,210,2016,DET,2,16,46
+731,Nick Caamano,DAL,R,21,1998-09-07,Hamilton,-,CAN,-,74,200,2016,DAL,5,25,146
+732,Connor Bunnaman,PHI,C,21,1998-04-16,Guelph,-,CAN,-,73,207,2016,PHI,4,18,109
+733,Jordan Kyrou,STL,C,21,1998-05-05,Toronto,-,CAN,-,72,175,2016,STL,2,5,35
+734,Riley Stillman,FLA,D,21,1998-03-09,Peterborough,-,CAN,-,73,196,2016,FLA,4,23,114
+735,Noah Gregor,S.J,C,21,1998-07-28,Beaumont,-,CAN,-,72,185,2016,S.J,4,20,111
+736,Dennis Cholowski,DET,D,22,1998-02-15,Langley,-,CAN,-,72,197,2016,DET,1,20,20
+737,Samuel Girard,COL,D,21,1998-05-12,Roberval,-,CAN,-,70,170,2016,NSH,2,17,47
+738,Pierre-Luc Dubois,CBJ,"C, L",21,1998-06-24,Ste-Agathe-Des-Monts,-,CAN,-,75,218,2016,CBJ,1,3,3
+739,Henrik Borgstrom,FLA,C,22,1997-08-06,Helsinki,-,FIN,-,75,199,2016,FLA,1,23,23
+740,Jesper Bratt,N.J,L,21,1998-07-30,Stockholm,-,SWE,-,70,175,2016,N.J,6,11,162
+741,Mikhail Sergachev,T.B,D,21,1998-06-25,Nizhnekamsk,-,RUS,-,75,217,2016,MTL,1,9,9
+742,Vitaly Abramov,OTT,R,21,1998-05-08,Chelyabinsk,-,RUS,-,69,180,2016,CBJ,3,4,65
+743,Michael McLeod,N.J,C,22,1998-02-03,Mississauga,-,CAN,-,74,188,2016,N.J,1,12,12
+744,Tage Thompson,BUF,C,22,1997-10-30,Phoenix,-,USA,-,77,215,2016,STL,1,26,26
+745,Alex Nylander,CHI,L,21,1998-03-02,Calgary,-,CAN,-,73,192,2016,BUF,1,8,8
+746,German Rubtsov,PHI,C,21,1998-06-27,Chekhov,-,RUS,-,74,178,2016,PHI,1,22,22
+747,Filip Hronek,DET,D,22,1997-11-02,Hradec Králové,-,CZE,-,72,183,2016,DET,2,23,53
+748,Troy Stecher,VAN,D,25,1994-04-07,Richmond,-,CAN,-,70,186,-,-,-,-,-
+749,Nikita Zaitsev,OTT,D,28,1991-10-29,Moscow,-,RUS,-,74,188,-,-,-,-,-
+750,Drake Caggiula,CHI,C,25,1994-06-20,Pickering,-,CAN,-,70,176,-,-,-,-,-
+751,Patrick Russell,EDM,R,27,1993-01-04,Bickenrod,-,DNK,-,73,203,-,-,-,-,-
+752,Michal Kempny,WSH,D,29,1990-09-08,Hodonin,-,CZE,-,72,195,-,-,-,-,-
+753,Egor Korshkov,TOR,R,23,1996-07-10,Novosibirsk,-,RUS,-,76,214,2016,TOR,2,1,31
+754,Otto Koivula,NYI,L,21,1998-09-01,Nokia,-,FIN,-,76,219,2016,NYI,4,29,120
+755,Joachim Blichfeld,S.J,R,21,1998-07-17,Frederikshavn,-,DNK,-,74,180,2016,S.J,7,29,210
+756,Dylan Gambrell,S.J,C,23,1996-08-26,Bonney Lake,-,USA,-,72,185,2016,S.J,2,30,60
+757,Rhett Gardner,DAL,C,23,1996-02-28,Moose Jaw,-,CAN,-,75,225,2016,DAL,4,25,116
+758,Matt Luff,L.A,R,22,1997-05-05,Oakville,-,CAN,-,74,196,-,-,-,-,-
+759,Mathieu Olivier,NSH,R,23,1997-02-11,Biloxi,-,USA,-,74,210,-,-,-,-,-
+760,Trevor Moore,"L.A, TOR","C, L",24,1995-03-31,Thousand Oaks,-,USA,-,70,185,-,-,-,-,-
+761,Brennan Menell,MIN,D,22,1997-05-24,Woodbury,-,USA,-,71,177,-,-,-,-,-
+762,Zack MacEwen,VAN,C,23,1996-07-08,Charlottetown,-,CAN,-,75,205,-,-,-,-,-
+763,Gerald Mayhew,MIN,C,27,1992-12-31,Wyandotte,-,USA,-,69,166,-,-,-,-,-
+764,Zach Aston-Reese,PIT,C,25,1994-08-10,Staten Island,-,USA,-,72,204,-,-,-,-,-
+765,Kailer Yamamoto,EDM,R,21,1998-09-29,Spokane,-,USA,-,68,153,2017,EDM,1,22,22
+766,Nicolas Hague,VGK,D,21,1998-12-05,Kitchener,-,CAN,-,78,221,2017,VGK,2,3,34
+767,Conor Timmins,COL,D,21,1998-09-18,St. Catharines,-,CAN,-,74,185,2017,COL,2,1,32
+768,Mario Ferraro,S.J,D,21,1998-09-17,Toronto,-,CAN,-,71,185,2017,S.J,2,18,49
+769,Cale Fleury,MTL,D,21,1998-11-19,Carlyle,-,CAN,-,73,205,2017,MTL,3,25,87
+770,Jaret Anderson-Dolan,L.A,C,20,1999-09-12,Calgary,-,CAN,-,71,188,2017,L.A,2,10,41
+771,Cody Glass,VGK,C,20,1999-04-01,Winnipeg,-,CAN,-,74,192,2017,VGK,1,6,6
+772,Casey Mittelstadt,BUF,C,21,1998-11-22,Edina,-,USA,-,73,199,2017,BUF,1,8,8
+773,Urho Vaakanainen,BOS,D,21,1999-01-01,Joensuu,-,FIN,-,73,185,2017,BOS,1,18,18
+774,Nico Hischier,N.J,C,21,1999-01-04,Brig,-,CHE,-,73,175,2017,N.J,1,1,1
+775,Jesper Boqvist,N.J,C,21,1998-10-30,Falun,-,SWE,-,72,180,2017,N.J,2,5,36
+776,Klim Kostin,STL,C,20,1999-05-05,Penza,-,RUS,-,75,212,2017,STL,1,31,31
+777,Elias Pettersson,VAN,C,21,1998-11-12,Sundsvall,-,SWE,-,74,176,2017,VAN,1,5,5
+778,Nick Suzuki,MTL,C,20,1999-08-10,London,-,CAN,-,71,201,2017,VGK,1,13,13
+779,Jack Studnicka,BOS,C,21,1999-02-18,Windsor,-,CAN,-,73,171,2017,BOS,2,22,53
+780,Robert Thomas,STL,C,20,1999-07-02,Aurora,-,CAN,-,72,188,2017,STL,1,20,20
+781,Jason Robertson,DAL,L,20,1999-07-22,Arcadia,-,USA,-,74,195,2017,DAL,2,8,39
+782,Morgan Frost,PHI,C,20,1999-05-14,Aurora,-,CAN,-,71,170,2017,PHI,1,27,27
+783,Max Comtois,ANA,L,21,1999-01-08,Longueuil,-,CAN,-,74,215,2017,ANA,2,19,50
+784,Henri Jokiharju,BUF,D,20,1999-06-17,Oulu,-,FIN,-,72,195,2017,CHI,1,29,29
+785,Miro Heiskanen,DAL,D,20,1999-07-18,Espoo,-,FIN,-,73,190,2017,DAL,1,3,3
+786,Martin Necas,CAR,C,21,1999-01-15,Nove Mesto na Morave,-,CZE,-,73,189,2017,CAR,1,12,12
+787,Timothy Liljegren,TOR,D,20,1999-04-30,Kristianstad,-,SWE,-,72,192,2017,TOR,1,17,17
+788,Ryan Poehling,MTL,C,21,1999-01-03,Lakeville,-,USA,-,74,204,2017,MTL,1,25,25
+789,Cale Makar,COL,D,21,1998-10-30,Calgary,-,CAN,-,71,187,2017,COL,1,4,4
+790,Lias Andersson,NYR,C,21,1998-10-13,Smogen,-,SWE,-,72,190,2017,NYR,1,7,7
+791,Erik Brannstrom,OTT,D,20,1999-09-02,Eksjo,-,SWE,-,70,181,2017,VGK,1,15,15
+792,Alexandre Texier,CBJ,C,20,1999-09-13,St. Martin D'heres,-,FRA,-,72,192,2017,CBJ,2,14,45
+793,Filip Chytil,NYR,C,20,1999-09-05,Kromeriz,-,CZE,-,74,206,2017,NYR,1,21,21
+794,Alex Iafallo,L.A,L,26,1993-12-21,Eden,-,USA,-,72,188,-,-,-,-,-
+795,David Kampf,CHI,C,25,1995-01-12,Chomutov,-,CZE,-,74,188,-,-,-,-,-
+796,Neal Pionk,WPG,D,24,1995-07-29,Hermantown,-,USA,-,72,186,-,-,-,-,-
+797,Oscar Fantenberg,VAN,D,28,1991-10-07,Ljunby,-,SWE,-,72,206,-,-,-,-,-
+798,Calle Rosen,COL,D,26,1994-02-02,Vaxjo,-,SWE,-,73,186,-,-,-,-,-
+799,Radim Simek,S.J,D,27,1992-09-20,Mlada Boleslav,-,CZE,-,71,200,-,-,-,-,-
+800,Jan Rutta,T.B,D,29,1990-07-29,Písek,-,CZE,-,75,204,-,-,-,-,-
+801,Gustav Lindstrom,DET,D,21,1998-10-20,Ostervala,-,SWE,-,74,190,2017,DET,2,7,38
+802,Eetu Luostarinen,CAR,C,21,1998-09-02,Siilinjarvi,-,FIN,-,75,184,2017,CAR,2,11,42
+803,Alexander Volkov,T.B,R,22,1997-08-02,Moscow,-,RUS,-,73,191,2017,T.B,2,17,48
+804,Emil Bemstrom,CBJ,C,20,1999-06-01,Nykoping,-,SWE,-,71,190,2017,CBJ,4,24,117
+805,Drake Batherson,OTT,"C, R",21,1998-04-27,Fort Wayne,-,USA,-,73,206,2017,OTT,4,28,121
+806,Jonathan Davidsson,OTT,R,22,1997-03-12,Tyreso,-,SWE,-,71,185,2017,CBJ,6,15,170
+807,Max Veronneau,OTT,R,24,1995-12-12,Ottawa,-,CAN,-,72,193,-,-,-,-,-
+808,Sheldon Dries,COL,C,25,1994-04-23,Macomb Township,-,USA,-,69,180,-,-,-,-,-
+809,Sean Walker,L.A,D,25,1994-11-13,Keswick,-,CAN,-,71,196,-,-,-,-,-
+810,Adam Johnson,PIT,C,25,1994-06-22,Grand Rapids,-,USA,-,72,174,-,-,-,-,-
+811,Alexander True,S.J,C,22,1997-07-17,Kobenhavn,-,DNK,-,77,200,-,-,-,-,-
+812,Zach Whitecloud,VGK,D,23,1996-11-28,Brandon,-,CAN,-,74,209,-,-,-,-,-
+813,Eric Robinson,CBJ,L,24,1995-06-14,BELLMAWR,-,USA,-,74,197,-,-,-,-,-
+814,Joel L'Esperance,DAL,R,24,1995-08-18,Brighton,-,USA,-,74,215,-,-,-,-,-
+815,Lukas Radil,S.J,C,29,1990-08-05,Caslav,-,CZE,-,74,205,-,-,-,-,-
+816,Oliver Wahlstrom,NYI,R,19,2000-06-13,Portland,-,USA,-,73,211,2018,NYI,1,11,11
+817,Martin Fehervary,WSH,D,20,1999-10-06,Bratislava,-,SVK,-,74,200,2018,WSH,2,15,46
+818,Joel Farabee,PHI,L,19,2000-02-25,Syracuse,-,USA,-,72,164,2018,PHI,1,14,14
+819,Quinn Hughes,VAN,D,20,1999-10-14,Orlando,-,USA,-,70,170,2018,VAN,1,7,7
+820,Brady Tkachuk,OTT,L,20,1999-09-16,Scottsdale,-,USA,-,75,212,2018,OTT,1,4,4
+821,Isac Lundestrom,ANA,C,20,1999-11-06,Gallivare,-,SWE,-,72,187,2018,ANA,1,23,23
+822,Filip Zadina,DET,R,20,1999-11-27,Pardubice,-,CZE,-,72,189,2018,DET,1,6,6
+823,Jesperi Kotkaniemi,MTL,C,19,2000-07-06,Pori,-,FIN,-,74,198,2018,MTL,1,3,3
+824,Andrei Svechnikov,CAR,R,19,2000-03-26,Barnual,-,RUS,-,74,195,2018,CAR,1,2,2
+825,Rasmus Dahlin,BUF,D,19,2000-04-13,Trollhattan,-,SWE,-,75,193,2018,BUF,1,1,1
+826,Barrett Hayton,ARI,C,19,2000-06-09,Peterborough,-,CAN,-,73,190,2018,ARI,1,5,5
+827,Liam Foudy,CBJ,C,20,2000-02-04,Toronto,-,CAN,-,72,182,2018,CBJ,1,18,18
+828,Noah Dobson,NYI,D,20,2000-01-07,Summerside,-,CAN,-,75,184,2018,NYI,1,12,12
+829,Adam Boqvist,CHI,D,19,2000-08-15,Falun,-,SWE,-,71,179,2018,CHI,1,8,8
+830,Rasmus Sandin,TOR,D,19,2000-03-07,Uppsala,-,SWE,-,72,183,2018,TOR,1,29,29
+831,Karson Kuhlman,BOS,C,24,1995-09-26,Esko,-,USA,-,71,185,-,-,-,-,-
+832,Jordan Gross,ARI,D,24,1995-05-09,Maple Grove,-,USA,-,70,190,-,-,-,-,-
+833,Lawrence Pilut,BUF,D,24,1995-12-30,Tingsryd,-,SWE,-,71,194,-,-,-,-,-
+834,Joel Persson,EDM,D,25,1994-03-04,Kristianstad,-,SWE,-,71,170,-,-,-,-,-
+835,Par Lindholm,BOS,C,28,1991-10-05,Kusmark,-,SWE,-,72,183,-,-,-,-,-
+836,Juuso Riikola,PIT,D,26,1993-11-09,Joensuu,-,FIN,-,72,189,-,-,-,-,-
+837,Dominik Kahun,PIT,C,24,1995-07-02,Plana,-,CZE,-,71,175,-,-,-,-,-
+838,Ilya Lyubushkin,ARI,D,25,1994-04-06,Moscow,-,RUS,-,74,201,-,-,-,-,-
+839,Antti Suomela,S.J,C,25,1994-03-17,Espoo,-,FIN,-,72,180,-,-,-,-,-
+840,David Gustafsson,WPG,C,19,2000-04-11,Tingsryd,-,SWE,-,74,196,2018,WPG,2,29,60
+841,Otto Leskinen,MTL,D,23,1997-02-06,Pieksämäki,-,FIN,-,71,183,-,-,-,-,-
+842,Logan O'Connor,COL,R,23,1996-08-14,Missouri City,-,USA,-,72,175,-,-,-,-,-
+843,Taro Hirose,DET,L,23,1996-06-30,Calgary,-,CAN,-,70,162,-,-,-,-,-
+844,Nico Sturm,MIN,C,24,1995-05-03,Augsburg,-,DEU,-,75,206,-,-,-,-,-
+845,Blake Lizotte,L.A,C,22,1997-12-13,Lindstrom,-,USA,-,67,172,-,-,-,-,-
+846,Danil Yurtaykin,S.J,L,22,1997-07-01,Belovo,-,RUS,-,71,165,-,-,-,-,-
+847,Joel Kellman,S.J,C,25,1994-05-25,Karlskrona,-,SWE,-,71,192,-,-,-,-,-
+848,Kirby Dach,CHI,C,19,2001-01-21,Fort Saskatchewan,-,CAN,-,76,197,2019,CHI,1,3,3
+849,Kaapo Kakko,NYR,R,19,2001-02-13,Turku,-,FIN,-,75,199,2019,NYR,1,2,2
+850,Jack Hughes,N.J,C,18,2001-05-14,Orlando,-,USA,-,70,170,2019,N.J,1,1,1
+851,Ville Heinola,WPG,D,19,2001-02-03,Honkajoki,-,FIN,-,71,178,2019,WPG,1,20,20
+852,Tobias Bjornfot,L.A,D,18,2001-04-06,Upplands Vasby,-,SWE,-,72,202,2019,L.A,1,22,22
+853,Ilya Mikheyev,TOR,R,25,1994-10-10,Omsk,-,RUS,-,75,195,-,-,-,-,-
+854,Alexander Yelesin,CGY,D,24,1996-02-07,Yaroslavl,-,RUS,-,72,195,-,-,-,-,-
+855,Anton Wedin,CHI,L,26,1993-03-01,Sundsvall,-,SWE,-,71,195,-,-,-,-,-
+856,Joakim Nygard,EDM,L,27,1993-01-08,Stockholm,-,SWE,-,72,179,-,-,-,-,-
+857,Lean Bergmann,S.J,C,21,1998-10-04,Hemer,-,DEU,-,74,205,-,-,-,-,-
+858,Joel Kiviranta,DAL,L,23,1996-03-23,Vantaa,-,FIN,-,70,180,-,-,-,-,-
+859,Andrei Chibisov,WPG,R,26,1993-02-26,Prokopyevsk,-,RUS,-,76,227,-,-,-,-,-
+860,Joona Luoto,WPG,L,22,1997-09-26,TAMPERE,-,FIN,-,75,192,-,-,-,-,-
+861,Jakob Lilja,CBJ,L,26,1993-07-23,Malmo,-,SWE,-,73,196,-,-,-,-,-
+862,Gaetan Haas,EDM,C,28,1992-01-31,Bonfol,-,CHE,-,72,181,-,-,-,-,-

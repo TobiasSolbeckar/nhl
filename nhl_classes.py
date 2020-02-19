@@ -291,10 +291,10 @@ class Team():
 		self.team_toi_pk = 0
 		self.team_toi_pp_per_gp = 0
 		self.team_toi_pk_per_gp = 0
+		self.team_gf_per_pp = 0
+		self.team_ga_per_pp = 0
 		self.home_p_pcg = 0
 		self.away_p_pcg = 0
-
-		
 
 		self.sf = adv_array[0]
 		self.sa = adv_array[1]
@@ -508,4 +508,8 @@ class Team():
 		else:
 			self.next_opponent = 'N/A'
 		# Remove game from remaining schedule
-		opponent.remaining_schedule.remove(self.name)
+		try:
+			opponent.remaining_schedule.remove(self.name)
+		except:
+			raise ValueError('Schedule mis-match with the game between ' + self.name + ' (HOME) and ' + opponent.name + ' (AWAY).')
+

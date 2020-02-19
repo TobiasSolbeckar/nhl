@@ -62,6 +62,10 @@ def create_simulation_parameters(sp):
 	sp['do_exp'] = False
 	sp['do_player_cards'] = False
 	sp['simulation_date'] = None
+	sp['down_sample'] = False
+	sp['initial_time'] = 0 										# Initial time in seconds
+	sp['initial_ht_goals'] = 0
+	sp['initial_at_goals'] = 0
 	sp['do_plots'] = True
 	sp['exp_team'] = None
 	sp['exp_position'] = ['F','D']
@@ -114,7 +118,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
 simulation_param['seasons'] = ['201920']
-simulation_param['write_to_gsheet'] = False
+simulation_param['write_to_gsheet'] = True
 simulation_param['generate_fresh_databases'] = False
 
 simulation_param = create_simulation_parameters(simulation_param)
@@ -125,8 +129,8 @@ simulation_param['include_offseason_moves'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
-#simulation_param['simulate_season'] = True									# Default value = False
-simulation_param['do_exp'] = True 											# Default value = False
+simulation_param['simulate_season'] = True									# Default value = False
+#simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Simulation/iteration parameters
@@ -137,22 +141,34 @@ simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
 # Create databases.
 simulation_param = create_databases(simulation_param)
-simulation_param = set_starting_goalie(simulation_param,'CAR','PETR_MRAZEK')
-simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE')
+#simulation_param = set_starting_goalie(simulation_param,'BOS','JAROSLAV_HALAK')
+simulation_param = set_starting_goalie(simulation_param,'BUF','CARTER_HUTTON')
+#simulation_param = set_starting_goalie(simulation_param,'CAR','PETR_MRAZEK')
+simulation_param = set_starting_goalie(simulation_param,'CBJ','ELVIS_MERZLIKINS')
+#simulation_param = set_starting_goalie(simulation_param,'EDM','MIKKO_KOSKINEN')
+#simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE')
 simulation_param = set_starting_goalie(simulation_param,'NJD','LOUIS_DOMINGUE')
-simulation_param = set_starting_goalie(simulation_param,'SJS','AARON_DELL')
+#simulation_param = set_starting_goalie(simulation_param,'NJD','MACKENZIE_BLACKWOOD')
+simulation_param = set_starting_goalie(simulation_param,'PHI','CARTER_HART')
+simulation_param = set_starting_goalie(simulation_param,'PIT','TRISTAN_JARRY')
+#simulation_param = set_starting_goalie(simulation_param,'SJS','MARTIN_JONES')
+simulation_param = set_starting_goalie(simulation_param,'STL','JORDAN_BINNINGTON')
+#simulation_param = set_starting_goalie(simulation_param,'TOR','JACK_CAMPBELL')
+simulation_param = set_starting_goalie(simulation_param,'TOR','FREDERIK_ANDERSEN')
 simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK')
 
+simulation_param = add_unavailable_player(simulation_param,'ERIK_KARLSSON')
+
 # Gameplay parameters 
-simulation_param['simulation_date'] = today #'2020-01-22'
+simulation_param['simulation_date'] = today
 simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][simulation_param['simulation_date']]
-#simulation_param['games_to_simulate'] = [['NJD','DET']]
-#simulation_param['days_rested'] = [[2,2]]
+#simulation_param['games_to_simulate'] = [['MIN','SJS']]
+#simulation_param['days_rested'] = [[1,0]]
 #simulation_param['initial_wins'] = [[0,0]]
-simulation_param['down_sample'] = False
-simulation_param['initial_time'] = 0 #2400+60*(20-4)	# Initial time in seconds
-simulation_param['initial_ht_goals'] = 0
-simulation_param['initial_at_goals'] = 0
+#simulation_param['down_sample'] = False
+#simulation_param['initial_time'] = 0 # Initial time in seconds
+#simulation_param['initial_ht_goals'] = 0
+#simulation_param['initial_at_goals'] = 0
 
 # Analytics parameters
 simulation_param['team_plots'] = False
@@ -161,13 +177,26 @@ simulation_param['exp_list_length'] = 1
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_D']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters
 simulation_param['print_times'] = False
 simulation_param['verbose'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+'''
+attributes = ['sf_pcg','gf_pcg','cf_pcg','ff_pcg','xgf_pcg','scf_pcg']
+true_attribute = 'gf_pcg'
+for attribute in attributes:
+	x_array = []
+	y_array = []	
+	for team_id in ACTIVE_TEAMS:
+		team = simulation_param['databases']['team_db'][team_id]
+		x_array.append(team.rank[attribute])
+		y_array.append(team.rank[true_attribute])
+	print(attribute + ': ' + str(get_k_factor(x_array,y_array,True)))
+'''
 
 # For now, matplotlib cannot be loaded for Windows machines.
 if platform.system() == 'Windows':
@@ -498,7 +527,7 @@ if simulation_param['do_exp']:
 	f_div = lambda a,b : a/b
 	
 	# Print data for SJS-lines
-	#lines = [['MARC-EDOUARD_VLASIC','ERIK_KARLSSON'],['MARIO_FERRARO','TIM_HEED'],['BRENDEN_DILLON','BRENT_BURNS'],['RADIM_SIMEK','JACOB_MIDDLETON'],['EVANDER_KANE','TOMAS_HERTL','KEVIN_LABANC'],['PATRICK_MARLEAU','LOGAN_COUTURE','JONNY_BRODZINSKI'],['TIMO_MEIER','JOE_THORNTON','BARCLAY_GOODROW'],['ANTTI_SUOMELA','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','STEFAN_NOESEN','JOACHIM_BLICHFELD']]
+	#lines = [['MARC-EDOUARD_VLASIC','ERIK_KARLSSON'],['MARIO_FERRARO','TIM_HEED'],['RADIM_SIMEK','BRENT_BURNS'],['JACOB_MIDDLETON'],['EVANDER_KANE','TOMAS_HERTL','KEVIN_LABANC'],['PATRICK_MARLEAU','LOGAN_COUTURE','JONNY_BRODZINSKI'],['TIMO_MEIER','JOE_THORNTON','BARCLAY_GOODROW'],['ANTTI_SUOMELA','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','STEFAN_NOESEN','JOACHIM_BLICHFELD']]
 	#lines = [['EVANDER_KANE','TOMAS_HERTL','TIMO_MEIER'],['BARCLAY_GOODROW','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','DYLAN_GAMBRELL','PATRICK_MARLEAU'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	#now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['PATRICK_MARLEAU','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	old_lines = [['TIMO_MEIER','LOGAN_COUTURE','JOE_PAVELSKI'],['EVANDER_KANE','TOMAS_HERTL','JOONAS_DONSKOI'],['MARCUS_SORENSEN','JOE_THORNTON','KEVIN_LABANC'],['MELKER_KARLSSON','CHRIS_TIERNEY','BARCLAY_GOODROW']]
