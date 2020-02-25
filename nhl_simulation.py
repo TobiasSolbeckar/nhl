@@ -129,12 +129,12 @@ def	simulate_ind_game(simulation_param,data_param):
 				print('NAME   TOI   GOALS   SHOTS')
 				print(game_status['ht_id'])
 				for player_id in data_param['ht_players'].keys():
-					player = get_player(data_param['ht_players'],player_id)
+					player = get_skater(data_param['ht_players'],player_id)
 					print('   ' + player_id + '   ' + str(get_time_str_from_sec(player.in_game_stats['toi'])) + '   ' + str(player.in_game_stats['goals']) + '    ' + str(player.in_game_stats['shots']))
 
 				print(game_status['at_id'])
 				for player_id in data_param['at_players'].keys():
-					player = get_player(data_param['at_players'],player_id)
+					player = get_skater(data_param['at_players'],player_id)
 					print('   ' + player_id + '   ' + str(get_time_str_from_sec(player.in_game_stats['toi'])) + '   ' + str(player.in_game_stats['goals']) + '    ' + str(player.in_game_stats['shots']))
 
 			if False:
@@ -259,12 +259,12 @@ def simulate_gameplay(game_status,data_param,verbose=False):
 	
 	for i,ct in enumerate(CURRENT_TEAM):
 		ot = OPPONENT_TEAM[i]
-		opponent_goalie = get_player(data_param[ot + '_players'],data_param[ot + '_goalie'])
+		opponent_goalie = get_goalie(data_param[ot + '_players'],data_param[ot + '_goalie'])
 		current_team_sf_per_time = game_status[ct + '_line_values']['sf_per_time']
 		opponent_team_sa_per_time = game_status[ot + '_line_values']['sa_per_time']
 
 		for skater_id in game_status[ct + '_on_ice_db'].keys():
-			skater = get_player(data_param[ct + '_skaters'],skater_id)
+			skater = get_skater(data_param[ct + '_skaters'],skater_id)
 			sf_per_time = game_status[ct + '_on_ice_db'][skater_id][0]
 			sh_pcg = game_status[ct + '_on_ice_db'][skater_id][1]
 			pt_per_time = game_status[ct + '_on_ice_db'][skater_id][2]
@@ -324,7 +324,7 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 	for i,ct in enumerate(CURRENT_TEAM):
 		shot_taken, penalty_taken, goal_scored = False, False, False
 		ot = OPPONENT_TEAM[i]
-		opponent_goalie = get_player(data_param[ot + '_players'],data_param[ot + '_goalie'])
+		opponent_goalie = get_goalie(data_param[ot + '_players'],data_param[ot + '_goalie'])
 		
 		current_team_sf_per_time = game_status[ct + '_line_values']['sf_per_time']
 		opponent_team_sa_per_time = game_status[ot + '_line_values']['sa_per_time']
@@ -461,7 +461,7 @@ def get_in_game_players(db,key,th):
 	print('key = ' + str(key) + '. th = ' + str(th))
 	for pl_id in db.keys():
 		print('checking player ' + pl_id)
-		pl = get_player(db,pl_id)
+		pl = get_skater(db,pl_id)
 		print(pl_id + '.in_game_stats[' + str(key) + '] = ' + str(pl.in_game_stats[key]))
 		if pl.in_game_stats[key] >= th:
 			pl_id_str = pl_id
@@ -493,7 +493,7 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 			raise ValueError('Incorrect game_status')
 		while add_more_d or add_more_f:
 			for skater_id in set(data_param[ct + '_skaters']):  # using a set for randomizing purposes
-				skater = get_player(data_param[ct + '_skaters'],skater_id)				
+				skater = get_skater(data_param[ct + '_skaters'],skater_id)				
 				sf_per_time = game_status['time_step']*skater.on_ice['sf_per_sec']
 				sa_per_time = game_status['time_step']*skater.on_ice['sa_per_sec']
 				off_per_time = game_status['time_step']*skater.on_ice['estimated_off_per_sec']
@@ -880,7 +880,7 @@ def create_game_specific_db(simulation_param):
 	# Home team
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_ht_players:
-		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		skater = get_skater(simulation_param['databases']['skater_db'],skater_id)
 		toi_per_gp = skater.get_attribute('toi_per_gp')
 		if skater.get_attribute('position') == 'D':
 			list_of_defs.append((toi_per_gp,skater_id))
@@ -892,15 +892,15 @@ def create_game_specific_db(simulation_param):
 	list_of_fwds = list_of_fwds[:12]
 	for pair in list_of_defs:
 		skater_id = pair[1]
-		ht_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+		ht_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'],skater_id)
 	for pair in list_of_fwds:
 		skater_id = pair[1]
-		ht_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+		ht_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'],skater_id)
 
 	# Away team
 	list_of_defs, list_of_fwds = [],[]
 	for skater_id in available_at_players:
-		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		skater = get_skater(simulation_param['databases']['skater_db'],skater_id)
 		toi_per_gp = skater.get_attribute('toi_per_gp')
 		if skater.get_attribute('position') == 'D':
 			list_of_defs.append((toi_per_gp,skater_id))
@@ -912,10 +912,10 @@ def create_game_specific_db(simulation_param):
 	list_of_fwds = list_of_fwds[:12]
 	for pair in list_of_defs:
 		skater_id = pair[1]
-		at_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+		at_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'],skater_id)
 	for pair in list_of_fwds:
 		skater_id = pair[1]
-		at_skater_db[skater_id] = get_player(simulation_param['databases']['skater_db'],skater_id)
+		at_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'],skater_id)
 
 	# Set up data_param, containing information about the players in the game.
 	data_param = {}
@@ -929,9 +929,9 @@ def create_game_specific_db(simulation_param):
 	
 	# Add the starting goalie to the ht/at-player_db.
 	data_param['ht_goalie'] = get_starting_goalie(simulation_param,simulation_param['ht_id'])
-	data_param['ht_players'][data_param['ht_goalie']] = get_player(simulation_param['databases']['goalie_db'],data_param['ht_goalie'])
+	data_param['ht_players'][data_param['ht_goalie']] = get_goalie(simulation_param['databases']['goalie_db'],data_param['ht_goalie'])
 	data_param['at_goalie'] = get_starting_goalie(simulation_param,simulation_param['at_id'])
-	data_param['at_players'][data_param['at_goalie']] = get_player(simulation_param['databases']['goalie_db'],data_param['at_goalie'])
+	data_param['at_players'][data_param['at_goalie']] = get_goalie(simulation_param['databases']['goalie_db'],data_param['at_goalie'])
 	
 	return data_param
 

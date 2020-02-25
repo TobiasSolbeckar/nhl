@@ -71,6 +71,7 @@ def create_simulation_parameters(sp):
 	sp['exp_position'] = ['F','D']
 	sp['exp_additional_players'] = []
 	sp['data_dir'] = 'Data'
+	sp['backup_dir'] = 'Data_backup'
 	sp['url_skater_bio_201819'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20182019&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_skater_bio'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 	sp['url_skater_ind_es'] = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
@@ -117,8 +118,8 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201920']
-simulation_param['write_to_gsheet'] = True
+simulation_param['seasons'] = ['201920']	#download_old_season_data(['201819'])
+simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
 simulation_param = create_simulation_parameters(simulation_param)
@@ -127,9 +128,9 @@ simulation_param['include_offseason_moves'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-#simulation_param['simulate_ind_games'] = True								# Default value = False
+simulation_param['simulate_ind_games'] = True								# Default value = False
 #simulation_param['simulate_playoff_series'] = True
-simulation_param['simulate_season'] = True									# Default value = False
+#simulation_param['simulate_season'] = True									# Default value = False
 #simulation_param['do_exp'] = True 											# Default value = False
 #simulation_param['do_player_cards'] = True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -141,28 +142,42 @@ simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
 # Create databases.
 simulation_param = create_databases(simulation_param)
-#simulation_param = set_starting_goalie(simulation_param,'BOS','JAROSLAV_HALAK')
-simulation_param = set_starting_goalie(simulation_param,'BUF','CARTER_HUTTON')
-#simulation_param = set_starting_goalie(simulation_param,'CAR','PETR_MRAZEK')
-simulation_param = set_starting_goalie(simulation_param,'CBJ','ELVIS_MERZLIKINS')
-#simulation_param = set_starting_goalie(simulation_param,'EDM','MIKKO_KOSKINEN')
-#simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE')
-simulation_param = set_starting_goalie(simulation_param,'NJD','LOUIS_DOMINGUE')
-#simulation_param = set_starting_goalie(simulation_param,'NJD','MACKENZIE_BLACKWOOD')
-simulation_param = set_starting_goalie(simulation_param,'PHI','CARTER_HART')
-simulation_param = set_starting_goalie(simulation_param,'PIT','TRISTAN_JARRY')
-#simulation_param = set_starting_goalie(simulation_param,'SJS','MARTIN_JONES')
-simulation_param = set_starting_goalie(simulation_param,'STL','JORDAN_BINNINGTON')
-#simulation_param = set_starting_goalie(simulation_param,'TOR','JACK_CAMPBELL')
-simulation_param = set_starting_goalie(simulation_param,'TOR','FREDERIK_ANDERSEN')
-simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK')
 
-simulation_param = add_unavailable_player(simulation_param,'ERIK_KARLSSON')
+# Set starting goaltenders.
+#simulation_param = set_starting_goalie(simulation_param,'ANA','JOHN_GIBSON') #
+simulation_param = set_starting_goalie(simulation_param,'ARI','DARCY_KUEMPER') #ANTTI_RAANTA
+simulation_param = set_starting_goalie(simulation_param,'BOS','TUUKKA_RASK') #
+simulation_param = set_starting_goalie(simulation_param,'BUF','CARTER_HUTTON') #
+#simulation_param = set_starting_goalie(simulation_param,'CAR','ALEX_NEDELJKOVIC') #PETR_MRAZEK
+simulation_param = set_starting_goalie(simulation_param,'CBJ','JOONAS_KORPISALO') #ELVIS_MERZLIKINS
+simulation_param = set_starting_goalie(simulation_param,'CGY','DAVID_RITTICH') #
+simulation_param = set_starting_goalie(simulation_param,'CHI','COREY_CRAWFORD') #MALCOLM_SUBBAN
+simulation_param = set_starting_goalie(simulation_param,'COL','PAVEL_FRANCOUZ') #
+simulation_param = set_starting_goalie(simulation_param,'DAL','ANTON_KHUDOBIN') #BEN_BISHOP
+simulation_param = set_starting_goalie(simulation_param,'DET','JONATHAN_BERNIER') #
+simulation_param = set_starting_goalie(simulation_param,'EDM','MIKE_SMITH') #MIKKO_KOSKINEN
+simulation_param = set_starting_goalie(simulation_param,'FLA','SERGEI_BOBROVSKY') #
+simulation_param = set_starting_goalie(simulation_param,'MIN','ALEX_STALOCK') #DEVAN_DUBNYK
+simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE') #
+simulation_param = set_starting_goalie(simulation_param,'NJD','CORY_SCHNEIDER') #MACKENZIE_BLACKWOOD
+simulation_param = set_starting_goalie(simulation_param,'NYI','SEMYON_VARLAMOV') #
+simulation_param = set_starting_goalie(simulation_param,'NYR','ALEXANDAR_GEORGIEV') #IGOR_SHESTERKIN
+#simulation_param = set_starting_goalie(simulation_param,'NSH','') #
+simulation_param = set_starting_goalie(simulation_param,'OTT','CRAIG_ANDERSON') #
+simulation_param = set_starting_goalie(simulation_param,'PHI','CARTER_HART') #
+simulation_param = set_starting_goalie(simulation_param,'PIT','TRISTAN_JARRY') #
+simulation_param = set_starting_goalie(simulation_param,'SJS','AARON_DELL') #
+simulation_param = set_starting_goalie(simulation_param,'STL','JORDAN_BINNINGTON') #
+simulation_param = set_starting_goalie(simulation_param,'TBL','ANDREI_VASILEVSKIY') #
+simulation_param = set_starting_goalie(simulation_param,'TOR','FREDERIK_ANDERSEN') #
+simulation_param = set_starting_goalie(simulation_param,'VAN','THATCHER_DEMKO') #JACOB_MARKSTROM
+simulation_param = set_starting_goalie(simulation_param,'WPG','LAURENT_BROSSOIT') #CONNOR_HELLEBUYCK
+simulation_param = set_starting_goalie(simulation_param,'WSH','BRADEN_HOLTBY') #ILYA_SAMSONOV
 
 # Gameplay parameters 
 simulation_param['simulation_date'] = today
 simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][simulation_param['simulation_date']]
-#simulation_param['games_to_simulate'] = [['MIN','SJS']]
+#simulation_param['games_to_simulate'] = [['WPG','SJS']]
 #simulation_param['days_rested'] = [[1,0]]
 #simulation_param['initial_wins'] = [[0,0]]
 #simulation_param['down_sample'] = False
@@ -173,18 +188,17 @@ simulation_param['games_to_simulate'] = simulation_param['databases']['season_sc
 # Analytics parameters
 simulation_param['team_plots'] = False
 simulation_param['exp_min_toi'] = 100
-simulation_param['exp_list_length'] = 1
+simulation_param['exp_list_length'] = 0
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_D']
+#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters
 simulation_param['print_times'] = False
 simulation_param['verbose'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
 '''
 attributes = ['sf_pcg','gf_pcg','cf_pcg','ff_pcg','xgf_pcg','scf_pcg']
 true_attribute = 'gf_pcg'
@@ -527,6 +541,7 @@ if simulation_param['do_exp']:
 	f_div = lambda a,b : a/b
 	
 	# Print data for SJS-lines
+	'''
 	#lines = [['MARC-EDOUARD_VLASIC','ERIK_KARLSSON'],['MARIO_FERRARO','TIM_HEED'],['RADIM_SIMEK','BRENT_BURNS'],['JACOB_MIDDLETON'],['EVANDER_KANE','TOMAS_HERTL','KEVIN_LABANC'],['PATRICK_MARLEAU','LOGAN_COUTURE','JONNY_BRODZINSKI'],['TIMO_MEIER','JOE_THORNTON','BARCLAY_GOODROW'],['ANTTI_SUOMELA','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','STEFAN_NOESEN','JOACHIM_BLICHFELD']]
 	#lines = [['EVANDER_KANE','TOMAS_HERTL','TIMO_MEIER'],['BARCLAY_GOODROW','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','DYLAN_GAMBRELL','PATRICK_MARLEAU'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	#now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['PATRICK_MARLEAU','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
@@ -538,6 +553,7 @@ if simulation_param['do_exp']:
 		for line in lines:
 			tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
 			print(100*tmp_vals[0]/(tmp_vals[0]+tmp_vals[1]))
+	'''
 
 	for p_id in simulation_param['exp_additional_players']:
 		player = s_db[p_id]
@@ -965,6 +981,7 @@ if simulation_param['do_exp']:
 	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
 	
 	_filter['position'] = ['D']
+	_filter['toi'] *= (4/3) # D-men plays more than forwards.
 	print('\nBest ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
@@ -983,6 +1000,7 @@ if simulation_param['do_exp']:
 	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 	print('\nWorst ' + str(list_length) + ' ranked defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
+	_filter['toi'] /= (4/3)# Revert back to original TOI requirement.
 
 	_filter['toi'] *= 6 # Goalies play more than skaters.
 	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')

@@ -17,11 +17,12 @@ def create_databases(simulation_param):
 	simulation_param['databases']['season_schedule'] = season_schedule
 
 	# Download new csv-files if current files are too old.
-	DATABASE_BIT_REGISTER[UNAVAILABLE_PLAYERS_BIT] = False
 	data_dir = simulation_param['data_dir']
 	mod_time_db = os.stat(simulation_param['csvfiles']['skater_bio']).st_mtime
 	mod_time_db = datetime.datetime.fromtimestamp(mod_time_db)
 	if mod_time_db.strftime("%y%m%d") != datetime.datetime.now().strftime("%y%m%d") or simulation_param['generate_fresh_databases']:
+		print('Saving data backup to ' + simulation_param['backup_dir'])
+		backup_data_dir(simulation_param['data_dir'],simulation_param['backup_dir'])
 		print('Downloading new csv-files from www.naturalstattrick.com')
 		print('   Downloading bio-data')
 		DATABASE_BIT_REGISTER[SKATER_BIO_BIT] = write_skater_bio_csv(simulation_param['url_skater_bio'],os.path.join(data_dir,'Skater_Bio_201920.csv'))
@@ -133,35 +134,42 @@ def create_databases(simulation_param):
 	simulation_param['databases']['team_rosters'] = roster_output
 	return simulation_param
 
-def download_old_season_data(seasons=None):
+def download_old_season_data(seasons=None,data_dir='Data_download'):
 	if seasons == None:
 		raise ValueError('No seasons specified for download')
 	print('Downloading new csv-files from www.naturalstattrick.com')
 	for season in seasons:
+		orig_season_name = season
+		# Transformation to fit the url-format at Natural Stat Trick.
+		season = str(season[:-2]) + '20' + str(season[-2:])
 		url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_on_ice = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_skater_relative = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_goalie_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-		url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-		url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		# Individual data
 		print('   Downloading individual ES data for season ' + season)
 		write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + season + '.csv'))
 		print('   Downloading individual PP data for season ' + season)
 		write_skater_ind_csv(url_skater_ind_pp,os.path.join(data_dir,'Skater_Individual_PP_' + season + '.csv'))
 		print('   Downloading individual PK data for season ' + season)
 		write_skater_ind_csv(url_skater_ind_pk,os.path.join(data_dir,'Skater_Individual_PK_' + season + '.csv'))
+		# On ice data
 		print('   Downloading on-ice data for season ' + season)
 		write_skater_on_ice_csv(url_skater_on_ice,os.path.join(data_dir,'Skater_OnIce_' + season + '.csv'))
+		# Relative data
 		print('   Downloading relative data for season ' + season)
 		write_skater_relative_csv(url_skater_relative,os.path.join(data_dir,'Skater_Relative_' + season + '.csv'))
+		# Goalie data
 		print('   Downloading goalie ES data for season ' + season)
-		write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + season + '.csv'))
+		write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + orig_season_name + '.csv'))
 		print('   Downloading goalie PP data for season ' + season)
-		write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + season + '.csv'))
+		write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + orig_season_name + '.csv'))
 		print('   Downloading goalie PK data for season ' + season)
-		write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + season + '.csv'))
+		write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + orig_season_name + '.csv'))
 
 
 def create_skater_db(simulation_param):
@@ -1079,7 +1087,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 	
 	# Update Skater data
 	for skater_id in skater_db.keys():
-		skater = get_player(skater_db,skater_id)
+		skater = get_skater(skater_db,skater_id)
 		skater.ind['toi_pcg'] = [0,0,0]
 		skater.ind['toi_pcg'][STAT_ES] = skater.ind['toi_per_gp'][STAT_ES] / team_db[skater.bio['team_id']].team_toi_es_per_gp
 		skater.ind['toi_pcg'][STAT_PP] = skater.ind['toi_per_gp'][STAT_PP] / team_db[skater.bio['team_id']].team_toi_pp_per_gp
@@ -1151,7 +1159,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		goalie = goalie_db[g_id]
 		# Calculate total sa/ss per team, only if player is available
 		if g_id not in unavailable_players:
-			goalie = get_player(goalie_db,g_id)
+			goalie = get_goalie(goalie_db,g_id)
 			shots_against_dict[goalie.bio['team_id']].append(sum(goalie.ind['sa']))			# Using sum to get sa/sv for all strengths (EV/PP/PK)
 			shots_saved_dict[goalie.bio['team_id']].append(sum(goalie.ind['sv']))
 			toi_dict[goalie.bio['team_id']].append(goalie.ind['toi'][STAT_ES])
@@ -1236,7 +1244,7 @@ def generate_schedule(csvfiles):
 def create_team_specific_db(simulation_param):
 	output = defaultdict(dict)
 	for skater_id in simulation_param['databases']['skater_db'].keys():
-		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		skater = get_skater(simulation_param['databases']['skater_db'],skater_id)
 		if (skater_id not in simulation_param['databases']['unavailable_players']):
 			output[skater.bio['team_id']][skater.bio['name']] = skater
 	return output
@@ -1495,6 +1503,10 @@ def update_new_team(db,player,new_team):
 
 def add_unavailable_player(simulation_param,player_id):
 	simulation_param['databases']['unavailable_players'].add(player_id)
+	# Make sure to remove player from the team specific database.
+	player = get_player(simulation_param,player_id)
+	team_id = player.get_attribute('team_id')
+	del simulation_param['databases']['team_specific_db'][team_id][player_id]
 	return simulation_param
 
 def get_unavailable_players():
@@ -1522,37 +1534,75 @@ def get_unavailable_players():
 
 def get_team_id_for_player(name,team_id):
 	manually_checked_players = set()
+	manually_checked_players.add('MARCO_SCANDELLA')
+	manually_checked_players.add('ILYA_KOVALCHUK')
 	new_team = {}
+	new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
+	new_team['ERIK_GUDBRANSON'] = 'ANA'
+	new_team['ANDREAS_MARTINSEN'] = 'PTI'
+	new_team['BRENDAN_PERLINI'] = 'DET'
+	new_team['JACOB_DE_LA_ROSE'] = 'STL'
+	new_team['ROBBY_FABBRI'] = 'DET'
+	new_team['CHANDLER_STEPHENSON'] = 'VGK'
+	new_team['NICK_SHORE'] = 'WPG'
+	new_team['TAYLOR_HALL'] = 'ARI'
+	new_team['STEFAN_NOESEN'] = 'SJS'
+	new_team['MARCO_SCANDELLA'] = 'STL'
+	new_team['MIKE_REILLY'] = 'OTT'
+	new_team['ILYA_KOVALCHUK'] = 'MTL'
+	new_team['MICHAEL_FROLIK'] = 'BUF'
+	new_team['JACK_CAMPBELL'] = 'TOR'
+	new_team['KYLE_CLIFFORD'] = 'TOR'
+	new_team['TREVOR_MOORE'] = 'LAK'
+	new_team['NICK_SEELER'] = 'CHI'
+	new_team['JASON_ZUCKER'] = 'PIT'
+	new_team['ALEX_GALCHENYUK'] = 'MIN'
+	new_team['ANDY_GREENE'] = 'NYI'
+	new_team['BRENDEN_DILLON'] = 'WSH'
+	new_team['TYLER_TOFFOLI'] = 'VAN'
+	new_team['JULIEN_GAUTHIER'] = 'NYR'
+	new_team['BLAKE_COLEMAN'] = 'TBL'
+	new_team['ALEC_MARTINEZ'] = 'VGK'
+	new_team['DYLAN_DEMELO'] = 'WPG'
+	new_team['TIM_SCHALLER'] = 'LAK'
+	new_team['JAYCE_HAWRYLUK'] = 'OTT'
+	new_team['DENIS_MALGIN'] = 'TOR'
+	new_team['CODY_EAKIN'] = 'WPG'
+	new_team['DANTON_HEINEN'] = 'ANA'
+	new_team['NICK_RITCHIE'] = 'BOS'
+	new_team['DEREK_GRANT'] = 'PHI'
+	new_team['PATRICK_MARLEAU'] = 'PIT'
+	new_team['WAYNE_SIMMONDS'] = 'BUF'
+	new_team['NATE_THOMPSON'] = 'PHI'
+	new_team['VINCENT_TROCHECK'] = 'CAR'
+	new_team['ERIK_HAULA'] = 'FLA'
+	new_team['LUCAS_WALLMARK'] = 'FLA'
+	new_team['JEAN-GABRIEL_PAGEAU'] = 'NYI'
+	new_team['VLADISLAV_NAMESTNIKOV'] = 'COL'
+	new_team['ILYA_KOVALCHUK'] = 'WSH'
+	new_team['ANDREAS_ATHANASIOU'] = 'EDM'
+	new_team['SAM_GAGNER'] = 'DET'
+	new_team['TYLER_ENNIS'] = 'EDM'
+	new_team['EVAN_RODRIGUES'] = 'PIT'
+	new_team['CONOR_SHEARY'] = 'PIT'
+	new_team['DOMINIK_KAHUN'] = 'BUF'
+	new_team['SONNY_MILANO'] = 'ANA'
+	new_team['DEVIN_SHORE'] = 'CBJ'
+	new_team['BARCLAY_GOODROW'] = 'TBL'
+	new_team['DANIEL_SPRONG'] = 'WSH'
+	new_team['MIKE_GREEN'] = 'EDM'
+	new_team['CHRISTIAN_DJOOS'] = 'ANA'
+	new_team['NICK_COUSINS'] = 'VGK'
+	new_team['MATTHEW_PECA'] = 'OTT'
+
+	# Make sure players have been added to their new clubs. If not, set an error.
 	team_id_arr = (team_id.replace(' ','').split(','))
 	if len(team_id_arr) > 1:
+		if name not in new_team.keys():
+			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)
 		if len(team_id_arr) > 2:
 			if name not in manually_checked_players:
 				raise ValueError('Player ' + name + ' changed club more than once. Please add to "manually_checked_players" to continue.')
-		new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
-		new_team['ERIK_GUDBRANSON'] = 'ANA'
-		new_team['ANDREAS_MARTINSEN'] = 'PTI'
-		new_team['BRENDAN_PERLINI'] = 'DET'
-		new_team['JACOB_DE_LA_ROSE'] = 'STL'
-		new_team['ROBBY_FABBRI'] = 'DET'
-		new_team['CHANDLER_STEPHENSON'] = 'VGK'
-		new_team['NICK_SHORE'] = 'WPG'
-		new_team['TAYLOR_HALL'] = 'ARI'
-		new_team['STEFAN_NOESEN'] = 'SJS'
-		new_team['MARCO_SCANDELLA'] = 'MTL'
-		new_team['MIKE_REILLY'] = 'OTT'
-		new_team['ILYA_KOVALCHUK'] = 'MTL'
-		new_team['MICHAEL_FROLIK'] = 'BUF'
-		new_team['JACK_CAMPBELL'] = 'TOR'
-		new_team['KYLE_CLIFFORD'] = 'TOR'
-		new_team['TREVOR_MOORE'] = 'LAK'
-		new_team['NICK_SEELER'] = 'CHI'
-		new_team['JASON_ZUCKER'] = 'PIT'
-		new_team['ALEX_GALCHENYUK'] = 'MIN'
-		new_team['ANDY_GREENE'] = 'NYI'
-		new_team['BRENDEN_DILLON'] = 'WSH'
-
-		if name not in set(new_team.keys()):
-			raise ValueError('Player ' + name + ' has more than one team(s). Team-ID: ' + team_id)		
 
 	if team_id == 'L.A':
 		team_id = 'LAK'

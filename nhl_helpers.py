@@ -18,6 +18,7 @@ import signal
 from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
+from shutil import copyfile
 
 if platform.system() == 'Darwin':
 	import matplotlib
@@ -216,8 +217,19 @@ def get_team_id(long_name):
 def get_team(team_db,team_id):
 	return team_db[team_id]
 
-def get_player(player_db,player_id):
-	return player_db[player_id]
+def get_player(simulation_param,player_id):
+	if player_id in ACTIVE_GOALIES:
+		return get_goalie(simulation_param['databases']['goalie_db'],player_id)
+	elif player_id in ACTIVE_SKATERS:
+		return get_skater(simulation_param['databases']['skater_db'],player_id)
+	else:
+		raise ValueError(player_id + ' not included in Goalie or Skater databse.')
+
+def get_skater(skater_db,player_id):
+	return skater_db[player_id]
+
+def get_goalie(goalie_db,player_id):
+	return goalie_db[player_id]
 
 def print_progress(i,N,t0,step=10):
 	time_unit = ['min','min']
@@ -620,7 +632,7 @@ def print_player_from_team(player_db,team_id,position=[]):
 	if position == []:
 		position = ['G','D','F']
 	for player_id in player_db:
-		player = get_player(player_db,player_id)
+		player = get_skater(player_db,player_id)
 		if (player.bio['team_id'] == team_id) and (player.bio['position'] in position):
 			print(player_id)
 
@@ -637,7 +649,7 @@ def get_sorted_db(simulation_param,value_key,cut_off=None,toi_filter=0,position_
 	if position_filter == None:
 		position_filter = ['G','D','F']
 	for skater_id in simulation_param['databases']['skater_db'].keys():
-		skater = get_player(simulation_param['databases']['skater_db'],skater_id)
+		skater = get_skater(simulation_param['databases']['skater_db'],skater_id)
 		if (skater.es['toi']/60 >= toi_filter) and (skater.bio['position'] in position_filter):
 			if split_key[0] == 'es':
 				lst.append((skater.es[split_val_key],skater_id))
@@ -655,7 +667,7 @@ def get_sorted_db(simulation_param,value_key,cut_off=None,toi_filter=0,position_
 def create_player_list(s_db,_filter):
 	list_of_players = []
 	for skater_id in ACTIVE_SKATERS:
-		skater = get_player(s_db,skater_id)
+		skater = get_skater(s_db,skater_id)
 		player_ok = True
 		for attribute in _filter:
 			if isinstance(_filter[attribute],str) == True:
@@ -808,7 +820,7 @@ def get_starting_goalie(simulation_param,team_id):
 		found_goalie = False
 		while found_goalie == False:
 			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
-				goalie = get_player(simulation_param['databases']['goalie_db'], goalie_id)
+				goalie = get_goalie(simulation_param['databases']['goalie_db'], goalie_id)
 				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
 					found_goalie = True
 					return goalie_id
@@ -828,6 +840,17 @@ def get_k_factor(x_array,y_array,do_plot=False):
 		plt.plot(x_val,fit_fn(x_val),'y--',label='Data fit (k=' + str(k) + ')')
 		plt.show()
 	return k
+
+def backup_data_dir(src,dst):
+	'''
+	Backup all csv-files from the source folder to the destination folder
+	'''
+	list_of_all = os.listdir(src)
+	list_of_files = []
+	for filename in list_of_all:
+		filepath = os.path.join(src,filename)
+		if os.path.splitext(filepath)[1] == '.csv':
+			copyfile(filepath,os.path.join(dst,filename))
 
 def generic_csv_reader(csv_file_path,dict_key_attribute='name',output_attributes=False):
 	'''
