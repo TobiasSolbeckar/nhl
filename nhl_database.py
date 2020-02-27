@@ -80,9 +80,9 @@ def create_databases(simulation_param):
 	simulation_param['databases']['team_db'] = create_team_db(simulation_param)
 
 	print('   Creating Skater-DB')
-	s_db = create_skater_db(simulation_param)
+	simulation_param['databases']['skater_db'] = create_skater_db(simulation_param)
 	print('   Creating Goalie-DB')
-	g_db = create_goalie_db(simulation_param)
+	simulation_param['databases']['goalie_db'] = create_goalie_db(simulation_param)
 	ACTIVE_PLAYERS = ACTIVE_SKATERS.union(ACTIVE_GOALIES)
 	old_rating, new_rating, diff_rating = {},{},{}
 
@@ -91,7 +91,7 @@ def create_databases(simulation_param):
 		players_to_remove = []
 		simulation_param['databases']['unavailable_players'] = get_unavailable_players()
 		for player_id in simulation_param['databases']['unavailable_players']:
-			if (player_id not in s_db) and (player_id not in g_db):
+			if (player_id not in simulation_param['databases']['skater_db']) and (player_id not in simulation_param['databases']['goalie_db']):
 				#print('Unavailable player ' + player_id + ' not in skaterDB.')
 				players_to_remove.append(player_id)
 		for player_id in players_to_remove:
@@ -100,12 +100,12 @@ def create_databases(simulation_param):
 		simulation_param['databases']['unavailable_players'] = set()
 
 	print('   Modifying databases manually')
-	[s_db,g_db] = modify_player_db(s_db,g_db)
+	simulation_param = modify_player_db(simulation_param)
 	
 	# Add experimental data - needs to be done after creation of SkaterDB (and GoalieDB).
 	print('   Adding experimental data')
-	[simulation_param['databases']['team_db'],simulation_param['databases']['skater_db'],simulation_param['databases']['goalie_db']] = add_experimental_data(simulation_param['databases']['team_db'],s_db,g_db,simulation_param['databases']['unavailable_players'],simulation_param['debug_team'])
-	
+	simulation_param = add_experimental_data(simulation_param)
+
 	for team_id in ACTIVE_TEAMS:
 		team = simulation_param['databases']['team_db'][team_id]
 		old_rating[team_id] = team.get_ratings()[1]
@@ -116,9 +116,6 @@ def create_databases(simulation_param):
 			new_rating[team_id] = team.get_ratings()[1]
 			diff_rating[team_id] = new_rating[team_id] - old_rating[team_id]
 			#print('{0}: Difference in rating after off-seasons: {1:.1f}%'.format(team_id,100*diff_rating[team_id]/old_rating[team_id]))
-
-	# Save the goalie database.
-	simulation_param['databases']['goalie_db'] = g_db
 
 	simulation_param['databases']['starting_goalies'] = generate_starting_goalies()
 	simulation_param['databases']['team_specific_db'] = create_team_specific_db(simulation_param)	
@@ -1137,14 +1134,17 @@ def create_team_db(simulation_param):
 
 	return output
 
-def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,debug_team_id=None):
+def add_experimental_data(simulation_param): #add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None):
+	# For readability
+	team_db = simulation_param['databases']['team_db']
+	skater_db = simulation_param['databases']['skater_db']
+	goalie_db = simulation_param['databases']['goalie_db']
+	unavailable_players = simulation_param['databases']['unavailable_players']
+
 	sf_dict,gf_dict,cf_dict,ca_dict,scf_dict,sca_dict,hits_dict,hits_taken_dict = defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list)
 	estimated_off_dict, estimated_def_dict = defaultdict(list),defaultdict(list)
 	shots_against_dict,shots_saved_dict = defaultdict(list),defaultdict(list)
 	gp_array = []
-
-	if debug_team_id != None:
-		print('\n' + debug_team_id + ' roster (DEBUG):')
 	
 	# Update Skater data
 	for skater_id in skater_db.keys():
@@ -1196,7 +1196,7 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
-		if skater.get_attribute('team_id') == debug_team_id:
+		if skater.get_attribute('team_id') == 'SJS':
 			print(skater_id)
 			print('   5v5-TOI: {0:.1f} min. 5v5-TOI/GP: {1:.1f} min. 5v5-TOI%: {2:.1f}%'.format(skater.get_toi()/60,skater.get_attribute('toi_per_gp',STAT_ES)/60,100*skater.get_attribute('toi_pcg',STAT_ES)))
 			print('   PP-TOI: {0:.1f} s. PP-TOI/GP: {1:.1f}. PP-TOI%: {2:.1f}%'.format(skater.get_toi(STAT_PP)/60,skater.get_attribute('toi_per_gp',STAT_PP)/60,100*skater.get_attribute('toi_pcg',STAT_PP)))
@@ -1289,7 +1289,12 @@ def add_experimental_data(team_db,skater_db,goalie_db,unavailable_players=None,d
 		team_db[team_id].rank['estimated_off_pcg'] = get_rank(team_db[team_id].exp_data['estimated_off_pcg'],values_dict['estimated_off_pcg'])
 		team_db[team_id].rank['in_season_rating'] = get_rank(team_db[team_id].exp_data['in_season_rating'],values_dict['in_season_rating'])
 
-	return [team_db,skater_db,goalie_db]
+	# Store values for the return
+	simulation_param['databases']['team_db'] = team_db
+	simulation_param['databases']['skater_db'] = skater_db
+	simulation_param['databases']['goalie_db'] = goalie_db
+	simulation_param['databases']['unavailable_players'] = unavailable_players
+	return simulation_param 	#return [team_db,skater_db,goalie_db]
 
 def generate_schedule(csvfiles):
 	schedule_per_team = defaultdict(list)
@@ -1531,20 +1536,18 @@ def get_row_values_for_team_db(row):
 	return [name,gp,team_toi,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo]
 
 
-def modify_player_db(s_db,g_db):
+def modify_player_db(simulation_param):
 	'''
 	Manually update databases if needed.
 	Ex:
-		s_db = update_new_team(s_db,'RICHARD_PANIK','WSH')
-		g_db = update_new_team(g_db,'JOHN_GIBSON','SJS')
-		g_db = update_new_team(g_db,'MARTIN_JONES',None)
-		g_db['MARTIN_JONES'].sv = int(0.93*g_db['MARTIN_JONES'].sa)
+		simulation_param['databases'][skater_db] = ...
+		simulation_param['databases'][goalie_db] = ...
 	'''
 
 	# ADD MODIFICATIONS TO DATABASE HERE
 	
 	
-	return [s_db, g_db]
+	return simulation_param
 
 def update_new_team(db,player,new_team):
 	global ACTIVE_PLAYERS

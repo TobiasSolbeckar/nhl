@@ -196,7 +196,7 @@ simulation_param['exp_list_length'] = 1
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters
