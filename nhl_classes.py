@@ -219,10 +219,12 @@ class Goalie():
 		for index in [STAT_ES,STAT_PP,STAT_PK]:
 			self.ind['ga_above_xga'][index] = ind['ga'][index] - ind['xga'][index]
 			if ind['toi'][index] == 0:
+				self.ind['gaa'][index] = 0
 				self.ind['sa_per_sec'][index] = 0
 				self.ind['gsaa_per_60'][index] = 0
 				self.ind['ga_above_xga_per_60'][index] = 0
 			else:
+				self.ind['gaa'][index] = 3600*ind['ga'][index]/ind['toi'][index]
 				self.ind['sa_per_sec'][index] = ind['sa'][index]/ind['toi'][index]
 				self.ind['gsaa_per_60'][index] = 3600*(ind['gsaa'][index])/ind['toi'][index]
 				self.ind['ga_above_xga_per_60'][index] = 3600*(self.ind['ga_above_xga'][index])/ind['toi'][index]
@@ -249,14 +251,17 @@ class Goalie():
 		print('Information for player ' + self.bio['name'])
 		print('	5v5:')
 		print('		Shots against: {0:.0f}. Goals against: {1:.0f}. Save%: {2:.1f}'.format(self.ind['sa'][0],self.ind['ga'][0],100*self.ind['sv_pcg'][0]))
+		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][0],self.ind['gaa'][0]))
 		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][0],self.ind['ga_above_xga'][0]))
 		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][0],self.ind['ga_above_xga_per_60'][0]))
 		print('	PP:')
 		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][1],self.ind['ga'][1],100*self.ind['sv_pcg'][1]))
+		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][1],self.ind['gaa'][1]))
 		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][1],self.ind['ga_above_xga'][1]))
 		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][1],self.ind['ga_above_xga_per_60'][1]))
 		print('	PK:')
 		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][2],self.ind['ga'][2],100*self.ind['sv_pcg'][2]))
+		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][2],self.ind['gaa'][2]))
 		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][2],self.ind['ga_above_xga'][2]))
 		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][2],self.ind['ga_above_xga_per_60'][2]))
 		
@@ -301,22 +306,30 @@ class Team():
 		self.sf_pcg = adv_array[2]
 		self.sf_per_sec = self.sf/self.team_toi_es
 		self.sa_per_sec = self.sa/self.team_toi_es
+		self.sf_per_60 = 3600*self.sf_per_sec
+		self.sa_per_60 = 3600*self.sa_per_sec
 		self.cf = adv_array[3]
 		self.ca = adv_array[4]
 		self.cf_pcg = adv_array[5]
 		self.cf_per_sec = self.cf/self.team_toi_es
 		self.ca_per_sec = self.ca/self.team_toi_es
+		self.cf_per_60 = 3600*self.cf_per_sec
+		self.ca_per_60 = 3600*self.ca_per_sec
 		self.ff = adv_array[6]
 		self.fa = adv_array[7]
 		self.ff_pcg = adv_array[8]
 		self.ff_per_sec = self.ff/self.team_toi_es
 		self.fa_per_sec = self.fa/self.team_toi_es
+		self.ff_per_60 = 3600*self.ff_per_sec
+		self.fa_per_60 = 3600*self.fa_per_sec
 		self.blocked_against = self.cf-self.ff
 		self.xgf = adv_array[9]
 		self.xga = adv_array[10]
 		self.xgf_pcg = adv_array[11]
 		self.xgf_per_sec = self.xgf/self.team_toi_es
 		self.xga_per_sec = self.xga/self.team_toi_es
+		self.xgf_per_60 = 3600*self.xgf_per_sec
+		self.xga_per_60 = 3600*self.xga_per_sec
 		self.scf = adv_array[12]
 		self.sca = adv_array[13]
 		self.scf_pcg = adv_array[14]
@@ -329,6 +342,8 @@ class Team():
 		self.hdcf_pcg = adv_array[17]
 		self.hdcf_per_sec = self.hdcf/self.team_toi_es
 		self.hdca_per_sec = self.hdca/self.team_toi_es
+		self.hdcf_per_60 = 3600*self.hdcf_per_sec
+		self.hdca_per_60 = 3600*self.hdca_per_sec
 		self.sv_pcg = adv_array[18]
 		self.pdo = adv_array[19]
 
@@ -381,7 +396,8 @@ class Team():
 		self.rank['hdcf_pcg'] = 0
 		self.rank['sv_pcg'] = 0
 		self.rank['pdo'] = 0
-		self.rank['hits_per_game'] = 0
+		self.rank['hits'] = 0
+		self.rank['hits_diff'] = 0
 
 		self.fatigue = fatigue_info
 

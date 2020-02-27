@@ -715,7 +715,9 @@ def get_team_values(team_db):
 		values_dict['hdcf_pcg'].append(team.hdcf_pcg)
 		values_dict['sv_pcg'].append(team.sv_pcg)
 		values_dict['pdo'].append(team.pdo)
-		values_dict['hits_per_game'].append(team.exp_data['hits_per_game'])
+		values_dict['hits'].append(team.exp_data['hits'])
+		values_dict['hits_taken'].append(team.exp_data['hits_taken'])
+		values_dict['hits_diff'].append(team.exp_data['hits_diff'])
 		values_dict['estimated_off_pcg'].append(team.exp_data['estimated_off_pcg'])
 		values_dict['in_season_rating'].append(team.exp_data['in_season_rating'])
 	return values_dict
@@ -840,6 +842,9 @@ def get_k_factor(x_array,y_array,do_plot=False):
 		plt.plot(x_val,fit_fn(x_val),'y--',label='Data fit (k=' + str(k) + ')')
 		plt.show()
 	return k
+
+def cond_bp():
+	raise ValueError('Conditional breakpoint')
 
 def backup_data_dir(src,dst):
 	'''

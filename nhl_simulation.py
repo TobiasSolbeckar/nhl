@@ -10,7 +10,29 @@ def	simulate_ind_game(simulation_param,data_param):
 	if simulation_param['verbose']:
 		print('Simulating game between ' + simulation_param['ht_id'] + ' and ' + simulation_param['at_id'])
 		print('Starting goalies. {0}: {1}, {2}: {3}'.format(simulation_param['ht_id'],data_param['ht_goalie'],simulation_param['at_id'],data_param['at_goalie']))
-
+		for PLAYFORM in [0,1,2]:
+			print('Playform: ' + str(PLAYFORM))
+			for i,ct in enumerate(CURRENT_TEAM):
+				ot = OPPONENT_TEAM[i]
+				isf_tot = 0
+				isf_per_sec_tot = 0
+				gf_tot = 0
+				for p_id in data_param[ct + '_players'].keys():
+					player = get_skater(data_param[ct + '_players'],p_id)
+					if player.get_attribute('position') != "G":
+						isf = player.get_attribute('isf',PLAYFORM)
+						isf_per_sec = player.get_attribute('isf_per_sec',PLAYFORM)
+						gf = player.get_attribute('gf',PLAYFORM)
+						isf_tot += isf
+						isf_per_sec_tot += isf_per_sec
+						gf_tot += gf
+						print(p_id + ' iSF/second: ' + str(isf_per_sec))
+					else:
+						sv_pcg = player.get_attribute('sv_pcg',PLAYFORM)
+				print('   Total shots for ' + simulation_param[ct + '_id'] + ' roster: ' + str(isf_tot))
+				print('   Total shots/60 for ' + simulation_param[ct + '_id'] + ' roster: ' + str(3600*isf_per_sec_tot))
+				print('   Total goals for ' + simulation_param[ct + '_id'] + ' roster: ' + str(gf_tot) + '. Shooting%: ' + str(100*gf_tot/isf_tot))
+				print('   Save% for ' + simulation_param[ct + '_id'] + ': ' + str(sv_pcg))
 	# Set up games status parameters
 	game_status = {}
 	game_status['time_step'] = 1
@@ -256,7 +278,8 @@ def simulate_ot(simulation_param,data_param,game_status):
 
 def simulate_gameplay(game_status,data_param,verbose=False):
 	game_status['goal_scored'] = [False, False]
-	
+
+
 	for i,ct in enumerate(CURRENT_TEAM):
 		ot = OPPONENT_TEAM[i]
 		opponent_goalie = get_goalie(data_param[ot + '_players'],data_param[ot + '_goalie'])
@@ -321,6 +344,7 @@ def simulate_gameplay(game_status,data_param,verbose=False):
 def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 	game_status['goal_scored'] = [False, False]
 	
+
 	for i,ct in enumerate(CURRENT_TEAM):
 		shot_taken, penalty_taken, goal_scored = False, False, False
 		ot = OPPONENT_TEAM[i]
@@ -331,7 +355,6 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 		current_team_pt_per_time = game_status[ct + '_line_values']['pt_per_time']
 		opponent_team_pd_per_time = game_status[ot + '_line_values']['pd_per_time']
 		current_team_sh_pcg = game_status[ct + '_line_values']['line_sh_pcg']
-
 		if random.uniform(0,1) < (current_team_sf_per_time + opponent_team_sa_per_time)/2:
 			game_status[ct + '_exp_shots'] += 1
 			shot_taken = True
@@ -350,14 +373,16 @@ def simulate_gameplay_per_line(game_status,data_param,verbose=False):
 		else:
 			if shot_taken == True:
 				skater_id = get_from_distribution(game_status[ct + '_on_ice_db'],'isf_per_time',normalize=True)
-				if verbose:
-					print(game_status['time_str'] + ':    Shot (' + game_status[ct + '_penalty_status'] + ') by ' + skater_id + ' (' + game_status[ct + '_id'] + ')')
 				if game_status[ot + '_pp'] == True:
 					OPPONENT_GOALIE_STAT_INDEX = STAT_PP
 				elif game_status[ot + '_pk'] == True:
 					OPPONENT_GOALIE_STAT_INDEX = STAT_PK
 				else:
 					OPPONENT_GOALIE_STAT_INDEX = STAT_ES
+				if verbose:
+					#print(game_status['time_str'] + ':    Shot (' + game_status[ct + '_penalty_status'] + ') by ' + skater_id + ' (' + game_status[ct + '_id'] + '). Skaters shooting percentage: ' + str(game_status[ct + '_on_ice_db'][skater_id][1]))
+					goal_prob = (game_status[ct + '_on_ice_db'][skater_id][1] + (1-opponent_goalie.ind['sv_pcg'][OPPONENT_GOALIE_STAT_INDEX]))/2
+					print('{0}:    Shot ({1}) by {2} ({3}). Likelyhood of goal: {4:.1f}%. (Shooter percentage: {5:.1f}% Save percentage: {6:.1f}%)'.format(game_status['time_str'],game_status[ct + '_penalty_status'],skater_id,game_status[ct + '_id'],100*goal_prob,100*game_status[ct + '_on_ice_db'][skater_id][1],100*opponent_goalie.ind['sv_pcg'][OPPONENT_GOALIE_STAT_INDEX]))
 				if random.uniform(0,1) < (game_status[ct + '_on_ice_db'][skater_id][1] + (1-opponent_goalie.ind['sv_pcg'][OPPONENT_GOALIE_STAT_INDEX]))/2:
 					# Goal is scored.
 					if verbose:
@@ -553,7 +578,10 @@ def put_players_on_ice(game_status,data_param,verbose=False):
 		lines_on_ice[i] = line_values
 		if verbose:
 			print(game_status['time_str'] + ': Players on ice for: ' + game_status[ct + '_id'] + ': ' + str(len(game_status[ct + '_on_ice_db'].keys())) + '. ' + str(game_status[ct + '_on_ice_db'].keys()))
-		
+			shots_for_per_shift = line_values['sf_per_time']*45
+			shots_against_per_shift = line_values['sa_per_time']*45
+			print('Average shots per shift for ({0}): {1:.2f}.'.format(game_status[ct + '_id'],shots_for_per_shift))
+			print('Average shots per shift against ({0}): {1:.2f}.'.format(game_status[ct + '_id'],shots_against_per_shift))
 		if len((game_status[ct + '_on_ice_db'].keys())) < 4 and (int(game_status['time_str'][0]) != 6):
 			raise ValueError('Too few players in ' + game_status[ct + '_id'])
 	return game_status			
