@@ -119,7 +119,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201920']	#download_old_season_data(['201718'])
+simulation_param['seasons'] = ['201819','201920']	#download_old_season_data(['201718'])
 simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
@@ -150,17 +150,17 @@ simulation_param = create_databases(simulation_param)
 simulation_param = set_starting_goalie(simulation_param,'ARI','DARCY_KUEMPER') #ANTTI_RAANTA
 simulation_param = set_starting_goalie(simulation_param,'BOS','JAROSLAV_HALAK') #TUUKKA_RASK
 simulation_param = set_starting_goalie(simulation_param,'BUF','CARTER_HUTTON') #
-simulation_param = set_starting_goalie(simulation_param,'CAR','AVERAGE_GOALIE_CAR_0') #PETR_MRAZEK
+simulation_param = set_starting_goalie(simulation_param,'CAR','AVERAGE_GOALIE_CAR_0') #PETR_MRAZEK ; ANTON_FORSBERG
 simulation_param = set_starting_goalie(simulation_param,'CBJ','JOONAS_KORPISALO') #ELVIS_MERZLIKINS
 #simulation_param = set_starting_goalie(simulation_param,'CGY','DAVID_RITTICH') #
 simulation_param = set_starting_goalie(simulation_param,'CHI','COREY_CRAWFORD') #MALCOLM_SUBBAN
-#simulation_param = set_starting_goalie(simulation_param,'COL','PAVEL_FRANCOUZ') #
+simulation_param = set_starting_goalie(simulation_param,'COL','PAVEL_FRANCOUZ') #
 simulation_param = set_starting_goalie(simulation_param,'DAL','BEN_BISHOP') #ANTON_KHUDOBIN
 simulation_param = set_starting_goalie(simulation_param,'DET','JIMMY_HOWARD') #JONATHAN_BERNIER
 simulation_param = set_starting_goalie(simulation_param,'EDM','MIKKO_KOSKINEN') #MIKE_SMITH
 #simulation_param = set_starting_goalie(simulation_param,'FLA','SERGEI_BOBROVSKY') #
 #simulation_param = set_starting_goalie(simulation_param,'LAK','') #
-simulation_param = set_starting_goalie(simulation_param,'MIN','ALEX_STALOCK') #DEVAN_DUBNYK
+#simulation_param = set_starting_goalie(simulation_param,'MIN','ALEX_STALOCK') #DEVAN_DUBNYK
 #simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE') #
 simulation_param = set_starting_goalie(simulation_param,'NJD','CORY_SCHNEIDER') #MACKENZIE_BLACKWOOD
 #simulation_param = set_starting_goalie(simulation_param,'NYI','SEMYON_VARLAMOV') #
@@ -174,7 +174,7 @@ simulation_param = set_starting_goalie(simulation_param,'STL','JORDAN_BINNINGTON
 simulation_param = set_starting_goalie(simulation_param,'TBL','CURTIS_MCELHINNEY') #ANDREI_VASILEVSKIY
 #simulation_param = set_starting_goalie(simulation_param,'TOR','FREDERIK_ANDERSEN') #
 simulation_param = set_starting_goalie(simulation_param,'VAN','THATCHER_DEMKO') #JACOB_MARKSTROM
-simulation_param = set_starting_goalie(simulation_param,'VGK','MARC-ANDRE_FLEURY') #ROBIN_LEHNER
+simulation_param = set_starting_goalie(simulation_param,'VGK','ROBIN_LEHNER') #MARC-ANDRE_FLEURY
 simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK') #LAURENT_BROSSOIT
 simulation_param = set_starting_goalie(simulation_param,'WSH','ILYA_SAMSONOV') #BRADEN_HOLTBY
 
@@ -191,12 +191,12 @@ simulation_param['games_to_simulate'] = simulation_param['databases']['season_sc
 
 # Analytics parameters
 simulation_param['team_plots'] = False
-simulation_param['exp_min_toi'] = 100
-simulation_param['exp_list_length'] = 1
+simulation_param['exp_min_toi'] = 200
+simulation_param['exp_list_length'] = 25
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_D']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters

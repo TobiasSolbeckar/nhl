@@ -110,7 +110,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 109,Pat Maroon,T.B,L,31,1988-04-23,St. Louis,-,USA,-,75,236,2007,PHI,6,10,161
 110,James van Riemsdyk,PHI,L,30,1989-05-04,Middletown,-,USA,-,75,217,2007,PHI,1,2,2
 111,Paul Byron,MTL,L,30,1989-04-27,Ottawa,-,CAN,-,69,158,2007,BUF,6,28,179
-112,Sam Gagner,EDM,C,30,1989-08-10,London,-,CAN,-,71,200,2007,EDM,1,6,6
+112,Sam Gagner,"DET, EDM",C,30,1989-08-10,London,-,CAN,-,71,200,2007,EDM,1,6,6
 113,Logan Couture,S.J,C,30,1989-03-28,Guelph,-,CAN,-,73,200,2007,S.J,1,9,9
 114,P.K. Subban,N.J,D,30,1989-05-13,Toronto,-,CAN,-,72,210,2007,MTL,2,13,43
 115,Riley Nash,CBJ,C,30,1989-05-09,Consort,-,CAN,-,73,185,2007,EDM,1,21,21
@@ -548,7 +548,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 547,Nick Ritchie,"ANA, BOS",L,24,1995-12-05,Orangeville,-,CAN,-,74,230,2014,ANA,1,10,10
 548,Kevin Fiala,MIN,L,23,1996-07-22,St. Gallen,-,CHE,-,70,193,2014,NSH,1,11,11
 549,Brendan Perlini,"CHI, DET",L,23,1996-04-27,Guildford,-,GBR,-,75,211,2014,ARI,1,12,12
-550,Jakub Vrana,WSH,L,23,1996-02-28,Prague,-,CZE,-,72,195,2014,WSH,1,13,13
+550,Jakub Vrana,WSH,L,24,1996-02-28,Prague,-,CZE,-,72,195,2014,WSH,1,13,13
 551,Dylan Larkin,DET,C,23,1996-07-30,Waterford,-,USA,-,73,198,2014,DET,1,15,15
 552,Sonny Milano,"ANA, CBJ",L,23,1996-05-12,Massapequa,-,USA,-,72,194,2014,CBJ,1,16,16
 553,Travis Sanheim,PHI,D,23,1996-03-29,Elkhorn,-,CAN,-,75,181,2014,PHI,1,17,17
@@ -599,7 +599,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 598,Dylan Sikura,CHI,R,24,1995-06-01,Aurora,-,CAN,-,71,166,2014,CHI,6,28,178
 599,Victor Olofsson,BUF,"L, R",24,1995-07-18,Ornskoldsvik,-,SWE,-,71,183,2014,BUF,7,1,181
 600,Pierre Engvall,TOR,L,23,1996-05-31,Ljungby,-,SWE,-,77,214,2014,TOR,7,8,188
-601,Ondrej Kase,ANA,R,24,1995-11-08,Kadan,-,CZE,-,72,190,2014,ANA,7,25,205
+601,Ondrej Kase,"ANA, BOS",R,24,1995-11-08,Kadan,-,CZE,-,72,190,2014,ANA,7,25,205
 602,Jake Evans,MTL,C,23,1996-06-02,Toronto,-,CAN,-,73,181,2014,MTL,7,27,207
 603,Jacob Middleton,S.J,D,24,1996-01-02,Wainwright,-,CAN,-,75,210,2014,L.A,7,30,210
 604,Matthew Highmore,CHI,C,24,1996-02-27,Halifax,-,CAN,-,71,188,-,-,-,-,-
@@ -687,7 +687,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 686,Rudolfs Balcers,OTT,L,22,1997-04-08,Latvia,-,LVA,-,71,180,2015,S.J,5,21,142
 687,Troy Terry,ANA,"C, R",22,1997-09-10,Denver,-,USA,-,73,180,2015,ANA,5,27,148
 688,Adam Gaudette,VAN,C,23,1996-10-03,Braintree,-,USA,-,73,170,2015,VAN,5,28,149
-689,Brett Seney,N.J,L,23,1996-02-28,London,-,CAN,-,69,156,2015,N.J,6,6,157
+689,Brett Seney,N.J,L,24,1996-02-28,London,-,CAN,-,69,156,2015,N.J,6,6,157
 690,Vladislav Gavrikov,CBJ,D,24,1995-11-21,Yaroslavl,-,RUS,-,75,213,2015,CBJ,6,8,159
 691,Cameron Hughes,BOS,C,23,1996-10-09,Edmonton,-,CAN,-,71,160,2015,BOS,6,14,165
 692,Mason Appleton,WPG,C,24,1996-01-15,Green Bay,-,USA,-,74,193,2015,WPG,6,17,168
@@ -733,7 +733,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 732,Dante Fabbro,NSH,D,21,1998-06-20,Coquitlam,-,CAN,-,72,189,2016,NSH,1,17,17
 733,Josh Mahura,ANA,D,21,1998-05-05,St. Albert,-,CAN,-,73,186,2016,ANA,3,24,85
 734,Victor Mete,MTL,D,21,1998-06-07,Woodbridge,-,CAN,-,69,187,2016,MTL,4,9,100
-735,Givani Smith,DET,R,21,1998-02-28,Thornhill,-,CAN,-,74,210,2016,DET,2,16,46
+735,Givani Smith,DET,R,22,1998-02-28,Thornhill,-,CAN,-,74,210,2016,DET,2,16,46
 736,Nick Caamano,DAL,R,21,1998-09-07,Hamilton,-,CAN,-,74,200,2016,DAL,5,25,146
 737,Connor Bunnaman,PHI,C,21,1998-04-16,Guelph,-,CAN,-,73,207,2016,PHI,4,18,109
 738,Jordan Kyrou,STL,C,21,1998-05-05,Toronto,-,CAN,-,72,175,2016,STL,2,5,35
@@ -762,7 +762,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 761,Calvin Thurkauf,CBJ,C,22,1997-06-27,Zug,-,CHE,-,74,204,2016,CBJ,7,4,185
 762,Joachim Blichfeld,S.J,R,21,1998-07-17,Frederikshavn,-,DNK,-,74,180,2016,S.J,7,29,210
 763,Dylan Gambrell,S.J,C,23,1996-08-26,Bonney Lake,-,USA,-,72,185,2016,S.J,2,30,60
-764,Rhett Gardner,DAL,C,23,1996-02-28,Moose Jaw,-,CAN,-,75,225,2016,DAL,4,25,116
+764,Rhett Gardner,DAL,C,24,1996-02-28,Moose Jaw,-,CAN,-,75,225,2016,DAL,4,25,116
 765,Matt Luff,L.A,R,22,1997-05-05,Oakville,-,CAN,-,74,196,-,-,-,-,-
 766,Mathieu Olivier,NSH,R,23,1997-02-11,Biloxi,-,USA,-,74,210,-,-,-,-,-
 767,Trevor Moore,"L.A, TOR","C, L",24,1995-03-31,Thousand Oaks,-,USA,-,70,185,-,-,-,-,-
@@ -806,7 +806,7 @@ id,player_name,team,position,age,dob,birth_city,birth_state,birth_country,nation
 805,David Kampf,CHI,C,25,1995-01-12,Chomutov,-,CZE,-,74,188,-,-,-,-,-
 806,Neal Pionk,WPG,D,24,1995-07-29,Hermantown,-,USA,-,72,186,-,-,-,-,-
 807,Oscar Fantenberg,VAN,D,28,1991-10-07,Ljunby,-,SWE,-,72,206,-,-,-,-,-
-808,Calle Rosen,COL,D,26,1994-02-02,Vaxjo,-,SWE,-,73,186,-,-,-,-,-
+808,Calle Rosen,"COL, TOR",D,26,1994-02-02,Vaxjo,-,SWE,-,73,186,-,-,-,-,-
 809,Radim Simek,S.J,D,27,1992-09-20,Mlada Boleslav,-,CZE,-,71,200,-,-,-,-,-
 810,Jan Rutta,T.B,D,29,1990-07-29,Písek,-,CZE,-,75,204,-,-,-,-,-
 811,Gustav Lindstrom,DET,D,21,1998-10-20,Ostervala,-,SWE,-,74,190,2017,DET,2,7,38
