@@ -1141,6 +1141,7 @@ def add_experimental_data(simulation_param): #add_experimental_data(team_db,skat
 	goalie_db = simulation_param['databases']['goalie_db']
 	unavailable_players = simulation_param['databases']['unavailable_players']
 
+	# Initialization
 	sf_dict,gf_dict,cf_dict,ca_dict,scf_dict,sca_dict,hits_dict,hits_taken_dict = defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list),defaultdict(list)
 	estimated_off_dict, estimated_def_dict = defaultdict(list),defaultdict(list)
 	shots_against_dict,shots_saved_dict = defaultdict(list),defaultdict(list)
@@ -1670,6 +1671,8 @@ def get_team_id_for_player(name,team_id):
 	new_team['BRADY_SKJEI'] = 'CAR'
 	new_team['ERIK_GUSTAFSSON'] = 'CGY'
 	new_team['ROBIN_LEHNER'] ='VGK'
+	new_team['ONDREJ_KASE'] = 'BOS'
+	new_team['CALLE_ROSEN'] = 'TOR'
 
 	# Make sure players have been added to their new clubs. If not, set an error.
 	team_id_arr = (team_id.replace(' ','').split(','))

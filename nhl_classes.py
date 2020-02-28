@@ -117,7 +117,8 @@ class Skater():
 			self.ind['primary_points'][index] = gf + f_assist
 			self.ind['gf_above_xgf'][index] = gf-ixgf
 			self.ind['pd_diff_per_60'][index] = self.ind['pd_per_60'][index] - self.ind['pt_per_60'][index]
-			self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
+			#self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
+			self.ind['goal_scoring_rating'][index] = self.ind['gf_above_xgf'][index]
 		
 		# OnIce
 		self.on_ice = {}
