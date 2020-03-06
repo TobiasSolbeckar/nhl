@@ -69,6 +69,8 @@ def create_simulation_parameters(sp):
 	sp['do_plots'] = True
 	sp['exp_team'] = None
 	sp['add_average_goalies'] = None
+	sp['exp_temp_attributes'] = None
+	sp['exp_playform'] = STAT_ES
 	sp['exp_position'] = ['F','D']
 	sp['exp_additional_players'] = []
 	sp['data_dir'] = 'Data'
@@ -119,7 +121,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201819','201920']	#download_old_season_data(['201718'])
+simulation_param['seasons'] = ['201920']	#download_old_season_data(['201718'])
 simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
@@ -142,61 +144,64 @@ simulation_param['debug_team'] = None
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
 
 # Create databases.
-simulation_param['add_average_goalies'] = ['CAR']
+#simulation_param['add_average_goalies'] = ['CAR']
 simulation_param = create_databases(simulation_param)
 
 # Set starting goaltenders.
-#simulation_param = set_starting_goalie(simulation_param,'ANA','JOHN_GIBSON') #
+simulation_param = set_starting_goalie(simulation_param,'ANA','JOHN_GIBSON') #RYAN_MILLER
 simulation_param = set_starting_goalie(simulation_param,'ARI','DARCY_KUEMPER') #ANTTI_RAANTA
 simulation_param = set_starting_goalie(simulation_param,'BOS','JAROSLAV_HALAK') #TUUKKA_RASK
-simulation_param = set_starting_goalie(simulation_param,'BUF','CARTER_HUTTON') #
-simulation_param = set_starting_goalie(simulation_param,'CAR','AVERAGE_GOALIE_CAR_0') #PETR_MRAZEK ; ANTON_FORSBERG
+simulation_param = set_starting_goalie(simulation_param,'BUF','JONAS_JOHANSSON') #CARTER_HUTTON
+simulation_param = set_starting_goalie(simulation_param,'CAR','ALEX_NEDELJKOVIC') #PETR_MRAZEK ; ANTON_FORSBERG
 simulation_param = set_starting_goalie(simulation_param,'CBJ','JOONAS_KORPISALO') #ELVIS_MERZLIKINS
-#simulation_param = set_starting_goalie(simulation_param,'CGY','DAVID_RITTICH') #
-simulation_param = set_starting_goalie(simulation_param,'CHI','COREY_CRAWFORD') #MALCOLM_SUBBAN
-simulation_param = set_starting_goalie(simulation_param,'COL','PAVEL_FRANCOUZ') #
-simulation_param = set_starting_goalie(simulation_param,'DAL','BEN_BISHOP') #ANTON_KHUDOBIN
-simulation_param = set_starting_goalie(simulation_param,'DET','JIMMY_HOWARD') #JONATHAN_BERNIER
-simulation_param = set_starting_goalie(simulation_param,'EDM','MIKKO_KOSKINEN') #MIKE_SMITH
+simulation_param = set_starting_goalie(simulation_param,'CGY','CAM_TALBOT') #DAVID_RITTICH
+#simulation_param = set_starting_goalie(simulation_param,'CHI','COREY_CRAWFORD') #MALCOLM_SUBBAN
+#simulation_param = set_starting_goalie(simulation_param,'COL','PAVEL_FRANCOUZ') #
+simulation_param = set_starting_goalie(simulation_param,'DAL','ANTON_KHUDOBIN') #BEN_BISHOP
+#simulation_param = set_starting_goalie(simulation_param,'DET','JONATHAN_BERNIER') #JIMMY_HOWARD
+simulation_param = set_starting_goalie(simulation_param,'EDM','MIKE_SMITH') #MIKKO_KOSKINEN
 #simulation_param = set_starting_goalie(simulation_param,'FLA','SERGEI_BOBROVSKY') #
 #simulation_param = set_starting_goalie(simulation_param,'LAK','') #
-#simulation_param = set_starting_goalie(simulation_param,'MIN','ALEX_STALOCK') #DEVAN_DUBNYK
-#simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE') #
-simulation_param = set_starting_goalie(simulation_param,'NJD','CORY_SCHNEIDER') #MACKENZIE_BLACKWOOD
-#simulation_param = set_starting_goalie(simulation_param,'NYI','SEMYON_VARLAMOV') #
+simulation_param = set_starting_goalie(simulation_param,'MIN','ALEX_STALOCK') # DEVAN_DUBNYK
+simulation_param = set_starting_goalie(simulation_param,'MTL','CAREY_PRICE') #
+simulation_param = set_starting_goalie(simulation_param,'NJD','CORY_SCHNEIDER') # MACKENZIE_BLACKWOOD
+simulation_param = set_starting_goalie(simulation_param,'NYI','SEMYON_VARLAMOV') # THOMAS_GREISS
 simulation_param = set_starting_goalie(simulation_param,'NYR','ALEXANDAR_GEORGIEV') #IGOR_SHESTERKIN
-#simulation_param = set_starting_goalie(simulation_param,'NSH','') #
-simulation_param = set_starting_goalie(simulation_param,'OTT','MARCUS_HOGBERG') #CRAIG_ANDERSON
-simulation_param = set_starting_goalie(simulation_param,'PHI','CARTER_HART') #
-#simulation_param = set_starting_goalie(simulation_param,'PIT','TRISTAN_JARRY') #
+simulation_param = set_starting_goalie(simulation_param,'NSH','JUUSE_SAROS') #
+simulation_param = set_starting_goalie(simulation_param,'OTT','CRAIG_ANDERSON') #MARCUS_HOGBERG
+simulation_param = set_starting_goalie(simulation_param,'PHI','CARTER_HART') #BRIAN_ELLIOTT
+simulation_param = set_starting_goalie(simulation_param,'PIT','MATT_MURRAY') #TRISTAN_JARRY
 simulation_param = set_starting_goalie(simulation_param,'SJS','MARTIN_JONES') #AARON_DELL
 simulation_param = set_starting_goalie(simulation_param,'STL','JORDAN_BINNINGTON') #
-simulation_param = set_starting_goalie(simulation_param,'TBL','CURTIS_MCELHINNEY') #ANDREI_VASILEVSKIY
-#simulation_param = set_starting_goalie(simulation_param,'TOR','FREDERIK_ANDERSEN') #
-simulation_param = set_starting_goalie(simulation_param,'VAN','THATCHER_DEMKO') #JACOB_MARKSTROM
-simulation_param = set_starting_goalie(simulation_param,'VGK','ROBIN_LEHNER') #MARC-ANDRE_FLEURY
+simulation_param = set_starting_goalie(simulation_param,'TBL','ANDREI_VASILEVSKIY') #CURTIS_MCELHINNEY
+simulation_param = set_starting_goalie(simulation_param,'TOR','JACK_CAMPBELL') #FREDERIK_ANDERSEN
+#simulation_param = set_starting_goalie(simulation_param,'VAN','THATCHER_DEMKO') #JACOB_MARKSTROM
+simulation_param = set_starting_goalie(simulation_param,'VGK','MARC-ANDRE_FLEURY') #ROBIN_LEHNER
 simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK') #LAURENT_BROSSOIT
 simulation_param = set_starting_goalie(simulation_param,'WSH','ILYA_SAMSONOV') #BRADEN_HOLTBY
 
 # Gameplay parameters 
 simulation_param['simulation_date'] = today
 simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][simulation_param['simulation_date']]
-#simulation_param['games_to_simulate'] = [['SJS','NJD']]
+#simulation_param['games_to_simulate'] = [['SJS','PIT']]
 #simulation_param['days_rested'] = [[1,0]]
 #simulation_param['initial_wins'] = [[0,0]]
 #simulation_param['down_sample'] = False
-#simulation_param['initial_time'] = 0 # Initial time in seconds
-#simulation_param['initial_ht_goals'] = 0
+#simulation_param['initial_time'] = 60*(20+20+16) # Initial time in seconds
+#simulation_param['initial_ht_goals'] = 5
 #simulation_param['initial_at_goals'] = 0
 
 # Analytics parameters
 simulation_param['team_plots'] = False
-simulation_param['exp_min_toi'] = 200
-simulation_param['exp_list_length'] = 25
+simulation_param['exp_min_toi'] = 100
+simulation_param['exp_list_length'] = 15
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
-#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_D']
+#simulation_param['exp_playform'] = STAT_PK
+#simulation_param['exp_temp_attributes'] = ['primary_points_per_60']
+#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+#simulation_param['exp_additional_players'] = ['ARTEMI_PANARIN']
 simulation_param['exp_show_player_ranking'] = False
 
 # Output/print parameters
@@ -544,35 +549,56 @@ if simulation_param['do_exp']:
 	f_mult = lambda a,b : a*b
 	f_div = lambda a,b : a/b
 	
-	# Print data for SJS-lines
 	'''
+	# Print data for SJS-lines
+	
 	#lines = [['MARC-EDOUARD_VLASIC','ERIK_KARLSSON'],['MARIO_FERRARO','TIM_HEED'],['RADIM_SIMEK','BRENT_BURNS'],['JACOB_MIDDLETON'],['EVANDER_KANE','TOMAS_HERTL','KEVIN_LABANC'],['PATRICK_MARLEAU','LOGAN_COUTURE','JONNY_BRODZINSKI'],['TIMO_MEIER','JOE_THORNTON','BARCLAY_GOODROW'],['ANTTI_SUOMELA','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','STEFAN_NOESEN','JOACHIM_BLICHFELD']]
 	#lines = [['EVANDER_KANE','TOMAS_HERTL','TIMO_MEIER'],['BARCLAY_GOODROW','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','DYLAN_GAMBRELL','PATRICK_MARLEAU'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	#now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['PATRICK_MARLEAU','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
 	old_lines = [['TIMO_MEIER','LOGAN_COUTURE','JOE_PAVELSKI'],['EVANDER_KANE','TOMAS_HERTL','JOONAS_DONSKOI'],['MARCUS_SORENSEN','JOE_THORNTON','KEVIN_LABANC'],['MELKER_KARLSSON','CHRIS_TIERNEY','BARCLAY_GOODROW']]
 	best_now_lines = [['EVANDER_KANE','LOGAN_COUTURE','TIMO_MEIER'],['PATRICK_MARLEAU','TOMAS_HERTL','KEVIN_LABANC'],['MARCUS_SORENSEN','JOE_THORNTON','BARCLAY_GOODROW'],['STEFAN_NOESEN','JOEL_KELLMAN','ANTTI_SUOMELA']]
-	now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','PATRICK_MARLEAU'],['TIMO_MEIER','JOE_THORNTON','KEVIN_LABANC'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','ALEXANDER_TRUE','DYLAN_GAMBRELL']]
+	
+	now_lines = [['EVANDER_KANE','LOGAN_COUTURE','NOAH_GREGOR'],['TIMO_MEIER','JOE_THORNTON','KEVIN_LABANC'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL']]
+	
 	all_lines = [old_lines,best_now_lines,now_lines]
-	for lines in all_lines:
-		for line in lines:
-			tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
-			print(100*tmp_vals[0]/(tmp_vals[0]+tmp_vals[1]))
-
+	all_lines = now_lines
+	
+	for line in now_lines:
+		tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
+		print(100*tmp_vals[0]/(tmp_vals[0]+tmp_vals[1]))
+	
 	for p_id in s_db.keys():
-		sjs_ca_per_60 = t_db['SJS'].ca_per_60
-		sjs_sa_per_60 = t_db['SJS'].sa_per_60
-		sjs_ga_per_60 = t_db['SJS'].ga_per_60
-		sjs_xga_per_60 = t_db['SJS'].xga_per_60
-		sjs_sca_per_60 = t_db['SJS'].sca_per_60
-		sjs_hdca_per_60 = t_db['SJS'].hdca_per_60
+		ca_per_60 = t_db[simulation_param['debug_team']].ca_per_60
+		sa_per_60 = t_db[simulation_param['debug_team']].sa_per_60
+		ga_per_60 = t_db[simulation_param['debug_team']].ga_per_60
+		xga_per_60 = t_db[simulation_param['debug_team']].xga_per_60
+		sca_per_60 = t_db[simulation_param['debug_team']].sca_per_60
+		hdca_per_60 = t_db[simulation_param['debug_team']].hdca_per_60
 		player = get_skater(s_db,p_id)
-		if player.get_attribute('team_id') == 'SJS':
+		if player.get_attribute('team_id') == simulation_param['debug_team']:
 			if player.get_toi() > 100*60:
-				#print('{0}: CA/60: {1:.1f}. SA/60: {2:.1f}. GA/60: {3:.2f}. xGA/60: {4:.2f}. SCA/60: {5:.1f}. HDCA: {6:.1f}.'.format(p_id,player.get_attribute('ca_per_60'),player.get_attribute('sa_per_60'),player.get_attribute('ga_per_60'),player.get_attribute('xga_per_60'),player.get_attribute('sca_per_60'),player.get_attribute('hdca_per_60')))
-				print('{0}: CA/60: {1:.2f}%. SA/60: {2:.2f}%. GA/60: {3:.2f}%. xGA/60: {4:.2f}%. SCA/60: {5:.2f}%. HDCA: {6:.2f}%.'.format(p_id,100*player.get_attribute('ca_per_60')/sjs_ca_per_60,100*player.get_attribute('sa_per_60')/sjs_sa_per_60,100*player.get_attribute('ga_per_60')/sjs_ga_per_60,100*player.get_attribute('xga_per_60')/sjs_xga_per_60,100*player.get_attribute('sca_per_60')/sjs_sca_per_60,100*player.get_attribute('hdca_per_60')/sjs_hdca_per_60))
+				print('{0}: CA/60: {1:.2f}%. SA/60: {2:.2f}%. GA/60: {3:.2f}%. xGA/60: {4:.2f}%. SCA/60: {5:.2f}%. HDCA: {6:.2f}%.'.format(p_id,100*player.get_attribute('ca_per_60')/ca_per_60,100*player.get_attribute('sa_per_60')/sa_per_60,100*player.get_attribute('ga_per_60')/ga_per_60,100*player.get_attribute('xga_per_60')/xga_per_60,100*player.get_attribute('sca_per_60')/sca_per_60,100*player.get_attribute('hdca_per_60')/hdca_per_60))
 			else:
 				print(p_id + ' has only played ' + str(player.get_toi()/60) + ' minutes.')
 	'''
+
+	tmp_list = []
+	tmp_list_data = []
+	for team_id in ACTIVE_TEAMS:
+		team = t_db[team_id]
+		value = (team.gf-team.ga)-(team.xgf-team.xga)
+		tmp_list.append((value,team_id))
+		tmp_list_data.append(value)
+	mu = np.mean(tmp_list_data)
+	sigma = np.std(tmp_list_data)
+	tmp_list.sort(reverse=True)
+	for i,pair in enumerate(tmp_list):
+		team_id = pair[1]
+		value = pair[0]
+		print('{0:.0f}: {1} - {2:.2f} ({3:.2f} sigma).'.format(i+1,team_id,value,(value-mu)/sigma))
+	print('Mean: ' + str(mu))
+	print('Stdv: ' + str(sigma))
+
 	for p_id in simulation_param['exp_additional_players']:
 		player = s_db[p_id]
 		player.print_player()
@@ -958,111 +984,112 @@ if simulation_param['do_exp']:
 	list_length = simulation_param['exp_list_length']
 	_filter = {}
 	_filter['toi'] = simulation_param['exp_min_toi']
-	_filter['position'] = ['F','D']
+	_filter['position'] = simulation_param['exp_position']
 	_filter['team'] = simulation_param['exp_team']
 	_filter['additional_players'] = simulation_param['exp_additional_players']
+	_filter['playform'] = simulation_param['exp_playform']
 	
 
+	if simulation_param['exp_temp_attributes'] != None:
+		for attribute in simulation_param['exp_temp_attributes']:
+			print('\nBest ' + str(list_length) + ' ' + attribute +'. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+			op = print_sorted_list(s_db,[attribute],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+	else:
+		print('\nBest ' + str(list_length) + ' goal scorers. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['goal_scoring_rating'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
 
-	print('\nBest ' + str(list_length) + ' goal scorers. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['goal_scoring_rating'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nBest ' + str(list_length) + ' relative goal impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['rel_gf_diff_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' relative goal impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['rel_gf_diff_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
+		print('\nBest (most) ' + str(list_length) + ' offensive impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_diff'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst (least) ' + str(list_length) + ' offensive impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_diff'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
+		
+		_filter['position'] = ['F']
+		print('\nBest ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
+		print('\nBest ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nBest ' + str(list_length) + ' combined forwards (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+		print('\nBest ' + str(list_length) + ' point scoring forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['primary_points_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+		print('\nBest ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
+		print('\nWorst ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 
+		print('\nBest ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
+		
+		_filter['position'] = ['D']
+		_filter['toi'] *= (4/3) # D-men plays more than forwards.
+		print('\nBest ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
+		print('\nBest ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nBest ' + str(list_length) + ' combined defenders (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True,normalize=True) 
+		print('\nBest ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				 				
+		print('\nBest ' + str(list_length) + ' ranked defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		print('\nWorst ' + str(list_length) + ' ranked defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
+		_filter['toi'] /= (4/3)# Revert back to original TOI requirement.
 
-	print('\nBest ' + str(list_length) + ' relative goal impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['rel_gf_diff_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' relative goal impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['rel_gf_diff_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
-	print('\nBest (most) ' + str(list_length) + ' offensive impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_diff'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst (least) ' + str(list_length) + ' offensive impact player. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_diff'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
-	
-	_filter['position'] = ['F']
-	print('\nBest ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' offensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
-	print('\nBest ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' defensive forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nBest ' + str(list_length) + ' combined forwards (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
-	print('\nBest ' + str(list_length) + ' point scoring forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['primary_points_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
-	print('\nBest ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
-	print('\nWorst ' + str(list_length) + ' combined forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 
-	print('\nBest ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
-	
-	_filter['position'] = ['D']
-	_filter['toi'] *= (4/3) # D-men plays more than forwards.
-	print('\nBest ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' offensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
-	print('\nBest ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' defensive defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_def_per_60'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nBest ' + str(list_length) + ' combined defenders (w. points). Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg','primary_points_per_60'],operation=f_mult,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True,normalize=True) 
-	print('\nBest ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' combined defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 				 				
-	print('\nBest ' + str(list_length) + ' ranked defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
-	print('\nWorst ' + str(list_length) + ' ranked defenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
-	_filter['toi'] /= (4/3)# Revert back to original TOI requirement.
+		_filter['toi'] *= 6 # Goalies play more than skaters.
+		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
+		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True)
+		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
 
-	_filter['toi'] *= 6 # Goalies play more than skaters.
-	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
-	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True)
-	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
-	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'gsaa_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
-	print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-	print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-	op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+		_filter['toi'] /= 6 # Revert back to original TOI requirement.
+		if simulation_param['write_to_gsheet'] == True:
+			g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
+			output_sheet = g_wb.worksheet("SkaterData")
+			start_cell = output_sheet.find('name')
+			attributes = output_sheet.row_values(start_cell.row)
+			end_col = get_alpha(len(attributes))
+			num_of_rows = 0
+			data_list = []
+			for player_id in s_db.keys():
+				player = s_db[player_id]
+				if player.get_toi() > _filter['toi']*60:
+					num_of_rows += 1
+					for attribute in attributes:
+						if attribute == 'toi':
+							data_list.append(player.get_toi()/60)
+						else:
+							data_list.append(player.get_attribute(attribute))
+			data_range = str('A2:' + end_col + str(1+num_of_rows))
+			cell_list = output_sheet.range(data_range)
+			for i,cell in enumerate(cell_list):
+				cell.value = data_list[i]
 
-	_filter['toi'] /= 6 # Revert back to original TOI requirement.
-	if simulation_param['write_to_gsheet'] == True:
-		g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
-		output_sheet = g_wb.worksheet("SkaterData")
-		start_cell = output_sheet.find('name')
-		attributes = output_sheet.row_values(start_cell.row)
-		end_col = get_alpha(len(attributes))
-		num_of_rows = 0
-		data_list = []
-		for player_id in s_db.keys():
-			player = s_db[player_id]
-			if player.get_toi() > _filter['toi']*60:
-				num_of_rows += 1
-				for attribute in attributes:
-					if attribute == 'toi':
-						data_list.append(player.get_toi()/60)
-					else:
-						data_list.append(player.get_attribute(attribute))
-		data_range = str('A2:' + end_col + str(1+num_of_rows))
-		cell_list = output_sheet.range(data_range)
-		for i,cell in enumerate(cell_list):
-			cell.value = data_list[i]
-
-		# Update in batch
-		output_sheet.update_cells(cell_list)
+			# Update in batch
+			output_sheet.update_cells(cell_list)
 
 if (simulation_param['do_player_cards'] == True) and (simulation_param['do_plots'] == True):
 	s_db = simulation_param['databases']['skater_db']

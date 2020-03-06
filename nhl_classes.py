@@ -112,13 +112,13 @@ class Skater():
 			else:
 				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)			
 			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
-			self.ind['points'][index] = gf + assist
+			self.ind['points'][index] = p_points
 			self.ind['i_blocked_against'][index] = icf-iff
 			self.ind['primary_points'][index] = gf + f_assist
 			self.ind['gf_above_xgf'][index] = gf-ixgf
 			self.ind['pd_diff_per_60'][index] = self.ind['pd_per_60'][index] - self.ind['pt_per_60'][index]
-			#self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
-			self.ind['goal_scoring_rating'][index] = self.ind['gf_above_xgf'][index]
+			self.ind['goal_scoring_rating'][index] = self.ind['ixgf_pcg'][index] * self.ind['icf_per_60'][index]
+			#self.ind['goal_scoring_rating'][index] = self.ind['gf_above_xgf'][index]
 		
 		# OnIce
 		self.on_ice = {}
@@ -168,6 +168,8 @@ class Skater():
 
 		self.rank = {}
 		self.rank['estimated_off_pcg'] = 0
+		self.rank['estimated_off_per_60'] = 0
+		self.rank['estimated_off_per_60'] = 0
 		self.rank['primary_points_per_60'] = 0
 		self.rank['goal_scoring_rating'] = 0
 		self.rank['total'] = 0
@@ -431,6 +433,16 @@ class Team():
 
 	def get_ratings(self):
 		return [self.exp_data['in_season_rating'], self.exp_data['pre_season_rating']]
+
+	def print_team(self):
+		print(self.name)
+		print('   CF:   {0:.0f}. CA:   {1:.0f}. CF%:   {2:.1f}%.'.format(self.cf,self.ca,100*self.cf_pcg))
+		print('   FF:   {0:.0f}. FA:   {1:.0f}. FF%:   {2:.1f}%.'.format(self.ff,self.fa,100*self.ff_pcg))
+		print('   SF:   {0:.0f}. SA:   {1:.0f}. SF%:   {2:.1f}%.'.format(self.sf,self.sa,100*self.sf_pcg))
+		print('   GF:   {0:.0f}. GA:   {1:.0f}. GF%:   {2:.1f}%.'.format(self.gf,self.ga,100*self.gf_pcg))
+		print('   xGF:  {0:.0f}. xGA:  {1:.0f}. xGF%:  {2:.1f}%.'.format(self.xgf,self.xga,100*self.xgf_pcg))
+		print('   SCF:  {0:.0f}. SCA:  {1:.0f}. SCF%:  {2:.1f}%.'.format(self.scf,self.sca,100*self.scf_pcg))
+		print('   HDCF: {0:.0f}. HDCA: {1:.0f}. HDCF%: {2:.1f}%.'.format(self.hdcf,self.hdca,100*self.hdcf_pcg))
 
 	def update_score(self,key):
 		if key == 'w':

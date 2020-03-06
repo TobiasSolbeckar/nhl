@@ -306,23 +306,23 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 		_filter['position'] = ['F','D']
 		_filter['additional_players'] = []
 		_filter['team'] = None
+		_filter['playform'] = STAT_ES
 		
 	output = {}
 	added_players = set()
 	sorted_list,data_list = [],[]
-	playform = STAT_ES
 	for skater_id in db.keys():
 		skater = db[skater_id]
-		if (skater.ind['toi'][STAT_ES] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
+		if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
 			if len(attributes) > 1:
 				if attributes[0] == 'ranking':
 					val = skater.get_attribute(attributes[1],playform_index='ranking')
 				else:
-					val_a = skater.get_attribute(attributes[0],playform)
-					val_b = skater.get_attribute(attributes[1],playform)
+					val_a = skater.get_attribute(attributes[0],_filter['playform'])
+					val_b = skater.get_attribute(attributes[1],_filter['playform'])
 					val = operation(val_a,val_b)
 			else:
-				val = skater.get_attribute(attributes[0],playform)
+				val = skater.get_attribute(attributes[0],_filter['playform'])
 			val *= scale_factor
 			if _filter['team'] == None:
 				sorted_list.append((val,skater_id))
@@ -364,9 +364,9 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 				else:
 					val = norm_factor*pair[0]
 					print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma']))
-					print('   TOI: {0:.1f} minutes'.format(skater.get_toi(playform)/60))
+					print('   TOI: {0:.1f} minutes'.format(skater.get_toi(_filter['playform'])/60))
 					for attribute in attributes:
-						print('   {0}: {1:.2f}'.format(attribute,scale_factor*skater.get_attribute(attribute,playform)))
+						print('   {0}: {1:.2f}'.format(attribute,scale_factor*skater.get_attribute(attribute,_filter['playform'])))
 	return output
 
 def print_sorted_list_goalie(db,attribute,_filter,print_list_length=10,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
@@ -697,6 +697,8 @@ def get_skater_values(skater_db):
 	for skater_id in ACTIVE_SKATERS:
 		skater = skater_db[skater_id]
 		values_dict['estimated_off_pcg'].append(skater.on_ice['estimated_off_pcg'])
+		values_dict['estimated_off_per_60'].append(skater.on_ice['estimated_off_per_60'])
+		values_dict['estimated_def_per_60'].append(skater.on_ice['estimated_def_per_60'])
 		values_dict['primary_points_per_60'].append(skater.ind['primary_points_per_60'][0])
 		values_dict['goal_scoring_rating'].append(skater.ind['goal_scoring_rating'][0])
 	return values_dict

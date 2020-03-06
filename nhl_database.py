@@ -1076,7 +1076,7 @@ def create_team_db(simulation_param):
 		for row in reader:
 			if row[1] != 'team_name':
 				# Get data from row.
-				[name,gp,team_toi_es,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xga,xgf,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
+				[name,gp,team_toi_es,w,l,otl,p,sf,sa,sf_pcg,gf,ga,p_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdca,hdcf,hdcf_pcg,sv_pcg,pdo] = get_row_values_for_team_db(row)
 
 				reg_array = [gp,team_toi_es,w,l,otl,p,gf,ga,p_pcg]
 				adv_array = [sf,sa,sf_pcg,cf,ca,cf_pcg,ff,fa,ff_pcg,xgf,xga,xgf_pcg,scf,sca,scf_pcg,hdcf,hdca,hdcf_pcg,sv_pcg,pdo]
@@ -1197,6 +1197,7 @@ def add_experimental_data(simulation_param): #add_experimental_data(team_db,skat
 			skater.on_ice['estimated_off_pcg'] = 0
 		else:
 			skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
+		'''
 		if skater.get_attribute('team_id') == 'SJS':
 			print(skater_id)
 			print('   5v5-TOI: {0:.1f} min. 5v5-TOI/GP: {1:.1f} min. 5v5-TOI%: {2:.1f}%'.format(skater.get_toi()/60,skater.get_attribute('toi_per_gp',STAT_ES)/60,100*skater.get_attribute('toi_pcg',STAT_ES)))
@@ -1204,10 +1205,13 @@ def add_experimental_data(simulation_param): #add_experimental_data(team_db,skat
 			print('   PK-TOI: {0:.1f} s. PK-TOI/GP: {1:.1f}. PK-TOI%: {2:.1f}%'.format(skater.get_toi(STAT_PK)/60,skater.get_attribute('toi_per_gp',STAT_PK)/60,100*skater.get_attribute('toi_pcg',STAT_PK)))
 			print('   Off/60: {0:.1f}. Def/60: {1:.1f}. Off%: {2:.1f}%'.format(skater.get_attribute('estimated_off_per_60'),skater.get_attribute('estimated_def_per_60'),100*skater.get_attribute('estimated_off_pcg')))
 			print('   PT/60: {0:.2f}. PD/60: {1:.2f}. PD diff/60: {2:.2f}'.format(skater.get_attribute('pt_per_60'),skater.get_attribute('pd_per_60'),skater.get_attribute('pd_diff_per_60')))	
+		'''
 	# Add ranking data. 
 	values_dict = get_skater_values(skater_db)
 	for skater_id in ACTIVE_SKATERS:
 		skater_db[skater_id].rank['estimated_off_pcg'] = get_rank(skater_db[skater_id].on_ice['estimated_off_pcg'],values_dict['estimated_off_pcg'])
+		skater_db[skater_id].rank['estimated_off_per_60'] = get_rank(skater_db[skater_id].on_ice['estimated_off_per_60'],values_dict['estimated_off_per_60'])
+		skater_db[skater_id].rank['estimated_def_per_60'] = get_rank(skater_db[skater_id].on_ice['estimated_def_per_60'],values_dict['estimated_def_per_60'])
 		skater_db[skater_id].rank['primary_points_per_60'] = get_rank(skater_db[skater_id].ind['primary_points_per_60'][0],values_dict['primary_points_per_60'])
 		skater_db[skater_id].rank['goal_scoring_rating'] = get_rank(skater_db[skater_id].ind['goal_scoring_rating'][0],values_dict['goal_scoring_rating'])
 		if skater_db[skater_id].bio['position'] == 'F':
@@ -1673,6 +1677,13 @@ def get_team_id_for_player(name,team_id):
 	new_team['ROBIN_LEHNER'] ='VGK'
 	new_team['ONDREJ_KASE'] = 'BOS'
 	new_team['CALLE_ROSEN'] = 'TOR'
+	new_team['DAVID_BACKES'] = 'ANA'
+	new_team['DMYTRO_TIMASHOV'] = 'DET'
+	new_team['LOUIS_DOMINGUE'] = 'VAN'
+	new_team['MICHAEL_HUTCHINSON'] = 'COL'
+	new_team['BRANDON_DAVIDSON'] = 'SJS'
+	new_team['MALCOLM_SUBBAN'] = 'CHI'
+	new_team['KORBINIAN_HOLZER'] = 'NSH'
 
 	# Make sure players have been added to their new clubs. If not, set an error.
 	team_id_arr = (team_id.replace(' ','').split(','))
