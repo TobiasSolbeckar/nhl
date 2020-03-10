@@ -110,8 +110,11 @@ class Skater():
 			if gf + ixgf == 0:
 				self.ind['ixgf_pcg'][index] = 0
 			else:
-				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)			
-			self.ind['toi_per_gp'][index] = toi/on_ice['gp']
+				self.ind['ixgf_pcg'][index] = gf/(gf+ixgf)	
+			if on_ice['gp'] == 0:
+				self.ind['toi_per_gp'][index] = 0
+			else:
+				self.ind['toi_per_gp'][index] = toi/on_ice['gp']
 			self.ind['points'][index] = p_points
 			self.ind['i_blocked_against'][index] = icf-iff
 			self.ind['primary_points'][index] = gf + f_assist
@@ -135,21 +138,40 @@ class Skater():
 				self.on_ice[char_f + '_pcg'] = 0
 			else:
 				self.on_ice[char_f + '_pcg'] = self.on_ice[char_f]/(self.on_ice[char_f] + self.on_ice[char_a])
-			self.on_ice[char_f + '_per_sec'] = self.on_ice[char_f]/ind['toi'][STAT_ES]
-			self.on_ice[char_a + '_per_sec'] = self.on_ice[char_a]/ind['toi'][STAT_ES]
+			if ind['toi'][STAT_ES] == 0:
+				self.on_ice[char_f + '_per_sec'] = 0
+				self.on_ice[char_a + '_per_sec'] = 0
+			else:
+				self.on_ice[char_f + '_per_sec'] = self.on_ice[char_f]/ind['toi'][STAT_ES]
+				self.on_ice[char_a + '_per_sec'] = self.on_ice[char_a]/ind['toi'][STAT_ES]
 			self.on_ice[char_f + '_per_60'] = 3600*self.on_ice[char_f + '_per_sec']
 			self.on_ice[char_a + '_per_60'] = 3600*self.on_ice[char_a + '_per_sec']
 			self.on_ice[char_f + '_diff_per_60'] = self.on_ice[char_f + '_per_60'] - self.on_ice[char_a + '_per_60']
 
-		self.on_ice['ozs_pcg'] = self.on_ice['ozs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
-		self.on_ice['nzs_pcg'] = self.on_ice['nzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
-		self.on_ice['dzs_pcg'] = self.on_ice['dzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
-		self.on_ice['ozfo_pcg'] = self.on_ice['ozfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
-		self.on_ice['nzfo_pcg'] = self.on_ice['nzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
-		self.on_ice['dzfo_pcg'] = self.on_ice['dzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
-		self.on_ice['oz_pcg'] = (self.on_ice['ozs'] + self.on_ice['ozfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
-		self.on_ice['nz_pcg'] = (self.on_ice['nzs'] + self.on_ice['nzfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
-		self.on_ice['dz_pcg'] = (self.on_ice['dzs'] + self.on_ice['dzfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+		if (self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']) == 0:
+			self.on_ice['ozs_pcg'] = 0
+			self.on_ice['nzs_pcg'] = 0
+			self.on_ice['dzs_pcg'] = 0
+		else:
+			self.on_ice['ozs_pcg'] = self.on_ice['ozs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
+			self.on_ice['nzs_pcg'] = self.on_ice['nzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
+			self.on_ice['dzs_pcg'] = self.on_ice['dzs']/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs'])
+		if (self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo']) == 0:
+			self.on_ice['ozfo_pcg'] = 0
+			self.on_ice['nzfo_pcg'] = 0
+			self.on_ice['dzfo_pcg'] = 0
+		else:
+			self.on_ice['ozfo_pcg'] = self.on_ice['ozfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+			self.on_ice['nzfo_pcg'] = self.on_ice['nzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+			self.on_ice['dzfo_pcg'] = self.on_ice['dzfo']/(self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+		if (self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo']) == 0:
+			self.on_ice['oz_pcg'] = 0
+			self.on_ice['nz_pcg'] = 0
+			self.on_ice['dz_pcg'] = 0
+		else:
+			self.on_ice['oz_pcg'] = (self.on_ice['ozs'] + self.on_ice['ozfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+			self.on_ice['nz_pcg'] = (self.on_ice['nzs'] + self.on_ice['nzfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
+			self.on_ice['dz_pcg'] = (self.on_ice['dzs'] + self.on_ice['dzfo'])/(self.on_ice['ozs']+self.on_ice['nzs']+self.on_ice['dzs']+self.on_ice['ozfo']+self.on_ice['nzfo']+self.on_ice['dzfo'])
 		self.on_ice['non_dz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_oz_pcg'] = self.on_ice['dz_pcg'] + self.on_ice['nz_pcg']
 		self.on_ice['non_nz_pcg'] = self.on_ice['oz_pcg'] + self.on_ice['dz_pcg']
@@ -167,9 +189,10 @@ class Skater():
 		self.on_ice['estimated_off_pcg'] = 0
 
 		self.rank = {}
+		self.rank['estimated_off_per_60'] = 0
+		self.rank['estimated_off_per_60'] = 0
 		self.rank['estimated_off_pcg'] = 0
-		self.rank['estimated_off_per_60'] = 0
-		self.rank['estimated_off_per_60'] = 0
+		self.rank['estimated_off_diff'] = 0
 		self.rank['primary_points_per_60'] = 0
 		self.rank['goal_scoring_rating'] = 0
 		self.rank['total'] = 0
@@ -217,20 +240,20 @@ class Goalie():
 		self.ind['sv_pcg'] = [None,None,None]
 		self.ind['sa_per_sec'] = [None,None,None]
 		self.ind['gsaa_per_60'] = [None,None,None]
-		self.ind['ga_above_xga'] = [None,None,None]
-		self.ind['ga_above_xga_per_60'] = [None,None,None]
+		self.ind['gsax'] = [None,None,None]
+		self.ind['gsax_per_60'] = [None,None,None]
 		for index in [STAT_ES,STAT_PP,STAT_PK]:
-			self.ind['ga_above_xga'][index] = ind['ga'][index] - ind['xga'][index]
+			self.ind['gsax'][index] = ind['xga'][index] - ind['ga'][index]
 			if ind['toi'][index] == 0:
 				self.ind['gaa'][index] = 0
 				self.ind['sa_per_sec'][index] = 0
 				self.ind['gsaa_per_60'][index] = 0
-				self.ind['ga_above_xga_per_60'][index] = 0
+				self.ind['gsax_per_60'][index] = 0
 			else:
 				self.ind['gaa'][index] = 3600*ind['ga'][index]/ind['toi'][index]
 				self.ind['sa_per_sec'][index] = ind['sa'][index]/ind['toi'][index]
 				self.ind['gsaa_per_60'][index] = 3600*(ind['gsaa'][index])/ind['toi'][index]
-				self.ind['ga_above_xga_per_60'][index] = 3600*(self.ind['ga_above_xga'][index])/ind['toi'][index]
+				self.ind['gsax_per_60'][index] = 3600*(self.ind['gsax'][index])/ind['toi'][index]
 			if ind['sa'][index] == 0:
 				self.ind['sv_pcg'][index] = 0
 			else:
@@ -255,18 +278,18 @@ class Goalie():
 		print('	5v5:')
 		print('		Shots against: {0:.0f}. Goals against: {1:.0f}. Save%: {2:.1f}'.format(self.ind['sa'][0],self.ind['ga'][0],100*self.ind['sv_pcg'][0]))
 		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][0],self.ind['gaa'][0]))
-		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][0],self.ind['ga_above_xga'][0]))
-		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][0],self.ind['ga_above_xga_per_60'][0]))
+		print('		Goals saved above average: {0:.1f}. Goals saved above xGA: {1:.1f}.'.format(self.ind['gsaa'][0],self.ind['gsax'][0]))
+		print('		Goals saved above average/60: {0:.1f}. Goals saved above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][0],self.ind['gsax_per_60'][0]))
 		print('	PP:')
 		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][1],self.ind['ga'][1],100*self.ind['sv_pcg'][1]))
 		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][1],self.ind['gaa'][1]))
-		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][1],self.ind['ga_above_xga'][1]))
-		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][1],self.ind['ga_above_xga_per_60'][1]))
+		print('		Goals saved above average: {0:.1f}. Goals saved above xGA: {1:.1f}.'.format(self.ind['gsaa'][1],self.ind['gsax'][1]))
+		print('		Goals saved above average/60: {0:.1f}. Goals saved above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][1],self.ind['gsax_per_60'][1]))
 		print('	PK:')
 		print('   	Shots against: {0:.1f}. Goals against: {1:.1f}. Save%: {2:.1f}'.format(self.ind['sa'][2],self.ind['ga'][2],100*self.ind['sv_pcg'][2]))
 		print('		TOI: {0:.0f}. Goals against average (GAA): {1:.2f}.'.format(self.ind['toi'][2],self.ind['gaa'][2]))
-		print('		Goals saved above average: {0:.1f}. GA above xGA: {1:.1f}.'.format(self.ind['gsaa'][2],self.ind['ga_above_xga'][2]))
-		print('		Goals saved above average/60: {0:.1f}. GA above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][2],self.ind['ga_above_xga_per_60'][2]))
+		print('		Goals saved above average: {0:.1f}. Goals saved above xGA: {1:.1f}.'.format(self.ind['gsaa'][2],self.ind['gsax'][2]))
+		print('		Goals saved above average/60: {0:.1f}. Goals saved above xGA/60: {1:.1f}.'.format(self.ind['gsaa_per_60'][2],self.ind['gsax_per_60'][2]))
 		
 
 class Team():

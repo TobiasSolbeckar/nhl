@@ -19,6 +19,7 @@ from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
 from shutil import copyfile
+from inspect import currentframe, getframeinfo
 
 if platform.system() == 'Darwin':
 	import matplotlib
@@ -288,8 +289,7 @@ def get_position_for_player(position):
 		position = 'F'
 	return position
 
-
-def generate_player_id(raw_str):
+def generate_player_id(raw_str,team_id):
 	player_id = str(raw_str).upper().replace(' ','_')
 	player_id = player_id.replace('.','_')
 	player_id = player_id.replace("'",'')
@@ -297,7 +297,148 @@ def generate_player_id(raw_str):
 	# Handle special cases
 	if player_id == 'ALEXANDER_NYLANDER':
 		player_id = 'ALEX_NYLANDER'
+
+	if (player_id == 'SEBASTIAN_AHO') and (team_id != 'CAR'):
+		player_id = 'SEBASTIAN_AHO2'
+
 	return player_id
+
+def is_this_aho(raw_player_str,raw_team_str):
+	player_id = str(raw_player_str).upper().replace(' ','_')
+	player_id = player_id.replace('.','_')
+	player_id = player_id.replace("'",'')
+	if player_id == 'SEBASTIAN_AHO':
+		bool_a = True
+		if raw_team_str == 'CAR':
+			player_id = 'SEBASTIAN_AHO'
+		else:
+			player_id = 'SEBASTIAN_AHO2'
+	else:
+		bool_a = False
+		player_id = 'N/A'
+	return [bool_a,player_id]
+
+def generate_player_and_team_id(raw_player_str,raw_team_str=None,is_relative=False):
+	player_id = str(raw_player_str).upper().replace(' ','_')
+	player_id = player_id.replace('.','_')
+	player_id = player_id.replace("'",'')
+
+	#@TODO: This should REALLY not be raw_team_str!!
+	if (player_id == 'SEBASTIAN_AHO') and (raw_team_str != 'CAR'):
+		player_id = 'SEBASTIAN_AHO2'
+		return [player_id, 'PROBABLY_THE_NEW_YORK_ISLANDERS']
+
+	# Handle special cases
+	if player_id == 'ALEXANDER_NYLANDER':
+		player_id = 'ALEX_NYLANDER'
+	
+	if raw_team_str == None:
+		team_id = 'MAKE_BELIEVES'
+	else:
+		# Get team-id
+		manually_checked_players = set()
+		manually_checked_players.add('MARCO_SCANDELLA')
+		manually_checked_players.add('ILYA_KOVALCHUK')
+		manually_checked_players.add('VLADISLAV_NAMESTNIKOV')
+		new_team = {}
+		#new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
+		new_team['ERIK_GUDBRANSON'] = 'ANA'
+		new_team['ANDREAS_MARTINSEN'] = 'PTI'
+		new_team['BRENDAN_PERLINI'] = 'DET'
+		new_team['JACOB_DE_LA_ROSE'] = 'STL'
+		new_team['ROBBY_FABBRI'] = 'DET'
+		new_team['CHANDLER_STEPHENSON'] = 'VGK'
+		new_team['NICK_SHORE'] = 'WPG'
+		new_team['TAYLOR_HALL'] = 'ARI'
+		new_team['STEFAN_NOESEN'] = 'SJS'
+		new_team['MARCO_SCANDELLA'] = 'STL'
+		new_team['MIKE_REILLY'] = 'OTT'
+		#new_team['ILYA_KOVALCHUK'] = 'MTL'
+		new_team['MICHAEL_FROLIK'] = 'BUF'
+		new_team['JACK_CAMPBELL'] = 'TOR'
+		new_team['KYLE_CLIFFORD'] = 'TOR'
+		new_team['TREVOR_MOORE'] = 'LAK'
+		new_team['NICK_SEELER'] = 'CHI'
+		new_team['JASON_ZUCKER'] = 'PIT'
+		new_team['ALEX_GALCHENYUK'] = 'MIN'
+		new_team['ANDY_GREENE'] = 'NYI'
+		new_team['BRENDEN_DILLON'] = 'WSH'
+		new_team['TYLER_TOFFOLI'] = 'VAN'
+		new_team['JULIEN_GAUTHIER'] = 'NYR'
+		new_team['BLAKE_COLEMAN'] = 'TBL'
+		new_team['ALEC_MARTINEZ'] = 'VGK'
+		new_team['DYLAN_DEMELO'] = 'WPG'
+		new_team['TIM_SCHALLER'] = 'LAK'
+		new_team['JAYCE_HAWRYLUK'] = 'OTT'
+		new_team['DENIS_MALGIN'] = 'TOR'
+		new_team['CODY_EAKIN'] = 'WPG'
+		new_team['DANTON_HEINEN'] = 'ANA'
+		new_team['NICK_RITCHIE'] = 'BOS'
+		new_team['DEREK_GRANT'] = 'PHI'
+		new_team['PATRICK_MARLEAU'] = 'PIT'
+		new_team['WAYNE_SIMMONDS'] = 'BUF'
+		new_team['NATE_THOMPSON'] = 'PHI'
+		new_team['VINCENT_TROCHECK'] = 'CAR'
+		new_team['ERIK_HAULA'] = 'FLA'
+		new_team['LUCAS_WALLMARK'] = 'FLA'
+		new_team['JEAN-GABRIEL_PAGEAU'] = 'NYI'
+		new_team['VLADISLAV_NAMESTNIKOV'] = 'COL'
+		new_team['ILYA_KOVALCHUK'] = 'WSH'
+		new_team['ANDREAS_ATHANASIOU'] = 'EDM'
+		new_team['SAM_GAGNER'] = 'DET'
+		new_team['TYLER_ENNIS'] = 'EDM'
+		new_team['EVAN_RODRIGUES'] = 'PIT'
+		new_team['CONOR_SHEARY'] = 'PIT'
+		new_team['DOMINIK_KAHUN'] = 'BUF'
+		new_team['SONNY_MILANO'] = 'ANA'
+		new_team['DEVIN_SHORE'] = 'CBJ'
+		new_team['BARCLAY_GOODROW'] = 'TBL'
+		new_team['DANIEL_SPRONG'] = 'WSH'
+		new_team['MIKE_GREEN'] = 'EDM'
+		new_team['CHRISTIAN_DJOOS'] = 'ANA'
+		new_team['NICK_COUSINS'] = 'VGK'
+		new_team['MATTHEW_PECA'] = 'OTT'
+		new_team['ZACH_BOGOSIAN'] = 'TBL'
+		new_team['CODY_GOLOUBEF'] = 'DET'
+		new_team['ANDREW_AGOZZINO'] = 'ANA'
+		new_team['MATT_IRWIN'] = 'ANA'
+		new_team['DEREK_FORBORT'] = 'LAK'
+		new_team['BRADY_SKJEI'] = 'CAR'
+		new_team['ERIK_GUSTAFSSON'] = 'CGY'
+		new_team['ROBIN_LEHNER'] ='VGK'
+		new_team['ONDREJ_KASE'] = 'BOS'
+		new_team['CALLE_ROSEN'] = 'TOR'
+		new_team['DAVID_BACKES'] = 'ANA'
+		new_team['DMYTRO_TIMASHOV'] = 'DET'
+		new_team['LOUIS_DOMINGUE'] = 'VAN'
+		new_team['MICHAEL_HUTCHINSON'] = 'COL'
+		new_team['BRANDON_DAVIDSON'] = 'SJS'
+		new_team['MALCOLM_SUBBAN'] = 'CHI'
+		new_team['KORBINIAN_HOLZER'] = 'NSH'
+
+		team_id = raw_team_str
+		# Make sure players have been added to their new clubs. If not, set an error.
+		team_id_arr = (team_id.replace(' ','').split(','))
+		if len(team_id_arr) > 1:
+			if player_id not in new_team.keys():
+				raise ValueError('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id)
+			if len(team_id_arr) > 2:
+				if player_id not in manually_checked_players:
+					raise ValueError('Player ' + player_id + ' (' + str(raw_team_str) + ') changed club more than once. Please add to "manually_checked_players" to continue.')
+
+		if team_id == 'L.A':
+			team_id = 'LAK'
+		elif team_id == 'N.J':
+			team_id = 'NJD'
+		elif team_id == 'S.J':
+			team_id = 'SJS'
+		elif team_id == 'T.B':
+			team_id = 'TBL'		
+
+		if player_id in set(new_team.keys()):
+			team_id = new_team[player_id]
+
+	return [player_id,team_id]
 
 def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_length=50,scale_factor=1,high_to_low=True,do_print=True,normalize=False):
 
@@ -696,9 +837,10 @@ def get_skater_values(skater_db):
 	values_dict = defaultdict(list)
 	for skater_id in ACTIVE_SKATERS:
 		skater = skater_db[skater_id]
-		values_dict['estimated_off_pcg'].append(skater.on_ice['estimated_off_pcg'])
 		values_dict['estimated_off_per_60'].append(skater.on_ice['estimated_off_per_60'])
 		values_dict['estimated_def_per_60'].append(skater.on_ice['estimated_def_per_60'])
+		values_dict['estimated_off_pcg'].append(skater.on_ice['estimated_off_pcg'])
+		values_dict['estimated_off_diff'].append(skater.on_ice['estimated_off_diff'])
 		values_dict['primary_points_per_60'].append(skater.ind['primary_points_per_60'][0])
 		values_dict['goal_scoring_rating'].append(skater.ind['goal_scoring_rating'][0])
 	return values_dict

@@ -126,6 +126,7 @@ simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
 simulation_param = create_simulation_parameters(simulation_param)
+
 simulation_param['offseason'] = False
 simulation_param['include_offseason_moves'] = False
 
@@ -142,6 +143,10 @@ simulation_param['do_exp'] = True 											# Default value = False
 simulation_param['N'] = [50000,2500]											# Number of simulations for each game/season. Default = [50000,2500]
 simulation_param['debug_team'] = None
 simulation_param['debug_player'] = ['ERIK_KARLSSON']
+
+# Output/print parameters
+simulation_param['print_times'] = False
+simulation_param['verbose'] = False
 
 # Create databases.
 #simulation_param['add_average_goalies'] = ['CAR']
@@ -194,19 +199,16 @@ simulation_param['games_to_simulate'] = simulation_param['databases']['season_sc
 # Analytics parameters
 simulation_param['team_plots'] = False
 simulation_param['exp_min_toi'] = 100
-simulation_param['exp_list_length'] = 15
+simulation_param['exp_list_length'] = 0
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
 #simulation_param['exp_playform'] = STAT_PK
 #simulation_param['exp_temp_attributes'] = ['primary_points_per_60']
 #simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
-#simulation_param['exp_additional_players'] = ['ARTEMI_PANARIN']
+#simulation_param['exp_additional_players'].append('DREW_DOUGHTY')
 simulation_param['exp_show_player_ranking'] = False
 
-# Output/print parameters
-simulation_param['print_times'] = False
-simulation_param['verbose'] = False
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 '''
 attributes = ['sf_pcg','gf_pcg','cf_pcg','ff_pcg','xgf_pcg','scf_pcg']
@@ -1052,20 +1054,20 @@ if simulation_param['do_exp']:
 		_filter['toi'] /= (4/3)# Revert back to original TOI requirement.
 
 		_filter['toi'] *= 6 # Goalies play more than skaters.
-		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		print('\nBest ' + str(list_length) + ' save percentage goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 		op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=True,do_print=True)
-		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		print('\nWorst ' + str(list_length) + ' save percentage goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 		op = print_sorted_list_goalie(g_db,'sv_pcg',_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True)
-		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-		op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-		op = print_sorted_list_goalie(g_db,'ga_above_xga',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
-		print('\nBest ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-		op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
-		print('\nWorst ' + str(list_length) + ' goaltenders. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
-		op = print_sorted_list_goalie(g_db,'ga_above_xga_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
-
+		print('\n ' + str(list_length) + ' goaltenders with most saved goals above expected. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'gsax',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+		print('\n ' + str(list_length) + ' goaltenders with least saved goals above expected. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'gsax',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
+		print('\nBest ' + str(list_length) + ' goaltenders, goals saved above expected per 60 minutes. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'gsax_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True)
+		print('\nWorst ' + str(list_length) + ' goaltenders, goals saved above expected per 60 minutes. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
+		op = print_sorted_list_goalie(g_db,'gsax_per_60',_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True)
 		_filter['toi'] /= 6 # Revert back to original TOI requirement.
+
 		if simulation_param['write_to_gsheet'] == True:
 			g_wb = acces_gsheet('SharksData_Public',credential_path='creds.json')		
 			output_sheet = g_wb.worksheet("SkaterData")
