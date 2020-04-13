@@ -282,6 +282,7 @@ def add_bio_data(simulation_param):
 					player_data[player_id]['bio']['draft_year'] = 0						
 				else:
 					player_data[player_id]['bio']['draft_year'] = int(row[SKATER_DB_BIO_DRAFT_YEAR])
+					print(int(row[SKATER_DB_BIO_DRAFT_YEAR]))
 				if str(row[SKATER_DB_BIO_DRAFT_TEAM]) == '-':
 					player_data[player_id]['bio']['draft_team'] = 'N/A'
 				else:

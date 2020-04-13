@@ -121,7 +121,7 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201920']	#download_old_season_data(['201718'])
+simulation_param['seasons'] = ['201819']	#download_old_season_data(['201718'])
 simulation_param['write_to_gsheet'] = False
 simulation_param['generate_fresh_databases'] = False
 
@@ -198,14 +198,14 @@ simulation_param['games_to_simulate'] = simulation_param['databases']['season_sc
 
 # Analytics parameters
 simulation_param['team_plots'] = False
-simulation_param['exp_min_toi'] = 100
+simulation_param['exp_min_toi'] = 200
 simulation_param['exp_list_length'] = 0
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
 simulation_param['exp_weighted_scale'] = WS_FWD
 #simulation_param['exp_playform'] = STAT_PK
 #simulation_param['exp_temp_attributes'] = ['primary_points_per_60']
-#simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
+simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
 #simulation_param['exp_additional_players'].append('DREW_DOUGHTY')
 simulation_param['exp_show_player_ranking'] = False
 
@@ -583,6 +583,11 @@ if simulation_param['do_exp']:
 			else:
 				print(p_id + ' has only played ' + str(player.get_toi()/60) + ' minutes.')
 	'''
+
+	ppa = defaultdict(list)
+	for player_id in ACTIVE_PLAYERS:
+		player = s_db[player_id]
+		ppa[player.get_attribute('age')].append(player.get_attribute('points'))
 
 	tmp_list = []
 	tmp_list_data = []
