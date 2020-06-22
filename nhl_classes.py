@@ -199,6 +199,7 @@ class Skater():
 
 	def print_player(self):
 		print('Information for player ' + self.bio['name'])
+		print('   Team: {0}.'.format(self.bio['team_id']))
 		print('   Estimated offense/60: {0:.1f}. Estimated defense/60: {1:.1f}. Estimated offense%: {2:.1f}'.format(self.on_ice['estimated_off_per_60'],self.on_ice['estimated_def_per_60'],100*self.on_ice['estimated_off_pcg']))
 		print('   Points/60: {0:.2f}. Goals above expected: {1:.2f}. GF/ixGF-quote: {2:.2f}'.format(self.ind['points_per_60'][0],self.ind['gf_above_xgf'][0],self.ind['ixgf_pcg'][0]))
 		print('   Rank-Off%: {0:.0f}. Rank-Primary points/60: {1:.0f}. Rank-Goal scoring: {2:.0f}'.format(self.rank['estimated_off_pcg'],self.rank['primary_points_per_60'],self.rank['goal_scoring_rating']))

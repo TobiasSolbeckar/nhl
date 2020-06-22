@@ -1004,3 +1004,21 @@ def simulate_po_series(simulation_param,teams,initial_wins):
 				series_done = True
 			game_number += 1
 	return series_distribution
+
+def set_starting_goalie(simulation_param,team_id,player_id):
+	if player_id not in ACTIVE_GOALIES:
+		raise ValueError('Goalie ' + player_id + ' not included in database')
+	simulation_param['databases']['starting_goalies'][team_id] = player_id
+	return simulation_param
+
+def get_starting_goalie(simulation_param,team_id):
+	if simulation_param['databases']['starting_goalies'][team_id] != None:
+		return simulation_param['databases']['starting_goalies'][team_id]
+	else:
+		found_goalie = False
+		while found_goalie == False:
+			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
+				goalie = get_goalie(simulation_param['databases']['goalie_db'], goalie_id)
+				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
+					found_goalie = True
+					return goalie_id

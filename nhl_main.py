@@ -13,26 +13,38 @@ def setup_csv_path(simulation_param):
 	simulation_param['csvfiles']['team_pk'] = os.path.join(data_dir,'Team_PK_201920.csv')
 	simulation_param['csvfiles']['team_home'] = os.path.join(data_dir,'Team_Home_201819_201920.csv')
 	simulation_param['csvfiles']['team_away'] = os.path.join(data_dir,'Team_Away_201819_201920.csv')
-	simulation_param['csvfiles']['goalie_bio'] = os.path.join(data_dir,'Goalie_ES_201920.csv')
-	simulation_param['csvfiles']['skater_relative'] = os.path.join(data_dir,'Skater_Relative_201819_201920.csv')
 	simulation_param['csvfiles']['skater_old_bio'] = os.path.join(data_dir,'Skater_Bio_201819.csv')
-	simulation_param['csvfiles']['skater_bio'] = os.path.join(data_dir,'Skater_Bio_201920.csv')
 
+
+	# Only use the first season for relative data
+	simulation_param['csvfiles']['skater_relative'] = os.path.join(data_dir,'Skater_Relative_201819_201920.csv')
+
+	simulation_param['csvfiles']['skater_bio'] = []
 	simulation_param['csvfiles']['skater_es'] = []
 	simulation_param['csvfiles']['skater_pp'] = []
 	simulation_param['csvfiles']['skater_pk'] = []
 	simulation_param['csvfiles']['skater_on_ice'] = []
+	simulation_param['csvfiles']['goalie_bio'] = []
 	simulation_param['csvfiles']['goalie_es'] = []
 	simulation_param['csvfiles']['goalie_pp'] = []
 	simulation_param['csvfiles']['goalie_pk'] = []
 	for season in simulation_param['seasons']:
+		simulation_param['csvfiles']['skater_bio'].append(os.path.join(data_dir,'Skater_Bio_' + season + '.csv'))
 		simulation_param['csvfiles']['skater_es'].append(os.path.join(data_dir,'Skater_Individual_ES_' + season + '.csv'))
 		simulation_param['csvfiles']['skater_pp'].append(os.path.join(data_dir,'Skater_Individual_PP_' + season + '.csv'))
 		simulation_param['csvfiles']['skater_pk'].append(os.path.join(data_dir,'Skater_Individual_PK_' + season + '.csv'))
-		simulation_param['csvfiles']['skater_on_ice'].append(os.path.join(data_dir,'Skater_OnIce_' + season + '.csv'))	
+		simulation_param['csvfiles']['skater_on_ice'].append(os.path.join(data_dir,'Skater_OnIce_' + season + '.csv'))
+		simulation_param['csvfiles']['goalie_bio'].append(os.path.join(data_dir,'Goalie_Bio_' + season + '.csv'))
 		simulation_param['csvfiles']['goalie_es'].append(os.path.join(data_dir,'Goalie_ES_' + season + '.csv'))
 		simulation_param['csvfiles']['goalie_pp'].append(os.path.join(data_dir,'Goalie_PP_' + season + '.csv'))
 		simulation_param['csvfiles']['goalie_pk'].append(os.path.join(data_dir,'Goalie_PK_' + season + '.csv'))
+		
+	if simulation_param['use_active_players_only']:
+		simulation_param['csvfiles']['skater_bio'] = os.path.join(data_dir,'Skater_Bio_201920.csv')
+		simulation_param['csvfiles']['goalie_bio'] = os.path.join(data_dir,'Goalie_Bio_201920.csv')
+		simulation_param['csvfiles']['skater_relative'] = os.path.join(data_dir,'Skater_Relative_201920.csv')
+
+	simulation_param['csvfiles']['check_file'] = os.path.join(data_dir,'Skater_Bio_201920.csv') # Use this file to check if new databases are needed.
 
 	# Make sure all CSV-files are availble
 	for key in simulation_param['csvfiles']:
@@ -121,9 +133,10 @@ today = datetime.datetime.today().strftime('%Y-%m-%d')
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 simulation_param = {}
-simulation_param['seasons'] = ['201819']	#download_old_season_data(['201718'])
-simulation_param['write_to_gsheet'] = False
-simulation_param['generate_fresh_databases'] = False
+simulation_param['seasons'] = ['201920']								# Which season(s) to use. Use "download_old_season_data" to download older seasons data
+simulation_param['use_active_players_only'] = False						# If true, only players who are still active is included in the data.
+simulation_param['write_to_gsheet'] = False								# Write information to Google Sheets
+simulation_param['generate_fresh_databases'] = False					# Create new databases from www.naturalstattrick.com
 
 simulation_param = create_simulation_parameters(simulation_param)
 
@@ -152,6 +165,7 @@ simulation_param['verbose'] = False
 #simulation_param['add_average_goalies'] = ['CAR']
 simulation_param = create_databases(simulation_param)
 
+'''
 # Set starting goaltenders.
 simulation_param = set_starting_goalie(simulation_param,'ANA','JOHN_GIBSON') #RYAN_MILLER
 simulation_param = set_starting_goalie(simulation_param,'ARI','DARCY_KUEMPER') #ANTTI_RAANTA
@@ -184,6 +198,7 @@ simulation_param = set_starting_goalie(simulation_param,'TOR','JACK_CAMPBELL') #
 simulation_param = set_starting_goalie(simulation_param,'VGK','MARC-ANDRE_FLEURY') #ROBIN_LEHNER
 simulation_param = set_starting_goalie(simulation_param,'WPG','CONNOR_HELLEBUYCK') #LAURENT_BROSSOIT
 simulation_param = set_starting_goalie(simulation_param,'WSH','ILYA_SAMSONOV') #BRADEN_HOLTBY
+'''
 
 # Gameplay parameters 
 simulation_param['simulation_date'] = today
@@ -198,15 +213,19 @@ simulation_param['games_to_simulate'] = simulation_param['databases']['season_sc
 
 # Analytics parameters
 simulation_param['team_plots'] = False
-simulation_param['exp_min_toi'] = 200
+simulation_param['exp_min_toi'] = 225
 simulation_param['exp_list_length'] = 0
 #simulation_param['exp_team'] = None
 simulation_param['exp_position'] = ['D','F']
-simulation_param['exp_weighted_scale'] = WS_FWD
+simulation_param['exp_weighted_scale'] = WS_DEF
 #simulation_param['exp_playform'] = STAT_PK
 #simulation_param['exp_temp_attributes'] = ['primary_points_per_60']
-simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
-#simulation_param['exp_additional_players'].append('DREW_DOUGHTY')
+simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_D']
+#simulation_param['exp_additional_players'] = ['OLIVER_BJORKSTRAND','CONOR_GARLAND','ONDREJ_KASE','OSKAR_SUNDQVIST']
+#simulation_param['exp_additional_players'].append('OLIVER_BJORKSTRAND')
+#simulation_param['exp_additional_players'].append('CONOR_GARLAND')   	# from 201516
+#simulation_param['exp_additional_players'].append('ONDREJ_KASE')
+#simulation_param['exp_additional_players'].append('OSKAR_SUNDQVIST')		# from 201415
 simulation_param['exp_show_player_ranking'] = False
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -550,45 +569,120 @@ if simulation_param['do_exp']:
 	f_sub = lambda a,b : a-b
 	f_mult = lambda a,b : a*b
 	f_div = lambda a,b : a/b
-	
+		
 	'''
-	# Print data for SJS-lines
-	
-	#lines = [['MARC-EDOUARD_VLASIC','ERIK_KARLSSON'],['MARIO_FERRARO','TIM_HEED'],['RADIM_SIMEK','BRENT_BURNS'],['JACOB_MIDDLETON'],['EVANDER_KANE','TOMAS_HERTL','KEVIN_LABANC'],['PATRICK_MARLEAU','LOGAN_COUTURE','JONNY_BRODZINSKI'],['TIMO_MEIER','JOE_THORNTON','BARCLAY_GOODROW'],['ANTTI_SUOMELA','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','STEFAN_NOESEN','JOACHIM_BLICHFELD']]
-	#lines = [['EVANDER_KANE','TOMAS_HERTL','TIMO_MEIER'],['BARCLAY_GOODROW','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','DYLAN_GAMBRELL','PATRICK_MARLEAU'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
-	#now_lines = [['EVANDER_KANE','BARCLAY_GOODROW','TIMO_MEIER'],['PATRICK_MARLEAU','JOE_THORNTON','KEVIN_LABANC'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON']]
-	old_lines = [['TIMO_MEIER','LOGAN_COUTURE','JOE_PAVELSKI'],['EVANDER_KANE','TOMAS_HERTL','JOONAS_DONSKOI'],['MARCUS_SORENSEN','JOE_THORNTON','KEVIN_LABANC'],['MELKER_KARLSSON','CHRIS_TIERNEY','BARCLAY_GOODROW']]
-	best_now_lines = [['EVANDER_KANE','LOGAN_COUTURE','TIMO_MEIER'],['PATRICK_MARLEAU','TOMAS_HERTL','KEVIN_LABANC'],['MARCUS_SORENSEN','JOE_THORNTON','BARCLAY_GOODROW'],['STEFAN_NOESEN','JOEL_KELLMAN','ANTTI_SUOMELA']]
-	
-	now_lines = [['EVANDER_KANE','LOGAN_COUTURE','NOAH_GREGOR'],['TIMO_MEIER','JOE_THORNTON','KEVIN_LABANC'],['STEFAN_NOESEN','JOEL_KELLMAN','MELKER_KARLSSON'],['MARCUS_SORENSEN','ANTTI_SUOMELA','DYLAN_GAMBRELL']]
-	
-	all_lines = [old_lines,best_now_lines,now_lines]
-	all_lines = now_lines
-	
-	for line in now_lines:
-		tmp_vals = evaluate_combination(simulation_param['databases']['skater_db'],line,attributes=['estimated_off_per_60','estimated_def_per_60'])
-		print(100*tmp_vals[0]/(tmp_vals[0]+tmp_vals[1]))
-	
-	for p_id in s_db.keys():
-		ca_per_60 = t_db[simulation_param['debug_team']].ca_per_60
-		sa_per_60 = t_db[simulation_param['debug_team']].sa_per_60
-		ga_per_60 = t_db[simulation_param['debug_team']].ga_per_60
-		xga_per_60 = t_db[simulation_param['debug_team']].xga_per_60
-		sca_per_60 = t_db[simulation_param['debug_team']].sca_per_60
-		hdca_per_60 = t_db[simulation_param['debug_team']].hdca_per_60
-		player = get_skater(s_db,p_id)
-		if player.get_attribute('team_id') == simulation_param['debug_team']:
-			if player.get_toi() > 100*60:
-				print('{0}: CA/60: {1:.2f}%. SA/60: {2:.2f}%. GA/60: {3:.2f}%. xGA/60: {4:.2f}%. SCA/60: {5:.2f}%. HDCA: {6:.2f}%.'.format(p_id,100*player.get_attribute('ca_per_60')/ca_per_60,100*player.get_attribute('sa_per_60')/sa_per_60,100*player.get_attribute('ga_per_60')/ga_per_60,100*player.get_attribute('xga_per_60')/xga_per_60,100*player.get_attribute('sca_per_60')/sca_per_60,100*player.get_attribute('hdca_per_60')/hdca_per_60))
-			else:
-				print(p_id + ' has only played ' + str(player.get_toi()/60) + ' minutes.')
-	'''
-
-	ppa = defaultdict(list)
-	for player_id in ACTIVE_PLAYERS:
+	# Print data based on player age and years played after draft year.
+	ages = []
+	d_ages = []
+	ppa_list,ppda_list = [],[]
+	ppa_list_sorted,ppda_list_sorted = [],[]
+	ppa,ppda = defaultdict(list),defaultdict(list)
+	for player_id in ACTIVE_SKATERS:
 		player = s_db[player_id]
-		ppa[player.get_attribute('age')].append(player.get_attribute('points'))
+		if player.get_attribute('position') == 'F':
+			ppa[player.get_attribute('age')].append(player.get_attribute('points',STAT_ES)+player.get_attribute('points',STAT_PP)+player.get_attribute('points',STAT_PK))
+			ppda[player.get_attribute('draft_age')].append(player.get_attribute('points',STAT_ES)+player.get_attribute('points',STAT_PP)+player.get_attribute('points',STAT_PK))
+			sum_attribute = 'estimated_off_pcg'
+			#ppa[player.get_attribute('age')].append(player.get_attribute(sum_attribute))
+			#ppda[player.get_attribute('draft_age')].append(player.get_attribute(sum_attribute))
+	for age in ppa.keys():
+		if len(ppa[age]) > 10:
+			ppa_list.append((age,np.mean(ppa[age])))
+			ages.append(age)
+		else:
+			print('Too few players in age group ' + str(age) + ' (' + str(len(ppa[age])) + ')')
+	for d_age in ppda.keys():
+		if len(ppda[d_age]) > 10:
+			ppda_list.append((d_age,np.mean(ppda[d_age])))
+			d_ages.append(d_age)
+		else:
+			print('Too few players in draft age group ' + str(d_age) + ' (' + str(len(ppda[d_age])) + ')')
+	# Sort the data
+	ppa_list.sort()
+	ppda_list.sort()
+	ages.sort()
+	d_ages.sort()
+	
+	print('Points average based on age: ')
+	for pair in ppa_list:
+		print(str(pair[0]) + ': ' + str(pair[1]))
+		ppa_list_sorted.append(pair[1])
+	print(ppa_list_sorted)
+	mu,std = st.norm.fit(ppa_list_sorted)
+	x = np.linspace(21, 35, 1)
+	p = st.norm.pdf(x, mu, std)
+	plt.plot(x,p)
+	print('Points average based on years after draft year: ')
+	for pair in ppda_list:
+		print(str(pair[0]) + ': ' + str(pair[1]))
+		ppda_list_sorted.append(pair[1])
+	# Plots
+	plt.figure(1)
+	plt.bar(ages,ppa_list_sorted)
+	plt.figure(2)
+	plt.bar(d_ages,ppda_list_sorted)
+	# Show plots
+	plt.show()
+	'''
+	
+	'''
+	# Fit Gaussian distribtion to player age
+	fitted_pdfs,label_strs = [],[]
+	colors = ["red","blue","green","black","cyan","brown","magenta"]
+	# Decide what to use as metric
+	metric = 'points_per_60'
+	category = 'draft_age'
+	#ths = [0.5,0.75,0.9]
+	start_val = 0
+	delta = 1
+	ths = np.linspace(start_val,start_val+(delta*6),7)
+	x_min = 0
+	x_max = 5
+	x = np.linspace(x_min,x_max,200)
+	for th in ths:
 
+		
+		## This is not used right now. This part should be used if different attribute curves should be compared.
+		#metrics_array = []
+		## Save metric data for all players (here, only fwds are used)
+		#for s_id in ACTIVE_SKATERS:
+		#	skater = s_db[s_id]
+		#	if skater.get_attribute('position') == 'F':
+		#		metrics_array.append(skater.get_attribute(metric))
+		#metrics_threshold = th*np.max(metrics_array)
+
+		# Use this to get different age curves
+		metrics_threshold = th
+		data = []
+		for s_id in ACTIVE_SKATERS:
+			skater = s_db[s_id]
+			if skater.get_attribute('position') == 'F':
+				#if skater.get_attribute(metric) > metrics_threshold:
+					#data.append(skater.get_attribute(category))
+				#if skater.get_attribute(category) == metrics_threshold:
+				if (skater.get_attribute(category) >= metrics_threshold) and (skater.get_attribute(category) < metrics_threshold+delta):
+					data.append(skater.get_attribute(metric))
+		
+		[mu,std] = st.norm.fit(data)
+		fitted_pdf = st.norm.pdf(x,mu,std)
+		label_str = str('{0}={1:.1f}, mu={2:.3f}, std={3:.3f}'.format(category,metrics_threshold,mu,std))
+		fitted_pdfs.append(fitted_pdf)
+		label_strs.append(label_str)
+	
+	for i in range(len(ths)):
+		plt.plot(x,fitted_pdfs[i],colors[i],label=label_strs[i],linewidth=1)
+		#plt.hist(data,normed=1,color="cyan",alpha=.3) #alpha, from 0 (transparent) to 1 (opaque)
+	
+	plt.title('Age distribution')
+	plt.legend()
+	plt.show()
+	for s_id in ACTIVE_SKATERS:
+		skater = s_db[s_id]
+		if skater.get_attribute('team_id') == 'SJS':
+			print('{0} has draft age: {1:.0f} years'.format(s_id,skater.get_attribute('draft_age')))
+
+	'''
+	'''
 	tmp_list = []
 	tmp_list_data = []
 	for team_id in ACTIVE_TEAMS:
@@ -605,6 +699,7 @@ if simulation_param['do_exp']:
 		print('{0:.0f}: {1} - {2:.2f} ({3:.2f} sigma).'.format(i+1,team_id,value,(value-mu)/sigma))
 	print('Mean: ' + str(mu))
 	print('Stdv: ' + str(sigma))
+	'''
 
 	for p_id in simulation_param['exp_additional_players']:
 		player = s_db[p_id]
@@ -1033,6 +1128,7 @@ if simulation_param['do_exp']:
 		op = print_sorted_list(s_db,['estimated_off_pcg'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=100,high_to_low=False,do_print=True) 
 		print('\nBest ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=True,do_print=True) 
+		
 		print('\nWorst ' + str(list_length) + ' ranked forwards. Based on seasons(s) ' + str(simulation_param['seasons']) + ' (min. ' + str(_filter['toi']) + ' minutes played):')
 		op = print_sorted_list(s_db,['ranking','total'],operation=None,_filter=_filter,print_list_length=list_length,scale_factor=1,high_to_low=False,do_print=True) 	
 		

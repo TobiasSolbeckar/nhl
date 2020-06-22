@@ -19,7 +19,7 @@ def create_databases(simulation_param):
 
 	# Download new csv-files if current files are too old.
 	data_dir = simulation_param['data_dir']
-	mod_time_db = os.stat(simulation_param['csvfiles']['skater_bio']).st_mtime
+	mod_time_db = os.stat(simulation_param['csvfiles']['check_file']).st_mtime
 	mod_time_db = datetime.datetime.fromtimestamp(mod_time_db)
 	if mod_time_db.strftime("%y%m%d") != datetime.datetime.now().strftime("%y%m%d") or simulation_param['generate_fresh_databases']:
 		print('Saving data backup to ' + simulation_param['backup_dir'])
@@ -134,20 +134,24 @@ def create_databases(simulation_param):
 def download_old_season_data(seasons=None,data_dir='Data_download'):
 	if seasons == None:
 		raise ValueError('No seasons specified for download')
-	print('Downloading new csv-files from www.naturalstattrick.com')
 	for season in seasons:
+		print('Downloading csv-files from www.naturalstattrick.com for season ' + season)
 		orig_season_name = season
 		# Transformation to fit the url-format at Natural Stat Trick.
 		season = str(season[:-2]) + '20' + str(season[-2:])
+		url_skater_bio = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
 		url_skater_on_ice = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_skater_relative = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+		url_goalie_bio = "http://naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=G&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_goalie_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season + "&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + season + "&thruseason=" + season +"&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 		# Individual data
+		print('   Downloading skater bio data for season ' + season)
+		write_skater_bio_csv(url_skater_bio,os.path.join(data_dir,'Skater_Bio_' + orig_season_name + '.csv'))
 		print('   Downloading individual ES data for season ' + season)
 		write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + orig_season_name + '.csv'))
 		print('   Downloading individual PP data for season ' + season)
@@ -161,6 +165,8 @@ def download_old_season_data(seasons=None,data_dir='Data_download'):
 		print('   Downloading relative data for season ' + season)
 		write_skater_relative_csv(url_skater_relative,os.path.join(data_dir,'Skater_Relative_' + orig_season_name + '.csv'))
 		# Goalie data
+		print('   Downloading goalie bio data for season ' + season)
+		write_skater_bio_csv(url_goalie_bio,os.path.join(data_dir,'Goalie_Bio_' + orig_season_name + '.csv'))
 		print('   Downloading goalie ES data for season ' + season)
 		write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + orig_season_name + '.csv'))
 		print('   Downloading goalie PP data for season ' + season)
@@ -170,6 +176,7 @@ def download_old_season_data(seasons=None,data_dir='Data_download'):
 
 
 def create_skater_db(simulation_param):
+	global ACTIVE_SKATERS
 	output = {}
 	player_data = add_bio_data(simulation_param)
 	player_data = add_es_data(simulation_param,player_data)
@@ -179,8 +186,9 @@ def create_skater_db(simulation_param):
 	player_data = add_relative_data(simulation_param,player_data)
 
 	for player_id in player_data.keys():
-		if player_data[player_id]['ind'] == None or player_data[player_id]['on_ice'] == None:
+		if (player_data[player_id]['ind'] == None) or (player_data[player_id]['on_ice'] == None) or (player_data[player_id]['ind']['toi'][0] == 0):
 			warnings.warn('\nSkipping player ' + player_id)
+			ACTIVE_SKATERS.remove(player_id)
 		else:
 			output[player_id] = Skater(player_data[player_id]['bio'],player_data[player_id]['ind'],player_data[player_id]['on_ice'])
 
@@ -189,153 +197,215 @@ def create_skater_db(simulation_param):
 def add_bio_data(simulation_param):
 	global ACTIVE_SKATERS
 	player_data = {}
-	with open(simulation_param['csvfiles']['skater_bio'],'rt') as f:
-		reader = csv.reader(f, delimiter=',')
-		for row in reader:
-			if row[1] != 'player_name':
-				# NAME
-				# Create and store player-ID.
-				[player_id,team_id] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],row[SKATER_DB_BIO_TEAM_ID])
-				
-				ACTIVE_SKATERS.add(player_id)
-				# Initialize structs.
-				player_data[player_id] = {}
-				# Bio
-				player_data[player_id]['bio'] = {}
-				player_data[player_id]['bio']['name'] = player_id
-				player_data[player_id]['bio']['team_id'] = team_id
+	for season_data in simulation_param['csvfiles']['skater_bio']:
+		with open(season_data,'rt') as f:
+			reader = csv.reader(f, delimiter=',')
+			for row in reader:
+				if (row[1] != 'player_name') and (row[1] != 'Player'):
+					# NAME
+					# Create and store player-ID.
+					[player_id,team_id] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],row[SKATER_DB_BIO_TEAM_ID])
+					# Only add new players
+					if player_id not in player_data.keys():
+						ACTIVE_SKATERS.add(player_id)
+						# Initialize structs.
+						player_data[player_id] = {}
+						# Bio
+						player_data[player_id]['bio'] = {}
+						player_data[player_id]['bio']['name'] = player_id
+						player_data[player_id]['bio']['team_id'] = team_id
 
-				# Individual_SKATER
-				player_data[player_id]['ind'] = {}
-				player_data[player_id]['ind']['multiple_teams'] = False
-				player_data[player_id]['ind']['toi'] = [0,0,0]
-				player_data[player_id]['ind']['gf'] = [0,0,0]
-				player_data[player_id]['ind']['assist'] = [0,0,0]
-				player_data[player_id]['ind']['f_assist'] = [0,0,0]
-				player_data[player_id]['ind']['s_assist'] = [0,0,0]
-				player_data[player_id]['ind']['isf'] = [0,0,0]
-				player_data[player_id]['ind']['icf'] = [0,0,0]
-				player_data[player_id]['ind']['iff'] = [0,0,0]
-				player_data[player_id]['ind']['iscf'] = [0,0,0]
-				player_data[player_id]['ind']['pt'] = [0,0,0]
-				player_data[player_id]['ind']['pd'] = [0,0,0]
-				player_data[player_id]['ind']['hits'] = [0,0,0]
-				player_data[player_id]['ind']['hits_taken'] = [0,0,0]
-				player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
+						# Individual_SKATER
+						player_data[player_id]['ind'] = {}
+						player_data[player_id]['ind']['multiple_teams'] = False
+						player_data[player_id]['ind']['toi'] = [0,0,0]
+						player_data[player_id]['ind']['gf'] = [0,0,0]
+						player_data[player_id]['ind']['assist'] = [0,0,0]
+						player_data[player_id]['ind']['f_assist'] = [0,0,0]
+						player_data[player_id]['ind']['s_assist'] = [0,0,0]
+						player_data[player_id]['ind']['isf'] = [0,0,0]
+						player_data[player_id]['ind']['icf'] = [0,0,0]
+						player_data[player_id]['ind']['iff'] = [0,0,0]
+						player_data[player_id]['ind']['iscf'] = [0,0,0]
+						player_data[player_id]['ind']['pt'] = [0,0,0]
+						player_data[player_id]['ind']['pd'] = [0,0,0]
+						player_data[player_id]['ind']['hits'] = [0,0,0]
+						player_data[player_id]['ind']['hits_taken'] = [0,0,0]
+						player_data[player_id]['ind']['ish_pcg'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['ixgf'] = [0.0,0.0,0.0]
 
-				# On-ice data_SKATER
-				player_data[player_id]['on_ice'] = {}
-				player_data[player_id]['on_ice']['rel_scf_per_60'] = 1.0
-				player_data[player_id]['on_ice']['rel_sca_per_60'] = 1.0
-				player_data[player_id]['on_ice']['rel_scf_pcg'] = 1.0
-				player_data[player_id]['on_ice']['gp'] = 0						
-				player_data[player_id]['on_ice']['cf'] = 0						
-				player_data[player_id]['on_ice']['ca'] = 0
-				player_data[player_id]['on_ice']['cf_pcg'] = 0.0						
-				player_data[player_id]['on_ice']['sf'] = 0						
-				player_data[player_id]['on_ice']['sa'] = 0						
-				player_data[player_id]['on_ice']['sf_pcg'] = 0.0
-				player_data[player_id]['on_ice']['gf'] = 0						
-				player_data[player_id]['on_ice']['ga'] = 0						
-				player_data[player_id]['on_ice']['gf_pcg'] = 0.0
-				player_data[player_id]['on_ice']['xgf'] = 0						
-				player_data[player_id]['on_ice']['xga'] = 0						
-				player_data[player_id]['on_ice']['xgf_pcg'] = 0.0						
-				player_data[player_id]['on_ice']['scf'] = 0						
-				player_data[player_id]['on_ice']['sca'] = 0						
-				player_data[player_id]['on_ice']['scf_pcg'] = 0.0						
-				player_data[player_id]['on_ice']['hdcf'] = 0						
-				player_data[player_id]['on_ice']['hdca'] = 0						
-				player_data[player_id]['on_ice']['hdcf_pcg'] = 0.0
-				player_data[player_id]['on_ice']['ozs'] = 0
-				player_data[player_id]['on_ice']['nzs'] = 0
-				player_data[player_id]['on_ice']['dzs'] = 0						
-				player_data[player_id]['on_ice']['ozfo'] = 0
-				player_data[player_id]['on_ice']['nzfo'] = 0
-				player_data[player_id]['on_ice']['dzfo'] = 0
+						# On-ice data_SKATER
+						player_data[player_id]['on_ice'] = {}
+						
+						player_data[player_id]['on_ice']['gp'] = 0						
+						player_data[player_id]['on_ice']['cf'] = 0						
+						player_data[player_id]['on_ice']['ca'] = 0
+						player_data[player_id]['on_ice']['cf_pcg'] = 0.0						
+						player_data[player_id]['on_ice']['sf'] = 0						
+						player_data[player_id]['on_ice']['sa'] = 0						
+						player_data[player_id]['on_ice']['sf_pcg'] = 0.0
+						player_data[player_id]['on_ice']['gf'] = 0						
+						player_data[player_id]['on_ice']['ga'] = 0						
+						player_data[player_id]['on_ice']['gf_pcg'] = 0.0
+						player_data[player_id]['on_ice']['xgf'] = 0						
+						player_data[player_id]['on_ice']['xga'] = 0						
+						player_data[player_id]['on_ice']['xgf_pcg'] = 0.0						
+						player_data[player_id]['on_ice']['scf'] = 0						
+						player_data[player_id]['on_ice']['sca'] = 0						
+						player_data[player_id]['on_ice']['scf_pcg'] = 0.0						
+						player_data[player_id]['on_ice']['hdcf'] = 0						
+						player_data[player_id]['on_ice']['hdca'] = 0						
+						player_data[player_id]['on_ice']['hdcf_pcg'] = 0.0
+						player_data[player_id]['on_ice']['ozs'] = 0
+						player_data[player_id]['on_ice']['nzs'] = 0
+						player_data[player_id]['on_ice']['dzs'] = 0						
+						player_data[player_id]['on_ice']['ozfo'] = 0
+						player_data[player_id]['on_ice']['nzfo'] = 0
+						player_data[player_id]['on_ice']['dzfo'] = 0
+						# Special case needed for relative data, since this cannot be staggered.
+						player_data[player_id]['on_ice']['rel_scf_per_60'] = 1.0
+						player_data[player_id]['on_ice']['rel_sca_per_60'] = 1.0
+						player_data[player_id]['on_ice']['rel_scf_pcg'] = 1.0
+						player_data[player_id]['on_ice']['rel_cf_factor'] = 1.0	
+						player_data[player_id]['on_ice']['rel_ca_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_ff_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_fa_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_sf_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_sa_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_gf_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_ga_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_xgf_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_xga_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_scf_factor'] = 1.0		
+						player_data[player_id]['on_ice']['rel_sca_factor'] = 1.0		
 
-				# POSITION
-				if str(row[SKATER_DB_BIO_POSITION]) == '-':
-					raise ValueError('Incorrect Player position')					
-				else:
-					position = str(row[SKATER_DB_BIO_POSITION])
-					player_data[player_id]['bio']['position'] = position
-					if ('C' in position) or ('L' in position) or ('R' in position):
-						player_data[player_id]['bio']['position'] = 'F'
-				if str(row[SKATER_DB_BIO_AGE]) == '-':
-					player_data[player_id]['bio']['age'] = 0						
-				else:
-					player_data[player_id]['bio']['age'] = int(row[SKATER_DB_BIO_AGE])
-				if str(row[SKATER_DB_BIO_HEIGHT]) == '-':
-					player_data[player_id]['bio']['height'] = 0						
-				else:
-					player_data[player_id]['bio']['height'] = int(row[SKATER_DB_BIO_HEIGHT])*2.54 # Convert to centimeters.
-				if str(row[SKATER_DB_BIO_WEIGHT]) == '-':
-					player_data[player_id]['bio']['weight'] = 0						
-				else:
-					player_data[player_id]['bio']['weight'] = int(row[SKATER_DB_BIO_WEIGHT])*0.453592 # Convert to kilograms.
-				# DRAFT
-				if str(row[SKATER_DB_BIO_DRAFT_YEAR]) == '-':
-					player_data[player_id]['bio']['draft_year'] = 0						
-				else:
-					player_data[player_id]['bio']['draft_year'] = int(row[SKATER_DB_BIO_DRAFT_YEAR])
-					print(int(row[SKATER_DB_BIO_DRAFT_YEAR]))
-				if str(row[SKATER_DB_BIO_DRAFT_TEAM]) == '-':
-					player_data[player_id]['bio']['draft_team'] = 'N/A'
-				else:
-					player_data[player_id]['bio']['draft_team'] = str(row[SKATER_DB_BIO_DRAFT_TEAM])
-				if str(row[SKATER_DB_BIO_DRAFT_ROUND]) == '-':
-					player_data[player_id]['bio']['draft_round'] = 7 # Default to last round			
-				else:
-					player_data[player_id]['bio']['draft_round'] = int(row[SKATER_DB_BIO_DRAFT_ROUND])
-				if str(row[SKATER_DB_BIO_ROUND_PICK]) == '-':
-					player_data[player_id]['bio']['round_pick'] = 32	# Default to last pick			
-				else:
-					player_data[player_id]['bio']['round_pick'] = int(row[SKATER_DB_BIO_ROUND_PICK])
-				if str(row[SKATER_DB_BIO_TOTAL_DRAFT_POS]) == '-':
-					player_data[player_id]['bio']['total_draft_pos'] = 225	# Default to one pick after last pick in the last round					
-				else:
-					player_data[player_id]['bio']['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
 
+						# POSITION
+						if str(row[SKATER_DB_BIO_POSITION]) == '-':
+							raise ValueError('Incorrect Player position')					
+						else:
+							position = str(row[SKATER_DB_BIO_POSITION])
+							player_data[player_id]['bio']['position'] = position
+							if ('C' in position) or ('L' in position) or ('R' in position):
+								player_data[player_id]['bio']['position'] = 'F'
+						if str(row[SKATER_DB_BIO_AGE]) == '-':
+							player_data[player_id]['bio']['age'] = 0						
+						else:
+							player_data[player_id]['bio']['age'] = int(row[SKATER_DB_BIO_AGE])
+						if str(row[SKATER_DB_BIO_HEIGHT]) == '-':
+							player_data[player_id]['bio']['height'] = 0						
+						else:
+							player_data[player_id]['bio']['height'] = int(row[SKATER_DB_BIO_HEIGHT])*2.54 # Convert to centimeters.
+						if str(row[SKATER_DB_BIO_WEIGHT]) == '-':
+							player_data[player_id]['bio']['weight'] = 0						
+						else:
+							player_data[player_id]['bio']['weight'] = int(row[SKATER_DB_BIO_WEIGHT])*0.453592 # Convert to kilograms.
+						# DRAFT
+						if str(row[SKATER_DB_BIO_DRAFT_YEAR]) == '-':
+							player_data[player_id]['bio']['draft_year'] = 0
+							player_data[player_id]['bio']['draft_age'] = -1
+						else:
+							player_data[player_id]['bio']['draft_year'] = int(row[SKATER_DB_BIO_DRAFT_YEAR])
+							if len(simulation_param['seasons']) > 1:
+								player_data[player_id]['bio']['draft_age'] = -1
+							else:
+								player_data[player_id]['bio']['draft_age'] = int(simulation_param['seasons'][0][:4])-player_data[player_id]['bio']['draft_year']
+						if str(row[SKATER_DB_BIO_DRAFT_TEAM]) == '-':
+							player_data[player_id]['bio']['draft_team'] = 'N/A'
+						else:
+							player_data[player_id]['bio']['draft_team'] = str(row[SKATER_DB_BIO_DRAFT_TEAM])
+						if str(row[SKATER_DB_BIO_DRAFT_ROUND]) == '-':
+							player_data[player_id]['bio']['draft_round'] = 7 # Default to last round			
+						else:
+							player_data[player_id]['bio']['draft_round'] = int(row[SKATER_DB_BIO_DRAFT_ROUND])
+						if str(row[SKATER_DB_BIO_ROUND_PICK]) == '-':
+							player_data[player_id]['bio']['round_pick'] = 32	# Default to last pick			
+						else:
+							player_data[player_id]['bio']['round_pick'] = int(row[SKATER_DB_BIO_ROUND_PICK])
+						if str(row[SKATER_DB_BIO_TOTAL_DRAFT_POS]) == '-':
+							player_data[player_id]['bio']['total_draft_pos'] = 225	# Default to one pick after last pick in the last round					
+						else:
+							player_data[player_id]['bio']['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
 	return player_data
 
 def add_bio_data_goalie(simulation_param):
 	global ACTIVE_GOALIES
 	player_data = {}
-	with open(simulation_param['csvfiles']['goalie_bio'],'rt') as f:
-		reader = csv.reader(f, delimiter=',')
-		for row in reader:
-			if row[1] != 'player_name':
-				# NAME
-				# Create and store player-ID.
-				[player_id,team_id] = generate_player_and_team_id(row[GOALIE_DB_NAME],row[GOALIE_DB_TEAM_ID])
-				ACTIVE_GOALIES.add(player_id)
-				# Initialize structs.
-				player_data[player_id] = {}
+	for season_data in simulation_param['csvfiles']['goalie_bio']:
+		with open(season_data,'rt') as f:
+			reader = csv.reader(f, delimiter=',')
+			for row in reader:
+				if row[1] != 'player_name':
+					# NAME
+					# Create and store player-ID.
+					[player_id,team_id] = generate_player_and_team_id(row[GOALIE_DB_NAME],row[GOALIE_DB_TEAM_ID])
+					# Only add new players
+					if player_id not in player_data.keys():
+						ACTIVE_GOALIES.add(player_id)
+						# Initialize structs.
+						player_data[player_id] = {}
 
-				# Bio
-				player_data[player_id]['bio'] = {}
-				player_data[player_id]['bio']['name'] = player_id
-				player_data[player_id]['bio']['team_id'] = team_id
-				player_data[player_id]['bio']['position'] = 'G'
+						# Bio
+						player_data[player_id]['bio'] = {}
+						player_data[player_id]['bio']['name'] = player_id
+						player_data[player_id]['bio']['team_id'] = team_id
+						player_data[player_id]['bio']['position'] = 'G'
 
-				# Individual_GOALIE
-				player_data[player_id]['ind'] = {}
-				player_data[player_id]['ind']['toi'] = [0,0,0]
-				player_data[player_id]['ind']['toi_pcg'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['sa'] = [0,0,0]
-				player_data[player_id]['ind']['sa_per_sec'] = [0,0,0]
-				player_data[player_id]['ind']['sv'] = [0,0,0]
-				player_data[player_id]['ind']['sv_pcg'] = [0,0,0]
-				player_data[player_id]['ind']['ga'] = [0,0,0]
-				player_data[player_id]['ind']['gaa'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['gsaa'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['xga'] = [0.0,0.0,0.0]
-				player_data[player_id]['ind']['avg_shot_dist'] = [0,0,0]
-				player_data[player_id]['ind']['avg_goal_dist'] = [0,0,0]
+						# Individual_GOALIE
+						player_data[player_id]['ind'] = {}
+						player_data[player_id]['ind']['toi'] = [0,0,0]
+						player_data[player_id]['ind']['toi_pcg'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['sa'] = [0,0,0]
+						player_data[player_id]['ind']['sa_per_sec'] = [0,0,0]
+						player_data[player_id]['ind']['sv'] = [0,0,0]
+						player_data[player_id]['ind']['sv_pcg'] = [0,0,0]
+						player_data[player_id]['ind']['ga'] = [0,0,0]
+						player_data[player_id]['ind']['gaa'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['gsaa'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['xga'] = [0.0,0.0,0.0]
+						player_data[player_id]['ind']['avg_shot_dist'] = [0,0,0]
+						player_data[player_id]['ind']['avg_goal_dist'] = [0,0,0]
+
+						if str(row[SKATER_DB_BIO_AGE]) == '-':
+							player_data[player_id]['bio']['age'] = 0						
+						else:
+							player_data[player_id]['bio']['age'] = int(row[SKATER_DB_BIO_AGE])
+						if str(row[SKATER_DB_BIO_HEIGHT]) == '-':
+							player_data[player_id]['bio']['height'] = 0						
+						else:
+							player_data[player_id]['bio']['height'] = int(row[SKATER_DB_BIO_HEIGHT])*2.54 # Convert to centimeters.
+						if str(row[SKATER_DB_BIO_WEIGHT]) == '-':
+							player_data[player_id]['bio']['weight'] = 0						
+						else:
+							player_data[player_id]['bio']['weight'] = int(row[SKATER_DB_BIO_WEIGHT])*0.453592 # Convert to kilograms.
+						# DRAFT
+						if str(row[SKATER_DB_BIO_DRAFT_YEAR]) == '-':
+							player_data[player_id]['bio']['draft_year'] = 0
+							player_data[player_id]['bio']['draft_age'] = -1
+						else:
+							player_data[player_id]['bio']['draft_year'] = int(row[SKATER_DB_BIO_DRAFT_YEAR])
+							if len(simulation_param['seasons']) > 1:
+								player_data[player_id]['bio']['draft_age'] = -1
+							else:
+								player_data[player_id]['bio']['draft_age'] = int(simulation_param['seasons'][0][:4])-player_data[player_id]['bio']['draft_year']
+						if str(row[SKATER_DB_BIO_DRAFT_TEAM]) == '-':
+							player_data[player_id]['bio']['draft_team'] = 'N/A'
+						else:
+							player_data[player_id]['bio']['draft_team'] = str(row[SKATER_DB_BIO_DRAFT_TEAM])
+						if str(row[SKATER_DB_BIO_DRAFT_ROUND]) == '-':
+							player_data[player_id]['bio']['draft_round'] = 7 # Default to last round			
+						else:
+							player_data[player_id]['bio']['draft_round'] = int(row[SKATER_DB_BIO_DRAFT_ROUND])
+						if str(row[SKATER_DB_BIO_ROUND_PICK]) == '-':
+							player_data[player_id]['bio']['round_pick'] = 32	# Default to last pick			
+						else:
+							player_data[player_id]['bio']['round_pick'] = int(row[SKATER_DB_BIO_ROUND_PICK])
+						if str(row[SKATER_DB_BIO_TOTAL_DRAFT_POS]) == '-':
+							player_data[player_id]['bio']['total_draft_pos'] = 225	# Default to one pick after last pick in the last round					
+						else:
+							player_data[player_id]['bio']['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
 
 	return player_data
 
@@ -965,6 +1035,7 @@ def create_goalie_db(simulation_param):
 	goalie_data = add_pp_data_goalie(simulation_param,goalie_data)
 	goalie_data = add_pk_data_goalie(simulation_param,goalie_data)	
 	for goalie_id in goalie_data.keys():
+		# @TODO: Make sure only goalies with TOI > 0 is added.
 		output[goalie_id] = Goalie(goalie_data[goalie_id]['bio'],goalie_data[goalie_id]['ind'])
 
 	# This guy is needed

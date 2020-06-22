@@ -15,6 +15,7 @@ import json
 import gspread
 import cfscrape
 import signal
+import scipy.stats as st
 from oauth2client.client import SignedJwtAssertionCredentials
 from collections import defaultdict
 from nhl_defines import *
@@ -323,10 +324,10 @@ def generate_player_and_team_id(raw_player_str,raw_team_str=None,is_relative=Fal
 	player_id = player_id.replace('.','_')
 	player_id = player_id.replace("'",'')
 
-	#@TODO: This should REALLY not be raw_team_str!!
+	#@TODO: This should REALLY not be raw_team_str!
 	if (player_id == 'SEBASTIAN_AHO') and (raw_team_str != 'CAR'):
 		player_id = 'SEBASTIAN_AHO2'
-		return [player_id, 'PROBABLY_THE_NEW_YORK_ISLANDERS']
+		return [player_id, 'NYI']
 
 	# Handle special cases
 	if player_id == 'ALEXANDER_NYLANDER':
@@ -375,7 +376,7 @@ def generate_player_and_team_id(raw_player_str,raw_team_str=None,is_relative=Fal
 		new_team['DANTON_HEINEN'] = 'ANA'
 		new_team['NICK_RITCHIE'] = 'BOS'
 		new_team['DEREK_GRANT'] = 'PHI'
-		new_team['PATRICK_MARLEAU'] = 'PIT'
+		#new_team['PATRICK_MARLEAU'] = 'PIT'
 		new_team['WAYNE_SIMMONDS'] = 'BUF'
 		new_team['NATE_THOMPSON'] = 'PHI'
 		new_team['VINCENT_TROCHECK'] = 'CAR'
@@ -421,10 +422,15 @@ def generate_player_and_team_id(raw_player_str,raw_team_str=None,is_relative=Fal
 		team_id_arr = (team_id.replace(' ','').split(','))
 		if len(team_id_arr) > 1:
 			if player_id not in new_team.keys():
-				raise ValueError('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id)
+				#raise ValueError('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id)
+				print('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id + '. Using team ' + team_id_arr[0] + ' for analysis.')
+				team_id = team_id_arr[0]
+				
 			if len(team_id_arr) > 2:
 				if player_id not in manually_checked_players:
-					raise ValueError('Player ' + player_id + ' (' + str(raw_team_str) + ') changed club more than once. Please add to "manually_checked_players" to continue.')
+					#raise ValueError('Player ' + player_id + ' (' + str(raw_team_str) + ') changed club more than once. Please add to "manually_checked_players" to continue.')
+					print('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id + '. Using team ' + team_id_arr[0] + ' for analysis.')
+					team_id = team_id_arr[0]
 
 		if team_id == 'L.A':
 			team_id = 'LAK'
@@ -434,9 +440,18 @@ def generate_player_and_team_id(raw_player_str,raw_team_str=None,is_relative=Fal
 			team_id = 'SJS'
 		elif team_id == 'T.B':
 			team_id = 'TBL'		
+		elif team_id == 'PHX':
+			team_id = 'ARI'
 
 		if player_id in set(new_team.keys()):
 			team_id = new_team[player_id]
+
+		# Weird special case due to misspelled team_id at NST-data.
+		if team_id == 'PTI':
+			team_id = 'PIT' 
+
+		if team_id not in ACTIVE_TEAMS:
+			raise ValueError('Team-ID for player ' + player_id + ' is incorrect ("' + team_id + '")')
 
 	return [player_id,team_id]
 
@@ -454,7 +469,8 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 	sorted_list,data_list = [],[]
 	for skater_id in db.keys():
 		skater = db[skater_id]
-		if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
+		#if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
+		if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']):
 			if len(attributes) > 1:
 				if attributes[0] == 'ranking':
 					val = skater.get_attribute(attributes[1],playform_index='ranking')
@@ -500,7 +516,7 @@ def print_sorted_list(db,attributes,operation=None,_filter=None,print_list_lengt
 			if ranking <= print_list_length or skater_id in _filter['additional_players']:
 				if attributes[0] == 'ranking':
 					val = norm_factor*pair[0]
-					print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma']))
+					print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma. TOI: {5:.1f} min/gp)'.format(ranking,skater.bio['name'],skater.bio['team_id'],val,(val-output['mu'])/output['sigma'],(skater.get_attribute('toi')/60)/skater.get_attribute('gp')))
 					#print('   Ranking: {0:.0f}'.format(skater.get_attribute(attributes[1],'ranking')))
 				else:
 					val = norm_factor*pair[0]
@@ -952,24 +968,6 @@ def get_fatigue_factor(fatigue_factors,team_id,days_rested=-1):
 def generate_starting_goalies():
 	starting_goalies_dict = generate_all_teams_dict(return_type=None)
 	return starting_goalies_dict
-
-def set_starting_goalie(simulation_param,team_id,player_id):
-	if player_id not in ACTIVE_GOALIES:
-		raise ValueError('Goalie ' + player_id + ' not included in database')
-	simulation_param['databases']['starting_goalies'][team_id] = player_id
-	return simulation_param
-
-def get_starting_goalie(simulation_param,team_id):
-	if simulation_param['databases']['starting_goalies'][team_id] != None:
-		return simulation_param['databases']['starting_goalies'][team_id]
-	else:
-		found_goalie = False
-		while found_goalie == False:
-			for goalie_id in set(simulation_param['databases']['goalie_db'].keys()):
-				goalie = get_goalie(simulation_param['databases']['goalie_db'], goalie_id)
-				if (goalie.bio['team_id'] == team_id) and (random.uniform(0,1) < goalie.ind['toi_pcg'][STAT_ES]) and (goalie_id not in simulation_param['databases']['unavailable_players']):		
-					found_goalie = True
-					return goalie_id
 
 def handler(signum,frame):
 	#print('Connection timed out')
