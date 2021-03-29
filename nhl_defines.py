@@ -25,12 +25,13 @@ GAMEPLAY_PK_AT = 1
 NO_GOALIE_HT = 3
 NO_GOALIE_AT = 4
 
-#PLAYFORMS = ['es', 'pp', 'pk']
-PLAYFORMS = ['es']
+PLAYFORMS = ['es', 'pp', 'pk']
+'''
 STAT_ES = 0
 STAT_PP = 1
 STAT_PK = 2
 STAT_INDEX = [STAT_ES, STAT_PP, STAT_PK]
+'''
 
 # Scrape
 SKATER_BIO_BIT = 0

@@ -6,12 +6,15 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 
-from nhl_database import create_databases
-from nhl_simulation import set_starting_goalie, create_game_specific_db, simulate_po_series, get_playoff_cut, create_tables
-from nhl_helpers import print_progress, get_days_rested, get_home_team_advantage, get_probability, get_list_pcg, get_team, acces_gsheet, get_alpha, get_long_name, print_sorted_list, print_sorted_list_goalie, plot_player_cards, weighted_sum
-from nhl_classes import Skater, Goalie, Team
-from nhl_settings import SimulationParameters
+from nhl_database import *
+#from nhl_simulation import set_starting_goalie, create_game_specific_db, simulate_po_series, get_playoff_cut, create_tables
+from nhl_helpers import *
+from nhl_entities import Skater, Goalie, Team
+from nhl_settings import Settings
 from nhl_defines import *
+from nhl_web_scrape import *
+from nhl_simulation import Simulation, GameSimulatuion, SeasonSimulation
+
 
 def simulate_individual_games(simulation_param):
     if simulation_param['simulation_mode'] is None:
@@ -30,13 +33,13 @@ def simulate_individual_games(simulation_param):
         print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(
             simulation_param['ht_id'],
             in_game_data['ht_goalie'],
-            100*simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['sv_pcg'][DEFINES['STAT_ES']],
-            simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['gaa'][DEFINES['STAT_ES']]))
+            100*simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['sv_pcg']['es'],
+            simulation_param['databases']['goalie_db'][in_game_data['ht_goalie']].ind['gaa']['es']))
         print('GOALIE ({0}): {1} (SV: {2:.1f}%, GAA: {3:.2f})'.format(
             simulation_param['at_id'],
             in_game_data['at_goalie'],
-            100*simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['sv_pcg'][DEFINES['STAT_ES']],
-            simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['gaa'][DEFINES['STAT_ES']]))
+            100*simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['sv_pcg']['es'],
+            simulation_param['databases']['goalie_db'][in_game_data['at_goalie']].ind['gaa']['es']))
         if simulation_param['verbose']:
             for ct in DEFINES['CURRENT_TEAM']:
                 # Print roster information
@@ -193,53 +196,6 @@ def simulate_individual_games(simulation_param):
             print('Total time, one season (N = 1): ' + str(82*15.5*(1/N_sim)*(t_tot)*(1/(1000*60))) + ' min.')
             print('Total time, one season (N = 10000): ' + str(82*15.5*(10000/N_sim)*(t_tot)*(1/(1000*3600))) + ' h.')
 
-def simulate_playoff_series(simulation_param):
-    simulation_param['simulation_mode'] = [None, None, None]
-    for g_idx, game in enumerate(simulation_param['games_to_simulate']):
-        t = get_list_pcg(simulate_po_series(simulation_param,game,simulation_param['initial_wins'][g_idx]))
-        """
-        simulation_param['ht_id'] = game[0]
-        simulation_param['at_id'] = game[1]
-        in_game_data = create_game_specific_db(simulation_param)
-        print('\nSimulating playoff series between ' + simulation_param['ht_id'] + ' and ' + simulation_param['at_id'] + '. Number of simulations = ' + str(simulation_param['N']) + '.')
-        series_distribution = [0,0,0,0,0,0,0,0]
-        t0_tmp = time.time()
-        for i in range(simulation_param['N']):
-            print_progress(i,simulation_param['N'],t0_tmp,step=20)
-            series_done = False
-            wins_in_series = list(simulation_param['initial_wins'][g_idx])
-            game_number = sum(wins_in_series)
-            while series_done == False:
-                in_game_data['ht'].simulate_game(in_game_data['at'],simulation_param,in_game_data)
-                if in_game_data['ht'].gf_in_simulated_game > in_game_data['at'].gf_in_simulated_game:
-                    wins_in_series[0] += 1
-                else:
-                    wins_in_series[1] += 1
-                if wins_in_series[0] == 4:
-                    if wins_in_series[1] == 0:
-                        series_distribution[0] += 1
-                    elif wins_in_series[1] == 1:
-                        series_distribution[1] += 1
-                    elif wins_in_series[1] == 2:
-                        series_distribution[2] += 1
-                    else:
-                        series_distribution[3] += 1
-                    series_done = True
-                if wins_in_series[1] == 4:
-                    if wins_in_series[0] == 0:
-                        series_distribution[4] += 1
-                    elif wins_in_series[0] == 1:
-                        series_distribution[5] += 1
-                    elif wins_in_series[0] == 2:
-                        series_distribution[6] += 1
-                    else:
-                        series_distribution[7] += 1
-                    series_done = True
-                game_number += 1
-                """
-        #t = get_list_pcg(series_distribution)
-        print('{0} - {1:.1f}% [in 4: {2:.1f}%, in 5: {3:.1f}%, in 6: {4:.1f}%, in 7: {5:.1f}%]'.format(simulation_param['ht_id'], sum(t[0:4]),t[0],t[1],t[2],t[3]))
-        print('{0} - {1:.1f}% [in 4: {2:.1f}%, in 5: {3:.1f}%, in 6: {4:.1f}%, in 7: {5:.1f}%]'.format(simulation_param['at_id'], sum(t[4:8]),t[4],t[5],t[6],t[7]))
 
 def simulate_season(simulation_param):
     if simulation_param['simulation_mode'] is None:
@@ -360,6 +316,7 @@ def simulate_season(simulation_param):
         print('Total time for computation (N=1000): ' + str((1000/N_sim)*(t_tot/(3600*1000))) + ' h.')
         print('Total time for computation (N=5000): ' + str((5000/N_sim)*(t_tot/(3600*1000))) + ' h.')
         print('Total time for computation (N=10000): ' + str((10000/N_sim)*(t_tot/(3600*1000))) + ' h.')
+
 
 def do_player_cards(simulation_param):
     s_db = simulation_param['databases']['skater_db']
@@ -513,7 +470,7 @@ def do_player_cards(simulation_param):
         axes_info['x']['label'] = 'Individual expected goals'
         axes_info['x']['scale'] = 1
         axes_info['x']['invert'] = False
-        axes_info['y']['attribute'] = 'gf'
+        axes_info['y']['attribute'] = 'goals'
         axes_info['y']['label'] = 'Goals scored'
         axes_info['y']['scale'] = 1
         axes_info['y']['invert'] = False
@@ -827,7 +784,7 @@ def do_player_cards(simulation_param):
     print('TOTAL RATING:')
     counter = 1
     for player_id in player_ids:
-        if s_db[player_id].ind['toi'][DEFINES['STAT_ES']] > _filter['toi']*60 and s_db[player_id].bio['position'] in _filter['position']:
+        if s_db[player_id].ind['toi']['es'] > _filter['toi']*60 and s_db[player_id].bio['position'] in _filter['position']:
             total_value = weighted_sum(s_db[player_id].rating, _filter['ws'])
             op_l.append((total_value, player_id))
             counter += 1
@@ -842,6 +799,7 @@ def do_player_cards(simulation_param):
         ll += 1
     print('Total number of players: ' + str(counter))
     print('Average value for player highlighted: ' + str(np.mean(values)))
+
 
 def perform_player_analysis(player):
     s_db = simulation_param['databases']['skater_db']
@@ -898,8 +856,8 @@ def perform_player_analysis(player):
     for player_id in DEFINES['ACTIVE_SKATERS']:
         player = s_db[player_id]
         if player.get_attribute('position') == 'F':
-            ppa[player.get_attribute('age')].append(player.get_attribute('points',DEFINES['STAT_ES'])+player.get_attribute('points',STAT_PP)+player.get_attribute('points',STAT_PK))
-            ppda[player.get_attribute('draft_age')].append(player.get_attribute('points',DEFINES['STAT_ES'])+player.get_attribute('points',STAT_PP)+player.get_attribute('points',STAT_PK))
+            ppa[player.get_attribute('age')].append(player.get_attribute('points',DEFINES[''es''])+player.get_attribute('points','pp')+player.get_attribute('points','pk'))
+            ppda[player.get_attribute('draft_age')].append(player.get_attribute('points',DEFINES[''es''])+player.get_attribute('points','pp')+player.get_attribute('points','pk'))
             sum_attribute = 'estimated_off_pcg'
             #ppa[player.get_attribute('age')].append(player.get_attribute(sum_attribute))
             #ppda[player.get_attribute('draft_age')].append(player.get_attribute(sum_attribute))
@@ -1742,110 +1700,148 @@ def perform_player_analysis(player):
             # Update in batch
             output_sheet.update_cells(cell_list)
 
+
+def download_season_data(year, data_dir='Data'):
+    ''' Download all data from www.naturalstattrick.com for a specific year.
+    This function will *not* check if the data is alreay available.
+    '''
+    y = str(year)
+    y = y[0:4] + '20' + y[-2:]
+    if len(y) != 8:
+        raise ValueError('Unexpected data format. Expected YYYYYYYY, got "' + y + '"')
+    url_skater_bio = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_goalie_bio = "http://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=G&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+
+    #url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+    url_skater_ind_es = "http://naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+    url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+    url_skater_on_ice = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+    url_goalie_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_team_es = "https://www.naturalstattrick.com/teamtable.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
+    url_team_pp = "https://www.naturalstattrick.com/teamtable.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
+    url_team_pk = "https://www.naturalstattrick.com/teamtable.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
+
+    print('   Downloading bio-data')
+    write_bio_csv(url_skater_bio,os.path.join(data_dir,'Skater_Bio_' + str(year) + '.csv'))
+    write_bio_csv(url_goalie_bio,os.path.join(data_dir,'Goalie_Bio_' + str(year) + '.csv'))
+    print('   Downloading individual ES data')
+    write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + str(year) + '.csv'))
+    print('   Downloading individual PP data')
+    write_skater_ind_csv(url_skater_ind_pp,os.path.join(data_dir,'Skater_Individual_PP_' + str(year) + '.csv'))
+    print('   Downloading individual PK data')
+    write_skater_ind_csv(url_skater_ind_pk,os.path.join(data_dir,'Skater_Individual_PK_' + str(year) + '.csv'))
+    print('   Downloading on-ice data')
+    write_skater_on_ice_csv(url_skater_on_ice,os.path.join(data_dir,'Skater_OnIce_' + str(year) + '.csv'))
+    print('   Downloading goalie ES data')
+    write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + str(year) + '.csv'))
+    print('   Downloading goalie PP data')
+    write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + str(year) + '.csv'))
+    print('   Downloading goalie PK data')
+    write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + str(year) + '.csv'))
+    print('   Downloading ES team data')
+    write_team_csv(url_team_es,os.path.join(data_dir,'Team_ES_' + str(year) + '.csv'))
+    print('   Downloading PP team data')
+    write_team_csv(url_team_pp,os.path.join(data_dir,'Team_PP_' + str(year) + '.csv'))
+    print('   Downloading PK team data')
+    write_team_csv(url_team_pk,os.path.join(data_dir,'Team_PK_' + str(year) + '.csv'))
+
+    # This is currently not working
+    # print('   Downloading unavailalbe players')
+    # write_unavailable_players_csv(os.path.join(data_dir,'Unavailable_Players.csv'))
+
+    # @TODO: This is not yet implemented. Not sure if it's needed.
+    # Should probably not look at home/away data from 2020/2021
+    #write_team_csv(simulation_param['url_team_home'],os.path.join(data_dir,'Team_Home_201819_1920.csv'))
+    #write_team_csv(simulation_param['url_team_away'],os.path.join(data_dir,'Team_Away_201819_1920.csv'))
+    #write_ufas(os.path.join(data_dir,'Contract_Expiry_Data.csv'))
+
+def create_databases(settings):
+    ''' Create and return databases for Skaters, Goalies and Teams '''
+    dbs = {}
+    # Create databases.
+    team_db = TeamDatabase(settings)
+    skater_db = SkaterDatabase(settings)
+    goalie_db = GoalieDatabase(settings)
+    # Create special metrics for teams, skaters and goalies.
+    # This needs to be performed _after_ the "normal" databases have been created
+    [team_db, skater_db, goalie_db] = create_metrics(team_db, skater_db, goalie_db)
+    dbs['skater'] = skater_db
+    dbs['goalie'] = goalie_db
+    dbs['team'] = team_db
+    return dbs
+
 if __name__ == '__main__':
     # Construct argument parser
-
-    print('hej')
     ap = argparse.ArgumentParser()
 
     # Add arguments to parser
     ap.add_argument("-y", "--year", required=True, help="Season to analyze")
+    ap.add_argument("-d", "--download", action='store_true', help="Set flag to download data for a season")
+    ap.add_argument("-l", "--print_list", action='store_true', help="Set flag to print list of ranking")
     ap.add_argument("-p", "--player", help="Name of player to analyze")
     ap.add_argument("-t", "--team", help="Name of team to analyze")
     args = vars(ap.parse_args())
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    #simulation_param['seasons'] = ['201920']  # Which season(s) to use. Use "download_old_season_data" to download older seasons data
-    raise ValueError(settings)
+    # First, check to see if new data should be downloaded
+    if args['download'] is True:
+        download_season_data(str(args["year"]))
+        #scrape_ep('https://www.eliteprospects.com/player/313352/linus-oberg')
 
-    settings = Settings([str(args["year"])])
+    # Create settings and store databases
+    settings = Settings([str(args["year"])]) # Use "download_old_season_data" to download older seasons data
+    #settings.update_setting('generate_fresh_databases', False)
+    settings.update_setting('databases', create_databases(settings))
 
-    settings.update_setting('generate_fresh_databases', False)
-    settings.update_setting('skip_data_download', True)
-    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    # Parse CL-input
+    if args['print_list'] is True:
+        _filter = {}
+        _filter['position'] = ['D']
+        #_filter['team'] = ['SJS']
+        _filter['toi'] = 300
+        # print_sorted_list(settings.databases['skater'], ['ranking', 'total'], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
+        print_sorted_list_goalie(settings.databases['goalie'], ['gsaa_per_60'], _filter=_filter, high_to_low=False, print_list_length=30)
+    else:
+        settings.add_setting('ht_id', 'SJS')
+        settings.add_setting('at_id', 'ANA')
+        settings.add_setting('ht_goalie', 'MARTIN_JONES')
+        settings.add_setting('at_goalie', 'JOHNH_GIBSON')
+        settings.add_setting('ht_initial_goals', 0)
+        settings.add_setting('at_initial_goals', 0)
+        settings.add_setting('game_db', {})
+        settings.add_setting('down_sample', False)
+
+        #simulation = Simulation(settings)
+        game = GameSimulatuion(settings)
+    '''
+    # Create roster lists split up on team and position.
+    roster_output, flt = {}, {}
+    for team_id in DEFINES['ACTIVE_TEAMS']:
+        flt['team_id'] = team_id
+        flt['position'] = 'D'
+        roster_output[str(team_id + '_D')] = create_player_list(simulation_param['databases']['skater_db'], flt)
+        flt['position'] = 'F'
+        roster_output[str(team_id + '_F')] = create_player_list(simulation_param['databases']['skater_db'], flt)
+    simulation_param['databases']['team_rosters'] = roster_output
+    '''
     '''
     # Simulation/iteration parameters
-    settings.update_setting('simulation_mode', DEFINES['SIMULATION_LIGHT'])
-    settings.update_setting('number_of_simulations)
-    settings['N'] = [50000, 2500]
-    '''
-
-    # Create databases.
-    # settings['add_average_goalies'] = ['CAR']
-    settings = create_databases(simulation_param)
-
-    my_new_database = Database(config)
+    settings.update_setting('simulation_mode', 'SIMULATION_LIGHT')
+    settings.update_setting('number_of_simulations, [50000, 2500])
+    settings.update_setting('games_to_simulate', [['DAL', 'CGY'], ['SJS', 'COL']]
 
     # Set starting goaltenders.
-    settings = set_starting_goalie(settings, 'SJS', 'MARTIN_JONES') #AARON_DELL
-    settings = set_starting_goalie(settings, 'WSH', 'ILYA_SAMSONOV') #HENRIK_LUNDQVIST
-
-    # Gameplay parameters
-    simulation_param['simulation_date'] = today
-    # simulation_param['games_to_simulate'] = simulation_param['databases']['season_schedule'][simulation_param['simulation_date']]
-    simulation_param['games_to_simulate'] = [['DAL', 'CGY']]
-    # simulation_param['days_rested'] = [[1,0]]
-    # simulation_param['initial_wins'] = [[0,0]]
-    # simulation_param['down_sample'] = False
-    # simulation_param['initial_time'] = 60*(20+20+16) # Initial time in seconds
-    # simulation_param['initial_ht_goals'] = 5
-    # simulation_param['initial_at_goals'] = 0
-
-    # Analytics parameters
-    simulation_param['team_plots'] = False
-    simulation_param['exp_min_toi'] = 100
-    simulation_param['exp_list_length'] = 1
-    # simulation_param['exp_team'] = None
-    simulation_param['exp_position'] = ['D', 'F']
-    simulation_param['exp_weighted_scale'] = DEFINES['WS_FWD']
-    # simulation_param['exp_playform'] = STAT_PK
-    # simulation_param['exp_temp_attributes'] = ['primary_points_per_60']
-    # simulation_param['exp_additional_players'] = ['MELKER_KARLSSON']
-    simulation_param['exp_additional_players'] = simulation_param['databases']['team_rosters']['SJS_F']
-    simulation_param['exp_additional_players'].append('BARCLAY_GOODROW')
+    settings.set_starting_goalie(settings, 'SJS', 'MARTIN_JONES') #AARON_DELL
+    settings.set_starting_goalie(settings, 'WSH', 'ILYA_SAMSONOV') #HENRIK_LUNDQVIST
     '''
-    for player_id in simulation_param['databases']['ufa']:
-        if player_id in DEFINES['ACTIVE_SKATERS']:
-            player = simulation_param['databases']['skater_db'][player_id]
-            if player.get_attribute('position') == 'F':
-                if player_id not in simulation_param['exp_additional_players']:
-                    print('Adding player ' + player_id + ' for analysis.')
-                    simulation_param['exp_additional_players'].append(player_id)
-    '''
-
-    '''
-    simulation_param['exp_additional_players'] = []
-    for player_id in simulation_param['databases']['ufa']:
-        if player_id in DEFINES['ACTIVE_SKATERS']:
-            player = simulation_param['databases']['skater_db'][player_id]
-            if player.get_attribute('position') == 'F':
-                simulation_param['exp_additional_players'].append(player_id)
-    '''
-
-    simulation_param['exp_show_player_ranking'] = False
-
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-    '''
-    attributes = ['sf_pcg','gf_pcg','cf_pcg','ff_pcg','xgf_pcg','scf_pcg']
-    true_attribute = 'gf_pcg'
-    for attribute in attributes:
-        x_array = []
-        y_array = []
-        for team_id in DEFINES['ACTIVE_TEAMS']:
-            team = simulation_param['databases']['team_db'][team_id]
-            x_array.append(team.rank[attribute])
-            y_array.append(team.rank[true_attribute])
-        print(attribute + ': ' + str(get_k_factor(x_array,y_array,True)))
-    '''
 
-
-    raise ValueError('We are not yet ready for this')
     # For now, matplotlib cannot be loaded for Windows machines.
     if platform.system() == 'Windows':
         print('Cannot do plots on Windows-platform')
         simulation_param['do_plots'] = False
         print('Cannot write to Google on Windows-platform')
         simulation_param['write_to_gsheet'] = False
-    perform_player_analysis(args["player"])
-    simulate_individual_games(simulation_param)

@@ -11,7 +11,6 @@ from shutil import copyfile
 
 import numpy as np
 import gspread
-
 from oauth2client.client import SignedJwtAssertionCredentials
 
 from nhl_defines import *
@@ -227,27 +226,6 @@ def get_team_id(long_name):
             return team_id
 
 
-def get_team(team_db, team_id):
-    return team_db[team_id]
-
-
-def get_player(simulation_param, player_id):
-    if player_id in simulation_param['databases']['goalie_db'].id_set:
-        return get_goalie(simulation_param['databases']['goalie_db'], player_id)
-    if player_id in simulation_param['databases']['skater_db'].id_set:
-        return get_skater(simulation_param['databases']['skater_db'], player_id)
-    else:
-        raise ValueError(player_id + ' not included in Goalie or Skater databse.')
-
-
-def get_skater(skater_db, player_id):
-    return skater_db[player_id]
-
-
-def get_goalie(goalie_db, player_id):
-    return goalie_db[player_id]
-
-
 def print_progress(i, N, t0, step=10):
     time_unit = ['min', 'min']
     printed = False
@@ -358,85 +336,20 @@ def generate_player_and_team_id(raw_player_str, raw_team_str=None):
         team_id = 'MAKE_BELIEVES'
     else:
         # Get team-id
+        # Add players that have played for more than two clubs the current season to "manually_checked_players"
         manually_checked_players = set()
-        manually_checked_players.add('MARCO_SCANDELLA')
-        manually_checked_players.add('ILYA_KOVALCHUK')
-        manually_checked_players.add('VLADISLAV_NAMESTNIKOV')
+        #manually_checked_players.add('EXAMPLE_PLAYER')
+
+        # Add players that have played for two teams the current season to "new_team"-dict:
         new_team = {}
-        # new_team['VLADISLAV_NAMESTNIKOV'] = 'OTT'
-        new_team['ERIK_GUDBRANSON'] = 'ANA'
-        new_team['ANDREAS_MARTINSEN'] = 'PTI'
-        new_team['BRENDAN_PERLINI'] = 'DET'
-        new_team['JACOB_DE_LA_ROSE'] = 'STL'
-        new_team['ROBBY_FABBRI'] = 'DET'
-        new_team['CHANDLER_STEPHENSON'] = 'VGK'
-        new_team['NICK_SHORE'] = 'WPG'
-        new_team['TAYLOR_HALL'] = 'ARI'
-        new_team['STEFAN_NOESEN'] = 'SJS'
-        new_team['MARCO_SCANDELLA'] = 'STL'
-        new_team['MIKE_REILLY'] = 'OTT'
-        # new_team['ILYA_KOVALCHUK'] = 'MTL'
-        new_team['MICHAEL_FROLIK'] = 'BUF'
-        new_team['JACK_CAMPBELL'] = 'TOR'
-        new_team['KYLE_CLIFFORD'] = 'TOR'
-        new_team['TREVOR_MOORE'] = 'LAK'
-        new_team['NICK_SEELER'] = 'CHI'
-        new_team['JASON_ZUCKER'] = 'PIT'
-        new_team['ALEX_GALCHENYUK'] = 'MIN'
-        new_team['ANDY_GREENE'] = 'NYI'
-        new_team['BRENDEN_DILLON'] = 'WSH'
-        new_team['TYLER_TOFFOLI'] = 'VAN'
-        new_team['JULIEN_GAUTHIER'] = 'NYR'
-        new_team['BLAKE_COLEMAN'] = 'TBL'
-        new_team['ALEC_MARTINEZ'] = 'VGK'
-        new_team['DYLAN_DEMELO'] = 'WPG'
-        new_team['TIM_SCHALLER'] = 'LAK'
-        new_team['JAYCE_HAWRYLUK'] = 'OTT'
-        new_team['DENIS_MALGIN'] = 'TOR'
-        new_team['CODY_EAKIN'] = 'WPG'
-        new_team['DANTON_HEINEN'] = 'ANA'
-        new_team['NICK_RITCHIE'] = 'BOS'
-        new_team['DEREK_GRANT'] = 'PHI'
-        new_team['PATRICK_MARLEAU'] = 'PIT'
-        new_team['WAYNE_SIMMONDS'] = 'BUF'
-        new_team['NATE_THOMPSON'] = 'PHI'
-        new_team['VINCENT_TROCHECK'] = 'CAR'
-        new_team['ERIK_HAULA'] = 'FLA'
-        new_team['LUCAS_WALLMARK'] = 'FLA'
-        new_team['JEAN-GABRIEL_PAGEAU'] = 'NYI'
-        new_team['VLADISLAV_NAMESTNIKOV'] = 'COL'
-        new_team['ILYA_KOVALCHUK'] = 'WSH'
-        new_team['ANDREAS_ATHANASIOU'] = 'EDM'
-        new_team['SAM_GAGNER'] = 'DET'
-        new_team['TYLER_ENNIS'] = 'EDM'
-        new_team['EVAN_RODRIGUES'] = 'PIT'
-        new_team['CONOR_SHEARY'] = 'PIT'
-        new_team['DOMINIK_KAHUN'] = 'BUF'
-        new_team['SONNY_MILANO'] = 'ANA'
-        new_team['DEVIN_SHORE'] = 'CBJ'
-        new_team['BARCLAY_GOODROW'] = 'TBL'
-        new_team['DANIEL_SPRONG'] = 'WSH'
-        new_team['MIKE_GREEN'] = 'EDM'
-        new_team['CHRISTIAN_DJOOS'] = 'ANA'
-        new_team['NICK_COUSINS'] = 'VGK'
-        new_team['MATTHEW_PECA'] = 'OTT'
-        new_team['ZACH_BOGOSIAN'] = 'TBL'
-        new_team['CODY_GOLOUBEF'] = 'DET'
-        new_team['ANDREW_AGOZZINO'] = 'ANA'
-        new_team['MATT_IRWIN'] = 'ANA'
-        new_team['DEREK_FORBORT'] = 'LAK'
-        new_team['BRADY_SKJEI'] = 'CAR'
-        new_team['ERIK_GUSTAFSSON'] = 'CGY'
-        new_team['ROBIN_LEHNER'] = 'VGK'
-        new_team['ONDREJ_KASE'] = 'BOS'
-        new_team['CALLE_ROSEN'] = 'TOR'
-        new_team['DAVID_BACKES'] = 'ANA'
-        new_team['DMYTRO_TIMASHOV'] = 'DET'
-        new_team['LOUIS_DOMINGUE'] = 'VAN'
-        new_team['MICHAEL_HUTCHINSON'] = 'COL'
-        new_team['BRANDON_DAVIDSON'] = 'SJS'
-        new_team['MALCOLM_SUBBAN'] = 'CHI'
-        new_team['KORBINIAN_HOLZER'] = 'NSH'
+        new_team['IAN_COLE'] = 'MIN'
+        new_team['GREG_PATERYN'] = 'COL'
+        new_team['JARRED_TINORDI'] = 'BOS'
+        new_team['RYAN_DZINGEL'] = 'OTT'
+        new_team['CEDRIC_PAQUETTE'] = 'CAR'
+        new_team['MARK_FRIEDMAN'] = 'PIT'
+        new_team['PATRIK_LAINE'] = 'CBJ'
+        new_team['PIERRE-LUC_DUBOIS'] = 'WPG'
 
         team_id = raw_team_str
         # Make sure players have been added to their new clubs. If not, set an error.
@@ -475,40 +388,44 @@ def generate_player_and_team_id(raw_player_str, raw_team_str=None):
 
     return [player_id, team_id]
 
+
 def print_sorted_list(db,
                       attributes,
                       operation=None,
-                      _filter=None,
+                      _filter={},
                       print_list_length=50,
                       scale_factor=1,
                       high_to_low=True,
-                      do_print=True,
                       normalize=False):
+    ''' Prints a list sorted on a specified attribute '''
 
-    if _filter is None:
-        _filter['toi'] = 0
+    # Validate filter settings
+    if 'toi' not in _filter or _filter == {}:
+        _filter['toi'] = 100
+    if 'position' not in _filter or _filter == {}:
         _filter['position'] = ['F', 'D']
+    if 'additional_players' not in _filter or _filter == {}:
         _filter['additional_players'] = []
+    if 'team' not in _filter or _filter == {}:
         _filter['team'] = None
-        _filter['playform'] = STAT_ES
-
+    if 'playform' not in _filter or _filter == {}:
+        _filter['playform'] = 'es'
+    print('Filter settings: ' + str(_filter))
     output = {}
     added_players = set()
-    sorted_list, data_list = [], []
-    for skater_id in db.keys():
-        skater = db[skater_id]
-        # if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
-        if skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']:
+    sorted_list, data_list, all_data = [], [], []
+    for skater_id in db.id_set:
+        skater = db.get_player(skater_id)
+        if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
             if len(attributes) > 1:
                 if attributes[0] == 'ranking':
                     val = skater.get_attribute(attributes[1], playform_index='ranking')
                 else:
-                    val_a = skater.get_attribute(attributes[0], _filter['playform'])
-                    val_b = skater.get_attribute(attributes[1], _filter['playform'])
-                    val = operation(val_a, val_b)
+                    raise ValueError('Got ' + str(len(attributes)) + ' attributes, expected 1')
             else:
                 val = skater.get_attribute(attributes[0], _filter['playform'])
             val *= scale_factor
+            all_data.append(val)
             if _filter['team'] is None:
                 sorted_list.append((val, skater_id))
                 data_list.append(val)
@@ -522,54 +439,54 @@ def print_sorted_list(db,
                 sorted_list.append((val, skater_id))
                 data_list.append(val)
 
-    # This is not very nice.
     sorted_list.sort(reverse=high_to_low)
     data_list.sort(reverse=high_to_low)
+    all_data.sort(reverse=high_to_low)
 
-    output['mu'] = np.mean(data_list)
-    output['sigma'] = np.std(data_list)
+    output['mu'] = np.mean(all_data)
+    output['sigma'] = np.std(all_data)
     output['list'] = sorted_list
     output['data'] = data_list
+    output['all_data'] = all_data
+
     if normalize is True:
         norm_factor = 1/np.max(data_list)
     else:
         norm_factor = 1
-    if do_print is True:
-        print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}. Stdev={5:.2f}.'
-              .format(attributes,
-                      scale_factor,
-                      _filter['toi'],
-                      len(sorted_list),
-                      output['mu'],
-                      output['sigma']))
-        ranking = 0
-        for pair in sorted_list:
-            ranking += 1
-            skater_id = pair[1]
-            skater = db[skater_id]
-            if ranking <= print_list_length or skater_id in _filter['additional_players']:
-                if attributes[0] == 'ranking':
-                    val = norm_factor*pair[0]
-                    print('{0}: {1} (AGE: {2:.0f}; TEAM: {3}) - {4:.2f} ({5:.2f} sigma. TOI: {6:.1f} min/gp)'
-                          .format(ranking,
-                                  skater.bio['name'],
-                                  skater.bio['age'],
-                                  skater.bio['team_id'],
-                                  val,
-                                  (val-output['mu'])/output['sigma'],
-                                  (skater.get_attribute('toi')/60)/skater.get_attribute('gp')))
-                else:
-                    val = norm_factor*pair[0]
-                    print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'
-                          .format(ranking,
-                                  skater.bio['name'],
-                                  skater.bio['team_id'],
-                                  val,
-                                  (val-output['mu'])/output['sigma']))
-                    print('   TOI: {0:.1f} minutes'.format(skater.get_toi(_filter['playform'])/60))
-                    for attribute in attributes:
-                        print('   {0}: {1:.2f}'
-                              .format(attribute, scale_factor*skater.get_attribute(attribute, _filter['playform'])))
+
+    print('{0}. Scale factor={1:.0f}. Min.TOI={2:.0f}. Total players={3:.0f}. Average value={4:.2f}. Stdev={5:.2f}.'
+            .format(attributes,
+                    scale_factor,
+                    _filter['toi'],
+                    len(all_data),
+                    output['mu'],
+                    output['sigma']))
+    ranking = 0
+    for pair in sorted_list:
+        ranking += 1
+        skater_id = pair[1]
+        skater = db.get_player(skater_id)
+        if ranking <= print_list_length or skater_id in _filter['additional_players']:
+            if attributes[0] == 'ranking':
+                val = norm_factor*pair[0]
+                print('{0}: {1} (AGE: {2:.0f}; TEAM: {3}) - {4:.2f} ({5:.2f} sigma. TOI: {6:.1f} min/gp)'
+                        .format(all_data.index(pair[0]) + 1,  # Add one to make print out look nice
+                                skater.bio['name'],
+                                skater.bio['age'],
+                                skater.bio['team_id'],
+                                val,
+                                (val-output['mu'])/output['sigma'],
+                                (skater.get_attribute('toi')/60)/skater.get_attribute('gp')))
+            else:
+                val = norm_factor*pair[0]
+                print('{0} ({1}): {2} ({3}) - {4:.2f} ({5:.2f} sigma)'
+                        .format(ranking,
+                                all_data.index(pair[0]) + 1,  # Add one to make print out look nice
+                                skater.bio['name'],
+                                skater.bio['team_id'],
+                                val,
+                                (val-output['mu'])/output['sigma']))
+                print('   TOI: {0:.1f} minutes'.format(skater.get_toi(_filter['playform'])/60))
     return output
 
 
@@ -581,17 +498,22 @@ def print_sorted_list_goalie(db,
                              high_to_low=True,
                              do_print=True,
                              normalize=False):
-    if _filter is None:
-        _filter['toi'] = 0
+    # Validate filter settings
+    if 'toi' not in _filter or _filter == {}:
+        _filter['toi'] = 500
+    if 'additional_players' not in _filter or _filter == {}:
         _filter['additional_players'] = []
+    if 'team' not in _filter or _filter == {}:
         _filter['team'] = None
+    print('Filter settings: ' + str(_filter))
     output = {}
     added_players = set()
-    sorted_list, data_list = [], []
-    for goalie_id in db.keys():
-        goalie = db[goalie_id]
+    sorted_list, data_list, all_data = [], [], []
+    for goalie_id in db.id_set:
+        goalie = db.get_player(goalie_id)
         if goalie.get_attribute('toi') >= 60*_filter['toi'] or goalie_id in _filter['additional_players']:
-            val = goalie.get_attribute(attribute) * scale_factor
+            val = goalie.get_attribute(attribute[0]) * scale_factor
+            all_data.append(val)
             if _filter['team'] is None:
                 sorted_list.append((val, goalie_id))
                 data_list.append(val)
@@ -608,8 +530,9 @@ def print_sorted_list_goalie(db,
     # This is not very nice.
     sorted_list.sort(reverse=high_to_low)
     data_list.sort(reverse=high_to_low)
-    output['mu'] = np.mean(data_list)
-    output['sigma'] = np.std(data_list)
+    all_data.sort(reverse=high_to_low)
+    output['mu'] = np.mean(all_data)
+    output['sigma'] = np.std(all_data)
     output['list'] = sorted_list
     output['data'] = data_list
     if normalize is True:
@@ -621,17 +544,17 @@ def print_sorted_list_goalie(db,
               .format(attribute,
                       scale_factor,
                       _filter['toi'],
-                      len(sorted_list),
+                      len(all_data),
                       output['mu']))
         ranking = 0
         for pair in sorted_list:
             ranking += 1
             goalie_id = pair[1]
-            goalie = db[goalie_id]
+            goalie = db.data[goalie_id]
             if ranking <= print_list_length or goalie_id in _filter['additional_players']:
                 val = norm_factor*pair[0]
                 print('{0}: {1} ({2}) - {3:.2f} ({4:.2f} sigma)'
-                      .format(ranking,
+                      .format(all_data.index(val) + 1,
                               goalie.get_attribute('name'),
                               goalie.get_attribute('team_id'),
                               val,
@@ -650,7 +573,7 @@ def get_pair_index(pair_list, key):
 
 def get_sigma_difference(db, player_id, attribute, playform=None):
     if playform is None:
-        playform = STAT_ES
+        playform = 'es'
 
     _filter = {}
     _filter['toi'] = 200
@@ -667,7 +590,7 @@ def get_sigma_difference(db, player_id, attribute, playform=None):
                            high_to_low=True,
                            do_print=False,
                            normalize=False)
-    player = db[player_id]
+    player = db.get_player(player_id)
     player_val = player.get_attribute(attribute, playform)
     return (player_val-op['mu'])/op['sigma']
 
@@ -889,11 +812,7 @@ def print_player_from_team(player_db, team_id, position=[]):
             print(player_id)
 
 
-def get_sorted_db(simulation_param,
-                  value_key, cut_off=None,
-                  toi_filter=0,
-                  position_filter=None,
-                  best_first=True):
+def get_sorted_db(simulation_param, value_key, cut_off=None, toi_filter=0, position_filter=None, best_first=True):
     """
     Return the cut_off best players in a certain category. Can filter out players based on time-on-ice [minutes]
     """
@@ -953,20 +872,20 @@ def get_probability(values, idx=0):
 def get_skater_values(skater_db):
     values_dict = defaultdict(list)
     for skater_id in skater_db.id_set:
-        skater = skater_db[skater_id]
+        skater = skater_db.data[skater_id]
         values_dict['estimated_off_per_60'].append(skater.on_ice['estimated_off_per_60'])
         values_dict['estimated_def_per_60'].append(skater.on_ice['estimated_def_per_60'])
         values_dict['estimated_off_pcg'].append(skater.on_ice['estimated_off_pcg'])
         values_dict['estimated_off_diff'].append(skater.on_ice['estimated_off_diff'])
-        values_dict['primary_points_per_60'].append(skater.ind['primary_points_per_60'][0])
-        values_dict['goal_scoring_rating'].append(skater.ind['goal_scoring_rating'][0])
+        values_dict['primary_points_per_60'].append(skater.ind['primary_points_per_60']['es'])
+        values_dict['goal_scoring_rating'].append(skater.ind['goal_scoring_rating']['es'])
     return values_dict
 
 
 def get_team_values(team_db):
     values_dict = defaultdict(list)
     for team_id in ACTIVE_TEAMS:
-        team = team_db[team_id]
+        team = team_db.data[team_id]
         values_dict['p_pcg'].append(team.p_pcg)
         values_dict['gf_pcg'].append(team.gf_pcg)
         values_dict['sf_pcg'].append(team.sf_pcg)
@@ -1037,20 +956,20 @@ def generate_fatigue_factors(csv_path='Data/nhl_result_from_2018.csv'):
                             else:
                                 p = 0
                             op_days[days_since_last_game]['games_played'] += 1
-                            op_days[days_since_last_game]['gf'] += gf
+                            op_days[days_since_last_game]['goals'] += gf
                             op_days[days_since_last_game]['ga'] += ga
                             op_days[days_since_last_game]['p'] += p
                             op_days[days_since_last_game]['p_total'] += 2
-                            op_all['gf'] += gf
+                            op_all['goals'] += gf
                             op_all['ga'] += ga
                             op_all['p'] += p
                             op_all['p_total'] += 2
                         prev_date = this_date
 
-        total_gf_pcg = get_probability([op_all['gf'], op_all['ga']])
+        total_gf_pcg = get_probability([op_all['goals'], op_all['ga']])
         total_p_pcg = op_all['p']/op_all['p_total']
         for i in range(3):
-            days_gf_pcg = get_probability([op_days[i]['gf'], op_days[i]['ga']])
+            days_gf_pcg = get_probability([op_days[i]['goals'], op_days[i]['ga']])
             days_p_pcg = op_days[i]['p']/op_days[i]['p_total']
             op_days[i]['gf_pcg'] = days_gf_pcg
             op_days[i]['gf_pcg_rel'] = days_gf_pcg/total_gf_pcg
@@ -1149,8 +1068,8 @@ def generic_csv_reader(csv_file_path, dict_key_attribute='name', output_attribut
 
 
 def clean_string(input_string):
-   ''' Clean up string, to use as attribute name '''
-   input_string = input_string.replace(' ','_')
-   input_string = input_string.replace('%','percent')
-   input_string = input_string.strip('.-')
-   return input_string.lower()
+    ''' Clean up string, to use as attribute name '''
+    input_string = input_string.replace(' ','_')
+    input_string = input_string.replace('%','percent')
+    input_string = input_string.strip('.-')
+    return input_string.lower()
