@@ -2,12 +2,10 @@ import csv
 import datetime
 from collections import defaultdict
 import numpy as np
-import os
-import warnings
 from nhl_helpers import *
 from nhl_defines import *
 from nhl_entities import Skater, Goalie, Team
-#from nhl_web_scrape import *
+# from nhl_web_scrape import *
 
 
 class Database():
@@ -41,14 +39,21 @@ class TeamDatabase():
         self.add_home_data()
         self.add_away_data()
         self.add_team_schedule()
-        #self.add_fattigue_information()
+        # @TODO: self.add_fattigue_information()
         self.add_additional_data()
+        self.fix_seattle()
+
+    def fix_seattle(self):
+        """ Special fix to handle introduction of Seattle Kraken """
+        kraken = self.get_team("MTL")
+        kraken.name = "SEA"
+        kraken.team_id = "SEA"
+        kraken.set_division()
+        self.data["SEA"] = kraken
 
     def add_es_data(self):
         ''' Adds ES-data for all teams '''
-        input_csv = self._configuration.csvfiles['team_es']
-
-        with open(input_csv, 'rt') as f:
+        with open(self._configuration.csvfiles['team_es'], 'rt') as f:
             reader = csv.reader(f, delimiter=',')
             total_gp, total_otl, total_gf = 0, 0, 0
             for row in reader:
@@ -354,7 +359,6 @@ class TeamDatabase():
             team = self.get_team(team_id)
             team.add_additional_data()
 
-
     def get_team(self, team_id):
         ''' Return a given team based on its team-id/name '''
         return self.data[team_id]
@@ -369,7 +373,7 @@ class TeamDatabase():
 
 class SkaterDatabase():
     ''' Class to handle skater data
-    #@TODO: This should inherit from the class Database
+    #TODO: This should inherit from the class Database
     '''
     def __init__(self, configuration):
         ''' SkaterDatabase constructor '''
@@ -381,6 +385,7 @@ class SkaterDatabase():
     def setup_database(self):
         ''' Method to parse information from csv-files '''
         self.add_bio_data()
+        self.add_contract_data()
         self.add_ind_data(playform='es')
         self.add_ind_data(playform='pp')
         self.add_ind_data(playform='pk')
@@ -414,17 +419,22 @@ class SkaterDatabase():
         ''' Read bio-data from CSV-file and create Skater-object to store in SkaterDb '''
         if input_csv is None:
             input_csv = _settings.csvfiles['skater_bio']
+        player_team_db = generic_csv_reader(_settings.csvfiles['player_team_info'], dict_key_attribute='player_id')
         for season_data in input_csv:
             with open(season_data, 'rt') as file_handle:
                 reader = csv.reader(file_handle, delimiter=',')
                 for row in reader:
                     if (row[1] != 'player_name') and (row[1] != 'Player'):
-                        # NAME
                         # Create and store player-ID.
-                        [player_id, team_id] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],
-                                                                           row[SKATER_DB_BIO_TEAM_ID])
-                        # Only add new players
-                        if player_id not in self.id_set:
+                        player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+                        try:
+                            team_id = player_team_db[player_id]["team_id"]
+                        except KeyError:
+                            # This means that the player has no active contract
+                            team_id = None
+
+                        # Only add new players, that has an active contract
+                        if player_id not in self.id_set and team_id is not None:
                             # Bio
                             bio_data = {}
                             bio_data['name'] = player_id
@@ -473,7 +483,7 @@ class SkaterDatabase():
                                 bio_data['total_draft_pos'] = 225  # Default to one pick after last pick in the last round
                             else:
                                 bio_data['total_draft_pos'] = int(row[SKATER_DB_BIO_TOTAL_DRAFT_POS])
-                        self.add_skater(Skater(bio_data))
+                            self.add_skater(Skater(bio_data))
 
     def add_ind_data(self, input_csv=None, playform=None):
         ''' Class method to read individual data from stored .csv-file(s),
@@ -494,10 +504,14 @@ class SkaterDatabase():
                     if row[1].upper() != 'PLAYER_NAME':
                         # Only add players that are playing today.
                         if row[SKATER_DB_BIO_NAME] == 'Sebastian Aho':
+                            """
                             [player_id, __] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],
                                                                         row[SKATER_DB_BIO_TEAM_ID])
+                            """
+                            player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+                            print("WE NEED TO TALK ABOUT SEBASTIAN AHO")
                         else:
-                            [player_id, __] = generate_player_and_team_id(str(row[SKATER_DB_BIO_NAME]))
+                            player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
                         if player_id in self.id_set:
                             skater = self.get_player(player_id)
                             ind_data = skater.get_ind_data()
@@ -535,10 +549,11 @@ class SkaterDatabase():
                             ind_data = stack(ind_data, attribute='hits_taken', playform=playform, value=int(row[SKATER_DB_IND_HITS_TAKEN]))
                             # Individual expected goals forward
                             ind_data = stack(ind_data, attribute='ixgf', playform=playform, value=float(row[SKATER_DB_IND_IXG]))
+                            # Update skater object
+                            skater.add_ind_data(ind_data)
                         else:
-                            print('Player ' + player_id + ' not included in BIO-data')
-                        # Update skater object
-                        skater.add_ind_data(ind_data)
+                            # print('Player ' + player_id + ' not included in BIO-data')
+                            pass
 
     def add_on_ice_data(self, input_csv=None):
         ''' Class method to read on-ice data from stored .csv-file(s), and update Skater-object in
@@ -553,10 +568,14 @@ class SkaterDatabase():
                     if row[1] != 'player_name':
                         # Only add players that are playing today.
                         if row[SKATER_DB_BIO_NAME] == 'Sebastian Aho':
+                            """
                             [player_id, __] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],
                                                                         row[SKATER_DB_BIO_TEAM_ID])
+                            """
+                            player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+                            print("WE NEED TO TALK ABOUT SEBASTIAN AHO")
                         else:
-                            [player_id, __] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME])
+                            player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
                         if player_id in self.id_set:
                             skater = self.get_player(player_id)
                             on_ice_data = skater.get_on_ice_data()
@@ -576,6 +595,8 @@ class SkaterDatabase():
                             # Shots against
                             on_ice_data = stack(on_ice_data, attribute='sa', value=int(row[SKATER_DB_ON_ICE_SA]))
                             # Expected goals forward
+                            if player_id == "ERIK_KARLSSON":
+                                print(f"{player_id}: Stacking value {float(row[SKATER_DB_ON_ICE_xGF])}")
                             on_ice_data = stack(on_ice_data, attribute='xgf', value=float(row[SKATER_DB_ON_ICE_xGF]))
                             # Expected goals against
                             on_ice_data = stack(on_ice_data, attribute='xga', value=float(row[SKATER_DB_ON_ICE_xGA]))
@@ -617,7 +638,7 @@ class SkaterDatabase():
                     if is_aho:
                         player_id = aho_id
                     else:
-                        [player_id, __] = generate_player_and_team_id(row[SKATER_DB_RELATIVE_NAME])
+                        player_id = generate_player_id(row[SKATER_DB_RELATIVE_NAME])
 
                     if player_id in self.id_set:
                         skater = self.get_player(player_id)
@@ -737,6 +758,26 @@ class SkaterDatabase():
                         if self._configuration.verbose is True:
                             print(player_id + ' is not an active player!')
 
+    def add_contract_data(self, input_csv=None):
+        '''
+        Adds (very) basic contract information from CapFriendlly
+        '''
+        if input_csv is None:
+            input_csv = self._configuration.csvfiles['contract_data']
+        ufas = []
+        with open(input_csv, 'rt') as f:
+            reader = csv.reader(f, delimiter=',')
+            for row in reader:
+                if row[0] != 'player_id':
+                    ufas.append(row[0])
+
+        for player_id in self.id_set:
+            skater = self.get_player(player_id)
+            if player_id in ufas:
+                skater.bio["ufa"] = True
+            else:
+                skater.bio["ufa"] = False
+
     def add_additional_data(self):
         '''
         Adds additional data to database.
@@ -768,6 +809,16 @@ class SkaterDatabase():
         lst.sort(reverse=reverse)
         return lst.index(attribute_value) + 1
 
+    def get_data_dict(self, attributes):
+        ''' Return dictionary of lists for each specified attribute '''
+        data_dict = defaultdict(list)
+        if isinstance(attributes, list) is False:
+            attributes = [attributes]
+        for player_id in self.id_set:
+            player = self.get_player(player_id)
+            for attribute in attributes:
+                data_dict[attribute].append(player.get_attribute(attribute))
+        return data_dict
 
 
 class GoalieDatabase():
@@ -805,16 +856,22 @@ class GoalieDatabase():
         # Read bio-data from CSV-file and create Goalie object to store in GoalieDb
         if input_csv is None:
             input_csv = _settings.csvfiles['goalie_bio']
+        player_team_db = generic_csv_reader(_settings.csvfiles['player_team_info'], dict_key_attribute='player_id')
         for season_data in input_csv:
             with open(season_data, 'rt') as file_handle:
                 reader = csv.reader(file_handle, delimiter=',')
                 for row in reader:
                     if (row[1] != 'player_name') and (row[1] != 'Player'):
                         # Create and store player-ID.
-                        [player_id, team_id] = generate_player_and_team_id(row[SKATER_DB_BIO_NAME],
-                                                                           row[SKATER_DB_BIO_TEAM_ID])
+                        player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
+                        try:
+                            team_id = player_team_db[player_id]["team_id"]
+                        except KeyError:
+                            # This means that the player has no active contract
+                            team_id = None
+
                         # Only add new players
-                        if player_id not in self.id_set:
+                        if player_id not in self.id_set and team_id is not None:
                             # Bio
                             bio_data = {}
                             bio_data['name'] = player_id
@@ -841,7 +898,7 @@ class GoalieDatabase():
                 reader = csv.reader(file_handle, delimiter=',')
                 for row in reader:
                     if row[1] != 'Player':
-                        [player_id, __] = generate_player_and_team_id(str(row[SKATER_DB_BIO_NAME]))
+                        player_id = generate_player_id(row[SKATER_DB_BIO_NAME])
                         if player_id in self.id_set:
                             goalie = self.get_player(player_id)
                             ind_data = goalie.get_ind_data()
@@ -888,35 +945,46 @@ class GoalieDatabase():
 
 def create_metrics(team_db, skater_db, goalie_db={}, unavailable_players={}):
     ''' Create metrics and rankings for teams and player (skaters and goalies) '''
+    # @TODO: This function REALLY needs an overhaul
     # Initialization
     sf_dict = defaultdict(list)
     gf_dict = defaultdict(list)
+    ixgf_dict = defaultdict(list)
     scf_dict = defaultdict(list)
     sca_dict = defaultdict(list)
-    hits_dict = defaultdict(list)
-    hits_taken_dict = defaultdict(list)
     estimated_off_dict = defaultdict(list)
     estimated_def_dict = defaultdict(list)
     shots_against_dict = defaultdict(list)
     shots_saved_dict = defaultdict(list)
+    toi_dict_skater = defaultdict(list)
+    goals_saved_above_expected_dict = defaultdict(list)
+    xgf_per_sec, xga_per_sec = defaultdict(list), defaultdict(list)
     gp_array = []
 
     # Update Skater data
     for skater_id in skater_db.id_set:
         skater = skater_db.get_player(skater_id)
         skater.ind['toi_pcg'] = {}
-        skater.ind['toi_pcg']['es'] = skater.ind['toi_per_gp']['es'] / team_db.data[skater.bio['team_id']].team_toi_es_per_gp
-        skater.ind['toi_pcg']['pp'] = skater.ind['toi_per_gp']['pp'] / team_db.data[skater.bio['team_id']].team_toi_pp_per_gp
-        skater.ind['toi_pcg']['pk'] = skater.ind['toi_per_gp']['pk'] / team_db.data[skater.bio['team_id']].team_toi_pk_per_gp
-
-        skater.on_ice['rel_gf_diff_per_60'] = skater.on_ice['gf_diff_per_60'] - team_db.data[skater.bio['team_id']].gf_diff_per_60
+        if skater.bio["team_id"] == "SEA":
+            if datetime.datetime.now().month not in [8, 9, 10]:
+                raise ValueError("This needs to be updated")
+            skater.ind['toi_pcg']['es'] = skater.ind['toi_per_gp']['es'] / team_db.data["MTL"].team_toi_es_per_gp
+            skater.ind['toi_pcg']['pp'] = skater.ind['toi_per_gp']['pp'] / team_db.data["MTL"].team_toi_pp_per_gp
+            skater.ind['toi_pcg']['pk'] = skater.ind['toi_per_gp']['pk'] / team_db.data["MTL"].team_toi_pk_per_gp
+            skater.on_ice['rel_gf_diff_per_60'] = skater.on_ice['gf_diff_per_60'] - team_db.data["MTL"].gf_diff_per_60  # MTL is very average...
+        else:
+            skater.ind['toi_pcg']['es'] = skater.ind['toi_per_gp']['es'] / team_db.data[skater.bio['team_id']].team_toi_es_per_gp
+            skater.ind['toi_pcg']['pp'] = skater.ind['toi_per_gp']['pp'] / team_db.data[skater.bio['team_id']].team_toi_pp_per_gp
+            skater.ind['toi_pcg']['pk'] = skater.ind['toi_per_gp']['pk'] / team_db.data[skater.bio['team_id']].team_toi_pk_per_gp
+            skater.on_ice['rel_gf_diff_per_60'] = skater.on_ice['gf_diff_per_60'] - team_db.data[skater.bio['team_id']].gf_diff_per_60
 
         # Estimate offensive and defensive capabilities. Different depending on the skater has played for multiple teams or not.
-        estimated_off_metric = 'sc'
+        # Per 2021-05-08: xgf
+        estimated_off_metric = 'xg'
         estimated_off = skater.on_ice[estimated_off_metric + 'f'] * skater.on_ice['rel_' + estimated_off_metric + 'f_factor']
         estimated_def = skater.on_ice[estimated_off_metric + 'a'] * skater.on_ice['rel_' + estimated_off_metric + 'a_factor']
 
-        # Not really sure if this code should be include..
+        # Not really sure if this code should be included..
         # If included, it is assumed that the player will perform in line with his new team (however, still taking the relative factor into account).
         # If excluded, the player might be "dragged down" by his previous club.
         '''
@@ -928,13 +996,19 @@ def create_metrics(team_db, skater_db, goalie_db={}, unavailable_players={}):
         skater.on_ice['estimated_def'] = estimated_def
         skater.on_ice['estimated_off_diff'] = estimated_off - estimated_def
         if skater.ind['toi']['es'] == 0:
+            skater.on_ice['xgf_per_sec'] = 0
+            skater.on_ice['xga_per_sec'] = 0
             skater.on_ice['estimated_off_per_sec'] = 0
             skater.on_ice['estimated_def_per_sec'] = 0
         else:
+            skater.on_ice['xgf_per_sec'] = (skater.on_ice['xgf']) / skater.ind['toi']['es']
+            skater.on_ice['xga_per_sec'] = (skater.on_ice['xga']) / skater.ind['toi']['es']
             skater.on_ice['estimated_off_per_sec'] = estimated_off / skater.ind['toi']['es']
             skater.on_ice['estimated_def_per_sec'] = estimated_def / skater.ind['toi']['es']
         skater.on_ice['estimated_off_per_60'] = skater.on_ice['estimated_off_per_sec']*3600
         skater.on_ice['estimated_def_per_60'] = skater.on_ice['estimated_def_per_sec']*3600
+        skater.on_ice['xgf_per_60'] = skater.on_ice['xgf_per_sec']*3600
+        skater.on_ice['xga_per_60'] = skater.on_ice['xga_per_sec']*3600
         skater.on_ice['estimated_off_per_60_diff'] = skater.on_ice['estimated_off_per_60'] - skater.on_ice['estimated_def_per_60']
         skater.on_ice['estimated_fun_factor'] = skater.on_ice['estimated_off_per_60'] + skater.on_ice['estimated_def_per_60']
         # Only use available players for the ranking data
@@ -942,122 +1016,188 @@ def create_metrics(team_db, skater_db, goalie_db={}, unavailable_players={}):
         if skater_id not in unavailable_players:
             sf_dict[skater.bio['team_id']].append(skater.ind['isf']['es'])
             gf_dict[skater.bio['team_id']].append(skater.ind['goals']['es'])
-            hits_dict[skater.bio['team_id']].append(skater.ind['hits']['es'])
-            hits_taken_dict[skater.bio['team_id']].append(skater.ind['hits_taken']['es'])
+            ixgf_dict[skater.bio['team_id']].append(skater.ind['ixgf']['es'])
             scf_dict[skater.bio['team_id']].append(skater.on_ice['scf'])
             sca_dict[skater.bio['team_id']].append(skater.on_ice['sca'])
+
             # Store estimated offensive and defensive capabilities per team.
+            xgf_per_sec[skater.bio['team_id']].append(skater.on_ice['xgf_per_sec'])
+            xga_per_sec[skater.bio['team_id']].append(skater.on_ice['xga_per_sec'])
             estimated_off_dict[skater.bio['team_id']].append(estimated_off)
             estimated_def_dict[skater.bio['team_id']].append(estimated_def)
+            toi_dict_skater[skater.bio['team_id']].append(skater.ind['toi']['es'])
         # Error/warning handling for weird input
         if (skater.on_ice['estimated_off_per_sec'] + skater.on_ice['estimated_def_per_sec']) == 0:
-            #warnings.warn('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
-            raise ValueError('Bad input for player ' + skater.bio['name'] + '. Setting value ESTIMATED_OFF_PCG to 0.')
-            skater.on_ice['estimated_off_pcg'] = 0
+            raise ValueError('Bad input for player ' + skater.bio['name'])
         else:
             skater.on_ice['estimated_off_pcg'] = skater.on_ice['estimated_off_per_sec'] / (skater.on_ice['estimated_off_per_sec']+skater.on_ice['estimated_def_per_sec'])
 
-    # Add ranking data.
-    values_dict = get_skater_values(skater_db)
-    for skater_id in skater_db.id_set:
-        skater_db.data[skater_id].rank['estimated_off_per_60'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_per_60'],
-                                                                     values_dict['estimated_off_per_60'])
-        skater_db.data[skater_id].rank['estimated_def_per_60'] = get_rank(skater_db.data[skater_id].on_ice['estimated_def_per_60'],
-                                                                     values_dict['estimated_def_per_60'])
-        skater_db.data[skater_id].rank['estimated_off_pcg'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_pcg'],
-                                                                  values_dict['estimated_off_pcg'])
-        skater_db.data[skater_id].rank['estimated_off_diff'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_diff'],
-                                                                   values_dict['estimated_off_diff'])
-        skater_db.data[skater_id].rank['primary_points_per_60'] = get_rank(skater_db.data[skater_id].ind['primary_points_per_60']['es'],
-                                                                      values_dict['primary_points_per_60'])
-        skater_db.data[skater_id].rank['goal_scoring_rating'] = get_rank(skater_db.data[skater_id].ind['goal_scoring_rating']['es'],
-                                                                    values_dict['goal_scoring_rating'])
-        if skater_db.data[skater_id].bio['position'] == 'F':
-            weighted_scale = WS_FWD
-        else:
-            weighted_scale = WS_DEF
-        skater_db.data[skater_id].rank['total'] = weighted_scale[0]*skater_db.data[skater_id].rank['estimated_off_diff'] +\
-                                             weighted_scale[1]*skater_db.data[skater_id].rank['primary_points_per_60'] +\
-                                             weighted_scale[2]*skater_db.data[skater_id].rank['goal_scoring_rating']
     # Update goalie data
-    toi_dict = defaultdict(list)
-    for g_id in goalie_db.id_set:
-        goalie = goalie_db.data[g_id]
+    toi_dict_goalies = defaultdict(list)
+    for g_id, goalie in goalie_db.data.items():
         # Calculate total sa/ss per team, only if player is available
         if g_id not in unavailable_players:
             shots_against_dict[goalie.bio['team_id']].append(goalie.get_attribute('sa', playform_index=-1))
             shots_saved_dict[goalie.bio['team_id']].append(goalie.get_attribute('sv', playform_index=-1))
-            toi_dict[goalie.bio['team_id']].append(goalie.ind['toi']['es'])
-    # This loop needs to happen, since the total toi_dict is created in the previous one.
+            toi_dict_goalies[goalie.bio['team_id']].append(goalie.ind['toi']['es'])
+            goals_saved_above_expected_dict[goalie.bio['team_id']].append(goalie.ind['gsax']['es'])
+    # This loop needs to happen, since the total toi_dict_goalies is created in the previous one.
     for g_id in goalie_db.id_set:
         goalie = goalie_db.get_player(g_id)
         goalie.ind['toi_pcg'] = {}
-        goalie.ind['toi_pcg']['es'] = goalie.ind['toi']['es'] / sum(toi_dict[goalie.bio['team_id']])
+        goalie.ind['toi_pcg']['es'] = goalie.ind['toi']['es'] / sum(toi_dict_goalies[goalie.bio['team_id']])
 
     # Update team data
     for team_id in team_db.id_set:
         gp_array.append(team_db.data[team_id].gp)
     avg_gp = np.mean(gp_array)
-    games_needed = 20
+    games_needed = 15
     if avg_gp > games_needed:
         avg_gp = games_needed
 
+    # Special fix to handle inlcusion of Seattle
+    team_db.data["SEA"] = team_db.data["MTL"]
+    if datetime.datetime.now().month not in [8, 9, 10]:
+        raise ValueError("This must be updated")
+
+    tmp_team_data = []
     for team_id in ACTIVE_TEAMS:
+        for g_id, goalie in goalie_db.data.items():
+            # goalie = goalie_db.data[g_id]
+            if goalie.bio['team_id'] == team_id:
+                sv_pcg = 100*goalie.ind["sv"]["es"]/goalie.ind["sa"]["es"]
         team_sh_pcg = sum(gf_dict[team_id])/sum(sf_dict[team_id])
         team_sv_pcg = sum(shots_saved_dict[team_id])/sum(shots_against_dict[team_id])
         team_estimated_off = sum(estimated_off_dict[team_id])  # How much offense the team generates, based on the individual players.
         team_estimated_def = sum(estimated_def_dict[team_id])  # How much offense the team gives up, based on the individual players.
-        team_scf = sum(scf_dict[team_id])
-        team_sca = sum(sca_dict[team_id])
-        team_db.data[team_id].exp_data['hits'] = sum(hits_dict[team_id])
-        team_db.data[team_id].exp_data['hits_taken'] = sum(hits_taken_dict[team_id])
-        team_db.data[team_id].exp_data['hits_diff'] = team_db.data[team_id].exp_data['hits'] - team_db.data[team_id].exp_data['hits_taken']
         team_db.data[team_id].exp_data['sh_pcg'] = team_sh_pcg
         team_db.data[team_id].exp_data['sv_pcg'] = team_sv_pcg
+        team_db.data[team_id].exp_data['team_off'] = team_estimated_off
+        team_db.data[team_id].exp_data['team_def'] = team_estimated_def
+        team_db.data[team_id].exp_data['team_off_pcg'] = team_estimated_off/(team_estimated_off+team_estimated_def)
+
         team_db.data[team_id].exp_data['estimated_off'] = team_estimated_off*team_db.data[team_id].exp_data['sh_pcg']
         team_db.data[team_id].exp_data['estimated_def'] = team_estimated_def*(1-team_db.data[team_id].exp_data['sv_pcg'])
         team_db.data[team_id].exp_data['estimated_off_pcg'] = team_db.data[team_id].exp_data['estimated_off']/(team_db.data[team_id].exp_data['estimated_off']+team_db.data[team_id].exp_data['estimated_def'])
-
         team_db.data[team_id].exp_data['pdo'] = team_db.data[team_id].exp_data['sh_pcg']+team_db.data[team_id].exp_data['sv_pcg']
-        team_db.data[team_id].exp_data['scf_per_60'] = (3600*team_scf/team_db.data[team_id].team_toi_es)/5  # Division by five to compare with in skater stat.
-        team_db.data[team_id].exp_data['sca_per_60'] = (3600*team_sca/team_db.data[team_id].team_toi_es)/5  # Division by five to compare with in skater stat.
-        team_db.data[team_id].exp_data['scf_pcg'] = (team_scf/(team_scf+team_sca))
+
 
         # Assign ratings. Different for pre_season or non_pre_season.
-        team_db.data[team_id].exp_data['pre_season_rating'] = team_db.data[team_id].exp_data['estimated_off_pcg']
+        # Special construction to blur effects of an exceptionally bad/good player changing teams
+        pre_season_off = team_db.data[team_id].exp_data['team_off']
+        pre_season_def = team_db.data[team_id].exp_data['team_def']
+        team_db.data[team_id].exp_data['pre_season_rating'] = pre_season_off/(pre_season_off + pre_season_def)
         team_db.data[team_id].exp_data['in_season_rating'] = (team_db.data[team_id].p_pcg*P_PCG_FACTOR*avg_gp/games_needed) + team_db.data[team_id].exp_data['estimated_off_pcg']
-        '''
-        print('   {0}: Rating: {1:.3f}. "Goodness": {2:.3f}. Play-control: {3:.1f}%. PDO: {4:.3f}. Shooting: {5:.1f}%. Saving: {6:.1f}%'.format(team_id,
-                                                                                                                                                team_db.data[team_id].exp_data['in_season_rating'],
-                                                                                                                                                team_db.data[team_id].exp_data['estimated_off_pcg'],
-                                                                                                                                                100*team_db.data[team_id].exp_data['scf_pcg'],
-                                                                                                                                                team_db.data[team_id].exp_data['pdo'],
-                                                                                                                                                100*team_db.data[team_id].exp_data['sh_pcg'],
-                                                                                                                                                100*team_db.data[team_id].exp_data['sv_pcg']))
-        '''
-    # Add ranking data. This needs to be done in a separate for-loop because of 'estimated_off_pcg'
-    # Get values for ranking
-    values_dict = get_team_values(team_db)
+        # print('   {0}: Rating: {1:.3f}. "Goodness": {2:.3f}. Play-control: {3:.1f}%. PDO: {4:.3f}. Shooting: {5:.1f}%. Saving: {6:.1f}%'.format(team_id,
+        #                                                                                                                                         team_db.data[team_id].exp_data['in_season_rating'],
+        #                                                                                                                                         team_db.data[team_id].exp_data['estimated_off_pcg'],
+        #                                                                                                                                         100*team_db.data[team_id].exp_data['scf_pcg'],
+        #                                                                                                                                         team_db.data[team_id].exp_data['pdo'],
+        #                                                                                                                                         100*team_db.data[team_id].exp_data['sh_pcg'],
+        #                                                                                                                                         100*team_db.data[team_id].exp_data['sv_pcg']))
 
-    # Assign ranking(s)
-    for team_id in ACTIVE_TEAMS:
-        team_db.data[team_id].rank['p_pcg'] = get_rank(team_db.data[team_id].p_pcg, values_dict['p_pcg'])
-        team_db.data[team_id].rank['gf_pcg'] = get_rank(team_db.data[team_id].gf_pcg, values_dict['gf_pcg'])
-        team_db.data[team_id].rank['sf_pcg'] = get_rank(team_db.data[team_id].sf_pcg, values_dict['sf_pcg'])
-        team_db.data[team_id].rank['cf_pcg'] = get_rank(team_db.data[team_id].cf_pcg, values_dict['cf_pcg'])
-        team_db.data[team_id].rank['ff_pcg'] = get_rank(team_db.data[team_id].ff_pcg, values_dict['ff_pcg'])
-        team_db.data[team_id].rank['xgf_pcg'] = get_rank(team_db.data[team_id].xgf_pcg, values_dict['xgf_pcg'])
-        team_db.data[team_id].rank['scf_pcg'] = get_rank(team_db.data[team_id].scf_pcg, values_dict['scf_pcg'])
-        team_db.data[team_id].rank['hdcf_pcg'] = get_rank(team_db.data[team_id].hdcf_pcg, values_dict['hdcf_pcg'])
-        team_db.data[team_id].rank['sv_pcg'] = get_rank(team_db.data[team_id].sv_pcg, values_dict['sv_pcg'])
-        team_db.data[team_id].rank['pdo'] = get_rank(team_db.data[team_id].pdo, values_dict['pdo'])
-        team_db.data[team_id].rank['hits'] = get_rank(team_db.data[team_id].exp_data['hits'], values_dict['hits'])
-        team_db.data[team_id].rank['hits_taken'] = get_rank(team_db.data[team_id].exp_data['hits_taken'], values_dict['hits_taken'])
-        team_db.data[team_id].rank['hits_diff'] = get_rank(team_db.data[team_id].exp_data['hits_diff'], values_dict['hits_diff'])
-        team_db.data[team_id].rank['estimated_off_pcg'] = get_rank(team_db.data[team_id].exp_data['estimated_off_pcg'], values_dict['estimated_off_pcg'])
-        team_db.data[team_id].rank['in_season_rating'] = get_rank(team_db.data[team_id].exp_data['in_season_rating'], values_dict['in_season_rating'])
+        # New approach to team ratings
+        team_gsvax_per_60 = 0
+        for gid in goalie_db.id_set:
+            goalie = goalie_db.get_player(gid)
+            if goalie.bio["team_id"] == team_id:
+                ind_gsvax_per_60 = 3600*goalie.ind['gsax']['es']/goalie.ind['toi']['es']
+                #print(f'   {gid}: Individual GSAX/60: {ind_xgf_per_60:.2f}. TOI-weighted: {goalie.ind["toi_pcg"]["es"] * ind_xgf_per_60:.2f}')
+                team_gsvax_per_60 += goalie.ind['toi_pcg']['es'] * ind_gsvax_per_60
+
+        team_db.data[team_id].exp_data['gsax_per_60'] = 3600*sum(goals_saved_above_expected_dict[team_id])/sum(toi_dict_goalies[team_id])
+        team_db.data[team_id].exp_data['xgf_per_60'] = 3600*sum(xgf_per_sec[team_id])
+        team_db.data[team_id].exp_data['xga_per_60'] = 3600*sum(xga_per_sec[team_id])
+        # How effective is the overall team compared to expected goals?
+        team_gfs = sum(gf_dict[team_id])
+        team_ixgfs = sum(ixgf_dict[team_id])
+        goal_scoring_factor = team_gfs/team_ixgfs
+        gsax_60 = team_db.data[team_id].exp_data['gsax_per_60']
+        # N is the number of players per team
+        N = len(xgf_per_sec[team_id])
+        xgf_60 = team_db.data[team_id].exp_data['xgf_per_60']
+        xga_60 = team_db.data[team_id].exp_data['xga_per_60']
+        # Expected goals forward per 60 minutes (5v5)
+        xgf_60_5v5 = xgf_60/N
+        # Expected goals against per 60 minutes (5v5)
+        xga_60_5v5 = xga_60/N
+
+        xgf_60_5v5_comp = xgf_60_5v5*goal_scoring_factor
+        xga_60_5v5_comp = xga_60_5v5 - gsax_60
+
+        xgf_pcg_no_g = xgf_60_5v5/(xgf_60_5v5 + xga_60_5v5)
+        xgf_pcg = xgf_60_5v5_comp/(xgf_60_5v5_comp+xga_60_5v5_comp)
+        tmp_team_data.append((100*xgf_pcg, team_id))
+
+
+        print(f"{team_id}: GSAx: {gsax_60:.2f}. 5v5-XGF60: {xgf_60_5v5_comp:.2f} GoalScoring: {goal_scoring_factor:.2f}. 5v5-XGA60: {xga_60_5v5_comp:.2f} XGF%: {100*xgf_pcg:.2f}% XGF-no-goalie%: {100*xgf_pcg_no_g:.2f}%")
+        """
+        for sid in skater_db.id_set:
+            skater = skater_db.get_player(sid)
+            if skater.bio["team_id"] == team_id:
+                s_xgf_pcg = skater.on_ice['xgf_per_60'] / (skater.on_ice['xgf_per_60'] + skater.on_ice['xga_per_60'])
+                # gscax = 3600*(skater.ind["gf_above_xgf"]["es"] / skater.ind['toi']['es'])
+                if skater.ind["goals"]["es"] == 0:
+                    gscax = 1
+                else:
+                    gscax = skater.ind["goals"]["es"] / skater.ind["ixgf"]["es"]
+                print(f"   {sid:20} (xGF: {100*s_xgf_pcg:.2f}%) (GScaX-quota: {gscax:.2f})")
+        for gid in goalie_db.id_set:
+            goalie = goalie_db.get_player(gid)
+            if goalie.bio["team_id"] == team_id:
+                print(f"   {gid} (GSaX/60: {goalie.ind['gsax_per_60']['es']:.2f})")
+        """
+    sort_and_print(tmp_team_data, reversed=True)
 
     return [team_db, skater_db, goalie_db]
+
+
+def create_rankings(team_db, skater_db, goalie_db):
+    """ Create rankings for Teams, Skaters and Goalies """
+
+    # @TODO: This really needs an update
+    values_dict = get_skater_values(skater_db)
+    for skater_id in skater_db.id_set:
+        skater_db.data[skater_id].rank['estimated_off_per_60'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_per_60'],
+                                                                          values_dict['estimated_off_per_60'])
+        skater_db.data[skater_id].rank['estimated_def_per_60'] = get_rank(skater_db.data[skater_id].on_ice['estimated_def_per_60'],
+                                                                          values_dict['estimated_def_per_60'])
+        skater_db.data[skater_id].rank['estimated_off_pcg'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_pcg'],
+                                                                       values_dict['estimated_off_pcg'])
+        skater_db.data[skater_id].rank['estimated_off_diff'] = get_rank(skater_db.data[skater_id].on_ice['estimated_off_diff'],
+                                                                        values_dict['estimated_off_diff'])
+        skater_db.data[skater_id].rank['primary_points_per_60'] = get_rank(skater_db.data[skater_id].ind['primary_points_per_60']['es'],
+                                                                           values_dict['primary_points_per_60'])
+        skater_db.data[skater_id].rank['goal_scoring_rating'] = get_rank(skater_db.data[skater_id].ind['goal_scoring_rating']['es'],
+                                                                         values_dict['goal_scoring_rating'])
+        if skater_db.data[skater_id].bio['position'] == 'F':
+            weighted_scale = WS_FWD
+        else:
+            weighted_scale = WS_DEF
+        skater_db.data[skater_id].rank['total'] = weighted_scale[0]*skater_db.data[skater_id].rank['estimated_off_diff'] + weighted_scale[1]*skater_db.data[skater_id].rank['primary_points_per_60'] + weighted_scale[2]*skater_db.data[skater_id].rank['goal_scoring_rating']
+
+
+    # Add team ranking data.
+    # Get values for ranking
+    values_dict = get_team_values(team_db)
+    rankings = ["p_pcg",
+                "gf_pcg",
+                "sf_pcg",
+                "cf_pcg",
+                "ff_pcg",
+                "xgf_pcg",
+                "scf_pcg",
+                "hdcf_pcg",
+                "sv_pcg",
+                "pdo"]
+    # Assign ranking(s)
+    for team_id in ACTIVE_TEAMS:
+        for rank in rankings:
+            team_db.data[team_id].rank[rank] = get_rank(team_db.data[team_id].__dict__[rank], values_dict[rank])
+        for key in team_db.data[team_id].exp_data:
+            team_db.data[team_id].rank[key] = get_rank(team_db.data[team_id].exp_data[key], values_dict[key])
+
+    return team_db, skater_db, goalie_db
 
 
 def create_team_specific_db(simulation_param):
@@ -1067,35 +1207,6 @@ def create_team_specific_db(simulation_param):
         if skater_id not in simulation_param['databases']['unavailable_players']:
             output[skater.bio['team_id']][skater.bio['name']] = skater
     return output
-
-
-def generate_ufa_database(simulation_param):
-    ''' Generates a database (in the form of a list) of all Unrestricted Free Agents,
-        based on the CSV-file downloaded and saved earlier. '''
-    ufa_list = []
-    with open(simulation_param['csvfiles']['contract_data'], 'rt') as f:
-        reader = csv.reader(f, delimiter=',')
-        for raw_row in reader:
-            str_row = str(raw_row[0])
-            # Skip the first row.
-            if str_row != 'player_id':
-                # Only add players that played some in the NHL the valid season.
-                if str_row in ACTIVE_PLAYERS:
-                    ufa_list.append(str_row)
-    return ufa_list
-
-
-def modify_player_db(simulation_param):
-    '''
-    Manually update databases if neede
-    Ex:
-        simulation_param['databases'][skater_db] = ...
-        simulation_param['databases'][goalie_db] = ...
-    '''
-
-    # ADD MODIFICATIONS TO DATABASE HERE
-
-    return simulation_param
 
 
 def add_unavailable_player(simulation_param, player_id):

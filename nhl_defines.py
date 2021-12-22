@@ -1,5 +1,142 @@
 ''' Pre defined variables '''
-#@TODO: Maybe move the separate defines to the files where they are used?
+# @TODO: Maybe move the separate defines to the files where they are used?
+
+# Links to team information from CapFriendly
+CF_TEAM_LINKS = {
+    "ANA": "https://www.capfriendly.com/teams/ducks",
+    "ARI": "https://www.capfriendly.com/teams/coyotes",
+    "BOS": "https://www.capfriendly.com/teams/bruins",
+    "BUF": "https://www.capfriendly.com/teams/sabres",
+    "CGY": "https://www.capfriendly.com/teams/flames",
+    "CAR": "https://www.capfriendly.com/teams/hurricanes",
+    "CHI": "https://www.capfriendly.com/teams/blackhawks",
+    "COL": "https://www.capfriendly.com/teams/avalanche",
+    "CBJ": "https://www.capfriendly.com/teams/bluejackets",
+    "DAL": "https://www.capfriendly.com/teams/stars",
+    "DET": "https://www.capfriendly.com/teams/redwings",
+    "EDM": "https://www.capfriendly.com/teams/oilers",
+    "FLA": "https://www.capfriendly.com/teams/panthers",
+    "LAK": "https://www.capfriendly.com/teams/kings",
+    "MIN": "https://www.capfriendly.com/teams/wild",
+    "MTL": "https://www.capfriendly.com/teams/canadiens",
+    "NSH": "https://www.capfriendly.com/teams/predators",
+    "NJD": "https://www.capfriendly.com/teams/devils",
+    "NYI": "https://www.capfriendly.com/teams/islanders",
+    "NYR": "https://www.capfriendly.com/teams/rangers",
+    "OTT": "https://www.capfriendly.com/teams/senators",
+    "PHI": "https://www.capfriendly.com/teams/flyers",
+    "PIT": "https://www.capfriendly.com/teams/penguins",
+    "SJS": "https://www.capfriendly.com/teams/sharks",
+    "SEA": "https://www.capfriendly.com/teams/kraken",
+    "STL": "https://www.capfriendly.com/teams/blues",
+    "TBL": "https://www.capfriendly.com/teams/lightning",
+    "TOR": "https://www.capfriendly.com/teams/mapleleafs",
+    "VAN": "https://www.capfriendly.com/teams/canucks",
+    "VGK": "https://www.capfriendly.com/teams/goldenknights",
+    "WSH": "https://www.capfriendly.com/teams/capitals",
+    "WPG": "https://www.capfriendly.com/teams/jets"
+}
+
+AGE_COEFF = {
+    16: 4.372,
+    17: 3.676,
+    18:	2.98,
+    19:	2.284,
+    20:	2.018,
+    21:	1.179,
+    22:	1.107,
+    23:	1.056,
+    24:	1.025,
+    25:	1,
+    26:	1,
+    27:	1,
+    28:	1,
+    29:	1
+}
+
+MONTH_LOOKUP = {
+    "JAN": 1,
+    "FEB": 2,
+    "MAR": 3,
+    "APR": 4,
+    "MAY": 5,
+    "JUN": 6,
+    "JUL": 7,
+    "AUG": 8,
+    "SEP": 9,
+    "OCT": 10,
+    "NOV": 11,
+    "DEC": 12
+}
+
+LEAGUE_COEFF = {"NHL": 1,
+                "AHL": 0.389,
+                "ALLSVENSKAN": 0.351,
+                "BCHL": 0.080,
+                "CZECH": 0.583,
+                "CZECH2": 0.240,
+                "DENMARK": 0.190,
+                "ECHL": 0.147,
+                "HOCKEYALLSVENSKAN": 0.285,
+                "HOCKEYETTAN": 0.109,
+                "J18 ELIT": 0.045,
+                "J18 ALLSVENSKAN": 0.067,
+                "J18 DIV 1": 0.02,
+                "J18 DIV 2": 0.01,
+                "J20 SUPERELIT": 0.091,
+                "KHL": 0.772,
+                "LIIGA": 0.441,
+                "MHL": 0.143,
+                "NCAA": 0.194,
+                "NLA": 0.459,
+                "NORWAY": 0.173,
+                "OHL": 0.144,
+                "QMJHL": 0.113,
+                "SHL": 0.566,
+                "SL": 0.137,
+                "SLOVAKIA": 0.295,
+                "USDP": 0.121,
+                "USHL": 0.143,
+                "USHS-PREP": 0.028,
+                "VHL": 0.328,
+                "WHL": 0.141
+                }
+
+EP_TEAM_LINKS = {
+    "ANA": "https://www.eliteprospects.com/team/1580/anaheim-ducks",
+    "ARI": "https://www.eliteprospects.com/team/72/arizona-coyotes",
+    "BOS": "https://www.eliteprospects.com/team/52/boston-bruins",
+    "BUF": "https://www.eliteprospects.com/team/53/buffalo-sabres",
+    "CGY": "https://www.eliteprospects.com/team/54/calgary-flames",
+    "CAR": "https://www.eliteprospects.com/team/55/carolina-hurricanes",
+    "CHI": "https://www.eliteprospects.com/team/56/chicago-blackhawks",
+    "COL": "https://www.eliteprospects.com/team/57/colorado-avalanche",
+    "CBJ": "https://www.eliteprospects.com/team/58/columbus-blue-jackets",
+    "DAL": "https://www.eliteprospects.com/team/59/dallas-stars",
+    "DET": "https://www.eliteprospects.com/team/60/detroit-red-wings",
+    "EDM": "https://www.eliteprospects.com/team/61/edmonton-oilers",
+    "FLA": "https://www.eliteprospects.com/team/62/florida-panthers",
+    "LAK": "https://www.eliteprospects.com/team/79/los-angeles-kings",
+    "MIN": "https://www.eliteprospects.com/team/63/minnesota-wild",
+    "MTL": "https://www.eliteprospects.com/team/64/montreal-canadiens",
+    "NSH": "https://www.eliteprospects.com/team/65/nashville-predators",
+    "NJD": "https://www.eliteprospects.com/team/66/new-jersey-devils",
+    "NYI": "https://www.eliteprospects.com/team/67/new-york-islanders",
+    "NYR": "https://www.eliteprospects.com/team/68/new-york-rangers",
+    "OTT": "https://www.eliteprospects.com/team/69/ottawa-senators",
+    "PHI": "https://www.eliteprospects.com/team/70/philadelphia-flyers",
+    "PIT": "https://www.eliteprospects.com/team/71/pittsburgh-penguins",
+    "SJS": "https://www.eliteprospects.com/team/73/san-jose-sharks",
+    "SEA": "https://www.eliteprospects.com/team/27336/seattle-kraken",
+    "STL": "https://www.eliteprospects.com/team/74/st.-louis-blues",
+    "TBL": "https://www.eliteprospects.com/team/75/tampa-bay-lightning",
+    "TOR": "https://www.eliteprospects.com/team/76/toronto-maple-leafs",
+    "VAN": "https://www.eliteprospects.com/team/77/vancouver-canucks",
+    "VGK": "https://www.eliteprospects.com/team/22211/vegas-golden-knights",
+    "WPG": "https://www.eliteprospects.com/team/9966/winnipeg-jets",
+    "WSH": "https://www.eliteprospects.com/team/78/washington-capitals"
+}
+
 TOTAL_POINTS_PER_GAME = 2.1066089693154995
 TOTAL_GOALS_PER_GAME = 5.209284028324154
 TOTAL_GOALS_PER_GAME_ES = 0
@@ -24,6 +161,7 @@ GAMEPLAY_PK_HT = 2
 GAMEPLAY_PK_AT = 1
 NO_GOALIE_HT = 3
 NO_GOALIE_AT = 4
+NUMBER_OF_PERIODS = 3
 
 PLAYFORMS = ['es', 'pp', 'pk']
 '''
@@ -57,8 +195,8 @@ CONNECTION_TIMEOUT = 60  # Connection will timeout after 60 seconds
 
 ACTIVE_TEAMS = ['ANA', 'ARI', 'BOS', 'BUF', 'CAR', 'CBJ', 'CGY', 'CHI', 'COL',
                         'DAL', 'DET', 'EDM', 'FLA', 'LAK', 'MIN', 'MTL', 'NJD', 'NSH',
-                        'NYI', 'NYR', 'OTT', 'PHI', 'PIT', 'SJS', 'STL', 'TBL', 'TOR',
-                        'VAN', 'VGK', 'WPG', 'WSH']
+                        'NYI', 'NYR', 'OTT', 'PHI', 'PIT', 'SEA', 'SJS', 'STL', 'TBL',
+                        'TOR', 'VAN', 'VGK', 'WPG', 'WSH']
 '''
 Skater Bio-DB from naturalstattrick.com
 ,"Player","Team","Position","Age","Date of Birth",

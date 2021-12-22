@@ -3,6 +3,7 @@
 import requests
 import cfscrape
 import csv
+import time
 
 from bs4 import BeautifulSoup
 from collections import defaultdict
@@ -35,6 +36,7 @@ def write_bio_csv(url, filename):
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             writer.writeheader()
             for i in range(number_of_players):
+                print(f"Saving data for player {str(data_table[1+i*data_length].find('a').contents[0])}")
                 player_dict = {}
                 player_dict['id'] = str(data_table[0+i*data_length].contents[0])
                 player_dict['player_name'] = str(data_table[1+i*data_length].find('a').contents[0])
@@ -240,10 +242,10 @@ def write_ufas(filename):
     name_list = set()
     try:
         with open(filename, mode='w', newline='') as csv_file:
-            writer = csv.writer(csv_file, delimiter=', ')
+            writer = csv.writer(csv_file, delimiter=',')
             writer.writerow(['player_id'])      # Write header manually.
-            for i in range(15):  # 50 players per page, i.ee 'range(15)' means maximum of 15*50=750 players.
-                url = "https://www.capfriendly.com/browse/free-agents/2021/caphit/all/all/ufa/?p=" + str(i+1)
+            for i in range(15):  # 50 players per page, i.e 'range(15)' means maximum of 15*50=750 players.
+                url = "https://www.capfriendly.com/browse/free-agents/2022/caphit/all/all/ufa/?pg=" + str(i+1)
                 scraper = cfscrape.create_scraper()
                 html = scraper.get(url).content
                 soup = BeautifulSoup(html, 'html.parser')
@@ -269,12 +271,182 @@ def write_ufas(filename):
     except Exception as ex:
         print('Could not download UFA information from ' + url)
         print(ex)
-        return False
     return True
 
 
-def scrape_ep(url):
+def scrape_ep_player_info(url):
+    # Declarations
+    season_data, meta_data = {}, {}
+    meta_data["split_seasons"], meta_data["seasons_played"] = [], []
+    meta_data["nhl_gps"] = 0
+    # EP request
+    soup = BeautifulSoup(requests.get(url).text, 'html.parser')
+    # Find all tables
+    tables = soup.find_all('table')
+    # Get player-card information for meta data
+    player_card = soup.find('div', {'class': 'ep-list'})
+    # Sort out infomration about DOB, position and name
+    dob_entry = player_card.find('div', {'class': "col-xs-12 col-17 text-right p-0 ep-text-color--black"})
+    meta_data["dob_raw"] = dob_entry.text.strip()
+    pos_entry = player_card.find('div', {'class': "col-xs-12 col-18 text-right p-0 ep-text-color--black"})
+    meta_data["pos_raw"] = pos_entry.text.strip()
+    meta_data["name_raw"] = url.split("/")[-1]  # This is not really correct - but maybe close enough...
+    # Get total number of NHL-games played.
+    total_stats = soup.find('div', {'id': 'total-stats'})  # @TODO: This should probably not be stored in "meta-data"
+    na_trs = total_stats.find_all('tr', {'class': 'team-continent-NA'})
+    for entry in na_trs:
+        link_entry = entry.find("a", href=True)
+        if link_entry.text.strip() == "NHL":
+            try:
+                meta_data["nhl_gps"] = int(entry.find('td', {'class': 'regular gp'}).text)
+            except ValueError:
+                meta_data["nhl_gps"] = 0
+
+    # Find all information about the seasons played
+    season_data_table = tables[1].find_all('td', {'class': 'season sorted'})
+    league_data_table = tables[1].find_all('td', {'class': 'league'})
+    gp_data_table = tables[1].find_all('td', {'class': 'regular gp'})
+    g_data_table = tables[1].find_all('td', {'class': 'regular g'})
+    a_data_table = tables[1].find_all('td', {'class': 'regular a'})
+    # Loop through each season
+    for idx, season in enumerate(season_data_table):
+        season_output = {}
+        league_entry = league_data_table[idx]
+        gp_entry = gp_data_table[idx]
+        g_entry = g_data_table[idx]
+        a_entry = a_data_table[idx]
+        # Store information weather or not a season is "split" (i.e. played for at least two different teams)
+        if str(season.text).strip() in season_data.keys():
+            dict_key = str(season.text).strip() + "__" + str(idx)
+            if str(season.text).strip() not in meta_data["split_seasons"]:
+                meta_data["split_seasons"].append(str(season.text).strip())
+        else:
+            dict_key = str(season.text).strip()
+        season_output['season'] = str(season.text).strip()
+        season_output['league'] = league_entry.text.strip()
+        try:
+            # Only add season data if at least 5 games are played
+            if int(gp_entry.text) > 5:
+                season_output['gp'] = int(gp_entry.text)
+                season_output['g'] = int(g_entry.text)
+                season_output['a'] = int(a_entry.text)
+                season_data[dict_key] = season_output
+                if str(season.text).strip() not in meta_data["seasons_played"]:
+                    meta_data["seasons_played"].append(str(season.text).strip())
+        except ValueError:
+            pass
+    return [meta_data, season_data]
+
+
+def scrape_cf(team_id, url):
+    ''' Download information from CapFriendly to decide which player belongs to what team '''
+    op_ = {}
     soup = BeautifulSoup(requests.get(url).text, 'html.parser')
     tables = soup.find_all('table')
-    data_table = tables[1].find_all('td')
-    print(data_table)
+    tr_classes = ["odd c", "even c"]
+    for tr_class in tr_classes:
+        tr_entries = tables[1].find_all('tr', {'class': tr_class})
+        for tr in tr_entries:
+            name_entry = tr.find('a')
+            name_str = str(name_entry.text).replace(" ", "")
+            name_str_array = name_str.split(",")
+            player_id = name_str_array[1].upper() + "_" + name_str_array[0].upper()
+            player_id = clean_cf_string(player_id)
+            op_[player_id] = team_id
+    return op_
+
+
+def clean_cf_string(player_id):
+    """ Remove 'weird' characters from player_id, and match names from NaturalStatTrick """
+    player_id = player_id.replace("'", "")
+    player_id = player_id.replace(".", "_")
+    player_id = player_id.replace("Á", "A")
+    player_id = player_id.replace("É", "E")
+    player_id = player_id.replace("Í", "I")
+    player_id = player_id.replace("Ū", "U")
+    player_id = player_id.replace("Å", "A")
+    player_id = player_id.replace("Ä", "A")
+    player_id = player_id.replace("Ö", "O")
+
+    # Synchronize player names
+    if player_id == "PATRICK_MAROON":
+        player_id = "PAT_MAROON"
+    elif player_id == "EVGENII_DADONOV":
+        player_id = "EVGENI_DADONOV"
+    elif player_id == "MICHAEL_MATHESON":
+        player_id = "MIKE_MATHESON"
+    elif player_id == "NICOLAS_PETAN":
+        player_id = "NIC_PETAN"
+    elif player_id == "JOSHUA_MORRISSEY":
+        player_id = "JOSH_MORRISSEY"
+    elif player_id == "ZACHARY_SANFORD":
+        player_id = "ZACH_SANFORD"
+    elif player_id == "ALEXANDER_WENNBERG":
+        player_id = "ALEX_WENNBERG"
+    elif player_id == "ANTHONY_DEANGELO":
+        player_id = "TONY_DEANGELO"
+    elif player_id == "LOUIS_BELPEDIO":
+        player_id = "LOUIE_BELPEDIO"
+    elif player_id == "SAMUEL_BLAIS":
+        player_id = "SAMMY_BLAIS"
+    elif player_id == "NICK_MERKLEY":
+        player_id = "NICHOLAS_MERKLEY"
+    elif player_id == "ZACHARY_WERENSKI":
+        player_id = "ZACH_WERENSKI"
+    elif player_id == "JEFFREY_TRUCHON-VIEL":
+        player_id = "JEFFREY_VIEL"
+    elif player_id == "MAXIME_COMTOIS":
+        player_id = "MAX_COMTOIS"
+    elif player_id == "JOSHUA_NORRIS":
+        player_id = "JOSH_NORRIS"
+    elif player_id == "ALEX_TRUE":
+        player_id = "ALEXANDER_TRUE"
+    elif player_id == "JOSEPH_VELENO":
+        player_id = "JOE_VELENO"
+    elif player_id == "JOSHUA_DUNNE":
+        player_id = "JOSH_DUNNE"
+    elif player_id == "AJ_GREER":
+        player_id = "A_J__GREER"
+    elif player_id == "NICHOLAS_CAAMANO":
+        player_id = "NICK_CAAMANO"
+    elif player_id == "DANIEL_RENOUF":
+        player_id = "DAN_RENOUF"
+    elif player_id == "MICHAEL_ANDERSON":
+        player_id = "MIKEY_ANDERSON"
+    elif player_id == "YEGOR_ZAMULA":
+        player_id = "EGOR_ZAMULA"
+    elif player_id == "ZACHARY_JONES":
+        player_id = "ZAC_JONES"
+
+    return player_id
+
+
+def write_player_team_info(filepath, team=None, verbose=True):
+    ''' Update the CSV-file keeping track on which team each player is contracted to.
+    Based on data from CapFriendly '''
+    # Select which teams to go through
+    if team is None:
+        _iter = CF_TEAM_LINKS
+    else:
+        _iter = {team: CF_TEAM_LINKS[team]}
+
+    # Loop through the selected teams
+    all_players = {}
+    for team_id, link in _iter.items():
+        if verbose is True:
+            print(f"Adding players to team {team_id}")
+        # Add sleep in order to not spam servers
+        time.sleep(1)
+        # Scrape CF for the selected team
+        players_in_team = scrape_cf(team_id, link)
+        # Store information in struct holding all players
+        for player_id in players_in_team:
+            all_players[player_id] = players_in_team[player_id]
+
+    # Write information to CSV-file
+    with open(filepath, mode='w', newline='') as csv_file:
+        fieldnames = ["player_id", "team_id"]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for player_id in all_players:
+            writer.writerow({"player_id": player_id, "team_id": all_players[player_id]})

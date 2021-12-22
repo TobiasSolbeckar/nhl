@@ -1,10 +1,12 @@
 import copy
+import datetime
 import argparse
 import os
-import platform
-import time
 import matplotlib.pyplot as plt
 import numpy as np
+import platform
+from scipy import stats
+import time
 
 from nhl_database import *
 #from nhl_simulation import set_starting_goalie, create_game_specific_db, simulate_po_series, get_playoff_cut, create_tables
@@ -1709,14 +1711,21 @@ def download_season_data(year, data_dir='Data'):
     y = y[0:4] + '20' + y[-2:]
     if len(y) != 8:
         raise ValueError('Unexpected data format. Expected YYYYYYYY, got "' + y + '"')
-    url_skater_bio = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_skater_bio = f"https://www.naturalstattrick.com/playerteams.php?fromseason={y}&thruseason={y}&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
     url_goalie_bio = "http://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=G&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+
+
+
 
     #url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
     url_skater_ind_es = "http://naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
     url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
     url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
     url_skater_on_ice = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
+    #url_skater_on_ice = f"https://naturalstattrick.com/playerteams.php?fromseason={y}&thruseason={y}&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+
+
+
     url_goalie_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
     url_goalie_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
     url_goalie_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
@@ -1724,29 +1733,60 @@ def download_season_data(year, data_dir='Data'):
     url_team_pp = "https://www.naturalstattrick.com/teamtable.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
     url_team_pk = "https://www.naturalstattrick.com/teamtable.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
 
-    print('   Downloading bio-data')
-    write_bio_csv(url_skater_bio,os.path.join(data_dir,'Skater_Bio_' + str(year) + '.csv'))
-    write_bio_csv(url_goalie_bio,os.path.join(data_dir,'Goalie_Bio_' + str(year) + '.csv'))
-    print('   Downloading individual ES data')
-    write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + str(year) + '.csv'))
-    print('   Downloading individual PP data')
-    write_skater_ind_csv(url_skater_ind_pp,os.path.join(data_dir,'Skater_Individual_PP_' + str(year) + '.csv'))
-    print('   Downloading individual PK data')
-    write_skater_ind_csv(url_skater_ind_pk,os.path.join(data_dir,'Skater_Individual_PK_' + str(year) + '.csv'))
-    print('   Downloading on-ice data')
-    write_skater_on_ice_csv(url_skater_on_ice,os.path.join(data_dir,'Skater_OnIce_' + str(year) + '.csv'))
-    print('   Downloading goalie ES data')
-    write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + str(year) + '.csv'))
-    print('   Downloading goalie PP data')
-    write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + str(year) + '.csv'))
-    print('   Downloading goalie PK data')
-    write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + str(year) + '.csv'))
-    print('   Downloading ES team data')
-    write_team_csv(url_team_es,os.path.join(data_dir,'Team_ES_' + str(year) + '.csv'))
-    print('   Downloading PP team data')
-    write_team_csv(url_team_pp,os.path.join(data_dir,'Team_PP_' + str(year) + '.csv'))
-    print('   Downloading PK team data')
-    write_team_csv(url_team_pk,os.path.join(data_dir,'Team_PK_' + str(year) + '.csv'))
+    # Is it necessary to download new season data?
+    do_download = True
+    filepath = os.path.join(data_dir, 'Skater_Individual_ES_' + str(year) + '.csv')
+    if os.path.exists(filepath) is True:
+        if datetime.datetime.now().year > int(y[-4:]):
+            print(f"   No new data downloaded, data already exists for old season '{year}'")
+            do_download = False
+        tsm = time.time() - os.path.getmtime(filepath)
+        if do_download is True and (tsm / (24*3600) < 3):
+            print("   No new data downloaded, data already up-to-date")
+            do_download = False
+
+    if do_download is True:
+        print('   Downloading bio-data')
+        write_bio_csv(url_skater_bio, os.path.join(data_dir,'Skater_Bio_' + str(year) + '.csv'))
+        write_bio_csv(url_goalie_bio, os.path.join(data_dir,'Goalie_Bio_' + str(year) + '.csv'))
+        print('   Downloading individual ES data')
+        write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + str(year) + '.csv'))
+        print('   Downloading individual PP data')
+        write_skater_ind_csv(url_skater_ind_pp,os.path.join(data_dir,'Skater_Individual_PP_' + str(year) + '.csv'))
+        print('   Downloading individual PK data')
+        write_skater_ind_csv(url_skater_ind_pk,os.path.join(data_dir,'Skater_Individual_PK_' + str(year) + '.csv'))
+        print('   Downloading on-ice data')
+        write_skater_on_ice_csv(url_skater_on_ice,os.path.join(data_dir,'Skater_OnIce_' + str(year) + '.csv'))
+        print('   Downloading goalie ES data')
+        write_goalie_csv(url_goalie_es,os.path.join(data_dir,'Goalie_ES_' + str(year) + '.csv'))
+        print('   Downloading goalie PP data')
+        write_goalie_csv(url_goalie_pp,os.path.join(data_dir,'Goalie_PP_' + str(year) + '.csv'))
+        print('   Downloading goalie PK data')
+        write_goalie_csv(url_goalie_pk,os.path.join(data_dir,'Goalie_PK_' + str(year) + '.csv'))
+        print('   Downloading ES team data')
+        write_team_csv(url_team_es,os.path.join(data_dir,'Team_ES_' + str(year) + '.csv'))
+        print('   Downloading PP team data')
+        write_team_csv(url_team_pp,os.path.join(data_dir,'Team_PP_' + str(year) + '.csv'))
+        print('   Downloading PK team data')
+        write_team_csv(url_team_pk,os.path.join(data_dir,'Team_PK_' + str(year) + '.csv'))
+
+    # Always download contract data
+    print('   Downloading contract data')
+    write_ufas(os.path.join(data_dir,'Contract_Expiry_Data.csv'))
+
+    # Separate check to see if player/team data should be downloaded
+    filepath = os.path.join(data_dir, "player_team_info.csv")
+    try:
+        tsm = time.time() - os.path.getmtime(filepath)
+        if (tsm / (24*3600) > 30):
+            do_download = True
+        else:
+            do_download = False
+    except FileNotFoundError:
+        do_download = True
+    if do_download is True:
+        print('   Downloading player/team information')
+        write_player_team_info(filepath)
 
     # This is currently not working
     # print('   Downloading unavailalbe players')
@@ -1756,7 +1796,8 @@ def download_season_data(year, data_dir='Data'):
     # Should probably not look at home/away data from 2020/2021
     #write_team_csv(simulation_param['url_team_home'],os.path.join(data_dir,'Team_Home_201819_1920.csv'))
     #write_team_csv(simulation_param['url_team_away'],os.path.join(data_dir,'Team_Away_201819_1920.csv'))
-    #write_ufas(os.path.join(data_dir,'Contract_Expiry_Data.csv'))
+
+
 
 def create_databases(settings):
     ''' Create and return databases for Skaters, Goalies and Teams '''
@@ -1768,43 +1809,212 @@ def create_databases(settings):
     # Create special metrics for teams, skaters and goalies.
     # This needs to be performed _after_ the "normal" databases have been created
     [team_db, skater_db, goalie_db] = create_metrics(team_db, skater_db, goalie_db)
+    [team_db, skater_db, goalie_db] = create_rankings(team_db, skater_db, goalie_db)
     dbs['skater'] = skater_db
     dbs['goalie'] = goalie_db
     dbs['team'] = team_db
     return dbs
 
+def calculate_r2(team_db, attribute, target_attribute='p_pcg', verbose=True):
+    ''' R2-factor '''
+    x, y = [], []
+    for team_id in ACTIVE_TEAMS:
+        team = team_db.get_team(team_id)
+        x.append(team.__dict__[attribute])
+        y.append(team.__dict__[target_attribute])
+    res = stats.linregress(x, y)
+    if verbose is True:
+        print(f'Relation between "{attribute}" and "{target_attribute}". R-squared: {res.rvalue**2:.3f}')
+    return (res.rvalue**2)
+
+def calculate_special_r2(team_db):
+    N = 50
+    attributes = ["pdo", "xgf_pcg"]
+    for i in range(N):
+        a = i/N
+        b = 1-a
+        x, y = [], []
+        ranks_x, ranks_y = [], []
+        teams_for_analysis = {}
+        for team_id in ACTIVE_TEAMS:
+            team = team_db.get_team(team_id)
+            x_val = (a*team.__dict__[attributes[0]] + b*team.__dict__[attributes[1]])
+            # if team_id == "SJS":
+            #     print(f'Appending value {x_val:.2f} ({a*team.__dict__[attributes[0]]:.2f} + {b*team.__dict__[attributes[1]]:.2}) for team {team_id}')
+            teams_for_analysis[team_id] = {"xval": x_val, "yval": team.p_pcg}
+            x.append(x_val)
+            y.append(team.p_pcg)
+
+        x.sort()
+        y.sort()
+        identical, good, ok, bad = [], [], [], []
+        for team_id, team in teams_for_analysis.items():
+            team_rank_x = x.index(team["xval"])
+            team_rank_y = y.index(team["yval"])
+            if abs(team_rank_x - team_rank_y) < 1:
+                identical.append(team_id)
+            elif abs(team_rank_x - team_rank_y) < 4:
+                good.append(team_id)
+            elif abs(team_rank_x - team_rank_y) < 7:
+                ok.append(team_id)
+            else:
+                bad.append(team_id)
+            ranks_x.append(team_rank_x)
+            ranks_y.append(team_rank_y)
+            #print(f'{team_id}: {team["xval"]} ({team_rank_x})')
+            #print(f'{team_id}: {team["yval"]} ({team_rank_y})')
+
+        # res = stats.linregress(x, y)
+        # if False:
+        #     print(f'Identical rankings: {len(identical)} ({identical})')
+        #     print(f'Good rankings: {len(good)} ({good})')
+        #     print(f'OK rankings: {len(ok)} ({ok})')
+        #     print(f'Bad rankings: {len(bad)} ({bad})')
+        # print(f'{res.rvalue**2:.4f}  [{attributes[0]}: {a:.3f}, {attributes[1]}: {b:.3f}]')
+
+        res = stats.linregress(ranks_x, ranks_y)
+        if False:
+            print(f'Identical rankings: {len(identical)} ({identical})')
+            print(f'Good rankings: {len(good)} ({good})')
+            print(f'OK rankings: {len(ok)} ({ok})')
+            print(f'Bad rankings: {len(bad)} ({bad})')
+        val_1 = res.rvalue**2
+        val_2 = (len(identical)*3 + len(good)*2 + len(ok)*1)/(32*3)
+        # print(f'   {val_1:.4f}')
+        # print(f'   {val_2:.4f}')
+    raise ValueError("DJ")
+    # y.append(team.p_pcg)
+    # res = stats.linregress(x, y)
+    # print(f"{team_id}: {x_val:.3f}")
+    # print(f"xgf: {a:.2f}, cf:{b:.2f}. R-squared: {res.rvalue**2:.3f}")
+
+
+def special_attributes_r2(team_db, target_attribute='p_pcg'):
+    ''' R2-factor '''
+    output_array = []
+    for a1 in np.linspace(0,1,300):
+        a2 = 1 - a1
+        x, y = [], []
+        for team_id in ACTIVE_TEAMS:
+            team = team_db.get_team(team_id)
+            x.append(a1*team.xgf_pcg + a2*team.scf_pcg)
+            y.append(team.__dict__[target_attribute])
+        res = stats.linregress(x, y)
+        output_array.append((res.rvalue**2, (a1, a2)))
+    sort_and_print(output_array, decs=5)
+
+def team_analysis(team_db):
+    output_array = []
+    for team_id in ACTIVE_TEAMS:
+        team = team_db.get_team(team_id)
+        output_array.append((100*(team.p_pcg - team.xgf_pcg), team_id))
+    sort_and_print(output_array)
+
+def extrapolated_player_rating(settings, attributes=["ozfo_pcg", "xgf_pcg"], toi_limit=100, N=50):
+    """ Generic method for printing extrapolated data"""
+    x_attribute, y_attribute = attributes
+    attribute_data = settings.databases['skater'].get_data_dict([x_attribute, y_attribute])
+    x_val = attribute_data[x_attribute]
+    y_val = attribute_data[y_attribute]
+    k, m = get_k_value(x_val, y_val)
+
+    sdb = settings.databases['skater']
+    sorted_list = []
+    for player_id in sdb.id_set:
+        player = sdb.get_player(player_id)
+        if player.get_attribute('toi') > toi_limit*60:
+            y_hat = k*player.get_attribute(x_attribute) + m
+            diff = player.get_attribute(y_attribute) / y_hat  # High value -> player is doing better than they "should"
+            sorted_list.append((diff, player_id))
+            sorted_list.sort(reverse=False)
+    i = 0
+    for value, player_id in sorted_list:
+        player = sdb.get_player(player_id)
+        if i < N:
+            print(f"{player_id} ({player.get_attribute('team_id')}): {value:.2f}")
+            i += 1
+
+def print_team_rating(settings):
+    team_db = settings.databases['team']
+    sorted_list = []
+    # @TODO: Should be possible to select other criterias than "pre_season_rating"
+    for team_id in ACTIVE_TEAMS:
+        sorted_list.append((team_db.data[team_id].exp_data["pre_season_rating"], team_id))
+    sorted_list.sort(reverse=True)
+    i = 1
+    print('\n\n*** PRE-SEASON RATINGS ***')
+    for value, team_id in sorted_list:
+        team = team_db.data[team_id]
+        dd = team.exp_data['team_off_pcg']
+        off_rank = 33-team.rank["team_off"]
+        def_rank = team.rank["team_def"]
+        gsax_rank = 33 - team.rank["gsax_per_60"]
+        off_value = team.exp_data["team_off"]
+        def_value = team.exp_data["team_def"]
+        gsax = team.exp_data["gsax_per_60"]
+        print(f' {i:2} - {team_id}: {value:.3f} ({dd:.3f}) OffRank: {off_rank} DefRank: {def_rank:.0f} GSAX_rank: {gsax_rank}')
+        i += 1
+
 if __name__ == '__main__':
+    _filter = {}
+    _filter["generic"] = []
     # Construct argument parser
     ap = argparse.ArgumentParser()
-
     # Add arguments to parser
-    ap.add_argument("-y", "--year", required=True, help="Season to analyze")
+    ap.add_argument("-y", "--year", nargs="+", required=True, help="Season to analyze")
     ap.add_argument("-d", "--download", action='store_true', help="Set flag to download data for a season")
-    ap.add_argument("-l", "--print_list", action='store_true', help="Set flag to print list of ranking")
+    ap.add_argument("-l", "--print_list", action='store_true', help="Set flag to print list of certain skill")
+    ap.add_argument("-r", "--print_ranking", action='store_true', help="Set flag to print list of ranking")
     ap.add_argument("-p", "--player", help="Name of player to analyze")
+    ap.add_argument("-a", "--attribute", help="Attribute to use when printing list")
+    ap.add_argument("-u", "--ufas", action='store_true', help="Set flag to only consider Unrestricted Free Agents")
     ap.add_argument("-t", "--team", help="Name of team to analyze")
+
     args = vars(ap.parse_args())
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
     # First, check to see if new data should be downloaded
     if args['download'] is True:
         download_season_data(str(args["year"]))
-        #scrape_ep('https://www.eliteprospects.com/player/313352/linus-oberg')
-
-    # Create settings and store databases
-    settings = Settings([str(args["year"])]) # Use "download_old_season_data" to download older seasons data
-    #settings.update_setting('generate_fresh_databases', False)
+    # Create settings and store databases, this should always be done.
+    settings = Settings(args["year"]) # Use "download_old_season_data" to download older seasons data
     settings.update_setting('databases', create_databases(settings))
 
     # Parse CL-input
+    if args['team'] is not None:
+        _filter['generic'].append(("team_id", args['team']))
+    if args['ufas'] is True:
+        _filter['generic'].append(("ufa", True))
+
+    # Print either the raw list or the ranking
     if args['print_list'] is True:
-        _filter = {}
+        _filter['toi'] = 100
+        if args['attribute'] is None:
+            attribute = "gf_above_xgf_per_60"
+        else:
+            attribute = args['attribute']
         _filter['position'] = ['D']
-        #_filter['team'] = ['SJS']
-        _filter['toi'] = 300
-        # print_sorted_list(settings.databases['skater'], ['ranking', 'total'], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
-        print_sorted_list_goalie(settings.databases['goalie'], ['gsaa_per_60'], _filter=_filter, high_to_low=False, print_list_length=30)
+        sdb = settings.databases['skater']
+        print_sorted_list_skaters(settings.databases['skater'], [attribute], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
+        _filter['position'] = ['F']
+        print_sorted_list_skaters(settings.databases['skater'], [attribute], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
+        _filter['toi'] = 400
+        print_sorted_list_goalie(settings.databases['goalie'], ['gsax_per_60'], _filter=_filter, high_to_low=True, print_list_length=30)
+    elif args['print_ranking'] is True:
+        _filter['toi'] = 100
+        _filter['position'] = ['D']
+        print('\nDefencemen ranking:')
+        print_sorted_list_skaters(settings.databases['skater'], ['ranking', 'total'], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
+        _filter['position'] = ['F']
+        print('\nForward ranking:')
+        print_sorted_list_skaters(settings.databases['skater'], ['ranking', 'total'], _filter=_filter, scale_factor=1, high_to_low=True, print_list_length=30)
     else:
+        pass
+        # for at in ['p_pcg', 'gf_pcg', 'cf_pcg', 'ff_pcg', 'sf_pcg', 'scf_pcg', 'hdcf_pcg', 'xgf_pcg']:
+        #     calculate_r2(settings.databases['team'], at, 'p_pcg', verbose=True)
+
+        """
+        #special_attributes_r2(settings.databases['team'])
+        #team_analysis(settings.databases['team'])
         settings.add_setting('ht_id', 'SJS')
         settings.add_setting('at_id', 'ANA')
         settings.add_setting('ht_goalie', 'MARTIN_JONES')
@@ -1812,10 +2022,11 @@ if __name__ == '__main__':
         settings.add_setting('ht_initial_goals', 0)
         settings.add_setting('at_initial_goals', 0)
         settings.add_setting('game_db', {})
-        settings.add_setting('down_sample', False)
 
         #simulation = Simulation(settings)
         game = GameSimulatuion(settings)
+        game.simulate_game()
+        """
     '''
     # Create roster lists split up on team and position.
     roster_output, flt = {}, {}

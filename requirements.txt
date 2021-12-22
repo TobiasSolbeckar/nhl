@@ -1,0 +1,17 @@
+cogapp==2.5.1
+cycler==0.10.0
+google-api-python-client==1.6.4
+httplib2==0.10.3
+matplotlib
+numpy
+oauth2client
+pyasn1==0.4.2
+pyasn1-modules==0.2.1
+pycparser==2.17
+pyparsing==2.2.0
+python-dateutil==2.6.1
+pytz==2017.2
+rsa==3.4.2
+scipy
+six==1.11.0
+uritemplate

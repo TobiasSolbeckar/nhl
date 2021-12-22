@@ -107,11 +107,13 @@ class Settings():
         ''' Construct the paths to CSV-files '''
         data_dir = self.data_dir
         self.csvfiles = {}
-        self.csvfiles['schedule'] = os.path.join(data_dir, '2019_2020_NHL_Schedule.csv')
+        # self.csvfiles['schedule'] = os.path.join(data_dir, '2019_2020_NHL_Schedule.csv')
+        self.csvfiles['schedule'] = os.path.join(data_dir, 'nhl-202021-asplayed.csv')
         self.csvfiles['team_home'] = os.path.join(data_dir, 'Team_Home_201819_201920.csv')
         self.csvfiles['team_away'] = os.path.join(data_dir, 'Team_Away_201819_201920.csv')
         self.csvfiles['skater_old_bio'] = os.path.join(data_dir, 'Skater_Bio_201819.csv')
         self.csvfiles['contract_data'] = os.path.join(data_dir, 'Contract_Expiry_Data.csv')
+        self.csvfiles['player_team_info'] = os.path.join(data_dir, 'player_team_info.csv')
 
         # Only use one season for relative data
         self.csvfiles['skater_relative'] = os.path.join(data_dir, 'Skater_Relative_201819_201920.csv')
@@ -125,6 +127,7 @@ class Settings():
         self.csvfiles['goalie_es'] = []
         self.csvfiles['goalie_pp'] = []
         self.csvfiles['goalie_pk'] = []
+        print(self.seasons)
         for season in self.seasons:
             self.csvfiles['skater_bio'].append(os.path.join(data_dir, 'Skater_Bio_' + season + '.csv'))
             self.csvfiles['skater_es'].append(os.path.join(data_dir, 'Skater_Individual_ES_' + season + '.csv'))
@@ -165,8 +168,8 @@ class Settings():
             reader = csv.reader(f, delimiter=',')
             for row in reader:
                 date = str(row[0])
-                home_team_id = get_team_id(row[3])
-                away_team_id = get_team_id(row[2])
+                home_team_id = get_team_id(row[5])
+                away_team_id = get_team_id(row[3])
                 schedule_per_team[home_team_id].append(away_team_id)
                 schedule_per_team[away_team_id].append(home_team_id)
                 schedule_per_date[date].append([home_team_id, away_team_id])

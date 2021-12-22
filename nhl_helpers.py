@@ -11,7 +11,7 @@ from shutil import copyfile
 
 import numpy as np
 import gspread
-from oauth2client.client import SignedJwtAssertionCredentials
+# from oauth2client.client import SignedJwtAssertionCredentials
 
 from nhl_defines import *
 
@@ -45,6 +45,7 @@ def generate_long_name():
     long_name['OTT'] = 'Ottawa Senators'
     long_name['PHI'] = 'Philadelphia Flyers'
     long_name['PIT'] = 'Pittsburgh Penguins'
+    long_name['SEA'] = 'Seattle Kraken'
     long_name['SJS'] = 'San Jose Sharks'
     long_name['STL'] = 'St. Louis Blues'
     long_name['TBL'] = 'Tampa Bay Lightning'
@@ -84,6 +85,7 @@ def generate_all_teams_dict(return_type):
     output['OTT'] = return_type
     output['PHI'] = return_type
     output['PIT'] = return_type
+    output['SEA'] = return_type
     output['SJS'] = return_type
     output['STL'] = return_type
     output['TBL'] = return_type
@@ -288,17 +290,20 @@ def get_position_for_player(position):
     return position
 
 
-def generate_player_id(raw_str, team_id):
-    player_id = str(raw_str).upper().replace(' ', '_')
+def generate_player_id(raw_str):
+    # Format: Firstname Lastname
+    names_array = raw_str.split(" ")
+    first_name = names_array[0].upper()
+    last_name = ""
+    for name in names_array[1:]:
+        last_name = last_name + name.upper()
+    player_id = first_name + "_" + last_name
     player_id = player_id.replace('.', '_')
     player_id = player_id.replace("'", '')
 
     # Handle special cases
     if player_id == 'ALEXANDER_NYLANDER':
         player_id = 'ALEX_NYLANDER'
-
-    if (player_id == 'SEBASTIAN_AHO') and (team_id != 'CAR'):
-        player_id = 'SEBASTIAN_AHO2'
 
     return player_id
 
@@ -320,9 +325,9 @@ def is_this_aho(raw_player_str, raw_team_str):
 
 
 def generate_player_and_team_id(raw_player_str, raw_team_str=None):
-    player_id = str(raw_player_str).upper().replace(' ', '_')
-    player_id = player_id.replace('.', '_')
-    player_id = player_id.replace("'", '')
+    # player_id = str(raw_player_str).upper().replace(' ', '_')
+    # player_id = player_id.replace('.', '_')
+    # player_id = player_id.replace("'", '')
 
     if (player_id == 'SEBASTIAN_AHO') and (raw_team_str != 'CAR'):
         player_id = 'SEBASTIAN_AHO2'
@@ -338,18 +343,68 @@ def generate_player_and_team_id(raw_player_str, raw_team_str=None):
         # Get team-id
         # Add players that have played for more than two clubs the current season to "manually_checked_players"
         manually_checked_players = set()
-        #manually_checked_players.add('EXAMPLE_PLAYER')
-
+        # manually_checked_players.add('EXAMPLE_PLAYER')
+        manually_checked_players.add('GREG_PATERYN')
         # Add players that have played for two teams the current season to "new_team"-dict:
         new_team = {}
         new_team['IAN_COLE'] = 'MIN'
-        new_team['GREG_PATERYN'] = 'COL'
+        new_team['GREG_PATERYN'] = 'SJS'
         new_team['JARRED_TINORDI'] = 'BOS'
         new_team['RYAN_DZINGEL'] = 'OTT'
         new_team['CEDRIC_PAQUETTE'] = 'CAR'
         new_team['MARK_FRIEDMAN'] = 'PIT'
         new_team['PATRIK_LAINE'] = 'CBJ'
         new_team['PIERRE-LUC_DUBOIS'] = 'WPG'
+        new_team['ERIC_STAAL'] = 'MTL'
+        new_team['TRAVIS_ZAJAC'] = 'NYI'
+        new_team['KYLE_PALMIERI'] = 'NYI'
+        new_team['ALEX_GALCHENYUK'] = 'TOR'
+        new_team['JIMMY_VESEY'] = 'VAN'
+        new_team['VINNIE_HINOSTROZA'] = 'CHI'
+        new_team['BRENDAN_LEMIEUX'] = 'LAK'
+        new_team['MICHAEL_AMADIO'] = 'OTT'
+        new_team['CHRISTIAN_WOLANIN'] = 'LAK'
+        new_team['ALEXANDER_VOLKOV'] = 'ANA'
+        new_team['MIKKO_LEHTONEN'] = 'CBJ'
+        new_team['JONAS_JOHANSSON'] = 'COL'
+        new_team['JEFF_CARTER'] = 'PIT'
+        new_team['CARL_SODERBERG'] = 'COL'
+        new_team['RICHARD_PANIK'] = 'DET'
+        new_team['SAMI_VATANEN'] = 'DAL'
+        new_team['DAVID_SAVARD'] = 'TBL'
+        new_team['ERIK_GUDBRANSON'] = 'NSH'
+        new_team['TAYLOR_HALL'] = 'BOS'
+        new_team['BRETT_CONNOLLY'] = 'CHI'
+        new_team['JANI_HAKANPAA'] = 'CAR'
+        new_team['MIKE_REILLY'] = 'BOS'
+        new_team['NIKITA_GUSEV'] = 'FLA'
+        new_team['MATTIAS_JANMARK'] = 'VGK'
+        new_team['CURTIS_LAZAR'] = 'BOS'
+        new_team['ANTHONY_MANTHA'] = 'WSH'
+        new_team['SAM_BENNETT'] = 'FLA'
+        new_team['HAYDN_FLEURY'] = 'ANA'
+        new_team['JAKUB_VRANA'] = 'DET'
+        new_team['BRANDON_MONTOUR'] = 'FLA'
+        new_team['LUCAS_WALLMARK'] = 'CHI'
+        new_team['ANDERS_BJORK'] = 'BUF'
+        new_team['JONAS_SIEGENTHALER'] = 'NJD'
+        new_team['VICTOR_METE'] = 'OTT'
+        new_team['RILEY_STILLMAN'] = 'CHI'
+        new_team['DEVAN_DUBNYK'] = 'COL'
+        new_team['DAVID_RITTICH'] = 'TOR'
+        new_team['BRAYDON_COBURN'] = 'NYI'
+        new_team['NICK_FOLIGNO'] = 'TOR'
+        new_team['JORDIE_BENN'] = 'WPG'
+        new_team['DMITRY_KULIKOV'] = 'EDM'
+        new_team['PATRIK_NEMETH'] = 'COL'
+        new_team['JON_MERRILL'] = 'MTL'
+        new_team['TRAVIS_BOYD'] = 'VAN'
+        new_team['ERIK_GUSTAFSSON'] = 'MTL'
+        new_team['MICHAEL_RAFFL'] = 'WSH'
+        new_team['MATTHEW_HIGHMORE'] = 'VAN'
+        new_team['ADAM_GAUDETTE'] = 'CHI'
+        new_team['DRAKE_CAGGIULA'] = 'BUF'
+        new_team['ALEXANDER_BARABANOV'] = 'SJS'
 
         team_id = raw_team_str
         # Make sure players have been added to their new clubs. If not, set an error.
@@ -362,7 +417,7 @@ def generate_player_and_team_id(raw_player_str, raw_team_str=None):
             if len(team_id_arr) > 2:
                 if player_id not in manually_checked_players:
                     # raise ValueError('Player ' + player_id + ' (' + str(raw_team_str) + ') changed club more than once. Please add to "manually_checked_players" to continue.')
-                    print('Player ' + player_id + ' has more than one team(s). Team-ID: ' + team_id + '. Using team ' + team_id_arr[0] + ' for analysis.')
+                    print('Player ' + player_id + ' has more than two team(s). Team-ID: ' + team_id + '. Using team ' + team_id_arr[0] + ' for analysis.')
                     team_id = team_id_arr[0]
 
         if team_id == 'L.A':
@@ -389,16 +444,44 @@ def generate_player_and_team_id(raw_player_str, raw_team_str=None):
     return [player_id, team_id]
 
 
-def print_sorted_list(db,
-                      attributes,
-                      operation=None,
-                      _filter={},
-                      print_list_length=50,
-                      scale_factor=1,
-                      high_to_low=True,
-                      normalize=False):
-    ''' Prints a list sorted on a specified attribute '''
+def sort_and_print(unsorted_list, reversed=False, value_idx=0, decs=1):
+    ''' Sorts and prints a list of tuples. Assuming the first position in each tuple is the key to be sorted on '''
+    if value_idx != 0:
+        desc_idx = 0
+    else:
+        desc_idx = 1
 
+    i = 0
+    for tup in sorted(unsorted_list, reverse=reversed):
+        i += 1
+        desc = tup[desc_idx]
+        value = tup[value_idx]
+        if decs == 0:
+            print(f'{i:3}: {desc}: {value:.0f}')
+        elif decs == 1:
+            print(f'{i:3}: {desc}: {value:.1f}')
+        elif decs == 2:
+            print(f'{i:3}: {desc}: {value:.2f}')
+        elif decs == 3:
+            print(f'{i:3}: {desc}: {value:.3f}')
+        elif decs == 4:
+            print(f'{i:3}: {desc}: {value:.4f}')
+        elif decs == 5:
+            print(f'{i:3}: {desc}: {value:.5f}')
+        elif decs == 6:
+            print(f'{i:3}: {desc}: {value:.6f}')
+        elif decs == 7:
+            print(f'{i:3}: {desc}: {value:.7f}')
+
+
+def print_sorted_list_skaters(db,
+                              attributes,
+                              _filter={},
+                              print_list_length=50,
+                              scale_factor=1,
+                              high_to_low=True,
+                              normalize=False):
+    ''' Prints a list sorted on a specified attribute '''
     # Validate filter settings
     if 'toi' not in _filter or _filter == {}:
         _filter['toi'] = 100
@@ -406,16 +489,17 @@ def print_sorted_list(db,
         _filter['position'] = ['F', 'D']
     if 'additional_players' not in _filter or _filter == {}:
         _filter['additional_players'] = []
-    if 'team' not in _filter or _filter == {}:
-        _filter['team'] = None
     if 'playform' not in _filter or _filter == {}:
         _filter['playform'] = 'es'
     print('Filter settings: ' + str(_filter))
+    # Initialize local parameters
     output = {}
     added_players = set()
     sorted_list, data_list, all_data = [], [], []
     for skater_id in db.id_set:
+        # Loop through all skaters
         skater = db.get_player(skater_id)
+        # Check if skater fits the filter settings
         if (skater.ind['toi'][_filter['playform']] >= 60*_filter['toi'] and skater.bio['position'] in _filter['position']) or (skater_id in _filter['additional_players']):
             if len(attributes) > 1:
                 if attributes[0] == 'ranking':
@@ -426,12 +510,19 @@ def print_sorted_list(db,
                 val = skater.get_attribute(attributes[0], _filter['playform'])
             val *= scale_factor
             all_data.append(val)
-            if _filter['team'] is None:
+            # Go over experimental attributes
+            if _filter['generic'] == []:
                 sorted_list.append((val, skater_id))
                 data_list.append(val)
                 added_players.add(skater_id)
             else:
-                if skater.bio['team_id'] in _filter['team']:
+                add_player = True
+                for attribute_to_check in _filter['generic']:
+                    if skater.get_attribute(attribute_to_check[0]) != attribute_to_check[1]:
+                        if skater.get_attribute(attribute_to_check[0]) is True:
+                            print("Removing player " + skater_id + " due to " + attribute_to_check[0])
+                        add_player = False
+                if add_player is True:
                     sorted_list.append((val, skater_id))
                     data_list.append(val)
                     added_players.add(skater_id)
@@ -469,8 +560,9 @@ def print_sorted_list(db,
         if ranking <= print_list_length or skater_id in _filter['additional_players']:
             if attributes[0] == 'ranking':
                 val = norm_factor*pair[0]
-                print('{0}: {1} (AGE: {2:.0f}; TEAM: {3}) - {4:.2f} ({5:.2f} sigma. TOI: {6:.1f} min/gp)'
-                        .format(all_data.index(pair[0]) + 1,  # Add one to make print out look nice
+                print('({0}) {1}: {2} (AGE: {3:.0f}; TEAM: {4}) - {5:.2f} ({6:.2f} sigma. TOI: {7:.1f} min/gp)'
+                        .format(ranking,
+                                all_data.index(pair[0]) + 1,  # Add one to make print out look nice
                                 skater.bio['name'],
                                 skater.bio['age'],
                                 skater.bio['team_id'],
@@ -593,6 +685,14 @@ def get_sigma_difference(db, player_id, attribute, playform=None):
     player = db.get_player(player_id)
     player_val = player.get_attribute(attribute, playform)
     return (player_val-op['mu'])/op['sigma']
+
+
+def get_k_value(x_val, y_val):
+    ''' Return k-value between two value vectors '''
+    fit = np.polyfit(x_val, y_val, 1)
+    fit_fn = np.poly1d(fit)
+    k = round(fit[0], 4)
+    return fit
 
 
 def plot_player_cards(ax, axes_info, p_db, player_ids, _filter):
@@ -722,8 +822,6 @@ def weighted_sum(lst, w_lst):
 
 
 def get_from_distribution(val_dict, attribute, normalize=False):
-    # ct_on_ice_db[skater_id] = [isf_per_time,sh_pcg,pt_per_time,pd_per_time,off_per_time,def_per_time]
-
     sum_value = 1.0
     if attribute == 'isf_per_time':
         index = 0
@@ -753,6 +851,7 @@ def get_from_distribution(val_dict, attribute, normalize=False):
             if random.uniform(0, 1) <= (player_values[index]/sum_value):
                 return p_id
 
+
 def acces_gsheet(name_of_ws, credential_path='creds.json'):
     # Open/access g-Sheet
     #name_of_ws = "SharksData_Public"
@@ -769,6 +868,22 @@ def acces_gsheet(name_of_ws, credential_path='creds.json'):
     return g_wb
 
 
+def get_time_str(time):
+    m = time//60
+    s = time % 60
+    if m < 10:
+        m = str('0'+str(m))
+    else:
+        m = str(m)
+
+    if s < 10:
+        s = str('0'+str(s))
+    else:
+        s = str(s)
+
+    return str(m + ':' + s)
+
+
 def get_alpha(pos=None):
     # translates column index (1,2,3) to column name ('A','B','C').
     alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z']
@@ -781,35 +896,6 @@ def get_alpha(pos=None):
         return combined_alpha
     else:
         return combined_alpha[pos-1]
-
-
-def evaluate_combination(s_db,
-                         player_ids,
-                         attributes=['estimated_off_per_60', 'estimated_def_per_60', 'pd_diff_per_60']):
-    if isinstance(player_ids, list) is False:
-        raise ValueError('Uncompatible types. Input must be a (list-of) list(s).')
-    else:
-        if isinstance(player_ids[0], list):
-            # List of line combinations
-            print('@TODO')
-        else:
-            data_values = len(attributes)*[0]
-            for player_id in player_ids:
-                skater = s_db[player_id]
-                for i, attribute in enumerate(attributes):
-                    data_values[i] += skater.get_attribute(attribute)
-            for i, attribute in enumerate(attributes):
-                print(str(player_ids) + ': ' + attribute + ': ' + str(data_values[i]))
-    return data_values
-
-
-def print_player_from_team(player_db, team_id, position=[]):
-    if position == []:
-        position = ['G', 'D', 'F']
-    for player_id in player_db:
-        player = get_skater(player_db, player_id)
-        if (player.bio['team_id'] == team_id) and (player.bio['position'] in position):
-            print(player_id)
 
 
 def get_sorted_db(simulation_param, value_key, cut_off=None, toi_filter=0, position_filter=None, best_first=True):
@@ -843,7 +929,7 @@ def get_sorted_db(simulation_param, value_key, cut_off=None, toi_filter=0, posit
 def create_player_list(s_db, _filter):
     list_of_players = []
     for skater_id in s_db.id_set:
-        skater = get_skater(s_db, skater_id)
+        skater = s_db.get_skater(skater_id)
         player_ok = True
         for attribute in _filter:
             if isinstance(_filter[attribute], str) is True:
@@ -896,11 +982,14 @@ def get_team_values(team_db):
         values_dict['hdcf_pcg'].append(team.hdcf_pcg)
         values_dict['sv_pcg'].append(team.sv_pcg)
         values_dict['pdo'].append(team.pdo)
-        values_dict['hits'].append(team.exp_data['hits'])
-        values_dict['hits_taken'].append(team.exp_data['hits_taken'])
-        values_dict['hits_diff'].append(team.exp_data['hits_diff'])
-        values_dict['estimated_off_pcg'].append(team.exp_data['estimated_off_pcg'])
-        values_dict['in_season_rating'].append(team.exp_data['in_season_rating'])
+        for key in team.exp_data:
+            values_dict[key].append(team.exp_data[key])
+
+        # values_dict['hits'].append(team.exp_data['hits'])
+        # values_dict['hits_taken'].append(team.exp_data['hits_taken'])
+        # values_dict['hits_diff'].append(team.exp_data['hits_diff'])
+        # values_dict['estimated_off_pcg'].append(team.exp_data['estimated_off_pcg'])
+        # values_dict['in_season_rating'].append(team.exp_data['in_season_rating'])
     return values_dict
 
 
@@ -996,9 +1085,7 @@ def generate_starting_goalies():
 
 
 def handler(signum, frame):
-    #print('Connection timed out')
     raise Exception("Connection timed out")
-
 
 def get_k_factor(x_array, y_array, do_plot=False):
     fit = np.polyfit(x_array, y_array, 1)
@@ -1011,10 +1098,6 @@ def get_k_factor(x_array, y_array, do_plot=False):
         plt.plot(x_val, fit_fn(x_val), 'y--', label='Data fit (k=' + str(k) + ')')
         plt.show()
     return k
-
-
-def cond_bp():
-    raise ValueError('Conditional breakpoint')
 
 
 def backup_data_dir(src, dst):

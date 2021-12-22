@@ -1,0 +1,18 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Improvements:
+# @TODO: Collect all TODOs in Trello.
+# @TODO: use gameplay_state-specific data in put_players_on_ice()
+# @TODO: It should be possible to easy update particular attributes, e.g. g_db = modify_attribute(g_db,'MARTIN_JONES','sv_pcg',0.915)
+# @TODO: Create an "smoothed" SH% value for each team? E.g. removing all values outside of league average + 1 sigma?
+# @TODO: Implement "what-if" (for season)
+# @TODO: Simulate per day, rather than per team? How would that work when there is no games at a particular date?
+# @TODO: Output from team_db_row_value looks ugly (too long)
+
+# Investigations:
+# @TODO: What happens if using all-situation (instead of 5v5) for sv_pcg during simulation?
+# @TODO: Review game_status/data_param/simulation_param parameters. Are all necessary?
+# @TODO: Something is weird with the penalty generating (and drawing of).
+# @TODO: Use OnIce-data for SF% (or something)?
+# @TODO: Use PP/PK specific data for sa for teams?
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

@@ -47,36 +47,188 @@ class GameSimulatuion(Simulation):
     ''' Class for controlling the simulation of one game '''
     def __init__(self, settings):
         print('Init of GameSimulation instance')
-        super.__init__(settings)
 
         ''' Constructor of game simulation '''
+        if self.down_sample is True:
+            self.time_step = 10
+        else:
+            self.time_step = 1
+        self.ht_id = settings.ht_id
+        self.at_id = settings.at_id
         self.game_db = settings.game_db
         self.ht_number_of_skaters = []  # [def, fwd]
         self.at_number_of_skaters = []  # [def, fwd]
         self.ht_on_ice_db = {}
         self.at_on_ice_db = {}
         self.game_active = False
-        self.goal_scored = [False, False]
-        self.ht_penalty = defaultdict(int)
-        self.at_penalty = defaultdict(int)
-        self.active_penalties = [0, 0]
-        self.current_period = 0
-        self.ht_line_values = {}
-        self.at_line_values = {}
-        self.players_in_pbox = []
-        self.previous_gameplay_state = GAMEPLAY_ES  # noqa: F405
-        self.gameplay_changed = False
-        self.gameplay_state = GAMEPLAY_ES  # noqa: F405
-        self.ht_goalie_in_net = True
-        self.at_goalie_in_net = True
+
         self.ht_goalscorers = []
         self.at_goalscorers = []
-        self.ht_pp = False
-        self.ht_pk = False
-        self.at_pp = False
-        self.at_pk = False
+        self.initial_time = 0
         if settings.down_sample is True:
             self.time_step *= 10
+
+        for setting in settings.__dict__:
+            self.__dict__[setting] = settings.__dict__[setting]
+
+    def simulate_game(self):
+        '''
+        Simulating one game between 'ht_id' and 'at_id', based on content in 'settings'
+        '''
+        # Set up games status parameters
+        game_status = {}
+        game_status['goal_scored'] = [False, False]
+        game_status['active_penalties'] = [0, 0]
+        game_status['current_period'] = 0
+        game_status['ht_line_values'], game_status['at_line_values'] = {}, {}
+        game_status['players_in_pbox'] = []
+        game_status['previous_gameplay_state'] = GAMEPLAY_ES  # noqa: F405
+        game_status['gameplay_changed'] = False
+        game_status['gameplay_state'] = GAMEPLAY_ES  # noqa: F405
+        game_status['ht_goalie_in_net'], game_status['at_goalie_in_net'] = True, True
+        game_status['ht_pp'], game_status['ht_pk'], game_status['at_pp'], game_status['at_pk'] = False, False, False, False
+        game_status['ht_goalie'] = self.ht_goalie
+        game_status['at_goalie'] = self.at_goalie
+        game_status['ht_goals'] = self.ht_initial_goals
+        game_status['at_goals'] = self.at_initial_goals
+        game_status['ht_points'], game_status['at_points'], game_status['ht_shots'], game_status['at_shots'] = 0, 0, 0, 0
+        game_status['game_active'] = False
+        game_status['goal_scored'] = [False, False]
+        game_status['ht_penalty'], game_status['at_penalty'] = defaultdict(int), defaultdict(int)
+        game_status['active_penalties'] = [0, 0]
+        game_status['current_period'] = 0
+        game_status['ht_number_of_skaters'], game_status['at_number_of_skaters'] = [], []  # [def, fwd]
+        game_status['ht_on_ice_db'], game_status['at_on_ice_db'] = {}, {}
+        game_status['ht_line_values'], game_status['at_line_values'] = {}, {}
+        game_status['players_in_pbox'] = []
+        game_status['previous_gameplay_state'] = GAMEPLAY_ES
+        game_status['gameplay_changed'] = False
+        game_status['gameplay_state'] = GAMEPLAY_ES
+        game_status['ht_goalie_in_net'], game_status['at_goalie_in_net'] = True, True
+        game_status['ht_goalscorers'], game_status['at_goalscorers'] = [], []  # Is this even used?
+        game_status['ht_pp'], game_status['ht_pk'], game_status['at_pp'], game_status['at_pk'] = False, False, False, False
+        game_status['period_length'] = 1200
+        game_status['time'] = 0
+
+        # Let's do that hockey
+        print('- - - - - - - - START OF GAME - - - - - - - -')
+        game_status['game_active'] = True
+
+        self.game_status = game_status
+
+        self.simulate_regulation_time()
+
+    def simulate_regulation_time(self):
+        '''
+        Simulate regulation time.
+        Args:
+            simulation_param    = data concerning the simulation engine
+            data_param          = @TODO: This should be stored in self.game_db [data concerning team/player statistics]
+            game_status         = data concerning the current in-game status
+        '''
+
+        self.time = self.initial_time
+        game_status = get_time_str(game_status)
+        while self.game_status['time'] < self.game_status['period_length'] * NUMBER_OF_PERIODS:
+
+            if (game_status['time'] % simulation_param['period_length']) == 0:
+                game_status['current_period'] += 1
+                if simulation_param['verbose']:
+                    print('- - - - - - - - START OF PERIOD ' + str(game_status['current_period']) + ' - - - - - - - -')
+
+            # 1: Update the state machine
+            self.update_state_machine()
+
+            # 2: Put new players on the ice, if the old shift is done or if it is the beginning of the game.
+            if ((self.time % self.shift_length) == 0) or (self.gameplay_changed is True) or (self.time == self.initial_time):
+                game_status = put_players_on_ice(game_status, data_param, simulation_param['verbose'])
+
+            # 3: Update game clock before simulating the gameplay.
+            self.time += self.time_step
+
+            # 4: Get the print-version of time, for print-outs only.
+            game_status = get_time_str(game_status)
+
+            # 5a: Simulate gameplay for one second
+            [game_status, data_param] = simulate_gameplay(game_status,data_param,simulation_param['verbose'])
+
+            # 5b: Simulate gameplay for one second. By putting a complete line on the ice computation time is reduced.
+            [game_status, data_param] = simulate_gameplay_per_line(game_status, data_param, simulation_param['verbose'])
+
+            # 6: Update penalties after gameplay simulation, if there are someone in the penalty box.
+            if game_status['players_in_pbox'] != []:
+                game_status = update_penalties(game_status)
+
+            if ((game_status['time'] % simulation_param['period_length']) == (simulation_param['period_length']-1)) and (simulation_param['verbose'] is True):
+                print('- - - - - - - - END OF PERIOD ' + str(game_status['current_period']) + ' - - - - - - - -')
+                print('Score:')
+                print(game_status['ht_id'] + ' ' + str(game_status['ht_goals']) + ' - ' + str(game_status['at_goals']) + ' ' + game_status['at_id'])
+                print('Shots:')
+                print(game_status['ht_id'] + ' ' + str(game_status['ht_exp_shots']) + ' - ' + str(game_status['at_exp_shots']) + ' ' + game_status['at_id'])
+
+        return [game_status, data_param]
+
+    def update_state_machine(self):
+        ''' Class method to update state machines '''
+        # Store old game_status
+        self.previous_gameplay_state = self.gameplay_state
+        self.ht_pp = False
+        self.ht_pk = False
+        self.at_pk = False
+        self.at_pp = False
+        self.ht_goalie_in_net = True
+        self.at_goalie_in_net = True
+
+        # Update game state machine
+        if self.active_penalties[0] > self.active_penalties[1]:
+            self.gameplay_state = GAMEPLAY_PP_AT  # noqa
+            self.ht_pk = True
+            self.at_pp = True
+            self.ht_penalty_status = 'SH'
+            self.at_penalty_status = 'PP'
+            if self.current_period <= 3:
+                self.ht_number_of_skaters = [2, 2]  # [def, fwd]
+                self.at_number_of_skaters = [1, 4]  # [def, fwd]
+            else:
+                self.ht_number_of_skaters = [2, 1]  # [def, fwd]
+                self.at_number_of_skaters = [1, 3]  # [def, fwd]
+
+        elif self.active_penalties[0] < self.active_penalties[1]:
+            self.gameplay_state = GAMEPLAY_PP_HT  # noqa
+            self.ht_pp = True
+            self.at_pk = True
+            self.ht_penalty_status = 'PP'
+            self.at_penalty_status = 'SH'
+            if self.current_period <= 3:
+                self.ht_number_of_skaters = [1, 4]  # [def, fwd]
+                self.at_number_of_skaters = [2, 2]  # [def, fwd]
+            else:
+                self.ht_number_of_skaters = [1, 3]  # [def, fwd]
+                self.at_number_of_skaters = [2, 1]  # [def, fwd]
+        else:
+            self.gameplay_state = GAMEPLAY_ES  # noqa
+            self.ht_penalty_status = 'ES'
+            self.at_penalty_status = 'ES'
+            if self.current_period <= 3:
+                self.ht_number_of_skaters = [2, 3]  # [def, fwd]
+                self.at_number_of_skaters = [2, 3]  # [def, fwd]
+            else:
+                self.ht_number_of_skaters = [1, 2]  # [def, fwd]
+                self.at_number_of_skaters = [1, 2]  # [def, fwd]
+
+        if int(self.time_str.split(":")[0]) >= 58:
+            if (self.ht_goals - self.at_goals == 1) or (self.ht_goals - self.at_goals == 2):
+                self.at_goalie_in_net = False
+                self.at_number_of_skaters[1] += 1  # Away team pulling goalie
+            elif (self.at_goals - self.ht_goals == 1) or (self.at_goals - self.ht_goals == 2):
+                self.ht_goalie_in_net = False
+                self.ht_number_of_skaters[1] += 1  # Home team pulling goalie
+
+        # Check if the gameplay_status has changed.
+        if (self.previous_gameplay_state != self.gameplay_state) or (sum(self.goal_scored) > 0):
+            self.gameplay_changed = True
+        else:
+            self.gameplay_changed = False
 
 
 class SeasonSimulation(Simulation):
@@ -416,7 +568,7 @@ def simulate_gameplay(game_status, data_param, verbose=False):
 def simulate_gameplay_per_line(game_status, data_param, verbose=False):
     game_status['goal_scored'] = [False, False]
 
-    for i,ct in enumerate(CURRENT_TEAM):
+    for i, ct in enumerate(CURRENT_TEAM):
         shot_taken, penalty_taken, goal_scored = False, False, False
         ot = OPPONENT_TEAM[i]
         opponent_goalie = get_goalie(data_param[ot + '_players'], data_param[ot + '_goalie'])
@@ -465,70 +617,6 @@ def simulate_gameplay_per_line(game_status, data_param, verbose=False):
                     if game_status['current_period'] >= 4:
                         game_status['game_active'] = False
     return [game_status, data_param]
-
-
-def update_state_machine(game_status):
-    # Store old game_status
-    game_status['previous_gameplay_state'] = game_status['gameplay_state']
-    game_status['ht_pp'] = False
-    game_status['ht_pk'] = False
-    game_status['at_pp'] = False
-    game_status['at_pk'] = False
-    game_status['ht_goalie_in_net'] = True
-    game_status['at_goalie_in_net'] = True
-
-    # Update game state machine
-    if game_status['active_penalties'][0] > game_status['active_penalties'][1]:
-        game_status['gameplay_state'] = GAMEPLAY_PP_AT
-        game_status['ht_pk'] = True
-        game_status['at_pp'] = True
-        game_status['ht_penalty_status'] = 'SH'
-        game_status['at_penalty_status'] = 'PP'
-        if game_status['current_period'] <= 3:
-            game_status['ht_number_of_skaters'] = [2, 2]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [1, 4]  # [def, fwd]
-        else:
-            game_status['ht_number_of_skaters'] = [2, 1]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [1, 3]  # [def, fwd]
-
-    elif game_status['active_penalties'][0] < game_status['active_penalties'][1]:
-        game_status['gameplay_state'] = GAMEPLAY_PP_HT
-        game_status['ht_pp'] = True
-        game_status['at_pk'] = True
-        game_status['ht_penalty_status'] = 'PP'
-        game_status['at_penalty_status'] = 'SH'
-        if game_status['current_period'] <= 3:
-            game_status['ht_number_of_skaters'] = [1, 4]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [2, 2]  # [def, fwd]
-        else:
-            game_status['ht_number_of_skaters'] = [1, 3]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [2, 1]  # [def, fwd]
-    else:
-        game_status['gameplay_state'] = GAMEPLAY_ES
-        game_status['ht_penalty_status'] = 'ES'
-        game_status['at_penalty_status'] = 'ES'
-        if game_status['current_period'] <= 3:
-            game_status['ht_number_of_skaters'] = [2, 3]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [2, 3]  # [def, fwd]
-        else:
-            game_status['ht_number_of_skaters'] = [1, 2]  # [def, fwd]
-            game_status['at_number_of_skaters'] = [1, 2]  # [def, fwd]
-
-    if int(game_status['time_str'].split(":")[0]) >= 58:
-        if (game_status['ht_goals'] - game_status['at_goals'] == 1) or (game_status['ht_goals'] - game_status['at_goals'] == 2):
-            game_status['at_goalie_in_net'] = False
-            game_status['at_number_of_skaters'][1] += 1  # Away team pulling goalie
-        elif (game_status['at_goals'] - game_status['ht_goals'] == 1) or (game_status['at_goals'] - game_status['ht_goals'] == 2):
-            game_status['ht_goalie_in_net'] = False
-            game_status['ht_number_of_skaters'][1] += 1  # Home team pulling goalie
-
-    # Check if the gameplay_status has changed.
-    if (game_status['previous_gameplay_state'] != game_status['gameplay_state']) or (sum(game_status['goal_scored']) > 0):
-        game_status['gameplay_changed'] = True
-    else:
-        game_status['gameplay_changed'] = False
-
-    return game_status
 
 
 def update_penalties(game_status):
@@ -667,24 +755,6 @@ def put_players_on_ice(game_status, data_param, verbose=False):
             print('Average shots per shift against ({0}): {1:.2f}.'.format(game_status[ct + '_id'], shots_against_per_shift))
         if len((game_status[ct + '_on_ice_db'].keys())) < 4 and (int(game_status['time_str'][0]) != 6):
             raise ValueError('Too few players in ' + game_status[ct + '_id'])
-    return game_status
-
-
-def get_time_str(game_status):
-    m = game_status['time']//60
-    s = game_status['time'] % 60
-    if m < 10:
-        m = str('0'+str(m))
-    else:
-        m = str(m)
-
-    if s < 10:
-        s = str('0'+str(s))
-    else:
-        s = str(s)
-
-    game_status['time_str'] = str(m + ':' + s)
-
     return game_status
 
 
@@ -1008,70 +1078,75 @@ def create_tables(team_db, key, print_to_cmd=True, store=False, use_simulated_po
         raise ValueError('wrong key')
 
 
-def create_game_specific_db(simulation_param):
+def create_game_specific_db(error):
     ''' Create 'sub-versions' of the player_db, containing only the players in the current game. '''
+    skater_db = FIX_THIS
+    goalie_db = FIX_THIS
+    ht_id = FIX_THIS
+    at_id = FIX_THIS
+
     ht_skater_db, at_skater_db = {}, {}
-    available_ht_players = set(simulation_param['databases']['team_specific_db'][simulation_param['ht_id']].keys())
-    available_at_players = set(simulation_param['databases']['team_specific_db'][simulation_param['at_id']].keys())
 
     # Home team
     list_of_defs, list_of_fwds = [], []
-    for skater_id in available_ht_players:
-        skater = get_skater(simulation_param['databases']['skater_db'], skater_id)
-        toi_per_gp = skater.get_attribute('toi_per_gp')
-        if skater.get_attribute('position') == 'D':
-            list_of_defs.append((toi_per_gp, skater_id))
-        else:
-            list_of_fwds.append((toi_per_gp, skater_id))
+    toi_threshold = [0, 0]
+    for skater_id in skater_db:
+        skater = skater_db.get_playe(skater_id)
+        if skater.get_attribute('team_id') == ht_id:
+            toi_per_gp = skater.get_attribute('toi_per_gp')
+            if skater.get_attribute('position') == 'D':
+                list_of_defs((toi_per_gp, skater_id))
+            elif skater.get_attribute('position') == 'F':
+                list_of_fwds((toi_per_gp, skater_id))
     list_of_defs.sort(reverse=True)
     list_of_defs = list_of_defs[:6]
     list_of_fwds.sort(reverse=True)
     list_of_fwds = list_of_fwds[:12]
     for pair in list_of_defs:
         skater_id = pair[1]
-        ht_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'], skater_id)
+        ht_skater_db[skater_id] = skater_db.get_player(skater_id)
     for pair in list_of_fwds:
         skater_id = pair[1]
-        ht_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'], skater_id)
+        ht_skater_db[skater_id] = skater_db.get_player(skater_id)
 
     # Away team
     list_of_defs, list_of_fwds = [], []
-    for skater_id in available_at_players:
-        skater = get_skater(simulation_param['databases']['skater_db'], skater_id)
-        toi_per_gp = skater.get_attribute('toi_per_gp')
-        if skater.get_attribute('position') == 'D':
-            list_of_defs.append((toi_per_gp, skater_id))
-        else:
-            list_of_fwds.append((toi_per_gp, skater_id))
+    toi_threshold = [0, 0]
+    for skater_id in skater_db:
+        skater = skater_db.get_playe(skater_id)
+        if skater.get_attribute('team_id') == at_id:
+            toi_per_gp = skater.get_attribute('toi_per_gp')
+            if skater.get_attribute('position') == 'D':
+                list_of_defs((toi_per_gp, skater_id))
+            elif skater.get_attribute('position') == 'F':
+                list_of_fwds((toi_per_gp, skater_id))
     list_of_defs.sort(reverse=True)
     list_of_defs = list_of_defs[:6]
     list_of_fwds.sort(reverse=True)
     list_of_fwds = list_of_fwds[:12]
     for pair in list_of_defs:
         skater_id = pair[1]
-        at_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'], skater_id)
+        at_skater_db[skater_id] = skater_db.get_player(skater_id)
     for pair in list_of_fwds:
         skater_id = pair[1]
-        at_skater_db[skater_id] = get_skater(simulation_param['databases']['skater_db'], skater_id)
+        at_skater_db[skater_id] = skater_db.get_player(skater_id)
 
     # Set up data_param, containing information about the players in the game.
-    data_param = {}
-    data_param['ht_skaters'] = ht_skater_db  # Separate 'skaters' and 'goalies'. 'players' = union('skaters','goalies')
-    data_param['at_skaters'] = at_skater_db  # Separate 'skaters' and 'goalies'. 'players' = union('skaters','goalies')
-    data_param['ht_players'] = copy.deepcopy(ht_skater_db)
-    data_param['at_players'] = copy.deepcopy(at_skater_db)
-    data_param['teams'] = simulation_param['databases']['team_db']
-    data_param['ht'] = get_team(simulation_param['databases']['team_db'], simulation_param['ht_id'])
-    data_param['at'] = get_team(simulation_param['databases']['team_db'], simulation_param['at_id'])
+    game_specific_db = {}
+    game_specific_db['ht_skaters'] = ht_skater_db  # Separate 'skaters' and 'goalies'. 'players' = union('skaters','goalies')
+    game_specific_db['at_skaters'] = at_skater_db  # Separate 'skaters' and 'goalies'. 'players' = union('skaters','goalies')
+    game_specific_db['ht_players'] = copy.deepcopy(ht_skater_db)
+    game_specific_db['at_players'] = copy.deepcopy(at_skater_db)
+    game_specific_db['teams'] = simulation_param['databases']['team_db']
+    game_specific_db['ht'] = get_team(simulation_param['databases']['team_db'], simulation_param['ht_id'])
+    game_specific_db['at'] = get_team(simulation_param['databases']['team_db'], simulation_param['at_id'])
 
     # Add the starting goalie to the ht/at-player_db.
-    data_param['ht_goalie'] = get_starting_goalie(simulation_param, simulation_param['ht_id'])
-    data_param['ht_players'][data_param['ht_goalie']] = get_goalie(simulation_param['databases']['goalie_db'],
-                                                                   data_param['ht_goalie'])
-    data_param['at_goalie'] = get_starting_goalie(simulation_param, simulation_param['at_id'])
-    data_param['at_players'][data_param['at_goalie']] = get_goalie(simulation_param['databases']['goalie_db'],
-                                                                   data_param['at_goalie'])
-    return data_param
+    game_specific_db['ht_goalie'] = get_starting_goalie(simulation_param, simulation_param['ht_id'])
+    game_specific_db['ht_players'][game_specific_db['ht_goalie']] = get_goalie(simulation_param['databases']['goalie_db'], game_specific_db['ht_goalie'])
+    game_specific_db['at_goalie'] = get_starting_goalie(simulation_param, simulation_param['at_id'])
+    game_specific_db['at_players'][game_specific_db['at_goalie']] = get_goalie(simulation_param['databases']['goalie_db'], game_specific_db['at_goalie'])
+    return game_specific_db
 
 
 def simulate_po_series(simulation_param, teams, initial_wins):
