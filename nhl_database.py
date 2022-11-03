@@ -6,7 +6,7 @@ from nhl_web_scrape import *
 def create_databases(simulation_param):
 	global ACTIVE_PLAYERS
 	'''
-	@TODO: The timeout functionality should be handled in the 'write_xxx_csv'-functions, with different degrees on the error functions.
+	@TODO: The timeout functionality shouldd be handled in the 'write_xxx_csv'-functions, with different degrees on the error functions.
 	For instance, it's OK if the unavailable players timeout (set a warning), but an error should be set if the (e.g.) bio cannot be read
 	'''
 	global DATABASE_BIT_REGISTER
