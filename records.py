@@ -1,17 +1,7 @@
 import datetime
-import time
-import itertools
-import os
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-import math
-import inspect
-import csv
 import random
 import json
 import gspread
-from collections import defaultdict
 from oauth2client.client import SignedJwtAssertionCredentials
 
 # Access gSheet and read data from the worksheet.

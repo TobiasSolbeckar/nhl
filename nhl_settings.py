@@ -4,7 +4,7 @@ import os
 
 from collections import defaultdict
 
-from nhl_defines import *
+from src.nhl_defines import *
 from nhl_helpers import *
 
 
@@ -22,9 +22,8 @@ class Settings():
         self.init_gametime_settings()
         self.init_simulation_settings()
         self.init_analytics_parameters()
-        self.init_static_urls()
         self.setup_csv_paths()
-        self.generate_schedule()
+        # self.generate_schedule()
 
     def init_database_settings(self):
         ''' Initiate database settings '''
@@ -68,25 +67,6 @@ class Settings():
         self.exp_playform = None
         self.exp_position = ['F', 'D']
 
-    def init_static_urls(self):
-        ''' Set up URLs to static (season independent) data '''
-        self.url_skater_bio_201819 = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20182019&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_skater_bio = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
-        self.url_skater_ind_pp = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
-        self.url_skater_ind_pk = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
-        self.url_skater_on_ice = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
-        self.url_skater_relative = "http://naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=oi&rate=r&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_goalie_201819_201920 = "https://www.naturalstattrick.com/playerteams.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_goalie_es_201920 = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_goalie_pp_201920 = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_goalie_pk_201920 = "https://www.naturalstattrick.com/playerteams.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&stdoi=g&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-        self.url_team_es = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
-        self.url_team_pp = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=5v4&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
-        self.url_team_pk = "https://www.naturalstattrick.com/teamtable.php?fromseason=20192020&thruseason=20192020&stype=2&sit=4v5&score=all&rate=n&team=all&loc=B&gpf=410&fd=&td="
-        self.url_team_home = "http://naturalstattrick.com/teamtable.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=H&gpf=410&fd=&td="
-        self.url_team_away = "http://naturalstattrick.com/teamtable.php?fromseason=20182019&thruseason=20192020&stype=2&sit=5v5&score=all&rate=n&team=all&loc=A&gpf=410&fd=&td="
-
     def update_setting(self, setting, value):
         ''' Method to update/set setting in Settings object'''
         if setting not in self.__dict__:
@@ -107,7 +87,6 @@ class Settings():
         ''' Construct the paths to CSV-files '''
         data_dir = self.data_dir
         self.csvfiles = {}
-        # self.csvfiles['schedule'] = os.path.join(data_dir, '2019_2020_NHL_Schedule.csv')
         self.csvfiles['schedule'] = os.path.join(data_dir, 'nhl-202021-asplayed.csv')
         self.csvfiles['team_home'] = os.path.join(data_dir, 'Team_Home_201819_201920.csv')
         self.csvfiles['team_away'] = os.path.join(data_dir, 'Team_Away_201819_201920.csv')
@@ -127,7 +106,6 @@ class Settings():
         self.csvfiles['goalie_es'] = []
         self.csvfiles['goalie_pp'] = []
         self.csvfiles['goalie_pk'] = []
-        print(self.seasons)
         for season in self.seasons:
             self.csvfiles['skater_bio'].append(os.path.join(data_dir, 'Skater_Bio_' + season + '.csv'))
             self.csvfiles['skater_es'].append(os.path.join(data_dir, 'Skater_Individual_ES_' + season + '.csv'))
@@ -142,6 +120,7 @@ class Settings():
         self.csvfiles['team_es'] = os.path.join(data_dir, 'Team_ES_' + season + '.csv')
         self.csvfiles['team_pp'] = os.path.join(data_dir, 'Team_PP_' + season + '.csv')
         self.csvfiles['team_pk'] = os.path.join(data_dir, 'Team_PK_' + season + '.csv')
+
         # Make sure all CSV-files are availble
         for key in self.csvfiles:
             filepath = self.csvfiles[key]
@@ -149,16 +128,10 @@ class Settings():
                 for sub_path in filepath:
                     if os.path.exists(sub_path) is False:
                         print(os.path.basename(sub_path).split('.')[0])
-                        raise ValueError('CSV file ' + sub_path + ' does not exist.')
+                        raise FileNotFoundError('CSV file ' + sub_path + ' does not exist.')
             else:
                 if os.path.exists(filepath) is False:
-                    raise ValueError('CSV file ' + filepath + ' does not exist.')
-
-    def set_starting_goalie(self, team_id, goalie_id):
-        ''' Set starting goalie for a team '''
-        if goalie_id not in self.databases['goalie'].id_set:
-            raise ValueError('Goalie ' + goalie_id + ' not included in database')
-        self.databases['starting_goalies'][team_id] = goalie_id
+                    raise FileNotFoundError('CSV file ' + filepath + ' does not exist.')
 
     def generate_schedule(self):
         ''' Create team specific schedules, for simulation purpose '''
@@ -175,3 +148,11 @@ class Settings():
                 schedule_per_date[date].append([home_team_id, away_team_id])
         self.databases['team_schedules'] = schedule_per_team
         self.databases['season_schedule'] = schedule_per_date
+
+
+class CsvHandler():
+    """ Class to handle data stored in csv-files """
+    def __init__(self):
+        """ Constructor for CsvHandler """
+        data_dir = "data"
+        self.schedule = os.path.join(data_dir, 'nhl-202021-asplayed.csv')

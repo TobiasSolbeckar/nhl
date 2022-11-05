@@ -13,7 +13,7 @@ import numpy as np
 import gspread
 # from oauth2client.client import SignedJwtAssertionCredentials
 
-from nhl_defines import *
+from src.nhl_defines import *
 
 if platform.system() == 'Darwin':
     import matplotlib.pyplot as plt

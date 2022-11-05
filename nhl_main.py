@@ -8,14 +8,14 @@ import platform
 from scipy import stats
 import time
 
-from nhl_database import *
+from nhl_database_old import *
 #from nhl_simulation import set_starting_goalie, create_game_specific_db, simulate_po_series, get_playoff_cut, create_tables
 from nhl_helpers import *
-from nhl_entities import Skater, Goalie, Team
+from nhl_entities_old import Skater, Goalie, Team
 from nhl_settings import Settings
-from nhl_defines import *
+from src.nhl_defines import *
 from nhl_web_scrape import *
-from nhl_simulation import Simulation, GameSimulatuion, SeasonSimulation
+from nhl_simulation_old import Simulation, GameSimulatuion, SeasonSimulation
 
 
 def simulate_individual_games(simulation_param):
@@ -1707,14 +1707,18 @@ def download_season_data(year, data_dir='Data'):
     ''' Download all data from www.naturalstattrick.com for a specific year.
     This function will *not* check if the data is alreay available.
     '''
+    print(type(year))
     y = str(year)
+    print(y)
     y = y[0:4] + '20' + y[-2:]
+    print(y)
     if len(y) != 8:
         raise ValueError('Unexpected data format. Expected YYYYYYYY, got "' + y + '"')
-    url_skater_bio = f"https://www.naturalstattrick.com/playerteams.php?fromseason={y}&thruseason={y}&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
+    url_skater_bio = "https://www.naturalstattrick.com/playerteams.php?fromseason={y}&thruseason={y}&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
     url_goalie_bio = "http://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=bio&rate=n&team=ALL&pos=G&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
-
-
+    print(y)
+    print(url_goalie_bio)
+    raise ValueError("hejj")
 
 
     #url_skater_ind_es = "https://www.naturalstattrick.com/playerteams.php?fromseason=" + y + "&thruseason=" + y + "&stype=2&sit=5v5&score=all&stdoi=std&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single"
@@ -1746,9 +1750,13 @@ def download_season_data(year, data_dir='Data'):
             do_download = False
 
     if do_download is True:
-        print('   Downloading bio-data')
+        print('   Downloading Skater bio-data')
         write_bio_csv(url_skater_bio, os.path.join(data_dir,'Skater_Bio_' + str(year) + '.csv'))
+        print("Sleeping")
+        time.sleep(60)
+        print('   Downloading Goalie bio-data')
         write_bio_csv(url_goalie_bio, os.path.join(data_dir,'Goalie_Bio_' + str(year) + '.csv'))
+        raise ValueError("stop")
         print('   Downloading individual ES data')
         write_skater_ind_csv(url_skater_ind_es,os.path.join(data_dir,'Skater_Individual_ES_' + str(year) + '.csv'))
         print('   Downloading individual PP data')
@@ -1974,6 +1982,8 @@ if __name__ == '__main__':
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
     # First, check to see if new data should be downloaded
     if args['download'] is True:
+        print(args["year"])
+        print(type(args["year"]))
         download_season_data(str(args["year"]))
     # Create settings and store databases, this should always be done.
     settings = Settings(args["year"]) # Use "download_old_season_data" to download older seasons data

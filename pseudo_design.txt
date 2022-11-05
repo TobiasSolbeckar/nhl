@@ -1,0 +1,19 @@
+# Pseudo design
+
+runner:
+    if do_download:
+        update_csvfiles()
+
+    create_databases()
+
+    switch input_action:
+        case Simulation:
+            do_game_simulation OR
+            do_season_simulation
+        case Stats:
+            perform_stats_calculations
+            print_outcome
+
+
+create_databases():
+    

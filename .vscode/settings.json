@@ -1,0 +1,18 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.pycodestyleEnabled": false,
+    "python.linting.pycodestyleArgs": [
+        "--max-line-length=140"
+    ],
+    "python.linting.pylintArgs": [
+        "--max-line-length=140"
+    ],
+    "files.trimTrailingWhitespace": true,
+    "files.autoSave": "afterDelay",
+    "editor.fontFamily": "Hack",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=140"
+    ]
+}

@@ -1,10 +1,12 @@
-import csv
-import numpy as np
 import datetime
-import time
+import numpy as np
+import requests
 import scipy.stats
+import time
 
-from nhl_web_scrape import *
+from bs4 import BeautifulSoup
+
+from util.nhl_web_scrape import scrape_ep_player_info, MONTH_LOOKUP, AGE_COEFF, LEAGUE_COEFF, EP_TEAM_LINKS
 
 
 class Player():
@@ -16,11 +18,12 @@ class Player():
         for se in self.data.season_data.values():
             print(se)
 
-    def print_nhle(self, seasons):
+    def print_nhle(self, seasons, player):
         for se in seasons:
             try:
                 if self.data.season_data[se]["nhle_ppg"] != -1:
-                    print(f'{se}: {self.data.season_data[se]["nhle_ppg"]:.3f}')
+                    ppg = self.data.season_data[se]["nhle_ppg"]
+                    print(f'{se} ({int(se[0:4])-player.meta_data["dob"][0]}yo, {self.data.season_data[se]["league"]}): {ppg:.3f} ({ppg*82:.0f} points on a full season at 25 years of age)')
             except KeyError:
                 print(f'No data for season {se}')
         print(f'Average NHLe: {self.data.nhle_avg:.3f}')
@@ -32,16 +35,17 @@ class Player():
 class PlayerData():
     def __init__(self, url):
         [self.meta_data, self.raw_data] = scrape_ep_player_info(url)
+
         self.split_seasons = []
         self.season_data = {}
         self.clean_meta_data()
-        if self.meta_data != "G":
+        if self.meta_data['pos'] != "G":
             self.clean_season_data()
             self.calculate_nhle()
 
     def clean_meta_data(self):
         # Make sure DOB is on the correct format
-        dob_temp_array = self.meta_data["dob_raw"].replace(",","").split(" ")
+        dob_temp_array = self.meta_data["dob_raw"].replace(",", "").split(" ")
         self.meta_data["dob"] = [None, None, None]
         self.meta_data["dob"][0] = int(dob_temp_array[2])
         self.meta_data["dob"][1] = MONTH_LOOKUP[dob_temp_array[0].upper()]
@@ -106,16 +110,15 @@ class PlayerData():
             # Calculate age coeffs based on 31st of December for the "starting year"
             # of the season
             season_year = int(se["season"].split("-")[0])
-            d0 = datetime.date(self.meta_data["dob"][0], self.meta_data["dob"][1], self.meta_data["dob"][2])
-            d1 = datetime.date(season_year, 12, 31)
-            delta = d1 - d0  # How many days old is the player during the season
+            # How many days old is the player during the season
+            delta = datetime.date(season_year, 12, 31) - datetime.date(self.meta_data["dob"][0], self.meta_data["dob"][1], self.meta_data["dob"][2])
             age_coeff_to_use = get_daily_age_coeff(delta.days)
             try:
                 se["nhle_ppg"] = se["ppg"] * LEAGUE_COEFF[se["league"].upper()] * age_coeff_to_use
                 nhles.append(se["nhle_ppg"])
             except KeyError:
                 # Skip the season if no data is available
-                #  print("Could not find norm factor for league " + se["league"])
+                # print("Could not find norm factor for league " + se["league"])
                 se["nhle_ppg"] = -1
             se["nhle_tp"] = se["nhle_ppg"] * 82
 
@@ -153,6 +156,11 @@ def get_daily_age_coeff(days_old_during_season):
     if season_years_of_age < 16:
         return 0
     season_delta_days = days_old_during_season - season_years_of_age*365
+    if season_years_of_age > 28:
+        season_years_of_age = 28
+    elif season_years_of_age < 16:
+        season_years_of_age = 16
+
     daily_coeff_delta = (AGE_COEFF[season_years_of_age + 1] - AGE_COEFF[season_years_of_age])/365
     return AGE_COEFF[season_years_of_age] + season_delta_days*daily_coeff_delta
 
@@ -176,7 +184,7 @@ def create_prospect_pool_analysis(url, dob_th=1997, nhle_th=0.25, nhl_gp_th=10, 
             i += 1
             try:
                 player = Player(link)
-            except:
+            except Exception:
                 print('Could not create analysis for player ' + name)
             if player.meta_data["pos"] == "F":
                 nhle_th = 0.35
@@ -196,20 +204,24 @@ def create_prospect_pool_analysis(url, dob_th=1997, nhle_th=0.25, nhl_gp_th=10, 
         print(f'Team prospect pool:\n   Number of prospects: {len(nhles)}\n   Number of NHL-players: {len(nhlers)}\n   total(NHLe): {sum(nhles):.1f}\n   mu(NHLe):    {np.mean(nhles):.3f}\n   sigma(NHLe): {np.std(nhles):.3f}')
 
 
-def create_prospect_analysis(player_url):
+def create_prospect_analysis(player_url, starting_year=2018):
     ''' Calculate "success probabilities" for a prospect '''
+    list_of_seasons = []
     try:
         player = Player(player_url)
-        print(f"\nAnalysing player {player.meta_data['name']}")
-        # @TODO: Add some sort of weighting here?
-        dist = scipy.stats.norm(np.mean(player.data.nhles), np.std(player.data.nhles))
-        print(f"Success probabilities (based on NHLe: {player.data.nhles}):")
-        print(f"   Probability for 1st line: {100*(1-dist.cdf(0.86)):.1f}%")
-        print(f"   Probability for 2nd line: {100*(1-dist.cdf(0.59)):.1f}%")
-        print(f"   Probability for 3rd line: {100*(1-dist.cdf(0.41)):.1f}%")
-        print(f"   Probability for 4th line: {100*(1-dist.cdf(0.26)):.1f}%")
-        player.print_nhle(['2018-19', '2019-20', '2020-21', '2021-22'])
-    except:
+        if player.meta_data["pos"] != "G":
+            print(f"\nAnalysing player {player.meta_data['name']}")
+            # @TODO: Add some sort of weighting here?
+            dist = scipy.stats.norm(np.mean(player.data.nhles), np.std(player.data.nhles))
+            print(f"Success probabilities (based on NHLe: {player.data.nhles}):")
+            print(f"   Probability for 1st line: {100*(1-dist.cdf(0.86)):.1f}%")
+            print(f"   Probability for 2nd line: {100*(1-dist.cdf(0.59)):.1f}%")
+            print(f"   Probability for 3rd line: {100*(1-dist.cdf(0.41)):.1f}%")
+            print(f"   Probability for 4th line: {100*(1-dist.cdf(0.26)):.1f}%")
+            for i in range(2022 - int(starting_year)):
+                list_of_seasons.append(f'{starting_year+i}-{starting_year+i+1-2000}')
+            player.print_nhle(list_of_seasons, player)
+    except AttributeError:
         print('Could not create analysis from player URL ' + player_url)
 
 
@@ -217,6 +229,15 @@ def main():
     if True:
         team = "SJS"
         url = EP_TEAM_LINKS[team] + "/depth-chart"  # noqa: F405
+        # create_prospect_analysis("https://www.eliteprospects.com/player/314906/linus-karlsson")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/212368/jonathan-dahlen")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/567389/theo-jacobsson")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/20723/matt-nieto")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/87913/alexander-barabanov")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/95921/timo-meier")
+        # create_prospect_analysis("https://www.eliteprospects.com/player/14686/nick-bonino")
+
+        #raise ValueError("stop")
         print(f"\n\nAnalysing {team}")
         create_prospect_pool_analysis(url,
                                       dob_th=1997,
@@ -224,9 +245,22 @@ def main():
                                       nhl_gp_th=10,
                                       extended=True,
                                       verbose=True)
+    else:
+        url = "https://naturalstattrick.com/playerteams.php?fromseason=20212022&thruseason=20212022&stype=2&sit=5v5&score=all&stdoi=oi&rate=n&team=ALL&pos=S&loc=B&toi=0&gpfilt=none&fd=&td=&tgp=410&lines=single&draftteam=ALL"
 
-    # write_player_team_info("TBL")
-    # create_prospect_analysis("https://www.eliteprospects.com/player/333786/ivan-chekhovich")
+        soup = BeautifulSoup(requests.get(url).text, 'html.parser')
+
+        # scraper = cfscrape.create_scraper()
+        # html = scraper.get(url).content
+        # soup = BeautifulSoup(html, 'html.parser')
+
+        print(soup)
+
+        # write_player_team_info("TBL")
+
+        # create_prospect_analysis("https://www.eliteprospects.com/player/333786/ivan-chekhovich", 2014)
+        # create_prospect_analysis("https://www.eliteprospects.com/player/14657/evander-kane", 2011)
+        # create_prospect_analysis("https://www.eliteprospects.com/player/9103/brent-burns", 2011)
 
 
 if __name__ == "__main__":
